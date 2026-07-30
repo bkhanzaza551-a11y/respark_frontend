@@ -938,12 +938,6 @@ export default function PosDashboardPage() {
                     <span style={{ fontWeight: 700 }}>Total: {formatMoney(row.total)}</span>
                   </div>
                   <div style={{ display: "flex", flexDirection: "column", gap: 4, alignItems: "flex-end" }}>
-                    {apptStatus && (
-                      <span style={{ fontSize: 10, fontWeight: 700, padding: "2px 8px", borderRadius: 6, textTransform: "uppercase", letterSpacing: "0.5px",
-                        background: apptStatus === "IN_PROGRESS" ? "#dbeafe" : apptStatus === "COMPLETED" ? "#dcfce7" : apptStatus === "CANCELLED" ? "#fee2e2" : "#fef3c7",
-                        color: apptStatus === "IN_PROGRESS" ? "#1d4ed8" : apptStatus === "COMPLETED" ? "#16a34a" : apptStatus === "CANCELLED" ? "#dc2626" : "#92400e"
-                      }}>{apptStatus === "IN_PROGRESS" ? "STARTED" : apptStatus}</span>
-                    )}
                     <span className={`pos-dash-card-pickup pos-dash-card-status-${(row.status || "default").toLowerCase()}`}>
                       {row.status === "PAID" ? "Paid" : row.status === "STARTED" ? "In Progress" : row.status === "PARTIAL" ? "Partial" : row.status === "UNPAID" ? "Unpaid" : row.status === "CANCELLED" ? "Cancelled" : row.status || "N/A"}
                     </span>
