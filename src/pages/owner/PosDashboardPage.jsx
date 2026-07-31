@@ -997,7 +997,7 @@ export default function PosDashboardPage() {
                   <div style={{ display: "flex", flexDirection: "column", gap: 4, alignItems: "flex-end" }}>
                     {isAppointment ? (
                       <span style={{ fontSize: 10, fontWeight: 700, padding: "2px 8px", borderRadius: 6, textTransform: "uppercase", letterSpacing: "0.5px", background: "#faf5ff", color: "#7c3aed", border: "1px solid #d8b4fe" }}>
-                        {apptStatus === "CONFIRMED" ? "Confirmed" : apptStatus === "PENDING" ? "Pending" : apptStatus === "CHECKED_IN" ? "Checked In" : apptStatus || "Scheduled"}
+                        Scheduled
                       </span>
                     ) : (
                       <span className={`pos-dash-card-pickup pos-dash-card-status-${(row.status || "default").toLowerCase()}`}>
