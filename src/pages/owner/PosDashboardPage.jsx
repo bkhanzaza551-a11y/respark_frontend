@@ -240,16 +240,63 @@ export default function PosDashboardPage() {
     setLoading(true);
     try {
       const queryParams = { startDate, endDate };
-      if (statusFilter) queryParams.status = statusFilter;
+      if (statusFilter && statusFilter !== "SCHEDULED") queryParams.status = statusFilter;
       if (selectedBranchId) queryParams.branchId = selectedBranchId;
 
-      const [invoiceResponse, summaryResponse] = await Promise.all([
+      const appointmentParams = {};
+      if (startDate) appointmentParams.from = startDate;
+      if (endDate) appointmentParams.to = endDate;
+      if (selectedBranchId) appointmentParams.branchId = selectedBranchId;
+
+      const [invoiceResponse, summaryResponse, appointmentResponse] = await Promise.all([
         api.get("/owner/invoices", { params: queryParams }),
-        api.get("/owner/invoices/reports/summary", { params: { startDate, endDate, ...(selectedBranchId ? { branchId: selectedBranchId } : {}) } })
+        api.get("/owner/invoices/reports/summary", { params: { startDate, endDate, ...(selectedBranchId ? { branchId: selectedBranchId } : {}) } }),
+        api.get("/owner/appointments", { params: appointmentParams }).catch(() => ({ data: { data: [] } }))
       ]);
 
-      setRows(invoiceResponse.data?.data || invoiceResponse.data || []);
-      setSummary(summaryResponse.data || null);
+      const invoiceRows = (invoiceResponse.data?.data || invoiceResponse.data || []).map(r => ({ ...r, _type: "invoice" }));
+      const scheduledAppointments = (appointmentResponse.data?.data || appointmentResponse.data || [])
+        .filter(a => !a.convertedInvoiceId && a.status !== "CANCELLED" && a.status !== "COMPLETED" && a.status !== "NO_SHOW")
+        .map(a => ({
+          id: a.id,
+          _type: "appointment",
+          invoiceNumber: null,
+          customer: a.customer ? { id: a.customer.id, name: a.customer.name, phone: a.customer.phone } : null,
+          items: (a.items || []).map(it => ({
+            itemType: "SERVICE",
+            serviceName: it.service?.name || "Service",
+            productId: null,
+            productName: null,
+            qty: 1,
+            unitPrice: 0,
+            taxPct: 0,
+            lineTotal: 0
+          })),
+          payments: [],
+          status: "SCHEDULED",
+          total: 0,
+          createdAt: a.startAt,
+          startedAt: a.startAt,
+          completedAt: null,
+          appointment: { id: a.id, status: a.status },
+          appointmentData: a,
+          discount: 0,
+          notes: a.notes || "",
+          appointmentTime: a.startAt,
+          appointmentEndTime: a.endAt,
+          staffName: a.primaryStaff?.user?.name || ""
+        }));
+
+      let merged = [...invoiceRows, ...scheduledAppointments];
+      if (statusFilter === "SCHEDULED") {
+        merged = merged.filter(r => r._type === "appointment");
+      }
+
+      merged.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
+      const scheduledCount = scheduledAppointments.length;
+      setRows(merged);
+      setSummary({ ...(summaryResponse.data || null), scheduledAppointments: scheduledCount, totalInvoices: ((summaryResponse.data?.totalInvoices) || 0) + scheduledCount });
 
       if (params.id) {
         const detailResponse = await api.get(`/owner/invoices/${params.id}`);
@@ -875,6 +922,7 @@ export default function PosDashboardPage() {
 
         <div className="pos-dash-header-right">
           <button className={`pos-dash-filter-pill ${statusFilter === "STARTED" ? "active" : ""}`} onClick={() => setStatusFilter("STARTED")} style={{ background: statusFilter === "STARTED" ? "#dbeafe" : undefined, borderColor: statusFilter === "STARTED" ? "#93c5fd" : undefined, color: statusFilter === "STARTED" ? "#1d4ed8" : undefined }}>In Progress <span>{summary?.startedInvoices || 0}</span></button>
+          <button className={`pos-dash-filter-pill ${statusFilter === "SCHEDULED" ? "active" : ""}`} onClick={() => setStatusFilter("SCHEDULED")} style={{ background: statusFilter === "SCHEDULED" ? "#faf5ff" : undefined, borderColor: statusFilter === "SCHEDULED" ? "#d8b4fe" : undefined, color: statusFilter === "SCHEDULED" ? "#7c3aed" : undefined }}>Scheduled <span>{summary?.scheduledAppointments || 0}</span></button>
           <button className={`pos-dash-filter-pill ${statusFilter === "UNPAID" ? "active" : ""}`} onClick={() => setStatusFilter("UNPAID")}>Unpaid <span>{summary?.unpaidInvoices || 0}</span></button>
           <button className={`pos-dash-filter-pill ${statusFilter === "PARTIAL" ? "active" : ""}`} onClick={() => setStatusFilter("PARTIAL")}>Partial <span>{summary?.partialInvoices || 0}</span></button>
           <button className={`pos-dash-filter-pill ${statusFilter === "PAID" ? "active" : ""}`} onClick={() => setStatusFilter("PAID")}>Paid <span>{summary?.paidInvoices || 0}</span></button>
@@ -888,15 +936,22 @@ export default function PosDashboardPage() {
       ) : (
         <div className="pos-dash-grid">
           {rows.map((row) => {
+            const isAppointment = row._type === "appointment";
             const dateStr = new Date(row.createdAt).toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" }).replace(/ /g, "-");
             const timeStr = new Date(row.createdAt).toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" });
             const startedStr = row.startedAt ? new Date(row.startedAt).toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" }) : (row.createdAt ? new Date(row.createdAt).toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" }) : null);
             const completedStr = row.completedAt ? new Date(row.completedAt).toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" }) : null;
             const apptStatus = row.appointment?.status || null;
+            const schedTime = isAppointment && row.appointmentTime ? new Date(row.appointmentTime).toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" }) : null;
+            const schedEndTime = isAppointment && row.appointmentEndTime ? new Date(row.appointmentEndTime).toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" }) : null;
+            const handleCardClick = () => {
+              if (isAppointment) return;
+              openInvoice(row.id);
+            };
             return (
-              <div key={row.id} className="pos-dash-card" onClick={() => openInvoice(row.id)}>
+              <div key={row.id} className="pos-dash-card" onClick={handleCardClick} style={isAppointment ? { borderLeft: "3px solid #7c3aed", cursor: "default" } : {}}>
                 <div className="pos-dash-card-actions">
-                  {(row.status === "PAID" || row.status === "PARTIAL") ? (
+                  {!isAppointment && (row.status === "PAID" || row.status === "PARTIAL") ? (
                     <button
                       type="button"
                       className="pos-dash-download-btn"
@@ -910,7 +965,7 @@ export default function PosDashboardPage() {
                     <FileText size={16} />
                   </div>
                 </div>
-                <div className="pos-dash-card-id">{row.invoiceNumber}</div>
+                <div className="pos-dash-card-id">{isAppointment ? (row.appointmentData?.title || "Appointment") : row.invoiceNumber}</div>
                 <div className="pos-dash-card-name">{row.customer?.name || "Walk-in"}</div>
                 <div className="pos-dash-card-phone">{row.customer?.phone || "N/A"}</div>
                 <div style={{ marginTop: 6 }}>
@@ -922,25 +977,33 @@ export default function PosDashboardPage() {
                       letterSpacing: "0.5px",
                       padding: "3px 8px",
                       borderRadius: 6,
-                      background: (row.items || []).every(i => i.itemType === "PRODUCT") ? "#fef3c7" : (row.items || []).every(i => i.itemType === "SERVICE") ? "#dbeafe" : "#f1f5f9",
-                      color: (row.items || []).every(i => i.itemType === "PRODUCT") ? "#92400e" : (row.items || []).every(i => i.itemType === "SERVICE") ? "#1e40af" : "#475569",
-                      border: `1px solid ${(row.items || []).every(i => i.itemType === "PRODUCT") ? "#fde68a" : (row.items || []).every(i => i.itemType === "SERVICE") ? "#bfdbfe" : "#e2e8f0"}`
+                      background: isAppointment ? "#faf5ff" : (row.items || []).every(i => i.itemType === "PRODUCT") ? "#fef3c7" : (row.items || []).every(i => i.itemType === "SERVICE") ? "#dbeafe" : "#f1f5f9",
+                      color: isAppointment ? "#7c3aed" : (row.items || []).every(i => i.itemType === "PRODUCT") ? "#92400e" : (row.items || []).every(i => i.itemType === "SERVICE") ? "#1e40af" : "#475569",
+                      border: `1px solid ${isAppointment ? "#d8b4fe" : (row.items || []).every(i => i.itemType === "PRODUCT") ? "#fde68a" : (row.items || []).every(i => i.itemType === "SERVICE") ? "#bfdbfe" : "#e2e8f0"}`
                     }}>
-                      {(row.items || []).every(i => i.itemType === "PRODUCT") ? "Products" : (row.items || []).every(i => i.itemType === "SERVICE") ? "Services" : "Items"}
+                      {isAppointment ? "Appointment" : (row.items || []).every(i => i.itemType === "PRODUCT") ? "Products" : (row.items || []).every(i => i.itemType === "SERVICE") ? "Services" : "Items"}
                     </span>
                   )}
                 </div>
                 <div className="pos-dash-card-footer">
                   <div className="pos-dash-card-meta" style={{ display: "flex", flexDirection: "column", gap: 2 }}>
                     <span>{dateStr}, {timeStr}</span>
-                    {startedStr && <span style={{ fontSize: 11, color: "#2563eb" }}>Started: {startedStr}</span>}
-                    {completedStr && <span style={{ fontSize: 11, color: "#16a34a" }}>Completed: {completedStr}</span>}
-                    <span style={{ fontWeight: 700 }}>Total: {formatMoney(row.total)}</span>
+                    {isAppointment && schedTime && <span style={{ fontSize: 11, color: "#7c3aed" }}>Scheduled: {schedTime}{schedEndTime ? ` - ${schedEndTime}` : ""}</span>}
+                    {!isAppointment && startedStr && <span style={{ fontSize: 11, color: "#2563eb" }}>Started: {startedStr}</span>}
+                    {!isAppointment && completedStr && <span style={{ fontSize: 11, color: "#16a34a" }}>Completed: {completedStr}</span>}
+                    {!isAppointment && <span style={{ fontWeight: 700 }}>Total: {formatMoney(row.total)}</span>}
+                    {isAppointment && row.staffName && <span style={{ fontSize: 11, color: "#64748b" }}>Staff: {row.staffName}</span>}
                   </div>
                   <div style={{ display: "flex", flexDirection: "column", gap: 4, alignItems: "flex-end" }}>
-                    <span className={`pos-dash-card-pickup pos-dash-card-status-${(row.status || "default").toLowerCase()}`}>
-                      {row.status === "PAID" ? "Paid" : row.status === "STARTED" ? "In Progress" : row.status === "PARTIAL" ? "Partial" : row.status === "UNPAID" ? "Unpaid" : row.status === "CANCELLED" ? "Cancelled" : row.status || "N/A"}
-                    </span>
+                    {isAppointment ? (
+                      <span style={{ fontSize: 10, fontWeight: 700, padding: "2px 8px", borderRadius: 6, textTransform: "uppercase", letterSpacing: "0.5px", background: "#faf5ff", color: "#7c3aed", border: "1px solid #d8b4fe" }}>
+                        {apptStatus === "CONFIRMED" ? "Confirmed" : apptStatus === "PENDING" ? "Pending" : apptStatus === "CHECKED_IN" ? "Checked In" : apptStatus || "Scheduled"}
+                      </span>
+                    ) : (
+                      <span className={`pos-dash-card-pickup pos-dash-card-status-${(row.status || "default").toLowerCase()}`}>
+                        {row.status === "PAID" ? "Paid" : row.status === "STARTED" ? "In Progress" : row.status === "PARTIAL" ? "Partial" : row.status === "UNPAID" ? "Unpaid" : row.status === "CANCELLED" ? "Cancelled" : row.status || "N/A"}
+                      </span>
+                    )}
                   </div>
                 </div>
               </div>
