@@ -1,3 +1,4 @@
+// pos dashboard
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { Clock3, Download, FileText, Gift, ScissorsLineDashed, TicketPercent, Trash2, X, FlaskConical, Plus } from "lucide-react";
