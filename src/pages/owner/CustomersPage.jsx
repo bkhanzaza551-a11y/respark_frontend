@@ -109,6 +109,7 @@ export default function CustomersPage() {
   const [memServiceSearch, setMemServiceSearch] = useState("");
   const [selectedPlan, setSelectedPlan] = useState(null);
   const [membershipForm, setMembershipForm] = useState({ validityDays: "", price: "", staffId: "", online: "", offline: "", balance: "", advance: "", remarks: "", purchaseDate: new Date().toISOString().slice(0, 10) });
+  const [membershipPaymentManuallyEdited, setMembershipPaymentManuallyEdited] = useState({ online: false, offline: false, advance: false });
   const [membershipSearch, setMembershipSearch] = useState("");
   const [showAddAdvanceModal, setShowAddAdvanceModal] = useState(false);
   const [advanceForm, setAdvanceForm] = useState({ amount: "", mode: "Online", remark: "" });
@@ -1896,7 +1897,7 @@ export default function CustomersPage() {
                               );
                             })
                           )}
-                          <button className="cust-assign-btn" onClick={() => { fetchMembershipPlans(); fetchStaffUsers(); fetchServices(); setSelectedPlan(null); setMembershipForm({ validityDays: "", price: "", staffId: "", online: "", offline: "", balance: "", advance: "", remarks: "", purchaseDate: new Date().toISOString().slice(0, 10) }); setMembershipSearch(""); setCustomServices([]); setMembershipError(""); setShowAssignMembershipModal(true); }}>
+                          <button className="cust-assign-btn" onClick={() => { fetchMembershipPlans(); fetchStaffUsers(); fetchServices(); setSelectedPlan(null); setMembershipForm({ validityDays: "", price: "", staffId: "", online: "", offline: "", balance: "", advance: "", remarks: "", purchaseDate: new Date().toISOString().slice(0, 10) }); setMembershipPaymentManuallyEdited({ online: false, offline: false, advance: false }); setMembershipSearch(""); setCustomServices([]); setMembershipError(""); setShowAssignMembershipModal(true); }}>
                             <CreditCard size={16} /> Assign Membership
                           </button>
                         </div>
@@ -2499,7 +2500,19 @@ export default function CustomersPage() {
                             type="number" 
                             placeholder="Online amount" 
                             value={membershipForm.online} 
+                            onFocus={() => {
+                              if (membershipPaymentManuallyEdited.online || membershipPaymentManuallyEdited.offline || membershipPaymentManuallyEdited.advance) return;
+                              setMembershipPaymentManuallyEdited(prev => ({ ...prev, online: true }));
+                              setMembershipForm(prev => {
+                                const price = Number(prev.price || 0);
+                                const offline = Number(prev.offline || 0);
+                                const advance = Number(prev.advance || 0);
+                                const maxAllowed = Math.max(0, price - (offline + advance));
+                                return { ...prev, online: maxAllowed > 0 ? String(maxAllowed) : "" };
+                              });
+                            }}
                             onChange={(e) => {
+                              setMembershipPaymentManuallyEdited(prev => ({ ...prev, online: true }));
                               setMembershipError("");
                               const val = e.target.value;
                               if (val === "") {
@@ -2522,7 +2535,19 @@ export default function CustomersPage() {
                             type="number" 
                             placeholder="Offline amount" 
                             value={membershipForm.offline} 
+                            onFocus={() => {
+                              if (membershipPaymentManuallyEdited.online || membershipPaymentManuallyEdited.offline || membershipPaymentManuallyEdited.advance) return;
+                              setMembershipPaymentManuallyEdited(prev => ({ ...prev, offline: true }));
+                              setMembershipForm(prev => {
+                                const price = Number(prev.price || 0);
+                                const online = Number(prev.online || 0);
+                                const advance = Number(prev.advance || 0);
+                                const maxAllowed = Math.max(0, price - (online + advance));
+                                return { ...prev, offline: maxAllowed > 0 ? String(maxAllowed) : "" };
+                              });
+                            }}
                             onChange={(e) => {
+                              setMembershipPaymentManuallyEdited(prev => ({ ...prev, offline: true }));
                               setMembershipError("");
                               const val = e.target.value;
                               if (val === "") {
@@ -2545,7 +2570,19 @@ export default function CustomersPage() {
                             type="number" 
                             placeholder="Advance" 
                             value={membershipForm.advance} 
+                            onFocus={() => {
+                              if (membershipPaymentManuallyEdited.online || membershipPaymentManuallyEdited.offline || membershipPaymentManuallyEdited.advance) return;
+                              setMembershipPaymentManuallyEdited(prev => ({ ...prev, advance: true }));
+                              setMembershipForm(prev => {
+                                const price = Number(prev.price || 0);
+                                const online = Number(prev.online || 0);
+                                const offline = Number(prev.offline || 0);
+                                const maxAllowed = Math.max(0, price - (online + offline));
+                                return { ...prev, advance: maxAllowed > 0 ? String(maxAllowed) : "" };
+                              });
+                            }}
                             onChange={(e) => {
+                              setMembershipPaymentManuallyEdited(prev => ({ ...prev, advance: true }));
                               setMembershipError("");
                               const val = e.target.value;
                               if (val === "") {
