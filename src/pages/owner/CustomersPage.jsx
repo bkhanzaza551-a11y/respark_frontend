@@ -11,6 +11,7 @@ import { useAuth } from "../../context/AuthContext";
 import { useBranch } from "../../context/BranchContext";
 import PosReceipt from "../../components/PosReceipt";
 
+import { useNavigate } from "react-router-dom";
 
 const EMPTY_ADVANCED_FILTERS = {
   gender: "",
@@ -71,6 +72,7 @@ const isWithinDateRange = (value, start, end) => {
 };
 
 export default function CustomersPage() {
+  const navigate = useNavigate();
   const { formatMoney, currencyCode, settings } = useSalonSettings();
   const { auth } = useAuth();
   const { selectedBranchId } = useBranch();
@@ -3401,10 +3403,7 @@ export default function CustomersPage() {
                   <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
                     <button
                       onClick={() => {
-                        const authData = localStorage.getItem("respark_auth");
-                        const token = authData ? JSON.parse(authData).accessToken : "";
-                        const base = api.defaults.baseURL?.replace(/\/api\/v1$/, "") || "";
-                        window.open(`${base}/api/v1/owner/invoices/${invoiceSuccessData.invoice.id}/receipt?token=${token}`, "_blank", "noopener,noreferrer");
+                        navigate(`/admin/invoices/${invoiceSuccessData.invoice.id}`);
                       }}
                       style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, background: "linear-gradient(135deg, #0ea5e9, #0284c7)", color: "#fff", border: "none", borderRadius: 12, padding: "14px", fontWeight: 700, fontSize: "0.9rem", cursor: "pointer", transition: "transform 0.15s, box-shadow 0.15s", boxShadow: "0 4px 12px rgba(14,165,233,0.2)" }}
                       onMouseEnter={(e) => { e.currentTarget.style.transform = "translateY(-1px)"; e.currentTarget.style.boxShadow = "0 6px 16px rgba(14,165,233,0.3)"; }}
