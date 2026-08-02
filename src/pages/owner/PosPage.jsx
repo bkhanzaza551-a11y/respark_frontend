@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { CheckCircle2, AlertCircle, AlarmClock, Gift, Droplet, X, FlaskConical, Plus } from "lucide-react";
 import { downloadFromApi } from "../../utils/download";
@@ -82,6 +82,7 @@ export default function PosPage() {
   const [dayClosing, setDayClosing] = useState(null);
   const [paymentLink, setPaymentLink] = useState(null);
   const [loading, setLoading] = useState(true);
+  const contextRequestRef = useRef(0);
   const [guestSearchInput, setGuestSearchInput] = useState("");
   const [posGender, setPosGender] = useState("ALL");
   const [serviceSearch, setServiceSearch] = useState("");
@@ -582,6 +583,7 @@ export default function PosPage() {
   };
 
   const loadContext = useCallback(async (customerId = form.customerId, branchId = form.branchId) => {
+    const requestId = ++contextRequestRef.current;
     setLoading(true);
     try {
       const params = {};
@@ -592,11 +594,15 @@ export default function PosPage() {
         api.get("/owner/pos/day-closing", { params: branchId ? { branchId } : {} }),
         api.get("/owner/service-categories", { params: branchId ? { branchId } : {} })
       ]);
+      if (requestId !== contextRequestRef.current) return;
       applyContext(contextResponse, closingResponse, catRes, customerId, branchId);
       setStatus((current) => ({ ...current, error: "" }));
     } catch (error) {
+      if (requestId !== contextRequestRef.current) return;
       setLoading(false);
       setStatus((current) => ({ ...current, error: formatApiError(error, "Could not load POS workspace") }));
+    } finally {
+      if (requestId === contextRequestRef.current) setLoading(false);
     }
   }, [applyContext, form.branchId, form.customerId]);
 
