@@ -70,11 +70,8 @@ export default function InventoryPage() {
 
   const handleSaveIndividualRecon = async (product) => {
     const edits = reconciliationEdits[product.id] || {};
-    const adjustStock = edits.adjustStock !== undefined ? edits.adjustStock : (product.productType === "RETAIL" ? Number(product.currentStock || 0) : 0);
-    const adjustConsumable = edits.adjustConsumable !== undefined ? edits.adjustConsumable : (product.productType === "CONSUMABLE" ? Number(product.currentStock || 0) : 0);
-    
-    // Choose physicalStock based on type
-    const physicalStock = product.productType === "CONSUMABLE" ? adjustConsumable : adjustStock;
+    const adjustStock = edits.adjustStock !== undefined ? edits.adjustStock : Number(product.currentStock || 0);
+    const physicalStock = adjustStock;
     const remark = edits.remark || "";
     
     const branchId = product.branchId || branches[0]?.id;
@@ -124,9 +121,8 @@ export default function InventoryPage() {
     for (const p of filteredReconProducts) {
       const edits = reconciliationEdits[p.id];
       if (edits) {
-        const adjustStock = edits.adjustStock !== undefined ? edits.adjustStock : (p.productType === "RETAIL" ? Number(p.currentStock || 0) : 0);
-        const adjustConsumable = edits.adjustConsumable !== undefined ? edits.adjustConsumable : (p.productType === "CONSUMABLE" ? Number(p.currentStock || 0) : 0);
-        const physicalStock = p.productType === "CONSUMABLE" ? adjustConsumable : adjustStock;
+        const adjustStock = edits.adjustStock !== undefined ? edits.adjustStock : Number(p.currentStock || 0);
+        const physicalStock = adjustStock;
         
         items.push({
           productId: p.id,
@@ -1290,28 +1286,21 @@ export default function InventoryPage() {
                     <th style={{ padding: "12px 16px", fontWeight: 600, textAlign: "center" }}>Actual Stock</th>
                     <th style={{ padding: "12px 16px", fontWeight: 600, textAlign: "center" }}>Adjust Stock</th>
                     <th style={{ padding: "12px 16px", fontWeight: 600, textAlign: "center" }}>Stock Difference</th>
-                    <th style={{ padding: "12px 16px", fontWeight: 600, textAlign: "center" }}>Stock Value</th>
-                    <th style={{ padding: "12px 16px", fontWeight: 600, textAlign: "center" }}>Actual Consumable</th>
-                    <th style={{ padding: "12px 16px", fontWeight: 600, textAlign: "center" }}>Adjust Consumable</th>
                     <th style={{ padding: "12px 16px", fontWeight: 600, textAlign: "center" }}>Unit</th>
-                    <th style={{ padding: "12px 16px", fontWeight: 600, textAlign: "center" }}>Consumable Difference</th>
+                    <th style={{ padding: "12px 16px", fontWeight: 600, textAlign: "center" }}>Stock Value</th>
                     <th style={{ padding: "12px 16px", fontWeight: 600 }}>Remark*</th>
                     <th style={{ padding: "12px 16px", fontWeight: 600, textAlign: "center" }}>Action</th>
                   </tr>
                 </thead>
                 <tbody>
                   {filteredReconProducts.map(p => {
-                    const actualStock = p.productType === "RETAIL" ? Number(p.currentStock || 0) : 0;
+                    const actualStock = Number(p.currentStock || 0);
                     const adjustStock = getEditValue(p.id, "adjustStock", actualStock);
                     const stockDiff = adjustStock - actualStock;
                     const stockValue = adjustStock * Number(p.costPrice || 0);
 
-                    const actualConsumable = p.productType === "CONSUMABLE" ? Number(p.currentStock || 0) : 0;
-                    const adjustConsumable = getEditValue(p.id, "adjustConsumable", actualConsumable);
-                    const consumableDiff = adjustConsumable - actualConsumable;
-
                     const remark = getEditValue(p.id, "remark", "");
-                    const unit = p.productType === "CONSUMABLE" ? "ml" : "gm";
+                    const unit = p.productType === "CONSUMABLE" ? (p.unit || "ml") : (p.unit || "pcs");
 
                     return (
                       <tr key={p.id} style={{ borderBottom: "1px solid #f1f5f9" }}>
@@ -1339,28 +1328,9 @@ export default function InventoryPage() {
                         <td style={{ padding: "12px 16px", textAlign: "center", color: stockDiff !== 0 ? (stockDiff > 0 ? "#10b981" : "#ef4444") : "#64748b", fontWeight: 600 }}>
                           {stockDiff > 0 ? `+${stockDiff}` : stockDiff}
                         </td>
+                        <td style={{ padding: "12px 16px", textAlign: "center", color: "#64748b" }}>{unit}</td>
                         <td style={{ padding: "12px 16px", textAlign: "center", fontWeight: 600, color: "#0f172a" }}>
                           {formatMoney(stockValue)}
-                        </td>
-                        <td style={{ padding: "12px 16px", textAlign: "center", color: "#64748b" }}>{actualConsumable}</td>
-                        <td style={{ padding: "12px 16px", textAlign: "center" }}>
-                          <input
-                            type="number"
-                            value={adjustConsumable}
-                            onChange={(e) => handleEditChange(p.id, "adjustConsumable", Number(e.target.value))}
-                            style={{
-                              width: 70,
-                              padding: "6px 8px",
-                              border: "1px solid #cbd5e1",
-                              borderRadius: 6,
-                              textAlign: "center",
-                              outline: "none"
-                            }}
-                          />
-                        </td>
-                        <td style={{ padding: "12px 16px", textAlign: "center", color: "#64748b" }}>{unit}</td>
-                        <td style={{ padding: "12px 16px", textAlign: "center", color: consumableDiff !== 0 ? (consumableDiff > 0 ? "#10b981" : "#ef4444") : "#64748b", fontWeight: 600 }}>
-                          {consumableDiff > 0 ? `+${consumableDiff}` : consumableDiff}
                         </td>
                         <td style={{ padding: "12px 16px" }}>
                           <input
