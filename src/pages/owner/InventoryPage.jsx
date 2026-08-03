@@ -801,9 +801,15 @@ export default function InventoryPage() {
                       <span style={{ background: "#fef2f2", color: "#dc2626", fontWeight: 700, fontSize: "0.85rem", padding: "6px 14px", borderRadius: 8, border: "1px solid #fecaca" }}>
                         {item.currentStock} left
                       </span>
-                      <span style={{ background: "#f0fdf4", color: "#16a34a", fontWeight: 700, fontSize: "0.85rem", padding: "6px 14px", borderRadius: 8, border: "1px solid #bbf7d0" }}>
-                        Need {Number(item.minStock) - Number(item.currentStock)} more
-                      </span>
+                      {Number(item.minStock) - Number(item.currentStock) > 0 ? (
+                        <span style={{ background: "#f0fdf4", color: "#16a34a", fontWeight: 700, fontSize: "0.85rem", padding: "6px 14px", borderRadius: 8, border: "1px solid #bbf7d0" }}>
+                          Need {Number(item.minStock) - Number(item.currentStock)} more
+                        </span>
+                      ) : (
+                        <span style={{ background: "#fffbeb", color: "#d97706", fontWeight: 700, fontSize: "0.85rem", padding: "6px 14px", borderRadius: 8, border: "1px solid #fde68a" }}>
+                          Restock Required
+                        </span>
+                      )}
                     </div>
                   </div>
                 ))}
