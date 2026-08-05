@@ -1096,6 +1096,26 @@ export default function SettingsPage() {
                   style={{ padding: "8px 12px", border: "1px solid #cbd5e1", borderRadius: "6px", width: "100%", maxWidth: "400px" }}
                 />
               </label>
+              <label className="checkbox-option" style={{ gridColumn: "1 / -1" }}>
+                <span style={{ fontWeight: 600, display: "block", marginBottom: 6 }}>Salon Phone on Invoice :</span>
+                <input
+                  type="text"
+                  value={generic.salonPhone || ""}
+                  onChange={(event) => updateGeneric("salonPhone", event.target.value)}
+                  placeholder="Enter phone number to display on invoices..."
+                  style={{ padding: "8px 12px", border: "1px solid #cbd5e1", borderRadius: "6px", width: "100%", maxWidth: "400px" }}
+                />
+              </label>
+              <label className="checkbox-option" style={{ gridColumn: "1 / -1" }}>
+                <span style={{ fontWeight: 600, display: "block", marginBottom: 6 }}>Salon Address on Invoice :</span>
+                <input
+                  type="text"
+                  value={generic.salonAddress || ""}
+                  onChange={(event) => updateGeneric("salonAddress", event.target.value)}
+                  placeholder="Enter address to display on invoices..."
+                  style={{ padding: "8px 12px", border: "1px solid #cbd5e1", borderRadius: "6px", width: "100%", maxWidth: "400px" }}
+                />
+              </label>
             </div>
 
             <div className="business-settings-grid">
