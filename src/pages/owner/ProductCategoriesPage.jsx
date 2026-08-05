@@ -1,7 +1,8 @@
 import { useEffect, useState, useCallback, useRef } from "react";
 import CustomDropdown from '../../components/common/CustomDropdown';
-import ToggleSwitch from '../../components/common/ToggleSwitch';
-import { X, Trash2, Edit2, Search, Plus, Package, ClipboardList, Check } from "lucide-react";
+import ToggleSwitch from "../../components/common/ToggleSwitch";
+import PremiumToast from "../../components/common/PremiumToast";
+import { Search, Plus, Package, X, Check, Edit2, Trash2, Camera, Download, Upload, AlertCircle, Eye, EyeOff } from "lucide-react";
 import { api } from "../../api/client";
 import { formatApiError } from "../../utils/apiError";
 import { useSalonSettings } from "../../context/SalonSettingsContext";
@@ -283,8 +284,8 @@ export default function ProductCategoriesPage() {
 
   return (
     <div className="responsive-page-layout" style={{ background: "#f8fafc", minHeight: "100vh", display: "flex", overflow: "hidden" }}>
-      {status.error && <div style={{ position: "fixed", top: 80, right: 24, background: "#fef2f2", color: "#dc2626", padding: "12px 20px", borderRadius: 8, fontSize: 14, zIndex: 999999, boxShadow: "0 4px 12px rgba(0,0,0,0.1)", display: "flex", alignItems: "center", gap: 12, fontWeight: 500 }}>{status.error}<button onClick={() => setStatus({...status, error: ""})} style={{ background: "none", border: "none", color: "#dc2626", cursor: "pointer", display: "flex" }}><X size={16} /></button></div>}
-      {status.success && <div style={{ position: "fixed", top: 80, right: 24, background: "#ecfdf5", color: "#059669", padding: "12px 20px", borderRadius: 8, fontSize: 14, zIndex: 999999, boxShadow: "0 4px 12px rgba(0,0,0,0.1)", display: "flex", alignItems: "center", gap: 12, fontWeight: 500 }}>{status.success}<button onClick={() => setStatus({...status, success: ""})} style={{ background: "none", border: "none", color: "#059669", cursor: "pointer", display: "flex" }}><X size={16} /></button></div>}
+      <PremiumToast message={status.error} type="error" onClose={() => setStatus({...status, error: ""})} />
+      <PremiumToast message={status.success} type="success" onClose={() => setStatus({...status, success: ""})} />
 
       {/* Left Sidebar - Categories */}
       <div className="responsive-sidebar" style={{ width: 280, background: "#ffffff", borderRight: "1px solid #e2e8f0", display: "flex", flexDirection: "column", flexShrink: 0, boxShadow: "2px 0 8px rgba(0,0,0,0.02)" }}>
