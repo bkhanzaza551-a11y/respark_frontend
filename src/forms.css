@@ -3,9 +3,10 @@
 ════════════════════════════════════════════ */
 
 /* Standardize Inputs, Selects, Textareas */
-input:not([type="checkbox"]):not([type="radio"]):not([type="color"]):not([type="range"]):not([type="file"]), 
-select, 
-textarea, 
+.hub-form-group input:not([type="checkbox"]):not([type="radio"]):not([type="color"]):not([type="range"]):not([type="file"]), 
+.modal-body input:not([type="checkbox"]):not([type="radio"]):not([type="color"]):not([type="range"]):not([type="file"]),
+.hub-form-group select, .modal-body select, 
+.hub-form-group textarea, .modal-body textarea, 
 .hub-input {
   background: #f8fafc;
   border: 1px solid #cbd5e1;
@@ -20,9 +21,10 @@ textarea,
 }
 
 /* Focus States */
-input:not([type="checkbox"]):not([type="radio"]):not([type="color"]):not([type="range"]):not([type="file"]):focus, 
-select:focus, 
-textarea:focus, 
+.hub-form-group input:not([type="checkbox"]):not([type="radio"]):not([type="color"]):not([type="range"]):not([type="file"]):focus, 
+.modal-body input:not([type="checkbox"]):not([type="radio"]):not([type="color"]):not([type="range"]):not([type="file"]):focus, 
+.hub-form-group select:focus, .modal-body select:focus, 
+.hub-form-group textarea:focus, .modal-body textarea:focus, 
 .hub-input:focus {
   background: #ffffff;
   border-color: #0ea5e9;
@@ -31,9 +33,10 @@ textarea:focus,
 }
 
 /* Hover States */
-input:not([type="checkbox"]):not([type="radio"]):not([type="color"]):not([type="range"]):not([type="file"]):hover:not(:focus), 
-select:hover:not(:focus), 
-textarea:hover:not(:focus), 
+.hub-form-group input:not([type="checkbox"]):not([type="radio"]):not([type="color"]):not([type="range"]):not([type="file"]):hover:not(:focus), 
+.modal-body input:not([type="checkbox"]):not([type="radio"]):not([type="color"]):not([type="range"]):not([type="file"]):hover:not(:focus), 
+.hub-form-group select:hover:not(:focus), .modal-body select:hover:not(:focus), 
+.hub-form-group textarea:hover:not(:focus), .modal-body textarea:hover:not(:focus), 
 .hub-input:hover:not(:focus) {
   border-color: #94a3b8;
 }
