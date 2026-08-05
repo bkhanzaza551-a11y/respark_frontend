@@ -191,41 +191,31 @@
   text-transform: uppercase;
 }
 
-.pos-dash-card-status-paid {
-  background: #f1f5f9;
-  color: #334155;
-  border: 1px solid #e2e8f0;
+.pos-dash-card-status {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.pos-dash-card-status-started {
-  background: #f1f5f9;
-  color: #334155;
-  border: 1px solid #e2e8f0;
-}
+.pos-dash-card-status-paid { background: #dcfce7; color: #16a34a; border: 1px solid #bbf7d0; }
 
-.pos-dash-card-status-partial {
-  background: #f1f5f9;
-  color: #334155;
-  border: 1px solid #e2e8f0;
-}
+.pos-dash-card-status-started, .pos-dash-card-status-inprogress { background: #f1f5f9; color: #475569; border: 1px solid #e2e8f0; }
 
-.pos-dash-card-status-unpaid {
-  background: #f1f5f9;
-  color: #334155;
-  border: 1px solid #e2e8f0;
-}
+.pos-dash-card-status-partial { background: #fef3c7; color: #d97706; border: 1px solid #fde68a; }
 
-.pos-dash-card-status-cancelled {
-  background: #f1f5f9;
-  color: #334155;
-  border: 1px solid #e2e8f0;
-}
+.pos-dash-card-status-unpaid { background: #fee2e2; color: #dc2626; border: 1px solid #fecaca; }
 
-.pos-dash-card-status-default {
-  background: #f1f5f9;
-  color: #334155;
-  border: 1px solid #e2e8f0;
-}
+.pos-dash-card-status-cancelled { background: #f1f5f9; color: #64748b; border: 1px solid #e2e8f0; }
+
+.pos-dash-card-status-default { background: #f1f5f9; color: #475569; border: 1px solid #e2e8f0; }
+.pos-dash-card-status-scheduled { background: #dbeafe; color: #2563eb; border: 1px solid #bfdbfe; }
+.pos-dash-card-status-completed { background: #dcfce7; color: #16a34a; border: 1px solid #bbf7d0; }
 
 .pos-dashboard-detail-modal {
   width: min(1300px, 98vw);

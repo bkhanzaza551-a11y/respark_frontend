@@ -996,16 +996,11 @@ export default function PosDashboardPage() {
                   </div>
                   <div style={{ display: "flex", flexDirection: "column", gap: 4, alignItems: "flex-end" }}>
                     {isAppointment ? (
-                      <span style={{
-                        fontSize: 10, fontWeight: 700, padding: "2px 8px", borderRadius: 6, textTransform: "uppercase", letterSpacing: "0.5px",
-                        background: "#f1f5f9",
-                        color: "#334155",
-                        border: "1px solid #e2e8f0"
-                      }}>
+                      <span className={`pos-dash-card-status pos-dash-card-status-${apptStatus === "COMPLETED" ? "completed" : apptStatus === "IN_PROGRESS" || apptStatus === "CHECKED_IN" ? "inprogress" : "scheduled"}`}>
                         {apptStatus === "COMPLETED" ? "Completed" : apptStatus === "IN_PROGRESS" || apptStatus === "CHECKED_IN" ? "In Progress" : "Scheduled"}
                       </span>
                     ) : (
-                      <span className={`pos-dash-card-pickup pos-dash-card-status-${(row.status || "default").toLowerCase()}`}>
+                      <span className={`pos-dash-card-status pos-dash-card-status-${(row.status || "default").toLowerCase()}`}>
                         {row.status === "PAID" ? "Paid" : row.status === "STARTED" ? "In Progress" : row.status === "PARTIAL" ? "Partial" : row.status === "UNPAID" ? "Unpaid" : row.status === "CANCELLED" ? "Cancelled" : row.status || "N/A"}
                       </span>
                     )}
