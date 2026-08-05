@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { X } from 'lucide-react';
+import { X, Layers, Plus, Edit2 } from 'lucide-react';
 import { api } from '../../api/client';
 import EmptyState from '../../components/EmptyState';
 import { formatApiError } from '../../utils/apiError';
@@ -479,9 +479,14 @@ export default function ServiceHubPage() {
       {isCategoryModalOpen && (
         <div className="hub-modal-overlay" onClick={() => setIsCategoryModalOpen(false)}>
           <form className="hub-modal-content" onSubmit={handleCategorySubmit} onClick={(e) => e.stopPropagation()}>
-            <div className="hub-modal-header" style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-              New Category
-              <button type="button" onClick={() => setIsCategoryModalOpen(false)} style={{ background: "none", border: "none", cursor: "pointer", color: "#60a5fa", padding: 4, display: "flex" }}><X size={18} /></button>
+            <div className="hub-modal-header" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "24px 32px", borderBottom: "1px solid #e2e8f0", background: "#ffffff", borderTopLeftRadius: 16, borderTopRightRadius: 16 }}>
+              <h2 style={{ fontSize: 22, fontWeight: 800, color: "#0f172a", margin: 0, display: "flex", alignItems: "center", gap: 10 }}>
+                <div style={{ background: "#f0f9ff", padding: 8, borderRadius: 10, display: "flex", color: "#0ea5e9" }}>
+                   <Layers size={20} />
+                </div>
+                New Category
+              </h2>
+              <button type="button" onClick={() => setIsCategoryModalOpen(false)} style={{ background: "transparent", border: "none", cursor: "pointer", color: "#94a3b8", padding: 8, borderRadius: 8, display: "flex", transition: "all 0.2s" }} onMouseEnter={e=>{e.currentTarget.style.background="#f1f5f9"; e.currentTarget.style.color="#0f172a"}} onMouseLeave={e=>{e.currentTarget.style.background="transparent"; e.currentTarget.style.color="#94a3b8"}}><X size={20} /></button>
             </div>
             <div className="hub-modal-body">
               <div className="hub-form-group">
@@ -509,9 +514,14 @@ export default function ServiceHubPage() {
       {isServiceModalOpen && (
         <div className="hub-modal-overlay" onClick={() => setIsServiceModalOpen(false)}>
           <form className="hub-modal-content" onSubmit={handleServiceSubmit} onClick={(e) => e.stopPropagation()}>
-            <div className="hub-modal-header" style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-              <span>{editingId ? 'Edit Service' : 'New Service'}</span>
-              <button type="button" onClick={() => setIsServiceModalOpen(false)} style={{ background: "none", border: "none", cursor: "pointer", color: "#60a5fa", padding: 4, display: "flex" }}><X size={18} /></button>
+            <div className="hub-modal-header" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "24px 32px", borderBottom: "1px solid #e2e8f0", background: "#ffffff", borderTopLeftRadius: 16, borderTopRightRadius: 16 }}>
+              <h2 style={{ fontSize: 22, fontWeight: 800, color: "#0f172a", margin: 0, display: "flex", alignItems: "center", gap: 10 }}>
+                <div style={{ background: "#f0f9ff", padding: 8, borderRadius: 10, display: "flex", color: "#0ea5e9" }}>
+                   {editingId ? <Edit2 size={20} /> : <Plus size={20} />}
+                </div>
+                {editingId ? "Edit Service" : "Create New Service"}
+              </h2>
+              <button type="button" onClick={() => setIsServiceModalOpen(false)} style={{ background: "transparent", border: "none", cursor: "pointer", color: "#94a3b8", padding: 8, borderRadius: 8, display: "flex", transition: "all 0.2s" }} onMouseEnter={e=>{e.currentTarget.style.background="#f1f5f9"; e.currentTarget.style.color="#0f172a"}} onMouseLeave={e=>{e.currentTarget.style.background="transparent"; e.currentTarget.style.color="#94a3b8"}}><X size={20} /></button>
             </div>
             <div className="hub-modal-body">
               {/* Name + Active toggle */}

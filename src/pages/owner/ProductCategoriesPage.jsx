@@ -469,9 +469,14 @@ export default function ProductCategoriesPage() {
       {showCategoryModal && (
         <div className="hub-modal-overlay" onClick={() => setShowCategoryModal(false)}>
           <div className="hub-modal-content" onClick={e => e.stopPropagation()} style={{ maxWidth: 480, borderRadius: 16 }}>
-            <div className="hub-modal-header" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "20px 24px", borderBottom: "1px solid #e2e8f0" }}>
-              <span style={{ fontSize: 18, fontWeight: 700, color: "#0f172a" }}>New Category</span>
-              <button type="button" onClick={() => setShowCategoryModal(false)} style={{ background: "#f1f5f9", border: "none", cursor: "pointer", color: "#64748b", padding: 6, borderRadius: "50%", display: "flex" }} onMouseEnter={e=>e.currentTarget.style.background="#e2e8f0"} onMouseLeave={e=>e.currentTarget.style.background="#f1f5f9"}><X size={16} /></button>
+            <div className="hub-modal-header" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "24px 32px", borderBottom: "1px solid #e2e8f0", background: "#ffffff", borderTopLeftRadius: 16, borderTopRightRadius: 16 }}>
+              <h2 style={{ fontSize: 22, fontWeight: 800, color: "#0f172a", margin: 0, display: "flex", alignItems: "center", gap: 10 }}>
+                <div style={{ background: "#f0f9ff", padding: 8, borderRadius: 10, display: "flex", color: "#0ea5e9" }}>
+                   <Package size={20} />
+                </div>
+                New Category
+              </h2>
+              <button type="button" onClick={() => setShowCategoryModal(false)} style={{ background: "transparent", border: "none", cursor: "pointer", color: "#94a3b8", padding: 8, borderRadius: 8, display: "flex", transition: "all 0.2s" }} onMouseEnter={e=>{e.currentTarget.style.background="#f1f5f9"; e.currentTarget.style.color="#0f172a"}} onMouseLeave={e=>{e.currentTarget.style.background="transparent"; e.currentTarget.style.color="#94a3b8"}}><X size={20} /></button>
             </div>
             <form onSubmit={handleSaveCategory} style={{ padding: "24px" }}>
               <div className="hub-form-group" style={{ marginBottom: 24 }}>
@@ -491,12 +496,17 @@ export default function ProductCategoriesPage() {
       {showProductModal && (
         <div className="hub-modal-overlay" onClick={() => setShowProductModal(false)}>
           <div className="hub-modal-content" onClick={e => e.stopPropagation()} style={{ maxWidth: 680, maxHeight: "90vh", display: "flex", flexDirection: "column", borderRadius: 16 }}>
-            <div className="hub-modal-header" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "20px 28px", borderBottom: "1px solid #e2e8f0", background: "#f8fafc", borderTopLeftRadius: 16, borderTopRightRadius: 16 }}>
-              <span style={{ fontSize: 18, fontWeight: 700, color: "#0f172a", display: "flex", alignItems: "center", gap: 8 }}>
-                {editingProduct ? <Edit2 size={18} color="#3b82f6" /> : <Plus size={18} color="#3b82f6" />}
-                {selectedCategory ? <span style={{ color: "#64748b" }}>{selectedCategory.name} / </span> : ""}{editingProduct ? "Edit Item" : "New Item"}
-              </span>
-              <button type="button" onClick={() => setShowProductModal(false)} style={{ background: "#e2e8f0", border: "none", cursor: "pointer", color: "#475569", padding: 6, borderRadius: "50%", display: "flex" }} onMouseEnter={e=>e.currentTarget.style.background="#cbd5e1"} onMouseLeave={e=>e.currentTarget.style.background="#e2e8f0"}><X size={16} /></button>
+            <div className="hub-modal-header" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "24px 32px", borderBottom: "1px solid #e2e8f0", background: "#ffffff", borderTopLeftRadius: 16, borderTopRightRadius: 16 }}>
+              <div>
+                <h2 style={{ fontSize: 22, fontWeight: 800, color: "#0f172a", margin: 0, display: "flex", alignItems: "center", gap: 10 }}>
+                  <div style={{ background: "#f0f9ff", padding: 8, borderRadius: 10, display: "flex", color: "#0ea5e9" }}>
+                     {editingProduct ? <Edit2 size={20} /> : <Plus size={20} />}
+                  </div>
+                  {editingProduct ? "Edit Product" : "Create New Product"}
+                </h2>
+                {selectedCategory && <p style={{ margin: "6px 0 0 46px", fontSize: 14, color: "#64748b", fontWeight: 500 }}>Category: {selectedCategory.name}</p>}
+              </div>
+              <button type="button" onClick={() => setShowProductModal(false)} style={{ background: "transparent", border: "none", cursor: "pointer", color: "#94a3b8", padding: 8, borderRadius: 8, display: "flex", transition: "all 0.2s" }} onMouseEnter={e=>{e.currentTarget.style.background="#f1f5f9"; e.currentTarget.style.color="#0f172a"}} onMouseLeave={e=>{e.currentTarget.style.background="transparent"; e.currentTarget.style.color="#94a3b8"}}><X size={20} /></button>
             </div>
             <form onSubmit={handleSaveProduct} style={{ display: "flex", flexDirection: "column", overflow: "hidden", flex: 1 }}>
               <div className="hub-modal-body" style={{ overflowY: "auto", flex: 1, padding: "24px 28px" }}>
