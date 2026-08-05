@@ -52,7 +52,7 @@ input:-webkit-autofill:active {
 }
 
 /* Standardize Labels */
-.hub-form-group label, 
+.hub-form-group label:not([style*="align-items: center"]):not([style*="display: flex"]), 
 .modal-content label:not([style*="align-items: center"]):not([style*="display: flex"]),
 .modal-body label:not([style*="align-items: center"]):not([style*="display: flex"]) {
   font-size: 13px !important;
