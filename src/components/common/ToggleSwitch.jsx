@@ -2,7 +2,7 @@ import React from 'react';
 
 export default function ToggleSwitch({ checked, onChange, label, color = "#0ea5e9", labelColor = "#475569", style = {} }) {
   return (
-    <label style={{ display: "flex", alignItems: "center", gap: 10, cursor: "pointer", userSelect: "none", ...style }}>
+    <label style={{ display: "flex", flexDirection: "row", alignItems: "center", gap: 10, cursor: "pointer", userSelect: "none", ...style }}>
       <input 
         type="checkbox" 
         checked={checked} 
