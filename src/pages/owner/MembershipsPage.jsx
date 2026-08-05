@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import CustomDropdown from '../../components/common/CustomDropdown';
+import ToggleSwitch from '../../components/common/ToggleSwitch';
 import { Link, useLocation, useParams } from "react-router-dom";
 import { Trash2, Edit2, Plus, PackageOpen, Package, X, UserPlus } from 'lucide-react';
 import { api } from "../../api/client";
@@ -456,18 +457,10 @@ export default function MembershipsPage() {
                     placeholder="Enter Name" 
                     value={membershipForm.name} 
                     onChange={(e) => setMembershipForm({ ...membershipForm, name: e.target.value })} 
-                    style={{ width: "100%", padding: "10px 12px", borderRadius: "6px", border: "1px solid #cbd5e1", fontSize: "0.85rem", boxSizing: "border-box", outline: "none" }}
+                   
                   />
                 </div>
-                <div style={{ display: "flex", alignItems: "center", gap: "8px", height: "38px" }}>
-                  <input 
-                    type="checkbox" 
-                    checked={membershipForm.isActive} 
-                    onChange={(e) => setMembershipForm({ ...membershipForm, isActive: e.target.checked })}
-                    style={{ accentColor: "var(--accent, #3b82f6)", width: "16px", height: "16px", cursor: "pointer" }}
-                  />
-                  <span style={{ fontSize: "0.85rem", fontWeight: 600, color: "#0f172a" }}>Active</span>
-                </div>
+                <ToggleSwitch label="Active" checked={membershipForm.isActive} onChange={(e) => setMembershipForm({ ...membershipForm, isActive: e.target.checked })} />
               </div>
 
               {/* Fees, Validity, Renewal Reminder, Standard Discount */}
@@ -479,7 +472,7 @@ export default function MembershipsPage() {
                     placeholder="Enter Fee" 
                     value={membershipForm.price} 
                     onChange={(e) => setMembershipForm({ ...membershipForm, price: e.target.value })} 
-                    style={{ width: "100%", padding: "10px 12px", borderRadius: "6px", border: "1px solid #cbd5e1", fontSize: "0.85rem", boxSizing: "border-box", outline: "none" }}
+                   
                   />
                 </div>
                 <div>
@@ -489,7 +482,7 @@ export default function MembershipsPage() {
                     placeholder="In Days" 
                     value={membershipForm.validityDays} 
                     onChange={(e) => setMembershipForm({ ...membershipForm, validityDays: e.target.value })} 
-                    style={{ width: "100%", padding: "10px 12px", borderRadius: "6px", border: "1px solid #cbd5e1", fontSize: "0.85rem", boxSizing: "border-box", outline: "none" }}
+                   
                   />
                 </div>
                 <div>
@@ -499,7 +492,7 @@ export default function MembershipsPage() {
                     placeholder="In Days" 
                     value={membershipForm.renewalReminder} 
                     onChange={(e) => setMembershipForm({ ...membershipForm, renewalReminder: e.target.value })} 
-                    style={{ width: "100%", padding: "10px 12px", borderRadius: "6px", border: "1px solid #cbd5e1", fontSize: "0.85rem", boxSizing: "border-box", outline: "none" }}
+                   
                   />
                 </div>
                 {membershipForm.membershipType === "Percentage" && (
@@ -510,7 +503,7 @@ export default function MembershipsPage() {
                       placeholder="Enter %" 
                       value={membershipForm.discountValue} 
                       onChange={(e) => setMembershipForm({ ...membershipForm, discountValue: e.target.value })} 
-                      style={{ width: "100%", padding: "10px 12px", borderRadius: "6px", border: "1px solid #cbd5e1", fontSize: "0.85rem", boxSizing: "border-box", outline: "none" }}
+                     
                     />
                   </div>
                 )}
@@ -525,38 +518,20 @@ export default function MembershipsPage() {
                     placeholder="Enter Amount" 
                     value={membershipForm.walletValue} 
                     onChange={(e) => setMembershipForm({ ...membershipForm, walletValue: e.target.value })} 
-                    style={{ width: "100%", padding: "10px 12px", borderRadius: "6px", border: "1px solid #cbd5e1", fontSize: "0.85rem", boxSizing: "border-box", outline: "none" }}
+                   
                   />
                 </div>
               )}
 
               {/* Toggles */}
               <div style={{ display: "flex", flexDirection: "column", gap: "12px", marginTop: "8px" }}>
-                <label style={{ display: "flex", alignItems: "center", gap: "12px", cursor: "pointer", width: "fit-content" }}>
-                  <span style={{ fontSize: "0.85rem", color: "#0f172a", fontWeight: 600 }}>Membership Sharable</span>
-                  <div style={{ position: "relative", width: "36px", height: "20px", background: membershipForm.isSharable ? "#3b82f6" : "#cbd5e1", borderRadius: "20px", transition: "background 0.3s" }}>
-                    <div style={{ position: "absolute", top: "2px", left: membershipForm.isSharable ? "18px" : "2px", width: "16px", height: "16px", background: "white", borderRadius: "50%", transition: "left 0.3s" }}></div>
-                  </div>
-                  <input type="checkbox" checked={membershipForm.isSharable} onChange={e => setMembershipForm({...membershipForm, isSharable: e.target.checked})} style={{ display: "none" }} />
-                </label>
+                <ToggleSwitch label="Membership Sharable" checked={membershipForm.isSharable} onChange={e => setMembershipForm({...membershipForm, isSharable: e.target.checked})} />
                 
                 {membershipForm.membershipType === "Percentage" && (
                   <>
-                    <label style={{ display: "flex", alignItems: "center", gap: "12px", cursor: "pointer", width: "fit-content" }}>
-                      <span style={{ fontSize: "0.85rem", color: "#0f172a", fontWeight: 600 }}>Apply Membership For Selected Days</span>
-                      <div style={{ position: "relative", width: "36px", height: "20px", background: membershipForm.applySelectedDays ? "#3b82f6" : "#cbd5e1", borderRadius: "20px", transition: "background 0.3s" }}>
-                        <div style={{ position: "absolute", top: "2px", left: membershipForm.applySelectedDays ? "18px" : "2px", width: "16px", height: "16px", background: "white", borderRadius: "50%", transition: "left 0.3s" }}></div>
-                      </div>
-                      <input type="checkbox" checked={membershipForm.applySelectedDays} onChange={e => setMembershipForm({...membershipForm, applySelectedDays: e.target.checked})} style={{ display: "none" }} />
-                    </label>
+                    <ToggleSwitch label="Apply For Selected Days" checked={membershipForm.applySelectedDays} onChange={e => setMembershipForm({...membershipForm, applySelectedDays: e.target.checked})} />
 
-                    <label style={{ display: "flex", alignItems: "center", gap: "12px", cursor: "pointer", width: "fit-content" }}>
-                      <span style={{ fontSize: "0.85rem", color: "#0f172a", fontWeight: 600 }}>Apply Membership On Selected Services</span>
-                      <div style={{ position: "relative", width: "36px", height: "20px", background: membershipForm.applySelectedServices ? "#3b82f6" : "#cbd5e1", borderRadius: "20px", transition: "background 0.3s" }}>
-                        <div style={{ position: "absolute", top: "2px", left: membershipForm.applySelectedServices ? "18px" : "2px", width: "16px", height: "16px", background: "white", borderRadius: "50%", transition: "left 0.3s" }}></div>
-                      </div>
-                      <input type="checkbox" checked={membershipForm.applySelectedServices} onChange={e => setMembershipForm({...membershipForm, applySelectedServices: e.target.checked})} style={{ display: "none" }} />
-                    </label>
+                    <ToggleSwitch label="Apply On Selected Services" checked={membershipForm.applySelectedServices} onChange={e => setMembershipForm({...membershipForm, applySelectedServices: e.target.checked})} />
                   </>
                 )}
               </div>
@@ -570,7 +545,7 @@ export default function MembershipsPage() {
                     placeholder="Search services..." 
                     value={serviceSearch} 
                     onChange={(e) => setServiceSearch(e.target.value)} 
-                    style={{ marginBottom: "12px", padding: "8px 12px", width: "100%", borderRadius: "6px", border: "1px solid #cbd5e1", boxSizing: "border-box", fontSize: "0.8rem", outline: "none" }}
+                   
                   />
                   <div style={{ display: "flex", flexWrap: "wrap", gap: "8px", maxHeight: "150px", overflowY: "auto" }}>
                     {services.filter(s => s.name.toLowerCase().includes(serviceSearch.toLowerCase())).map((service) => {
@@ -673,17 +648,10 @@ export default function MembershipsPage() {
                     placeholder="e.g. Bridal Package" 
                     value={packageForm.name} 
                     onChange={(e) => setPackageForm({ ...packageForm, name: e.target.value })} 
-                    style={{ width: "100%", padding: "10px 12px", borderRadius: "6px", border: "1px solid #cbd5e1", fontSize: "0.85rem", boxSizing: "border-box", outline: "none" }}
+                   
                   />
                 </div>
-                <div style={{ display: "flex", alignItems: "center", gap: "8px", height: "38px" }}>
-                  <input 
-                    type="checkbox" 
-                    defaultChecked={true}
-                    style={{ accentColor: "var(--accent, #3b82f6)", width: "16px", height: "16px", cursor: "pointer" }}
-                  />
-                  <span style={{ fontSize: "0.85rem", fontWeight: 600, color: "#0f172a" }}>Active</span>
-                </div>
+                <ToggleSwitch label="Active" checked={true} onChange={() => {}} />
               </div>
 
               {/* Price, Total Sessions, Validity */}
@@ -696,7 +664,7 @@ export default function MembershipsPage() {
                     placeholder="0" 
                     value={packageForm.price} 
                     onChange={(e) => setPackageForm({ ...packageForm, price: e.target.value })} 
-                    style={{ width: "100%", padding: "10px 12px", borderRadius: "6px", border: "1px solid #cbd5e1", fontSize: "0.85rem", boxSizing: "border-box", outline: "none" }}
+                   
                   />
                 </div>
                 <div>
@@ -707,7 +675,7 @@ export default function MembershipsPage() {
                     placeholder="5" 
                     value={packageForm.totalSessions} 
                     onChange={(e) => setPackageForm({ ...packageForm, totalSessions: e.target.value })} 
-                    style={{ width: "100%", padding: "10px 12px", borderRadius: "6px", border: "1px solid #cbd5e1", fontSize: "0.85rem", boxSizing: "border-box", outline: "none" }}
+                   
                   />
                 </div>
                 <div>
@@ -718,20 +686,14 @@ export default function MembershipsPage() {
                     placeholder="60" 
                     value={packageForm.validityDays} 
                     onChange={(e) => setPackageForm({ ...packageForm, validityDays: e.target.value })} 
-                    style={{ width: "100%", padding: "10px 12px", borderRadius: "6px", border: "1px solid #cbd5e1", fontSize: "0.85rem", boxSizing: "border-box", outline: "none" }}
+                   
                   />
                 </div>
               </div>
 
               {/* Toggles */}
               <div style={{ display: "flex", flexDirection: "column", gap: "12px", marginTop: "8px" }}>
-                <label style={{ display: "flex", alignItems: "center", gap: "12px", cursor: "pointer", width: "fit-content" }}>
-                  <span style={{ fontSize: "0.85rem", color: "#0f172a", fontWeight: 600 }}>Does this package include physical products?</span>
-                  <div style={{ position: "relative", width: "36px", height: "20px", background: packageForm.includeProducts ? "#3b82f6" : "#cbd5e1", borderRadius: "20px", transition: "background 0.3s" }}>
-                    <div style={{ position: "absolute", top: "2px", left: packageForm.includeProducts ? "18px" : "2px", width: "16px", height: "16px", background: "white", borderRadius: "50%", transition: "left 0.3s" }}></div>
-                  </div>
-                  <input type="checkbox" checked={packageForm.includeProducts} onChange={e => setPackageForm({...packageForm, includeProducts: e.target.checked})} style={{ display: "none" }} />
-                </label>
+                <ToggleSwitch label="Include physical products" checked={packageForm.includeProducts} onChange={e => setPackageForm({...packageForm, includeProducts: e.target.checked})} />
               </div>
 
               {/* Service Category + Selected Services + Individual Services */}
@@ -740,7 +702,7 @@ export default function MembershipsPage() {
                 <CustomDropdown
                   value={packageForm.selectedCategoryId}
                   onChange={(e) => handleCategorySelect(e.target.value)}
-                  style={{ width: "100%", padding: "10px 12px", borderRadius: "6px", border: "1px solid #cbd5e1", fontSize: "0.85rem", boxSizing: "border-box", outline: "none", marginBottom: "12px" }}
+                 
                 >
                   <option value="">Select a category to auto-add services</option>
                   {serviceCategories.map((cat) => (
@@ -782,7 +744,7 @@ export default function MembershipsPage() {
                   placeholder="Search services..."
                   value={serviceSearch}
                   onChange={(e) => setServiceSearch(e.target.value)}
-                  style={{ marginBottom: "12px", padding: "8px 12px", width: "100%", borderRadius: "6px", border: "1px solid #cbd5e1", boxSizing: "border-box", fontSize: "0.8rem", outline: "none" }}
+                 
                 />
                 <div style={{ display: "flex", flexWrap: "wrap", gap: "8px", maxHeight: "150px", overflowY: "auto" }}>
                   {services.filter(s => s.name.toLowerCase().includes(serviceSearch.toLowerCase())).map((service) => {
@@ -816,7 +778,7 @@ export default function MembershipsPage() {
                     placeholder="Search products..." 
                     value={productSearch} 
                     onChange={(e) => setProductSearch(e.target.value)} 
-                    style={{ marginBottom: "12px", padding: "8px 12px", width: "100%", borderRadius: "6px", border: "1px solid #cbd5e1", boxSizing: "border-box", fontSize: "0.8rem", outline: "none" }}
+                   
                   />
                   <div style={{ display: "flex", flexWrap: "wrap", gap: "8px", maxHeight: "150px", overflowY: "auto" }}>
                     {products.filter(p => p.name.toLowerCase().includes(productSearch.toLowerCase())).map((product) => {
