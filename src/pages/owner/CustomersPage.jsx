@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, useMemo } from "react";
-import { Search, Filter, Plus, Download, Upload, MoreVertical, ChevronsLeft, ChevronLeft, ChevronRight, ChevronsRight, X, ChevronDown, Trash2, GitMerge, MessageCircle, User, FileText, CreditCard, Gift, Wallet, AlertCircle, Package, Users, UserCog, Tag, Phone, StickyNote, Edit3, CheckCircle, Circle, Eye, Monitor } from "lucide-react";
+import { Search, Filter, Plus, Download, Upload, MoreVertical, MoreHorizontal, ChevronsLeft, ChevronLeft, ChevronRight, ChevronsRight, X, ChevronDown, Trash2, GitMerge, MessageCircle, User, FileText, CreditCard, Gift, Wallet, AlertCircle, Package, Users, UserCog, Tag, Phone, StickyNote, Edit3, CheckCircle, Circle, Eye, Monitor } from "lucide-react";
 import { api } from "../../api/client";
 import IndianPhoneInput from "../../components/IndianPhoneInput";
 import { useSalonSettings } from "../../context/SalonSettingsContext";
@@ -1572,7 +1572,7 @@ export default function CustomersPage() {
                     <td>{formatCompactDate(row.dateOfBirth, false)}</td>
                     <td className="crm-row-action" onClick={(e) => e.stopPropagation()}>
                       <button className="crm-row-action-trigger" onClick={(e) => { e.stopPropagation(); setActiveMenuRowId((current) => current === row.id ? "" : row.id); }}>
-                        <MoreVertical size={22} />
+                        <MoreHorizontal size={24} strokeWidth={3} color="#1e293b" />
                       </button>
                       {activeMenuRowId === row.id && (
                         <div className="crm-row-menu" ref={actionMenuRef}>
