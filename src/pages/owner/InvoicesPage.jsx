@@ -151,7 +151,7 @@ export default function InvoicesPage() {
   };
 
   return (
-    <div className="page-shell" style={{ maxWidth: '1200px', margin: '0 auto', padding: '24px' }}>
+    <div className="page-shell" style={{ maxWidth: '100%', margin: '0 auto', padding: '24px 32px' }}>
       <div style={{ padding: '0 4px 24px 4px', borderBottom: '1px solid #e2e8f0', marginBottom: '24px' }}>
         <h2 style={{ fontSize: '1.8rem', fontWeight: '800', color: '#0f172a', letterSpacing: '-0.02em', marginBottom: '8px' }}>Invoices & Billing</h2>
         <p style={{ color: '#64748b', fontSize: '0.95rem', lineHeight: '1.5', maxWidth: '800px', margin: 0 }}>
@@ -202,7 +202,7 @@ export default function InvoicesPage() {
       {status.error && <div style={{ backgroundColor: '#fef2f2', color: '#991b1b', padding: '12px 16px', borderRadius: '8px', marginBottom: '20px', border: '1px solid #fecaca' }}>{status.error}</div>}
       {status.success && <div style={{ backgroundColor: '#f0fdf4', color: '#166534', padding: '12px 16px', borderRadius: '8px', marginBottom: '20px', border: '1px solid #bbf7d0' }}>{status.success}</div>}
 
-      <div className="two-col" style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1fr) minmax(0, 1.2fr)', gap: '32px', alignItems: 'flex-start' }}>
+      <div className="two-col" style={{ display: 'grid', gridTemplateColumns: '1fr 1.2fr', gap: '16px', alignItems: 'flex-start' }}>
         <div style={{ display: 'flex', flexDirection: 'column' }}>
           {status.loading ? <PageLoader compact title="Loading invoices" message="Preparing invoice list..." /> : null}
           <div className="no-print" style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
