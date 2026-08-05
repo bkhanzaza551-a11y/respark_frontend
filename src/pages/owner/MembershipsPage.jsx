@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import CustomDropdown from '../../components/common/CustomDropdown';
-import { Link, useLocation, useParams } from "react-router-dom";
-import { Trash2, Edit2, Plus, PackageOpen, Package } from "lucide-react";
+import { Link, useLocation, useParams, useNavigate } from "react-router-dom";
+import { Trash2, Edit2, Plus, PackageOpen, Package, X, UserPlus, CheckCircle, ChevronRight } from "lucide-react";
 import { api } from "../../api/client";
 import { useSalonSettings } from "../../context/SalonSettingsContext";
 import { useBranch } from "../../context/BranchContext";
@@ -12,6 +12,23 @@ import PageLoader from "../../components/PageLoader";
 import "./MembershipsPage.css";
 
 
+
+const ModalWrapper = ({ isOpen, onClose, title, children }) => {
+  if (!isOpen) return null;
+  return (
+    <div style={{ position: "fixed", inset: 0, zIndex: 100000, display: "flex", alignItems: "center", justifyContent: "center", background: "rgba(15, 23, 42, 0.6)", backdropFilter: "blur(4px)" }} onClick={onClose}>
+      <div style={{ background: "white", borderRadius: 16, width: "100%", maxWidth: 700, maxHeight: "90vh", display: "flex", flexDirection: "column", boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.1)" }} onClick={e => e.stopPropagation()}>
+        <div style={{ padding: "20px 24px", borderBottom: "1px solid #e2e8f0", display: "flex", justifyContent: "space-between", alignItems: "center", background: "#f8fafc", borderTopLeftRadius: 16, borderTopRightRadius: 16 }}>
+          <h2 style={{ margin: 0, fontSize: 18, fontWeight: 700, color: "#0f172a" }}>{title}</h2>
+          <button onClick={onClose} type="button" style={{ background: "none", border: "none", cursor: "pointer", color: "#64748b" }}><X size={20} /></button>
+        </div>
+        <div style={{ padding: "24px", overflowY: "auto", flex: 1 }} className="hub-form-group">
+          {children}
+        </div>
+      </div>
+    </div>
+  );
+};
 const emptyMembership = {
   membershipType: "Fixed", // 'Fixed' or 'Percentage'
   name: "",
@@ -43,6 +60,7 @@ const cleanBenefits = (value) => normalizeBenefits(value).map((item) => ({
 
 export default function MembershipsPage() {
   const location = useLocation();
+  const navigate = useNavigate();
   const { id: routeId } = useParams();
   const { formatMoney } = useSalonSettings();
   const { selectedBranchId } = useBranch();
@@ -66,6 +84,27 @@ export default function MembershipsPage() {
   const [status, setStatus] = useState({ error: "", success: "" });
   const [loading, setLoading] = useState(true);
   const [deletingId, setDeletingId] = useState(null);
+  const [showMembershipModal, setShowMembershipModal] = useState(false);
+  const [showPackageModal, setShowPackageModal] = useState(false);
+  const [showAssignMembershipModal, setShowAssignMembershipModal] = useState(false);
+  const [showAssignPackageModal, setShowAssignPackageModal] = useState(false);
+  
+  useEffect(() => {
+    if (editableMembershipId || location.pathname.includes('/memberships/create')) {
+      setShowMembershipModal(true);
+    } else {
+      setShowMembershipModal(false);
+    }
+  }, [editableMembershipId, location.pathname]);
+  
+  useEffect(() => {
+    if (editablePackageId || location.pathname.includes('/packages/create')) {
+      setShowPackageModal(true);
+    } else {
+      setShowPackageModal(false);
+    }
+  }, [editablePackageId, location.pathname]);
+
 
   const applyWorkspaceData = useCallback(async ({
     membershipResponse,
@@ -372,7 +411,7 @@ export default function MembershipsPage() {
           ]}
         />
       )}
-      <div className="settings-section-grid">
+      <div className="crm-table-container">
         {(activeSection === "memberships") && <div className="panel-card">
           <h3>{customerMembershipMode ? "Assigned Memberships" : "Membership Plans"}</h3>
           {loading ? <PageLoader compact title="Loading memberships" message="Preparing plans, assignments, and customer usage balances." /> : null}
@@ -514,6 +553,8 @@ export default function MembershipsPage() {
                 setMembershipForm(emptyMembership);
                 await loadAll();
                 setStatus({ error: "", success: membershipEditMode ? "Membership updated." : "Membership created." });
+                setShowMembershipModal(false);
+                navigate("/admin/memberships");
               } catch (error) {
                 setStatus({ error: formatApiError(error, "Could not save membership"), success: "" });
               }
@@ -719,7 +760,7 @@ export default function MembershipsPage() {
 
               {/* Actions */}
               <div style={{ display: "flex", justifyContent: "flex-end", gap: "12px", marginTop: "10px" }}>
-                <button type="button" onClick={() => setMembershipForm(emptyMembership)} style={{ padding: "8px 24px", borderRadius: "6px", border: "1px solid #cbd5e1", background: "#f1f5f9", color: "#475569", fontWeight: 600, cursor: "pointer" }}>Cancel</button>
+                <button type="button" onClick={() => { setMembershipForm(emptyMembership); navigate("/admin/memberships"); setShowMembershipModal(false); }} style={{ padding: "8px 24px", borderRadius: "6px", border: "1px solid #cbd5e1", background: "#f1f5f9", color: "#475569", fontWeight: 600, cursor: "pointer" }}>Cancel</button>
                 <button type="submit" style={{ padding: "8px 32px", borderRadius: "6px", border: "none", background: "var(--button-bg-solid, #3b82f6)", color: "white", fontWeight: 600, cursor: "pointer", transition: "opacity 0.2s" }}>Save</button>
               </div>
 
@@ -767,6 +808,8 @@ export default function MembershipsPage() {
                 setProductSearch("");
                 await loadAll();
                 setStatus({ error: "", success: packageEditMode ? "Package updated." : "Package created." });
+                setShowPackageModal(false);
+                navigate("/admin/packages");
               } catch (error) {
                 setStatus({ error: formatApiError(error, "Could not save package"), success: "" });
               }
@@ -961,7 +1004,7 @@ export default function MembershipsPage() {
 
               {/* Actions */}
               <div style={{ display: "flex", justifyContent: "flex-end", gap: "12px", marginTop: "10px" }}>
-                <button type="button" onClick={() => { setPackageForm(emptyPackage); setServiceSearch(""); setProductSearch(""); }} style={{ padding: "8px 24px", borderRadius: "6px", border: "1px solid #cbd5e1", background: "#f1f5f9", color: "#475569", fontWeight: 600, cursor: "pointer" }}>Cancel</button>
+                <button type="button" onClick={() => { setPackageForm(emptyPackage); setServiceSearch(""); setProductSearch(""); navigate("/admin/packages"); setShowPackageModal(false); }} style={{ padding: "8px 24px", borderRadius: "6px", border: "1px solid #cbd5e1", background: "#f1f5f9", color: "#475569", fontWeight: 600, cursor: "pointer" }}>Cancel</button>
                 <button type="submit" style={{ padding: "8px 32px", borderRadius: "6px", border: "none", background: "var(--button-bg-solid, #3b82f6)", color: "white", fontWeight: 600, cursor: "pointer", transition: "opacity 0.2s" }}>Save</button>
               </div>
 
@@ -984,6 +1027,7 @@ export default function MembershipsPage() {
               await loadAll(customerId || assignMembershipForm.customerId);
               setAssignMembershipForm({ customerId: customerId || "", membershipPlanId: "", startsAt: "" });
               setStatus({ error: "", success: "Membership assigned." });
+              setShowAssignMembershipModal(false);
               setTimeout(() => setStatus({ error: "", success: "" }), 3000);
             } catch (error) {
               setStatus({ error: formatApiError(error, "Could not assign membership"), success: "" });
@@ -1036,6 +1080,7 @@ export default function MembershipsPage() {
               await loadAll(customerId || assignPackageForm.customerId);
               setAssignPackageForm({ customerId: customerId || "", packageId: "", startsAt: "" });
               setStatus({ error: "", success: "Package assigned." });
+              setShowAssignPackageModal(false);
               setTimeout(() => setStatus({ error: "", success: "" }), 3000);
             } catch (error) {
               setStatus({ error: formatApiError(error, "Could not assign package"), success: "" });
@@ -1281,4 +1326,4 @@ export default function MembershipsPage() {
     </div>
   );
 }
-
+
