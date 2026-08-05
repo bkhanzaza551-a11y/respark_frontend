@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback, useRef } from "react";
-import { X, Trash2, Edit2, Search, Plus, Package, ClipboardList } from "lucide-react";
+import { X, Trash2, Edit2, Search, Plus, Package, ClipboardList, Check } from "lucide-react";
 import { api } from "../../api/client";
 import { formatApiError } from "../../utils/apiError";
 import { useSalonSettings } from "../../context/SalonSettingsContext";
@@ -464,11 +464,11 @@ export default function ProductCategoriesPage() {
             <form onSubmit={handleSaveCategory} style={{ padding: "24px" }}>
               <div className="hub-form-group" style={{ marginBottom: 24 }}>
                 <label style={{ fontSize: 13, fontWeight: 600, color: "#475569", marginBottom: 6, display: "block" }}>Name *</label>
-                <input type="text" required className="hub-input" value={categoryForm.name} onChange={e => setCategoryForm({...categoryForm, name: e.target.value})} placeholder="e.g. Skin Care" style={{ width: "100%", padding: "10px 14px", borderRadius: 8, border: "1px solid #cbd5e1" }} />
+                <input type="text" required className="hub-input" value={categoryForm.name} onChange={e => setCategoryForm({...categoryForm, name: e.target.value})} placeholder="e.g. Skin Care" style={{ width: "100%", padding: "12px 16px", borderRadius: 12, border: "1px solid #cbd5e1", background: "#f8fafc", fontSize: 14, outline: "none", transition: "border 0.2s" }} onFocus={e => e.target.style.border="1px solid #3b82f6"} onBlur={e => e.target.style.border="1px solid #cbd5e1"} />
               </div>
               <div style={{ display: "flex", justifyContent: "flex-end", gap: 12, borderTop: "1px solid #f1f5f9", paddingTop: 20 }}>
-                <button type="button" onClick={() => setShowCategoryModal(false)} style={{ padding: "10px 20px", background: "#fff", border: "1px solid #cbd5e1", borderRadius: 8, fontWeight: 600, color: "#475569", cursor: "pointer" }}>Cancel</button>
-                <button type="submit" disabled={saving} style={{ padding: "10px 24px", background: "#2563eb", border: "none", borderRadius: 8, fontWeight: 600, color: "#fff", cursor: saving ? "not-allowed" : "pointer" }}>{saving ? "Saving..." : "Create Category"}</button>
+                <button type="button" onClick={() => setShowCategoryModal(false)} style={{ padding: "12px 24px", background: "#fff", border: "1px solid #cbd5e1", borderRadius: 12, fontWeight: 600, color: "#475569", cursor: "pointer", transition: "background 0.2s" }} onMouseEnter={e=>e.currentTarget.style.background="#f8fafc"} onMouseLeave={e=>e.currentTarget.style.background="#fff"}>Cancel</button>
+                <button type="submit" disabled={saving} style={{ padding: "12px 24px", background: "#0f172a", border: "none", borderRadius: 12, fontWeight: 600, color: "#fff", cursor: saving ? "not-allowed" : "pointer", transition: "background 0.2s" }} onMouseEnter={e=>{if(!saving)e.currentTarget.style.background="#1e293b"}} onMouseLeave={e=>{if(!saving)e.currentTarget.style.background="#0f172a"}}>{saving ? "Saving..." : "Create Category"}</button>
               </div>
             </form>
           </div>
@@ -564,7 +564,7 @@ export default function ProductCategoriesPage() {
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 24, padding: "16px 20px", border: "1px solid #f1f5f9", borderRadius: 12, background: "#f8fafc", gap: 16, flexWrap: "wrap" }}>
                   <div className="hub-form-group">
                     <label style={{ fontSize: 13, fontWeight: 600, color: "#475569", marginBottom: 6, display: "block" }}>Current Stock</label>
-                    <input type="number" className="hub-input" value={productForm.currentStock} onChange={e => { const val = e.target.value; setProductForm(prev => ({...prev, currentStock: val === "" ? "" : (parseFloat(val) || 0)})); }} onFocus={() => handlePriceFocus("currentStock")} onBlur={() => handlePriceBlur("currentStock")} style={{ width: 120, padding: "8px 12px", borderRadius: 8, border: "1px solid #cbd5e1" }} />
+                    <input type="number" className="hub-input" value={productForm.currentStock} onChange={e => { const val = e.target.value; setProductForm(prev => ({...prev, currentStock: val === "" ? "" : (parseFloat(val) || 0)})); }} onFocus={() => handlePriceFocus("currentStock")} onBlur={() => handlePriceBlur("currentStock")} style={{ width: 120, padding: "10px 14px", borderRadius: 12, border: "1px solid #cbd5e1", background: "#fff", fontSize: 14, outline: "none", transition: "border 0.2s" }} onFocus={e => e.target.style.border="1px solid #3b82f6"} onBlur={e => e.target.style.border="1px solid #cbd5e1"} />
                   </div>
                   <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
                     <span style={{ fontSize: 13, fontWeight: 600, color: "#475569" }}>Target Group:</span>
@@ -587,21 +587,21 @@ export default function ProductCategoriesPage() {
                 <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr 1fr", gap: 20, marginBottom: 24, alignItems: "end" }}>
                   <div className="hub-form-group">
                     <label style={{ fontSize: 13, fontWeight: 600, color: "#475569", marginBottom: 6, display: "block" }}>Cost Price</label>
-                    <div style={{ display: "flex", alignItems: "center", border: "1px solid #cbd5e1", borderRadius: 8, overflow: "hidden", background: "#fff" }}>
+                    <div style={{ display: "flex", alignItems: "center", border: "1px solid #cbd5e1", borderRadius: 12, overflow: "hidden", background: "#fff", transition: "border 0.2s" }}>
                       <span style={{ padding: "10px 12px", background: "#f8fafc", borderRight: "1px solid #e2e8f0", fontSize: 14, fontWeight: 600, color: "#64748b" }}>{currencySymbol}</span>
                       <input type="number" className="hub-input" value={productForm.costPrice} onChange={e => { const val = e.target.value; setProductForm(prev => ({...prev, costPrice: val === "" ? "" : (parseFloat(val) || 0)})); }} onFocus={() => handlePriceFocus("costPrice")} onBlur={() => handlePriceBlur("costPrice")} style={{ border: "none", flex: 1, padding: "10px", fontSize: 14 }} />
                     </div>
                   </div>
                   <div className="hub-form-group">
                     <label style={{ fontSize: 13, fontWeight: 600, color: "#475569", marginBottom: 6, display: "block" }}>Selling Price *</label>
-                    <div style={{ display: "flex", alignItems: "center", border: "1px solid #cbd5e1", borderRadius: 8, overflow: "hidden", background: "#fff" }}>
+                    <div style={{ display: "flex", alignItems: "center", border: "1px solid #cbd5e1", borderRadius: 12, overflow: "hidden", background: "#fff", transition: "border 0.2s" }}>
                       <span style={{ padding: "10px 12px", background: "#f8fafc", borderRight: "1px solid #e2e8f0", fontSize: 14, fontWeight: 600, color: "#64748b" }}>{currencySymbol}</span>
                       <input type="number" required className="hub-input" value={productForm.sellingPrice} onChange={e => { const val = e.target.value; setProductForm(prev => ({...prev, sellingPrice: val === "" ? "" : (parseFloat(val) || 0)})); }} onFocus={() => handlePriceFocus("sellingPrice")} onBlur={() => handlePriceBlur("sellingPrice")} style={{ border: "none", flex: 1, padding: "10px", fontSize: 14, fontWeight: 600 }} />
                     </div>
                   </div>
                   <div className="hub-form-group">
                     <label style={{ fontSize: 13, fontWeight: 600, color: "#475569", marginBottom: 6, display: "block" }}>Sale Price</label>
-                    <div style={{ display: "flex", alignItems: "center", border: "1px solid #cbd5e1", borderRadius: 8, overflow: "hidden", background: "#fff" }}>
+                    <div style={{ display: "flex", alignItems: "center", border: "1px solid #cbd5e1", borderRadius: 12, overflow: "hidden", background: "#fff", transition: "border 0.2s" }}>
                       <span style={{ padding: "10px 12px", background: "#f8fafc", borderRight: "1px solid #e2e8f0", fontSize: 14, fontWeight: 600, color: "#64748b" }}>{currencySymbol}</span>
                       <input type="number" className="hub-input" value={productForm.salePrice} onChange={e => { const val = e.target.value; setProductForm(prev => ({...prev, salePrice: val === "" ? "" : (parseFloat(val) || 0)})); }} onFocus={() => handlePriceFocus("salePrice")} onBlur={() => handlePriceBlur("salePrice")} style={{ border: "none", flex: 1, padding: "10px", fontSize: 14 }} />
                     </div>
@@ -618,7 +618,7 @@ export default function ProductCategoriesPage() {
                 <div style={{ display: "grid", gridTemplateColumns: "2fr 1fr", gap: 20, marginBottom: 24, alignItems: "end" }}>
                   <div className="hub-form-group">
                     <label style={{ fontSize: 13, fontWeight: 600, color: "#475569", marginBottom: 6, display: "block" }}>SKU (Stock Keeping Unit)</label>
-                    <input type="text" className="hub-input" value={productForm.sku} onChange={e => setProductForm({...productForm, sku: e.target.value})} placeholder="e.g. SHAMP-001" style={{ width: "100%", padding: "10px 14px", borderRadius: 8, border: "1px solid #cbd5e1", fontFamily: "monospace" }} />
+                    <input type="text" className="hub-input" value={productForm.sku} onChange={e => setProductForm({...productForm, sku: e.target.value})} placeholder="e.g. SHAMP-001" style={{ width: "100%", padding: "12px 16px", borderRadius: 12, border: "1px solid #cbd5e1", background: "#f8fafc", fontFamily: "monospace", fontSize: 14, outline: "none", transition: "border 0.2s" }} onFocus={e => e.target.style.border="1px solid #3b82f6"} onBlur={e => e.target.style.border="1px solid #cbd5e1"} />
                   </div>
                   <div className="hub-form-group" style={{ display: "flex", alignItems: "end", paddingBottom: 10 }}>
                     <label style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 14, fontWeight: 600, color: "#334155", cursor: "pointer" }}>
@@ -631,7 +631,7 @@ export default function ProductCategoriesPage() {
                 {/* Category */}
                 <div className="hub-form-group" style={{ marginBottom: 24 }}>
                   <label style={{ fontSize: 13, fontWeight: 600, color: "#475569", marginBottom: 6, display: "block" }}>Category</label>
-                  <select className="hub-input" value={productForm.categoryId} onChange={e => setProductForm({...productForm, categoryId: e.target.value})} style={{ width: "100%", padding: "10px 14px", borderRadius: 8, border: "1px solid #cbd5e1", background: "#fff" }}>
+                  <select className="hub-input" value={productForm.categoryId} onChange={e => setProductForm({...productForm, categoryId: e.target.value})} style={{ width: "100%", padding: "12px 16px", borderRadius: 12, border: "1px solid #cbd5e1", background: "#f8fafc", fontSize: 14, outline: "none", transition: "border 0.2s" }} onFocus={e => e.target.style.border="1px solid #3b82f6"} onBlur={e => e.target.style.border="1px solid #cbd5e1"}>
                     <option value="">No Category</option>
                     {filteredCategories.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
                   </select>
