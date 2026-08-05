@@ -3781,3 +3781,58 @@ pre {
 }
 
 
+
+/* Global Modal Overrides for Premium UI Consistency */
+.modal-overlay, .hub-modal-overlay, .premium-modal-overlay {
+    background: rgba(15, 23, 42, 0.6) !important;
+    backdrop-filter: blur(4px) !important;
+    z-index: 9999 !important;
+}
+
+.modal-content, .hub-modal-content, .premium-modal-content {
+    border-radius: 16px !important;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04) !important;
+    border: 1px solid rgba(0,0,0,0.05) !important;
+}
+
+.modal-header, .hub-modal-header, .premium-modal-header {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    padding: 24px 32px !important;
+    border-bottom: 1px solid #e2e8f0 !important;
+    background: #ffffff !important;
+    border-top-left-radius: 16px !important;
+    border-top-right-radius: 16px !important;
+}
+
+/* Force headings inside the header to be consistent */
+.modal-header span, .modal-header h2, .hub-modal-header span, .hub-modal-header h2, .premium-modal-header span, .premium-modal-header h2 {
+    font-size: 22px !important;
+    font-weight: 800 !important;
+    color: #0f172a !important;
+    margin: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+}
+
+/* Force close button inside header to be premium */
+.modal-header button, .hub-modal-header button, .premium-modal-header button {
+    background: transparent !important;
+    border: none !important;
+    cursor: pointer !important;
+    color: #94a3b8 !important;
+    padding: 8px !important;
+    border-radius: 8px !important;
+    transition: all 0.2s !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+.modal-header button:hover, .hub-modal-header button:hover, .premium-modal-header button:hover {
+    background: #f1f5f9 !important;
+    color: #0f172a !important;
+}
+

@@ -1,5 +1,6 @@
 import { useEffect, useState, useCallback, useRef } from "react";
 import CustomDropdown from '../../components/common/CustomDropdown';
+import ToggleSwitch from '../../components/common/ToggleSwitch';
 import { X, Trash2, Edit2, Search, Plus, Package, ClipboardList, Check } from "lucide-react";
 import { api } from "../../api/client";
 import { formatApiError } from "../../utils/apiError";
@@ -41,16 +42,6 @@ const defaultProductForm = {
   unit: "",
   unitConversion: ""
 };
-
-const ToggleSwitch = ({ label, checked, onChange, color = "#0ea5e9", labelColor = "#475569" }) => (
-  <label style={{ display: "flex", alignItems: "center", gap: 10, cursor: "pointer", userSelect: "none" }}>
-    <input type="checkbox" checked={checked} onChange={onChange} style={{ display: "none" }} />
-    <div style={{ position: "relative", width: 40, height: 22, background: checked ? color : "#cbd5e1", borderRadius: 20, transition: "background 0.25s ease" }}>
-      <div style={{ position: "absolute", top: 2, left: checked ? 20 : 2, width: 18, height: 18, background: "#fff", borderRadius: "50%", transition: "left 0.25s ease", boxShadow: "0 1px 3px rgba(0,0,0,0.2)" }} />
-    </div>
-    {label && <span style={{ fontSize: 13, fontWeight: 600, color: checked ? color : labelColor, transition: "color 0.2s" }}>{label}</span>}
-  </label>
-);
 
 export default function ProductCategoriesPage() {
   const { currencySymbol } = useSalonSettings();
@@ -777,9 +768,14 @@ export default function ProductCategoriesPage() {
       {stockModal.open && stockModal.product && (
         <div className="hub-modal-overlay" onClick={() => { setStockModal({ open: false, product: null }); }} style={{ background: "rgba(15, 23, 42, 0.6)", backdropFilter: "blur(4px)" }}>
           <div className="hub-modal-content" onClick={e => e.stopPropagation()} style={{ maxWidth: 580, borderRadius: 16, boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)" }}>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "20px 28px", borderBottom: "1px solid #e2e8f0", background: "#f8fafc", borderTopLeftRadius: 16, borderTopRightRadius: 16 }}>
-              <span style={{ fontSize: 18, fontWeight: 700, color: "#0f172a" }}>Update Stock Details</span>
-              <button type="button" onClick={() => { setStockModal({ open: false, product: null }); }} style={{ background: "#e2e8f0", border: "none", cursor: "pointer", color: "#475569", padding: 6, borderRadius: "50%", display: "flex" }} onMouseEnter={e=>e.currentTarget.style.background="#cbd5e1"} onMouseLeave={e=>e.currentTarget.style.background="#e2e8f0"}><X size={16} /></button>
+            <div className="hub-modal-header" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "24px 32px", borderBottom: "1px solid #e2e8f0", background: "#ffffff", borderTopLeftRadius: 16, borderTopRightRadius: 16 }}>
+              <h2 style={{ fontSize: 22, fontWeight: 800, color: "#0f172a", margin: 0, display: "flex", alignItems: "center", gap: 10 }}>
+                <div style={{ background: "#f0f9ff", padding: 8, borderRadius: 10, display: "flex", color: "#0ea5e9" }}>
+                   <Package size={20} />
+                </div>
+                Update Stock Details
+              </h2>
+              <button type="button" onClick={() => { setStockModal({ open: false, product: null }); }} style={{ background: "transparent", border: "none", cursor: "pointer", color: "#94a3b8", padding: 8, borderRadius: 8, display: "flex", transition: "all 0.2s" }} onMouseEnter={e=>{e.currentTarget.style.background="#f1f5f9"; e.currentTarget.style.color="#0f172a"}} onMouseLeave={e=>{e.currentTarget.style.background="transparent"; e.currentTarget.style.color="#94a3b8"}}><X size={20} /></button>
             </div>
             <form onSubmit={handleSaveStock} style={{ padding: "24px 28px" }}>
               <div style={{ fontSize: 14, fontWeight: 600, color: "#0f172a", marginBottom: 20 }}>{stockModal.product.name}</div>
@@ -816,18 +812,8 @@ export default function ProductCategoriesPage() {
               </div>
 
               <div style={{ display: "flex", gap: 24, marginBottom: 24, padding: "16px 20px", border: "1px solid #f1f5f9", borderRadius: 12, background: "#f8fafc" }}>
-                <label style={{ display: "flex", alignItems: "center", gap: 10, fontSize: 14, fontWeight: 600, color: "#334155", cursor: "pointer" }}>
-                  <span style={{ color: "#64748b" }}>Retail</span>
-                  <button type="button" onClick={() => setStockForm({...stockForm, productType: stockForm.productType === "RETAIL" ? "CONSUMABLE" : "RETAIL"})} style={{ width: 44, height: 24, borderRadius: 12, border: "none", background: stockForm.productType === "RETAIL" ? "#3b82f6" : "#cbd5e1", position: "relative", cursor: "pointer", transition: "background 0.2s" }}>
-                    <div style={{ width: 20, height: 20, borderRadius: "50%", background: "#fff", position: "absolute", top: 2, left: stockForm.productType === "RETAIL" ? 22 : 2, transition: "left 0.2s", boxShadow: "0 1px 3px rgba(0,0,0,0.2)" }} />
-                  </button>
-                </label>
-                <label style={{ display: "flex", alignItems: "center", gap: 10, fontSize: 14, fontWeight: 600, color: "#334155", cursor: "pointer" }}>
-                  <span style={{ color: "#64748b" }}>Consumable</span>
-                  <button type="button" onClick={() => setStockForm({...stockForm, productType: stockForm.productType === "CONSUMABLE" ? "RETAIL" : "CONSUMABLE"})} style={{ width: 44, height: 24, borderRadius: 12, border: "none", background: stockForm.productType === "CONSUMABLE" ? "#3b82f6" : "#cbd5e1", position: "relative", cursor: "pointer", transition: "background 0.2s" }}>
-                    <div style={{ width: 20, height: 20, borderRadius: "50%", background: "#fff", position: "absolute", top: 2, left: stockForm.productType === "CONSUMABLE" ? 22 : 2, transition: "left 0.2s", boxShadow: "0 1px 3px rgba(0,0,0,0.2)" }} />
-                  </button>
-                </label>
+                <ToggleSwitch label="Retail" checked={stockForm.productType === "RETAIL"} onChange={e => setStockForm({...stockForm, productType: e.target.checked ? "RETAIL" : "CONSUMABLE"})} color="#3b82f6" />
+                <ToggleSwitch label="Consumable" checked={stockForm.productType === "CONSUMABLE"} onChange={e => setStockForm({...stockForm, productType: e.target.checked ? "CONSUMABLE" : "RETAIL"})} color="#3b82f6" />
               </div>
 
               <div style={{ display: "flex", justifyContent: "flex-end", gap: 12, borderTop: "1px solid #f1f5f9", paddingTop: 20 }}>
