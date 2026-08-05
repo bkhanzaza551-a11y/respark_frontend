@@ -630,44 +630,60 @@ export default function ProductCategoriesPage() {
                 </div>
 
                 {/* Variations */}
-                <div style={{ marginBottom: 24, padding: "20px", border: "1px solid #e2e8f0", borderRadius: 12, background: "#fff" }}>
-                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
-                    <span style={{ fontSize: 15, fontWeight: 700, color: "#0f172a" }}>Variations</span>
-                    <button type="button" onClick={() => setProductForm({...productForm, variations: [...productForm.variations, { name: "", price: 0, salePrice: 0, nonDiscountable: false, storeSku: "" }]})} style={{ background: "#eff6ff", color: "#2563eb", border: "1px solid #bfdbfe", borderRadius: 8, padding: "8px 16px", fontSize: 13, fontWeight: 600, cursor: "pointer", transition: "background 0.2s" }} onMouseEnter={e=>e.currentTarget.style.background="#dbeafe"} onMouseLeave={e=>e.currentTarget.style.background="#eff6ff"}>Add Variations</button>
-                  </div>
-                  {productForm.variations.map((v, idx) => (
-                    <div key={idx} style={{ marginBottom: 16, background: "#f8fafc", padding: 16, borderRadius: 10, border: "1px solid #f1f5f9" }}>
-                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
-                        <span style={{ fontSize: 13, fontWeight: 700, color: "#475569" }}>Variation: {idx + 1}</span>
-                        <button type="button" onClick={() => setProductForm({...productForm, variations: productForm.variations.filter((_, i) => i !== idx)})} style={{ background: "#fee2e2", color: "#dc2626", border: "1px solid #fecaca", borderRadius: 6, width: 32, height: 32, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }} title="Remove Variation"><X size={14} /></button>
-                      </div>
-                      <div style={{ display: "grid", gridTemplateColumns: "1.5fr 1fr 1fr 1fr 1fr", gap: 10, alignItems: "end" }}>
-                        <div>
-                          <label style={{ fontSize: 11, fontWeight: 600, color: "#64748b", marginBottom: 4, display: "block" }}>Name</label>
-                          <input type="text" value={v.name} onChange={e => { const next = [...productForm.variations]; next[idx] = {...next[idx], name: e.target.value}; setProductForm({...productForm, variations: next}); }} placeholder="e.g. 10 gm" style={{ width: "100%", padding: "8px 12px", borderRadius: 6, border: "1px solid #cbd5e1", fontSize: 13 }} />
-                        </div>
-                        <div>
-                          <label style={{ fontSize: 11, fontWeight: 600, color: "#64748b", marginBottom: 4, display: "block" }}>Price</label>
-                          <input type="number" value={v.price || ""} onChange={e => { const next = [...productForm.variations]; next[idx] = {...next[idx], price: parseFloat(e.target.value) || 0}; setProductForm({...productForm, variations: next}); }} placeholder="0" style={{ width: "100%", padding: "8px 12px", borderRadius: 6, border: "1px solid #cbd5e1", fontSize: 13 }} />
-                        </div>
-                        <div>
-                          <label style={{ fontSize: 11, fontWeight: 600, color: "#64748b", marginBottom: 4, display: "block" }}>Sale Price</label>
-                          <input type="number" value={v.salePrice || ""} onChange={e => { const next = [...productForm.variations]; next[idx] = {...next[idx], salePrice: parseFloat(e.target.value) || 0}; setProductForm({...productForm, variations: next}); }} placeholder="0" style={{ width: "100%", padding: "8px 12px", borderRadius: 6, border: "1px solid #cbd5e1", fontSize: 13 }} />
-                        </div>
-                        <div>
-                          <label style={{ fontSize: 11, fontWeight: 600, color: "#64748b", marginBottom: 4, display: "block" }}>Non Discountable</label>
-                          <button type="button" onClick={() => { const next = [...productForm.variations]; next[idx] = {...next[idx], nonDiscountable: !v.nonDiscountable}; setProductForm({...productForm, variations: next}); }} style={{ width: 48, height: 26, borderRadius: 13, border: "none", background: v.nonDiscountable ? "#2563eb" : "#cbd5e1", position: "relative", cursor: "pointer", transition: "background 0.25s", display: "flex", alignItems: "center" }}>
-                            <div style={{ width: 22, height: 22, borderRadius: "50%", background: "#fff", position: "absolute", top: 2, left: v.nonDiscountable ? 24 : 2, transition: "left 0.25s", boxShadow: "0 1px 4px rgba(0,0,0,0.25)" }} />
-                          </button>
-                        </div>
-                        <div>
-                          <label style={{ fontSize: 11, fontWeight: 600, color: "#64748b", marginBottom: 4, display: "block" }}>Store SKU</label>
-                          <input type="text" value={v.storeSku || ""} onChange={e => { const next = [...productForm.variations]; next[idx] = {...next[idx], storeSku: e.target.value}; setProductForm({...productForm, variations: next}); }} placeholder="SKU" style={{ width: "100%", padding: "8px 12px", borderRadius: 6, border: "1px solid #cbd5e1", fontSize: 13 }} />
-                        </div>
-                      </div>
+                <div style={{ marginBottom: 24, padding: "24px", border: "1px solid #e2e8f0", borderRadius: 16, background: "#ffffff", boxShadow: "0 1px 3px rgba(0,0,0,0.02)" }}>
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20 }}>
+                    <div>
+                      <span style={{ fontSize: 16, fontWeight: 700, color: "#0f172a", display: "block" }}>Product Variations</span>
+                      <span style={{ fontSize: 13, color: "#64748b", marginTop: 4, display: "block" }}>Add different sizes, weights, or options for this product</span>
                     </div>
-                  ))}
-                  {productForm.variations.length === 0 && <div style={{ color: "#94a3b8", fontSize: 13, fontStyle: "italic" }}>No variations added.</div>}
+                    <button type="button" onClick={() => setProductForm({...productForm, variations: [...productForm.variations, { name: "", price: 0, salePrice: 0, nonDiscountable: false, storeSku: "" }]})} style={{ background: "#f0f9ff", color: "#0ea5e9", border: "1px solid #bae6fd", borderRadius: 8, padding: "8px 16px", fontSize: 13, fontWeight: 600, cursor: "pointer", transition: "all 0.2s", display: "flex", alignItems: "center", gap: 6 }} onMouseEnter={e=>{e.currentTarget.style.background="#e0f2fe"; e.currentTarget.style.borderColor="#7dd3fc"}} onMouseLeave={e=>{e.currentTarget.style.background="#f0f9ff"; e.currentTarget.style.borderColor="#bae6fd"}}><Plus size={16} /> Add Variation</button>
+                  </div>
+                  
+                  <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+                    {productForm.variations.map((v, idx) => (
+                      <div key={idx} style={{ position: "relative", background: "#f8fafc", padding: "20px 24px", borderRadius: 12, border: "1px solid #e2e8f0", display: "flex", flexDirection: "column", gap: 16, transition: "box-shadow 0.2s" }} onMouseEnter={e => e.currentTarget.style.boxShadow = "0 4px 6px -1px rgba(0,0,0,0.05)"} onMouseLeave={e => e.currentTarget.style.boxShadow = "none"}>
+                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", borderBottom: "1px solid #f1f5f9", paddingBottom: 12 }}>
+                          <span style={{ fontSize: 14, fontWeight: 700, color: "#334155", display: "flex", alignItems: "center", gap: 8 }}>
+                            <div style={{ width: 24, height: 24, borderRadius: "50%", background: "#e2e8f0", color: "#475569", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 12 }}>{idx + 1}</div>
+                            Variation Details
+                          </span>
+                          <button type="button" onClick={() => setProductForm({...productForm, variations: productForm.variations.filter((_, i) => i !== idx)})} style={{ background: "transparent", color: "#94a3b8", border: "none", borderRadius: 6, width: 32, height: 32, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", transition: "all 0.2s" }} onMouseEnter={e=>{e.currentTarget.style.background="#fee2e2"; e.currentTarget.style.color="#dc2626"}} onMouseLeave={e=>{e.currentTarget.style.background="transparent"; e.currentTarget.style.color="#94a3b8"}} title="Remove Variation"><X size={16} /></button>
+                        </div>
+                        
+                        <div style={{ display: "grid", gridTemplateColumns: "1.5fr 1fr 1fr 1.2fr", gap: 16, alignItems: "start" }}>
+                          <div>
+                            <label style={{ fontSize: 12, fontWeight: 600, color: "#475569", marginBottom: 6, display: "block" }}>Name</label>
+                            <input type="text" value={v.name} onChange={e => { const next = [...productForm.variations]; next[idx] = {...next[idx], name: e.target.value}; setProductForm({...productForm, variations: next}); }} placeholder="e.g. 500ml, 1kg" style={{ width: "100%", padding: "10px 14px", borderRadius: 8, border: "1px solid #cbd5e1", fontSize: 14, outline: "none", transition: "border 0.2s" }} onFocus={e=>e.target.style.borderColor="#0ea5e9"} onBlur={e=>e.target.style.borderColor="#cbd5e1"} />
+                          </div>
+                          <div>
+                            <label style={{ fontSize: 12, fontWeight: 600, color: "#475569", marginBottom: 6, display: "block" }}>Price</label>
+                            <input type="number" value={v.price || ""} onChange={e => { const next = [...productForm.variations]; next[idx] = {...next[idx], price: parseFloat(e.target.value) || 0}; setProductForm({...productForm, variations: next}); }} placeholder="0" style={{ width: "100%", padding: "10px 14px", borderRadius: 8, border: "1px solid #cbd5e1", fontSize: 14, outline: "none", transition: "border 0.2s" }} onFocus={e=>e.target.style.borderColor="#0ea5e9"} onBlur={e=>e.target.style.borderColor="#cbd5e1"} />
+                          </div>
+                          <div>
+                            <label style={{ fontSize: 12, fontWeight: 600, color: "#475569", marginBottom: 6, display: "block" }}>Sale Price</label>
+                            <input type="number" value={v.salePrice || ""} onChange={e => { const next = [...productForm.variations]; next[idx] = {...next[idx], salePrice: parseFloat(e.target.value) || 0}; setProductForm({...productForm, variations: next}); }} placeholder="0" style={{ width: "100%", padding: "10px 14px", borderRadius: 8, border: "1px solid #cbd5e1", fontSize: 14, outline: "none", transition: "border 0.2s" }} onFocus={e=>e.target.style.borderColor="#0ea5e9"} onBlur={e=>e.target.style.borderColor="#cbd5e1"} />
+                          </div>
+                          <div>
+                            <label style={{ fontSize: 12, fontWeight: 600, color: "#475569", marginBottom: 6, display: "block" }}>Store SKU</label>
+                            <input type="text" value={v.storeSku || ""} onChange={e => { const next = [...productForm.variations]; next[idx] = {...next[idx], storeSku: e.target.value}; setProductForm({...productForm, variations: next}); }} placeholder="Optional SKU" style={{ width: "100%", padding: "10px 14px", borderRadius: 8, border: "1px solid #cbd5e1", fontSize: 14, outline: "none", transition: "border 0.2s" }} onFocus={e=>e.target.style.borderColor="#0ea5e9"} onBlur={e=>e.target.style.borderColor="#cbd5e1"} />
+                          </div>
+                        </div>
+                        
+                        <div style={{ display: "flex", alignItems: "center", paddingTop: 8 }}>
+                           <ToggleSwitch label="No Discount on this variation" checked={v.nonDiscountable} onChange={e => { const next = [...productForm.variations]; next[idx] = {...next[idx], nonDiscountable: e.target.checked}; setProductForm({...productForm, variations: next}); }} color="#ef4444" labelColor="#64748b" />
+                        </div>
+                      </div>
+                    ))}
+                    {productForm.variations.length === 0 && (
+                      <div style={{ padding: "32px", background: "#f8fafc", borderRadius: 12, border: "1px dashed #cbd5e1", textAlign: "center", display: "flex", flexDirection: "column", alignItems: "center", gap: 12 }}>
+                        <div style={{ width: 48, height: 48, borderRadius: "50%", background: "#f1f5f9", display: "flex", alignItems: "center", justifyContent: "center", color: "#94a3b8" }}><Plus size={24} /></div>
+                        <div>
+                          <span style={{ fontSize: 14, fontWeight: 600, color: "#475569", display: "block" }}>No variations added</span>
+                          <span style={{ fontSize: 13, color: "#94a3b8", display: "block", marginTop: 4 }}>Add variations if this product comes in different sizes or types.</span>
+                        </div>
+                      </div>
+                    )}
+                  </div>
                 </div>
 
                 {/* Description + Video Link */}
