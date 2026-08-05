@@ -1143,11 +1143,11 @@ export default function AppointmentsPage() {
           flex-shrink: 0;
         }
         .sp-header h3 {
-          margin: 0;
-          font-size: 0.92rem;
-          color: #ef4444;
-          font-weight: 600;
-        }
+  margin: 0;
+  font-size: 1.05rem;
+  color: #0f172a;
+  font-weight: 700;
+}
         .sp-close {
           background: #f1f5f9;
           border: none;
@@ -1170,60 +1170,67 @@ export default function AppointmentsPage() {
           gap: 10px;
         }
         .sp-card {
-          background: white;
-          border-radius: 8px;
-          border: 1px solid #e2e8f0;
-          padding: 12px 14px;
-          box-shadow: none;
-        }
+  background: white;
+  border-radius: 10px;
+  border: 1px solid #e2e8f0;
+  padding: 16px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+}
         .sp-card-title {
-          font-size: 0.78rem;
-          color: #64748b;
-          margin-top: 0;
-          margin-bottom: 10px;
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-        }
+  font-size: 0.8rem;
+  color: #334155;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-top: 0;
+  margin-bottom: 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #f1f5f9;
+  padding-bottom: 8px;
+}
         .sp-input-group {
           position: relative;
           margin-bottom: 10px;
         }
         .sp-input {
-          width: 100%;
-          padding: 6px 10px;
-          border: 1px solid #cbd5e1;
-          border-radius: 6px;
-          font-size: 0.82rem;
-          box-sizing: border-box;
-          background: white;
-          min-height: unset;
-        }
-        .sp-input:focus { border-color: #3b82f6; outline: none; }
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  box-sizing: border-box;
+  background: #f8fafc;
+  min-height: unset;
+  transition: all 0.2s ease;
+}
+        .sp-input:focus { border-color: #3b82f6; outline: none; background: white; box-shadow: 0 0 0 3px rgba(59,130,246,0.1); }
         .sp-select {
-          width: 100%;
-          padding: 6px 10px;
-          border: 1px solid #cbd5e1;
-          border-radius: 6px;
-          font-size: 0.82rem;
-          appearance: none;
-          background: white;
-          box-sizing: border-box;
-          min-height: unset;
-        }
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  appearance: none;
+  background: #f8fafc;
+  box-sizing: border-box;
+  min-height: unset;
+  transition: all 0.2s ease;
+}
         .sp-grid-2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
         .sp-grid-2 > * { min-width: 0; }
         .sp-time-grid { display: grid; grid-template-columns: 1fr; gap: 8px; }
         .sp-time-grid > * { min-width: 0; }
         .sp-footer {
-          padding: 10px 16px;
-          background: white;
-          border-top: 1px solid #e2e8f0;
-          display: flex;
-          flex-direction: column;
-          gap: 8px;
-          flex-shrink: 0;
-        }
+  padding: 16px 20px;
+  background: #f8fafc;
+  border-top: 1px solid #e2e8f0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  flex-shrink: 0;
+}
         .sp-footer-checks {
           display: flex;
           gap: 16px;
@@ -1235,18 +1242,19 @@ export default function AppointmentsPage() {
           flex-wrap: wrap;
         }
         .sp-btn-primary {
-          width: 100%;
-          padding: 9px;
-          background: #3b82f6;
-          color: white;
-          border: none;
-          border-radius: 6px;
-          font-size: 0.88rem;
-          font-weight: 600;
-          cursor: pointer;
-          min-height: unset;
-          box-shadow: none;
-        }
+  width: 100%;
+  padding: 12px;
+  background: #2563eb;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  min-height: unset;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 12px rgba(37,99,235,0.2);
+}
         .sp-btn-primary:hover { background: #2563eb; transform: none; filter: none; }
           margin-top: 0;
           margin-bottom: 16px;
@@ -1283,13 +1291,13 @@ export default function AppointmentsPage() {
         .sp-time-grid { display: grid; grid-template-columns: 1fr; gap: 12px; }
         .sp-time-grid > * { min-width: 0; }
         .sp-footer {
-          padding: 16px 24px;
-          background: white;
-          border-top: 1px solid #e2e8f0;
-          display: flex;
-          flex-direction: column;
-          gap: 12px;
-        }
+  padding: 16px 24px;
+  background: #f8fafc;
+  border-top: 1px solid #e2e8f0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
         .sp-footer-checks {
           display: flex;
           gap: 16px;
@@ -1510,7 +1518,45 @@ export default function AppointmentsPage() {
           .date-navigator { flex-wrap: wrap; justify-content: center; gap: 8px; }
           .counters-row { flex-wrap: wrap; justify-content: center; gap: 8px; }
         }
-      `}</style>
+      `}
+        .styled-checkbox {
+          appearance: none;
+          background-color: #fff;
+          margin: 0;
+          font: inherit;
+          color: currentColor;
+          width: 1.15em;
+          height: 1.15em;
+          border: 1px solid #cbd5e1;
+          border-radius: 4px;
+          display: grid;
+          place-content: center;
+          transition: all 0.2s ease-in-out;
+          cursor: pointer;
+        }
+        .styled-checkbox::before {
+          content: "";
+          width: 0.65em;
+          height: 0.65em;
+          transform: scale(0);
+          transition: 120ms transform ease-in-out;
+          box-shadow: inset 1em 1em white;
+          background-color: white;
+          transform-origin: center;
+          clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
+        }
+        .styled-checkbox:checked {
+          background-color: #3b82f6;
+          border-color: #3b82f6;
+        }
+        .styled-checkbox:checked::before {
+          transform: scale(1);
+        }
+        .styled-checkbox:focus {
+          outline: 2px solid rgba(59,130,246,0.3);
+          outline-offset: 1px;
+        }
+      </style>
 
       <div className="calendar-toolbar">
         <div className="date-navigator">
@@ -1648,7 +1694,7 @@ export default function AppointmentsPage() {
                 {status.success && <div style={{ color: "#10b981", padding: 12, background: "#ecfdf5", borderRadius: 8 }}>{status.success}</div>}
 
                 <div className="sp-card">
-                  <h4 className="sp-card-title">1. Guest Details {editMode && form.customerId && <button className="add-link" type="button" onClick={() => navigate(`/admin/customers/${form.customerId}`)}>Guest History</button>}</h4>
+                  <h4 className="sp-card-title">Guest Details {editMode && form.customerId && <button className="add-link" type="button" onClick={() => navigate(`/admin/customers/${form.customerId}`)}>Guest History</button>}</h4>
                   <div className="sp-input-group" style={{ position: "relative" }}>
                     <input 
                       type="text" 
@@ -1696,7 +1742,7 @@ export default function AppointmentsPage() {
                 </div>
 
                 <div className="sp-card">
-                  <h4 className="sp-card-title">2. Service Details</h4>
+                  <h4 className="sp-card-title">Service Details</h4>
                   <div style={{ display: "flex", gap: 8, flexWrap: "wrap", alignItems: "center", marginBottom: 14 }}>
                     <button
                       type="button"
@@ -1820,7 +1866,7 @@ export default function AppointmentsPage() {
                   <button
                     type="button"
                     className="add-link"
-                    style={{ textAlign: "center", display: "block", width: "100%", padding: 12, border: "1px solid #e2e8f0", borderRadius: 8, marginTop: 8 }}
+                    style={{ textAlign: "center", display: "block", width: "100%", padding: 12, border: "1px dashed #cbd5e1", borderRadius: 8, marginTop: 12, backgroundColor: "#f8fafc", color: "#3b82f6", fontWeight: 600, transition: "background 0.2s" }}
                     onClick={() => setForm({ ...form, items: [...form.items, emptyItem] })}
                   >
                     Add New Service +
@@ -1832,7 +1878,7 @@ export default function AppointmentsPage() {
                 </div>
 
                 <div className="sp-card" style={{ marginBottom: 40 }}>
-                  <h4 className="sp-card-title">3. Instruction Details</h4>
+                  <h4 className="sp-card-title">Instruction Details</h4>
                   <textarea
                     className="sp-input"
                     rows={3}

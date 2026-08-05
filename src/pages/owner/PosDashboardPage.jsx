@@ -949,7 +949,7 @@ export default function PosDashboardPage() {
               openInvoice(row.id);
             };
             return (
-              <div key={row.id} className="pos-dash-card" onClick={handleCardClick} style={isAppointment ? { borderLeft: "3px solid #7c3aed", cursor: "default" } : {}}>
+              <div key={row.id} className="pos-dash-card" onClick={handleCardClick} style={isAppointment ? { borderLeft: "3px solid #e2e8f0", cursor: "default" } : {}}>
                 <div className="pos-dash-card-actions">
                   {!isAppointment && (row.status === "PAID" || row.status === "PARTIAL") ? (
                     <button
@@ -977,9 +977,9 @@ export default function PosDashboardPage() {
                       letterSpacing: "0.5px",
                       padding: "3px 8px",
                       borderRadius: 6,
-                      background: isAppointment ? "#faf5ff" : (row.items || []).every(i => i.itemType === "PRODUCT") ? "#fef3c7" : (row.items || []).every(i => i.itemType === "SERVICE") ? "#dbeafe" : "#f1f5f9",
-                      color: isAppointment ? "#7c3aed" : (row.items || []).every(i => i.itemType === "PRODUCT") ? "#92400e" : (row.items || []).every(i => i.itemType === "SERVICE") ? "#1e40af" : "#475569",
-                      border: `1px solid ${isAppointment ? "#d8b4fe" : (row.items || []).every(i => i.itemType === "PRODUCT") ? "#fde68a" : (row.items || []).every(i => i.itemType === "SERVICE") ? "#bfdbfe" : "#e2e8f0"}`
+                      background: "#f1f5f9",
+                      color: "#334155",
+                      border: "1px solid #e2e8f0"
                     }}>
                       {isAppointment ? "Appointment" : (row.items || []).every(i => i.itemType === "PRODUCT") ? "Products" : (row.items || []).every(i => i.itemType === "SERVICE") ? "Services" : "Items"}
                     </span>
@@ -988,9 +988,9 @@ export default function PosDashboardPage() {
                 <div className="pos-dash-card-footer">
                   <div className="pos-dash-card-meta" style={{ display: "flex", flexDirection: "column", gap: 2 }}>
                     <span>{dateStr}, {timeStr}</span>
-                    {isAppointment && schedTime && <span style={{ fontSize: 11, color: "#7c3aed" }}>Scheduled: {schedTime}{schedEndTime ? ` - ${schedEndTime}` : ""}</span>}
-                    {!isAppointment && startedStr && <span style={{ fontSize: 11, color: "#2563eb" }}>Started: {startedStr}</span>}
-                    {!isAppointment && completedStr && <span style={{ fontSize: 11, color: "#16a34a" }}>Completed: {completedStr}</span>}
+                    {isAppointment && schedTime && <span style={{ fontSize: 11, color: "#64748b" }}>Scheduled: {schedTime}{schedEndTime ? ` - ${schedEndTime}` : ""}</span>}
+                    {!isAppointment && startedStr && <span style={{ fontSize: 11, color: "#64748b" }}>Started: {startedStr}</span>}
+                    {!isAppointment && completedStr && <span style={{ fontSize: 11, color: "#64748b" }}>Completed: {completedStr}</span>}
                     {!isAppointment && <span style={{ fontWeight: 700 }}>Total: {formatMoney(row.total)}</span>}
                     {isAppointment && row.staffName && <span style={{ fontSize: 11, color: "#64748b" }}>Staff: {row.staffName}</span>}
                   </div>
@@ -998,9 +998,9 @@ export default function PosDashboardPage() {
                     {isAppointment ? (
                       <span style={{
                         fontSize: 10, fontWeight: 700, padding: "2px 8px", borderRadius: 6, textTransform: "uppercase", letterSpacing: "0.5px",
-                        background: apptStatus === "COMPLETED" ? "#dcfce7" : apptStatus === "IN_PROGRESS" || apptStatus === "CHECKED_IN" ? "#dbeafe" : "#faf5ff",
-                        color: apptStatus === "COMPLETED" ? "#16a34a" : apptStatus === "IN_PROGRESS" || apptStatus === "CHECKED_IN" ? "#1d4ed8" : "#7c3aed",
-                        border: `1px solid ${apptStatus === "COMPLETED" ? "#bbf7d0" : apptStatus === "IN_PROGRESS" || apptStatus === "CHECKED_IN" ? "#bfdbfe" : "#d8b4fe"}`
+                        background: "#f1f5f9",
+                        color: "#334155",
+                        border: "1px solid #e2e8f0"
                       }}>
                         {apptStatus === "COMPLETED" ? "Completed" : apptStatus === "IN_PROGRESS" || apptStatus === "CHECKED_IN" ? "In Progress" : "Scheduled"}
                       </span>
@@ -1191,7 +1191,7 @@ export default function PosDashboardPage() {
                           <div>
                             <div>{invoiceLabel(item)}</div>
                             {item.serviceReminder?.date ? (
-                              <div style={{ fontSize: 11, color: "#2563eb", marginTop: 4 }}>
+                              <div style={{ fontSize: 11, color: "#64748b", marginTop: 4 }}>
                                 Reminder: {new Date(item.serviceReminder.date).toLocaleDateString("en-GB")} {item.serviceReminder.note ? `- ${item.serviceReminder.note}` : ""}
                               </div>
                             ) : null}
@@ -1203,7 +1203,7 @@ export default function PosDashboardPage() {
                                   const unit = c.product?.unit || 'pcs';
                                   return (
                                     <div key={ci} style={{ fontSize: 11, color: "#334155", display: "flex", alignItems: "center", gap: 4, background: "#f1f5f9", padding: "2px 6px", borderRadius: 4, width: "fit-content" }}>
-                                      <span style={{ color: "#2563eb", fontWeight: 600 }}>🧪 {c.product?.name || "Consumable"}:</span>
+                                      <span style={{ color: "#64748b", fontWeight: 600 }}>🧪 {c.product?.name || "Consumable"}:</span>
                                       <input
                                         type="number"
                                         min="0"
@@ -1224,7 +1224,7 @@ export default function PosDashboardPage() {
                               </div>
                             )}
                             {item.consumables?.length ? (
-                              <div style={{ fontSize: 11, color: "#16a34a", marginTop: 4 }}>
+                              <div style={{ fontSize: 11, color: "#64748b", marginTop: 4 }}>
                                 Consumables: {item.consumables.map((entry) => `${entry.name} x${entry.qty}`).join(", ")}
                               </div>
                             ) : null}
@@ -1854,7 +1854,7 @@ export default function PosDashboardPage() {
                             return (
                               <tr key={idx} style={{ borderBottom: "1px solid #f1f5f9" }}>
                                 <td style={{ padding: "8px 0", color: isInCart ? "#16a34a" : "#0f172a" }}>{svc.service?.name || svc.serviceId}</td>
-                                <td style={{ padding: "8px 0", textAlign: "right", color: "#16a34a", fontWeight: 600 }}>{available}</td>
+                                <td style={{ padding: "8px 0", textAlign: "right", color: "#64748b", fontWeight: 600 }}>{available}</td>
                                 <td style={{ padding: "8px 0", textAlign: "right", color: "#64748b" }}>{svc.sessionsUsed || 0}</td>
                                 <td style={{ padding: "8px 0", textAlign: "right" }}>
                                   {available > 0 && isInCart && (
@@ -1917,7 +1917,7 @@ export default function PosDashboardPage() {
                 <div key={idx} style={{ display: "flex", alignItems: "center", gap: 12, padding: "10px 14px", background: "#f8fafc", border: "1px solid #e2e8f0", borderRadius: 8 }}>
                   <span style={{ color: "#64748b" }}>{idx + 1})</span>
                   <span style={{ flex: 1, fontWeight: 600, color: "#0f172a" }}>{entry.staffName || (posContext.staffUsers || []).find(s => s.id === entry.staffId)?.user?.name || "Staff"}</span>
-                  <span style={{ fontWeight: 600, color: "#16a34a" }}>{formatMoney(Number(entry.amount))}</span>
+                  <span style={{ fontWeight: 600, color: "#64748b" }}>{formatMoney(Number(entry.amount))}</span>
                   <span style={{ fontSize: "0.85rem", color: "#64748b" }}>{entry.paymentMode}</span>
                   <button type="button" onClick={() => removeTipEntry(idx)} style={{ background: "none", border: "none", cursor: "pointer", color: "#ef4444" }}><X size={16} /></button>
                 </div>

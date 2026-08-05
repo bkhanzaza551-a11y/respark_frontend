@@ -272,27 +272,28 @@ export default function EnquiriesPage() {
         
         .eq-card { background: white; border-radius: 20px; padding: 24px; border: 1px solid #e2e8f0; box-shadow: none; transition: all 0.3s; }
         
-        .eq-input { width: 100%; padding: 10px 14px; border-radius: 8px; border: 1px solid #cbd5e1; font-size: 14px; outline: none; transition: all 0.2s; background: #fff; }
-        .eq-input:focus { border-color: #3b82f6; box-shadow: none; }
+        .eq-input { width: 100%; padding: 10px 12px; border-radius: 8px; border: 1px solid #cbd5e1; font-size: 0.9rem; outline: none; transition: all 0.2s ease; background: #f8fafc; }
+        .eq-input:focus { border-color: #3b82f6; background: #fff; box-shadow: 0 0 0 3px rgba(59,130,246,0.1); }
         .eq-label { display: block; font-size: 12px; font-weight: 700; color: #64748b; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
         
         .eq-btn { padding: 10px 18px; border-radius: 8px; font-weight: 600; font-size: 14px; cursor: pointer; transition: all 0.2s; border: none; display: inline-flex; align-items: center; justify-content: center; gap: 8px; }
-        .eq-btn-primary { background: #1e88e5; color: white; box-shadow: none; }
-        .eq-btn-primary:hover { transform: translateY(-1px); background: #1565c0; box-shadow: none; }
+        .eq-btn-primary { background: #3b82f6; color: white; box-shadow: none; transition: all 0.2s ease; }
+        .eq-btn-primary:hover { transform: translateY(-1px); background: #2563eb; box-shadow: 0 4px 12px rgba(37,99,235,0.2); }
         
-        .eq-btn-secondary { background: #f1f5f9; border: 1px solid #cbd5e1; color: #475569; }
-        .eq-btn-secondary:hover { background: #f8fafc; border-color: #94a3b8; }
+        .eq-btn-secondary { background: #f8fafc; border: 1px solid #e2e8f0; color: #475569; }
+        .eq-btn-secondary:hover { background: #f1f5f9; color: #0f172a; border-color: #cbd5e1; }
 
-        .status-pill { padding: 4px 12px; border-radius: 20px; font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; }
+        .status-pill { padding: 4px 10px; border-radius: 6px; font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; display: inline-block; }
 
         .enquiries-table { width: 100%; border-collapse: separate; border-spacing: 0; }
-        .enquiries-table th { background: #f8fafc; padding: 14px 20px; font-weight: 700; font-size: 12px; text-transform: uppercase; color: #64748b; border-bottom: 1px solid #e2e8f0; text-align: left; letter-spacing: 0.5px; }
-        .enquiries-table td { padding: 16px 20px; border-bottom: 1px solid #f1f5f9; font-size: 14px; color: #334155; vertical-align: middle; }
+        .enquiries-table th { background: #f8fafc; padding: 14px 20px; font-weight: 700; font-size: 0.72rem; text-transform: uppercase; color: #64748b; border-bottom: 2px solid #e2e8f0; text-align: left; letter-spacing: 0.04em; }
+        .enquiries-table td { padding: 16px 20px; border-bottom: 1px solid #f1f5f9; font-size: 0.85rem; color: #334155; vertical-align: middle; }
+        .enquiries-table tr:hover td { background: #f8fafc; }
         
         .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(15, 23, 42, 0.5); display: flex; align-items: center; justify-content: center; z-index: 1200; backdrop-filter: blur(4px); }
         .modal-content { background: white; border-radius: 16px; width: 95%; max-width: 750px; padding: 28px; box-shadow: none; animation: modalFadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) both; }
         
-        .filter-bar { background: #f8fafc; border-radius: 12px; border: 1px solid #e2e8f0; padding: 16px 24px; display: flex; flex-wrap: wrap; gap: 16px; align-items: center; margin-bottom: 24px; }
+        .filter-bar { background: #fff; border-radius: 10px; border: 1px solid #e2e8f0; padding: 16px 20px; display: flex; flex-wrap: wrap; gap: 16px; align-items: center; margin-bottom: 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.02); }
         .filter-group { display: flex; align-items: center; gap: 8px; }
         .filter-group label { font-size: 14px; font-weight: 600; color: #475569; white-space: nowrap; }
         
@@ -355,7 +356,7 @@ export default function EnquiriesPage() {
 
             <button 
               className="eq-btn eq-btn-primary" 
-              style={{ marginLeft: "auto", background: "#0284c7" }}
+              style={{ marginLeft: "auto" }}
               onClick={() => setShowModal(true)}
             >
               <Plus size={16} /> Add Enquiry
@@ -398,10 +399,7 @@ export default function EnquiriesPage() {
                         <td>{row.interestedService?.name || "General"}</td>
                         <td>
                           <span style={{ 
-                            padding: "3px 8px", 
-                            borderRadius: "12px", 
-                            fontSize: "11px", 
-                            fontWeight: "700",
+                            padding: "4px 10px", borderRadius: "6px", fontSize: "0.72rem", fontWeight: "700", textTransform: "uppercase", letterSpacing: "0.05em", display: "inline-block",
                             background: getPriorityColor(row.priority).bg,
                             color: getPriorityColor(row.priority).text
                           }}>
@@ -420,7 +418,7 @@ export default function EnquiriesPage() {
                           <div style={{ display: "flex", gap: "8px" }}>
                             <button 
                               className="eq-btn eq-btn-secondary" 
-                              style={{ padding: "4px 8px", fontSize: "12px" }}
+                              style={{ padding: "6px 12px", fontSize: "0.78rem" }}
                               onClick={() => {
                                 setSelectedEnquiry(row);
                                 setNewStatus(mapStatusToUi(row.status));
@@ -434,7 +432,7 @@ export default function EnquiriesPage() {
                             {row.status !== "CONVERTED" && (
                               <button 
                                 className="eq-btn eq-btn-primary" 
-                                style={{ padding: "4px 8px", fontSize: "12px", background: "#10b981", boxShadow: "none" }}
+                                style={{ padding: "6px 12px", fontSize: "0.78rem", background: "#059669" }}
                                 onClick={() => handleConvertToCustomer(row)}
                                 title="Convert to Customer"
                               >

@@ -1228,8 +1228,9 @@ export default function CustomersPage() {
           .modal-body { padding:16px 18px; display:grid; gap:12px; }
           .modal-footer { padding:12px 18px; border-top:1px solid #f1f5f9; display:flex; justify-content:flex-end; gap:8px; }
           .form-group { display:flex; flex-direction:column; gap:4px; }
-          .form-group label { font-size:0.8rem; font-weight:600; color:#475569; }
-          .form-group input, .form-group select { padding:7px 10px; border:1px solid #cbd5e1; border-radius:6px; font-size:0.82rem; background:#fff; min-height:unset; }
+          .form-group label { font-size:0.85rem; font-weight:600; color:#334155; margin-bottom: 2px; }
+          .form-group input, .form-group select { padding:10px 12px; border:1px solid #cbd5e1; border-radius:8px; font-size:0.9rem; background:#f8fafc; min-height:unset; transition: all 0.2s ease; }
+          .form-group input:focus, .form-group select:focus { border-color:#3b82f6; outline:none; background:#fff; box-shadow: 0 0 0 3px rgba(59,130,246,0.1); }
           .radio-group { display:flex; gap:12px; align-items:center; }
           .radio-group label, .radio-column label { display:flex; align-items:center; gap:6px; font-weight:500; cursor:pointer; font-size:0.8rem; }
           .radio-column { display:flex; flex-direction:column; align-items:flex-start; gap:8px; }
@@ -1239,13 +1240,15 @@ export default function CustomersPage() {
           .export-item:hover { background:#f8fafc; color:#0f172a; }
           .sidebar-modal { position:fixed; top:0; right:0; bottom:0; width:min(92vw,520px); background:#fff; box-shadow: none; z-index:1200; display:flex; flex-direction:column; animation:slideIn 0.28s forwards; }
           @keyframes slideIn { from { transform:translateX(100%); } to { transform:translateX(0); } }
-          .sidebar-modal-header { display:flex; justify-content:space-between; align-items:center; padding:14px 18px; border-bottom:1px solid #f1f5f9; }
+          .sidebar-modal-header { display:flex; justify-content:space-between; align-items:center; padding:20px 24px; border-bottom:1px solid #e2e8f0; }
+          .sidebar-modal-header h3 { font-size: 1.15rem; font-weight: 700; color: #0f172a; margin: 0; }
           .sidebar-modal-body { flex:1; display:flex; overflow:hidden; }
-          .filter-categories { width:180px; background:#f8fafc; border-right:1px solid #f1f5f9; overflow-y:auto; }
-          .filter-category-btn { width:100%; text-align:left; padding:10px 12px; background:none; border:none; font-size:0.82rem; color:#475569; cursor:pointer; border-bottom:1px solid #e2e8f0; min-height:unset; }
-          .filter-category-btn.active { background:#fff; color:#0f766e; font-weight:700; border-left:3px solid #0f766e; }
-          .filter-options { flex:1; padding:16px; overflow-y:auto; display:grid; gap:12px; }
-          .sidebar-modal-footer { padding:12px 18px; border-top:1px solid #f1f5f9; display:flex; justify-content:flex-end; gap:8px; }
+          .filter-categories { width:220px; background:#f8fafc; border-right:1px solid #e2e8f0; overflow-y:auto; }
+          .filter-category-btn { width:100%; text-align:left; padding:14px 20px; background:none; border:none; font-size:0.88rem; font-weight:500; color:#64748b; cursor:pointer; border-bottom:1px solid transparent; min-height:unset; transition: all 0.2s ease; }
+          .filter-category-btn:hover { background: #f1f5f9; color: #334155; }
+          .filter-category-btn.active { background:#fff; color:#2563eb; font-weight:600; border-left:3px solid #2563eb; box-shadow: 0 1px 2px rgba(0,0,0,0.02); }
+          .filter-options { flex:1; padding:24px; overflow-y:auto; display:flex; flex-direction: column; gap:20px; }
+          .sidebar-modal-footer { padding:20px 24px; background:#f8fafc; border-top:1px solid #e2e8f0; display:flex; justify-content:flex-end; gap:12px; }
           .crm-row-action { position:relative; overflow:visible; }
           .crm-row-action-trigger { width:32px; height:32px; border-radius:6px; border:1px solid #e2e8f0; background:#f8fafc; color:#475569; display:inline-flex; align-items:center; justify-content:center; cursor:pointer; min-height:unset; box-shadow:none; }
           .crm-row-action-trigger:hover { background:#eff6ff; color:#2563eb; border-color:#bfdbfe; transform:none; filter:none; }
@@ -1375,7 +1378,8 @@ export default function CustomersPage() {
             </div>
             <div className="sidebar-modal-footer">
               <button
-                className="crm-btn"
+                className="crm-btn-light"
+                style={{ padding: "10px 20px", fontSize: "0.95rem" }}
                 onClick={() => {
                   setFilterType("");
                   setDraftFilters(EMPTY_ADVANCED_FILTERS);
@@ -1387,6 +1391,7 @@ export default function CustomersPage() {
               </button>
               <button
                 className="crm-btn"
+                style={{ padding: "10px 24px", fontSize: "0.95rem", boxShadow: "0 4px 12px rgba(37,99,235,0.2)" }}
                 onClick={() => {
                   setAppliedFilters(draftFilters);
                   setShowFilters(false);
@@ -1567,7 +1572,7 @@ export default function CustomersPage() {
                     <td>{formatCompactDate(row.dateOfBirth, false)}</td>
                     <td className="crm-row-action" onClick={(e) => e.stopPropagation()}>
                       <button className="crm-row-action-trigger" onClick={(e) => { e.stopPropagation(); setActiveMenuRowId((current) => current === row.id ? "" : row.id); }}>
-                        <MoreVertical size={18} />
+                        <MoreVertical size={22} />
                       </button>
                       {activeMenuRowId === row.id && (
                         <div className="crm-row-menu" ref={actionMenuRef}>
