@@ -625,6 +625,9 @@ export default function ExpensesPage() {
           text-transform: uppercase;
           letter-spacing: 0.5px;
           border-bottom: 1px solid #e2e8f0;
+          position: sticky;
+          top: 0;
+          z-index: 10;
         }
 
         .ledger-table td {
@@ -1299,7 +1302,8 @@ export default function ExpensesPage() {
                   <div style={{ padding: "18px 20px", borderBottom: "1px solid #e2e8f0", background: "#f8fafc", fontWeight: 700 }}>
                     {activeAccount} Transaction History
                   </div>
-                  <table className="ledger-table">
+                  <div style={{ maxHeight: "500px", overflowY: "auto" }}>
+                    <table className="ledger-table" style={{ borderCollapse: "separate", borderSpacing: 0 }}>
                     <thead>
                       <tr>
                         <th>Date</th>
@@ -1353,6 +1357,7 @@ export default function ExpensesPage() {
                       )}
                     </tbody>
                   </table>
+                  </div>
                 </div>
               </>
             )}
