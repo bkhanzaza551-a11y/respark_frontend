@@ -40,6 +40,16 @@ const defaultProductForm = {
   unitConversion: ""
 };
 
+const ToggleSwitch = ({ label, checked, onChange, color = "#0ea5e9", labelColor = "#475569" }) => (
+  <label style={{ display: "flex", alignItems: "center", gap: 10, cursor: "pointer", userSelect: "none" }}>
+    <input type="checkbox" checked={checked} onChange={onChange} style={{ display: "none" }} />
+    <div style={{ position: "relative", width: 40, height: 22, background: checked ? color : "#cbd5e1", borderRadius: 20, transition: "background 0.25s ease" }}>
+      <div style={{ position: "absolute", top: 2, left: checked ? 20 : 2, width: 18, height: 18, background: "#fff", borderRadius: "50%", transition: "left 0.25s ease", boxShadow: "0 1px 3px rgba(0,0,0,0.2)" }} />
+    </div>
+    {label && <span style={{ fontSize: 13, fontWeight: 600, color: checked ? color : labelColor, transition: "color 0.2s" }}>{label}</span>}
+  </label>
+);
+
 export default function ProductCategoriesPage() {
   const { currencySymbol } = useSalonSettings();
   const { selectedBranchId, branches } = useBranch();
@@ -489,8 +499,8 @@ export default function ProductCategoriesPage() {
             <form onSubmit={handleSaveProduct} style={{ display: "flex", flexDirection: "column", overflow: "hidden", flex: 1 }}>
               <div className="hub-modal-body" style={{ overflowY: "auto", flex: 1, padding: "24px 28px" }}>
                 {/* Name, Featured, Active */}
-                <div style={{ display: "grid", gridTemplateColumns: "2.5fr 1fr 1fr 1fr", gap: 20, marginBottom: 24, alignItems: "end" }}>
-                  <div className="hub-form-group" style={{ position: "relative" }}>
+                <div style={{ display: "flex", flexWrap: "wrap", gap: 24, marginBottom: 24, alignItems: "flex-end" }}>
+                  <div className="hub-form-group" style={{ position: "relative", flex: "1 1 300px" }}>
                     <label style={{ fontSize: 13, fontWeight: 600, color: "#475569", marginBottom: 6, display: "block" }}>Name *</label>
                     <input
                       ref={nameRef}
@@ -540,23 +550,10 @@ export default function ProductCategoriesPage() {
                       </div>
                     )}
                   </div>
-                  <div className="hub-form-group" style={{ display: "flex", alignItems: "end", paddingBottom: 10 }}>
-                    <label style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 14, fontWeight: 600, color: "#334155", cursor: "pointer" }}>
-                      <input type="checkbox" checked={productForm.featured} onChange={e => setProductForm({...productForm, featured: e.target.checked})} style={{ width: 18, height: 18, accentColor: "#f59e0b" }} />
-                      Featured
-                    </label>
-                  </div>
-                  <div className="hub-form-group" style={{ display: "flex", alignItems: "end", paddingBottom: 10 }}>
-                    <label style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 14, fontWeight: 600, color: "#334155", cursor: "pointer" }}>
-                      <input type="checkbox" checked={productForm.isActive} onChange={e => setProductForm({...productForm, isActive: e.target.checked})} style={{ width: 18, height: 18, accentColor: "#2563eb" }} />
-                      Active
-                    </label>
-                  </div>
-                  <div className="hub-form-group" style={{ display: "flex", alignItems: "end", paddingBottom: 10 }}>
-                    <label style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 14, fontWeight: 600, color: "#334155", cursor: "pointer" }}>
-                      <input type="checkbox" checked={productForm.favourite} onChange={e => setProductForm({...productForm, favourite: e.target.checked})} style={{ width: 18, height: 18, accentColor: "#ec4899" }} />
-                      Favourite
-                    </label>
+                  <div style={{ display: "flex", gap: 20, alignItems: "center", paddingBottom: 10 }}>
+                    <ToggleSwitch label="Featured" checked={productForm.featured} onChange={e => setProductForm({...productForm, featured: e.target.checked})} color="#f59e0b" />
+                    <ToggleSwitch label="Active" checked={productForm.isActive} onChange={e => setProductForm({...productForm, isActive: e.target.checked})} color="#10b981" />
+                    <ToggleSwitch label="Favourite" checked={productForm.favourite} onChange={e => setProductForm({...productForm, favourite: e.target.checked})} color="#ec4899" />
                   </div>
                 </div>
 
@@ -571,16 +568,15 @@ export default function ProductCategoriesPage() {
                     <div style={{ display: "flex", gap: 16, background: "#fff", padding: "8px 12px", borderRadius: 8, border: "1px solid #e2e8f0" }}>
                       {[{ value: "BOTH", label: "Both" }, { value: "FEMALE", label: "Female" }, { value: "MALE", label: "Male" }].map(g => (
                         <label key={g.value} style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 14, fontWeight: 500, color: "#334155", cursor: "pointer" }}>
-                          <input type="radio" name="targetGroup" value={g.value} checked={productForm.targetGroup === g.value} onChange={e => setProductForm({...productForm, targetGroup: e.target.value})} style={{ width: 16, height: 16, accentColor: "#2563eb" }} />
+                          <input type="radio" name="targetGroup" value={g.value} checked={productForm.targetGroup === g.value} onChange={e => setProductForm({...productForm, targetGroup: e.target.value})} style={{ width: 16, height: 16, accentColor: "#0ea5e9" }} />
                           {g.label}
                         </label>
                       ))}
                     </div>
                   </div>
-                  <label style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 14, fontWeight: 600, color: "#334155", cursor: "pointer" }}>
-                    <input type="checkbox" checked={productForm.hideFromCatalogue} onChange={e => setProductForm({...productForm, hideFromCatalogue: e.target.checked})} style={{ width: 18, height: 18, accentColor: "#2563eb" }} />
-                    Hide from catalogue
-                  </label>
+                  <div style={{ display: "flex", alignItems: "center" }}>
+                    <ToggleSwitch label="Hide from catalogue" checked={productForm.hideFromCatalogue} onChange={e => setProductForm({...productForm, hideFromCatalogue: e.target.checked})} color="#64748b" />
+                  </div>
                 </div>
 
                 {/* Cost Price, Price, Sale Price, Non Discountable */}
@@ -606,11 +602,8 @@ export default function ProductCategoriesPage() {
                       <input type="number" className="hub-input" value={productForm.salePrice} onChange={e => { const val = e.target.value; setProductForm(prev => ({...prev, salePrice: val === "" ? "" : (parseFloat(val) || 0)})); }} onFocus={() => handlePriceFocus("salePrice")} onBlur={() => handlePriceBlur("salePrice")} style={{ border: "none", flex: 1, padding: "10px", fontSize: 14 }} />
                     </div>
                   </div>
-                  <div className="hub-form-group" style={{ display: "flex", alignItems: "end", paddingBottom: 10 }}>
-                    <label style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 13, fontWeight: 600, color: "#334155", cursor: "pointer" }}>
-                      <input type="checkbox" checked={productForm.nonDiscountable} onChange={e => setProductForm({...productForm, nonDiscountable: e.target.checked})} style={{ width: 18, height: 18, accentColor: "#2563eb" }} />
-                      No Discount
-                    </label>
+                  <div className="hub-form-group" style={{ display: "flex", alignItems: "center", paddingBottom: 10 }}>
+                    <ToggleSwitch label="No Discount" checked={productForm.nonDiscountable} onChange={e => setProductForm({...productForm, nonDiscountable: e.target.checked})} color="#ef4444" />
                   </div>
                 </div>
 
@@ -620,11 +613,8 @@ export default function ProductCategoriesPage() {
                     <label style={{ fontSize: 13, fontWeight: 600, color: "#475569", marginBottom: 6, display: "block" }}>SKU (Stock Keeping Unit)</label>
                     <input type="text" className="hub-input" value={productForm.sku} onChange={e => setProductForm({...productForm, sku: e.target.value})} placeholder="e.g. SHAMP-001" style={{ width: "100%", padding: "12px 16px", borderRadius: 12, border: "1px solid #cbd5e1", background: "#f8fafc", fontFamily: "monospace", fontSize: 14, outline: "none", transition: "border 0.2s" }} onFocus={e => e.target.style.border="1px solid #3b82f6"} onBlur={e => e.target.style.border="1px solid #cbd5e1"} />
                   </div>
-                  <div className="hub-form-group" style={{ display: "flex", alignItems: "end", paddingBottom: 10 }}>
-                    <label style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 14, fontWeight: 600, color: "#334155", cursor: "pointer" }}>
-                      <input type="checkbox" checked={productForm.productType === "RETAIL"} onChange={e => setProductForm({...productForm, productType: e.target.checked ? "RETAIL" : "CONSUMABLE"})} style={{ width: 18, height: 18, accentColor: "#2563eb" }} />
-                      Retail Product
-                    </label>
+                  <div className="hub-form-group" style={{ display: "flex", alignItems: "center", paddingBottom: 10 }}>
+                    <ToggleSwitch label="Retail Product" checked={productForm.productType === "RETAIL"} onChange={e => setProductForm({...productForm, productType: e.target.checked ? "RETAIL" : "CONSUMABLE"})} color="#0ea5e9" />
                   </div>
                 </div>
 
