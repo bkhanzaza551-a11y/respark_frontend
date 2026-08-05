@@ -1,3 +1,5 @@
+
+import CustomDropdown from '../common/CustomDropdown';
 export default function CatalogAnalyticsPanel({
   analytics,
   branchFilter,
@@ -12,10 +14,10 @@ export default function CatalogAnalyticsPanel({
     <div className="panel-card">
       <h3>Catalog Analytics</h3>
       <div className="inline-actions" style={{ marginBottom: 16 }}>
-        <select value={branchFilter} onChange={(event) => setBranchFilter(event.target.value)}>
+        <CustomDropdown value={branchFilter} onChange={(event) => setBranchFilter(event.target.value)}>
           <option value="">All branches</option>
           {(branches || []).map((branch) => <option key={branch.id} value={branch.id}>{branch.name}</option>)}
-        </select>
+        </CustomDropdown>
         <input
           type="date"
           value={dateFilters.start}

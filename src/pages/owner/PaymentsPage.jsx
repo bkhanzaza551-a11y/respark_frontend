@@ -8,6 +8,8 @@ import { useBranch } from '../../context/BranchContext';
 import { Eye, RotateCcw } from "lucide-react";
 import { formatApiError } from "../../utils/apiError";
 
+import CustomDropdown from '../../components/common/CustomDropdown';
+
 export default function PaymentsPage() {
   const { selectedBranchId } = useBranch();
   const navigate = useNavigate();
@@ -89,7 +91,7 @@ export default function PaymentsPage() {
             </label>
             <label>
               <span className="muted">Modes</span>
-              <select value={filters.mode} onChange={(event) => setFilters((current) => ({ ...current, mode: event.target.value }))}>
+              <CustomDropdown value={filters.mode} onChange={(event) => setFilters((current) => ({ ...current, mode: event.target.value }))}>
               <option value="">All modes</option>
               <option value="CASH">Cash</option>
               <option value="CARD">Card</option>
@@ -97,15 +99,15 @@ export default function PaymentsPage() {
               <option value="BANK_TRANSFER">Bank Transfer</option>
               <option value="ONLINE">Online</option>
               <option value="WALLET">Wallet</option>
-            </select>
+            </CustomDropdown>
             </label>
             <label>
               <span className="muted">Types</span>
-              <select value={filters.type} onChange={(event) => setFilters((current) => ({ ...current, type: event.target.value }))}>
+              <CustomDropdown value={filters.type} onChange={(event) => setFilters((current) => ({ ...current, type: event.target.value }))}>
               <option value="">All types</option>
               <option value="PAYMENT">Payment</option>
               <option value="REFUND">Refund</option>
-            </select>
+            </CustomDropdown>
             </label>
             <button type="button" className="secondary-button" onClick={() => setFilters({ q: "", mode: "", type: "" })}>Reset</button>
             {[

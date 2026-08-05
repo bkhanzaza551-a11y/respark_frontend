@@ -8,6 +8,8 @@ import { useBranch } from "../../context/BranchContext";
 import { useSalonSettings } from "../../context/SalonSettingsContext";
 import { formatApiError } from "../../utils/apiError";
 import { 
+import CustomDropdown from '../../components/common/CustomDropdown';
+
   Receipt, Wallet, Search, Filter, FolderKanban, PlusCircle, 
   Calendar, CheckCircle2, Clock, AlertCircle, XCircle, LayoutDashboard,
   Building, ArrowUpRight, ArrowDownRight, Edit, Check, X, ChevronRight, Plus, Trash2
@@ -946,7 +948,7 @@ export default function ExpensesPage() {
                   <div className="filters-group">
                     <div className="filter-item">
                       <span className="filter-label">Paymode:</span>
-                      <select 
+                      <CustomDropdown 
                         className="filter-select"
                         value={filters.paymentMode}
                         onChange={(e) => setFilters({ ...filters, paymentMode: e.target.value })}
@@ -958,12 +960,12 @@ export default function ExpensesPage() {
                         <option value="BANK_TRANSFER">BANK TRANSFER</option>
                         <option value="WALLET">WALLET</option>
                         <option value="ONLINE">ONLINE</option>
-                      </select>
+                      </CustomDropdown>
                     </div>
 
                     <div className="filter-item">
                       <span className="filter-label">Expense Type:</span>
-                      <select 
+                      <CustomDropdown 
                         className="filter-select"
                         value={filters.categoryId}
                         onChange={(e) => setFilters({ ...filters, categoryId: e.target.value })}
@@ -972,7 +974,7 @@ export default function ExpensesPage() {
                         {categories.map(c => (
                           <option key={c.id} value={c.id}>{c.name}</option>
                         ))}
-                      </select>
+                      </CustomDropdown>
                     </div>
 
                     <div className="filter-item">
@@ -1173,7 +1175,7 @@ export default function ExpensesPage() {
 
                       <div className="form-group">
                         <label className="form-label">Expense / PNL Category</label>
-                        <select 
+                        <CustomDropdown 
                           className="filter-select"
                           style={{ width: "100%" }}
                           value={categoryForm.pnlCategory}
@@ -1183,7 +1185,7 @@ export default function ExpensesPage() {
                           <option value="Operating Expenses">Operating Expenses</option>
                           <option value="Administrative Expenses">Administrative Expenses</option>
                           <option value="Other Indirect Expenses">Other Indirect Expenses</option>
-                        </select>
+                        </CustomDropdown>
                       </div>
 
                       <div className="form-group">
@@ -1430,7 +1432,7 @@ export default function ExpensesPage() {
                 <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
                   <div className="form-group" style={{ margin: 0 }}>
                     <label className="form-label">Type / Category</label>
-                    <select 
+                    <CustomDropdown 
                       className="filter-select"
                       style={{ width: "100%" }}
                       value={form.categoryId}
@@ -1441,12 +1443,12 @@ export default function ExpensesPage() {
                       {categories.map(c => (
                         <option key={c.id} value={c.id}>{c.name}</option>
                       ))}
-                    </select>
+                    </CustomDropdown>
                   </div>
 
                   <div className="form-group" style={{ margin: 0 }}>
                     <label className="form-label">Payment Mode</label>
-                    <select 
+                    <CustomDropdown 
                       className="filter-select"
                       style={{ width: "100%" }}
                       value={form.paymentMode}
@@ -1458,7 +1460,7 @@ export default function ExpensesPage() {
                       <option value="BANK_TRANSFER">BANK TRANSFER</option>
                       <option value="WALLET">WALLET</option>
                       <option value="ONLINE">ONLINE</option>
-                    </select>
+                    </CustomDropdown>
                   </div>
                 </div>
 
@@ -1533,7 +1535,7 @@ export default function ExpensesPage() {
 
                   <div className="form-group" style={{ margin: 0 }}>
                     <label className="form-label">Account</label>
-                    <select 
+                    <CustomDropdown 
                       className="filter-select"
                       style={{ width: "100%" }}
                       value={balanceForm.accountMode}
@@ -1543,7 +1545,7 @@ export default function ExpensesPage() {
                       {Object.entries(accountBalances).map(([mode, data]) => (
                         <option key={mode} value={mode}>{mode} ({currencyMeta.symbol} {data.balance.toLocaleString()})</option>
                       ))}
-                    </select>
+                    </CustomDropdown>
                   </div>
                 </div>
 
@@ -1563,7 +1565,7 @@ export default function ExpensesPage() {
 
                   <div className="form-group" style={{ margin: 0 }}>
                     <label className="form-label">Paymode</label>
-                    <select 
+                    <CustomDropdown 
                       className="filter-select"
                       style={{ width: "100%" }}
                       value={balanceForm.paymentMode}
@@ -1576,7 +1578,7 @@ export default function ExpensesPage() {
                       <option value="BANK_TRANSFER">BANK TRANSFER</option>
                       <option value="WALLET">WALLET</option>
                       <option value="ONLINE">ONLINE</option>
-                    </select>
+                    </CustomDropdown>
                   </div>
                 </div>
 

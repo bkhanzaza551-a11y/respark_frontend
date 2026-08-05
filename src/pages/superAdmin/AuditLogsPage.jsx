@@ -4,6 +4,8 @@ import EmptyState from "../../components/EmptyState";
 import PageLoader from "../../components/PageLoader";
 import { formatApiError } from "../../utils/apiError";
 
+import CustomDropdown from '../../components/common/CustomDropdown';
+
 export default function AuditLogsPage() {
   const [rows, setRows] = useState([]);
   const [query, setQuery] = useState("");
@@ -44,10 +46,10 @@ export default function AuditLogsPage() {
             </label>
           <label>
               <span className="muted">Types</span>
-              <select value={typeFilter} onChange={(event) => setTypeFilter(event.target.value)}>
+              <CustomDropdown value={typeFilter} onChange={(event) => setTypeFilter(event.target.value)}>
             <option value="">All types</option>
             {typeOptions.map((type) => <option key={type} value={type}>{type}</option>)}
-          </select>
+          </CustomDropdown>
             </label>
           <button type="button" className="secondary-button" onClick={() => { setQuery(""); setTypeFilter(""); }}>Reset</button>
         </div>

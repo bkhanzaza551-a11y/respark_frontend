@@ -12,6 +12,8 @@ import { downloadFromApi } from "../../utils/download";
 import { formatApiError } from "../../utils/apiError";
 import "./PosDashboard.css";
 import "./PosPage.css";
+import CustomDropdown from '../../components/common/CustomDropdown';
+
 const invoiceLabel = (item) => item?.serviceName || item?.productName || item?.name || "Item";
 const invoiceStatusClass = (status) => {
   const normalized = String(status || "").toUpperCase();
@@ -1225,12 +1227,12 @@ export default function PosDashboardPage() {
                             ) : null}
                           </div>
                           <div>
-                            <select value={item.staffUserSalonId || ""} onChange={(event) => updateItem(index, { staffUserSalonId: event.target.value })} style={{ width: "100%", padding: 4, borderRadius: 4, border: "1px solid #cbd5e1" }} disabled={!isEditing}>
+                            <CustomDropdown value={item.staffUserSalonId || ""} onChange={(event) => updateItem(index, { staffUserSalonId: event.target.value })} style={{ width: "100%", padding: 4, borderRadius: 4, border: "1px solid #cbd5e1" }} disabled={!isEditing}>
                               <option value="">Select Staff</option>
                               {(posContext.staffUsers || []).map((userSalon) => (
                                 <option key={userSalon.id} value={userSalon.id}>{userSalon.user?.name}</option>
                               ))}
-                            </select>
+                            </CustomDropdown>
                           </div>
                           <div>
                             <input type="number" min="1" value={item.qty} onChange={(event) => updateItem(index, { qty: Number(event.target.value || 1) })} style={{ width: 52, padding: 4, borderRadius: 4, border: "1px solid #cbd5e1" }} disabled={!isEditing} />
@@ -1525,10 +1527,10 @@ export default function PosDashboardPage() {
                 </div>
                 <div style={{ flex:1.2, minWidth:150 }}>
                   <label style={{ fontSize:"0.82rem", fontWeight:600, color:"#475569", display:"block", marginBottom:6 }}>Staff</label>
-                  <select value={gcDraft.staffId} onChange={e=>setGcDraft(d=>({...d,staffId:e.target.value}))} style={{ width:"100%", padding:"10px 12px", border:"1px solid #cbd5e1", borderRadius:8, fontSize:"0.9rem", boxSizing:"border-box" }}>
+                  <CustomDropdown value={gcDraft.staffId} onChange={e=>setGcDraft(d=>({...d,staffId:e.target.value}))} style={{ width:"100%", padding:"10px 12px", border:"1px solid #cbd5e1", borderRadius:8, fontSize:"0.9rem", boxSizing:"border-box" }}>
                     <option value="">Select Staff</option>
                     {(posContext.staffUsers || []).map(s => <option key={s.id} value={s.id}>{s.user?.name || s.user?.email || s.id}</option>)}
-                  </select>
+                  </CustomDropdown>
                 </div>
               </div>
             </div>
@@ -1656,7 +1658,7 @@ export default function PosDashboardPage() {
                 <div style={{ display:"flex", gap:20, alignItems:"flex-end", marginTop:16, flexWrap:"wrap" }}>
                   <div style={{ flex:1.5, minWidth:200 }}>
                     <label style={{ fontSize:"0.85rem", fontWeight:700, color:"#334155", display:"block", marginBottom:8 }}>Assign Staff <span style={{color: "#ef4444"}}>*</span></label>
-                    <select
+                    <CustomDropdown
                       value={pkgDraft.staffId}
                       onChange={e => setPkgDraft(d => ({ ...d, staffId: e.target.value }))}
                       style={{ width:"100%", padding:"12px 16px", border:"1px solid #cbd5e1", borderRadius:8, fontSize:"0.95rem", boxSizing:"border-box", outline: "none", backgroundColor: "#fff", cursor: "pointer", transition: "border-color 0.2s" }}
@@ -1664,7 +1666,7 @@ export default function PosDashboardPage() {
                     >
                       <option value="">Select Staff</option>
                       {(posContext.staffUsers || []).map(s => <option key={s.id} value={s.id}>{s.user?.name || s.user?.email || s.id}</option>)}
-                    </select>
+                    </CustomDropdown>
                   </div>
                   <div style={{ flex:1, minWidth:160 }}>
                     <label style={{ fontSize:"0.85rem", fontWeight:700, color:"#334155", display:"block", marginBottom:8 }}>Purchase Date</label>
@@ -1768,10 +1770,10 @@ export default function PosDashboardPage() {
                   </div>
                   <div style={{ flex:1.2, minWidth:150 }}>
                     <label style={{ fontSize:"0.82rem", fontWeight:600, color:"#475569", display:"block", marginBottom:6 }}>Staff</label>
-                    <select value={memDraft.staffId} onChange={e=>setMemDraft(d=>({...d,staffId:e.target.value}))} style={{ width:"100%", padding:"10px 12px", border:"1px solid #cbd5e1", borderRadius:8, fontSize:"0.9rem", boxSizing:"border-box" }}>
+                    <CustomDropdown value={memDraft.staffId} onChange={e=>setMemDraft(d=>({...d,staffId:e.target.value}))} style={{ width:"100%", padding:"10px 12px", border:"1px solid #cbd5e1", borderRadius:8, fontSize:"0.9rem", boxSizing:"border-box" }}>
                       <option value="">Select Staff</option>
                       {(posContext.staffUsers || []).map(s => <option key={s.id} value={s.id}>{s.user?.name || s.user?.email || s.id}</option>)}
-                    </select>
+                    </CustomDropdown>
                   </div>
                   <div style={{ flex:1, minWidth:140 }}>
                     <label style={{ fontSize:"0.82rem", fontWeight:600, color:"#475569", display:"block", marginBottom:6 }}>Purchase date</label>
@@ -1920,10 +1922,10 @@ export default function PosDashboardPage() {
               <div style={{ display: "grid", gridTemplateColumns: "2fr 1fr 1fr auto", gap: 10, alignItems: "end", padding: "12px 14px", border: "1px solid #e2e8f0", borderRadius: 8 }}>
                 <label style={{ display: "grid", gap: 4 }}>
                   <span style={{ fontSize: "0.82rem", fontWeight: 600, color: "#475569" }}>Staff</span>
-                  <select value={tipDraft.staffId} onChange={e => setTipDraft(d => ({ ...d, staffId: e.target.value }))} style={{ padding: "8px 10px", border: "1px solid #cbd5e1", borderRadius: 6, fontSize: "0.9rem" }}>
+                  <CustomDropdown value={tipDraft.staffId} onChange={e => setTipDraft(d => ({ ...d, staffId: e.target.value }))} style={{ padding: "8px 10px", border: "1px solid #cbd5e1", borderRadius: 6, fontSize: "0.9rem" }}>
                     <option value="">Select staff</option>
                     {(posContext.staffUsers || []).map(s => <option key={s.id} value={s.id}>{s.user?.name || s.user?.email || s.id}</option>)}
-                  </select>
+                  </CustomDropdown>
                 </label>
                 <label style={{ display: "grid", gap: 4 }}>
                   <span style={{ fontSize: "0.82rem", fontWeight: 600, color: "#475569" }}>Amount</span>
@@ -1931,12 +1933,12 @@ export default function PosDashboardPage() {
                 </label>
                 <label style={{ display: "grid", gap: 4 }}>
                   <span style={{ fontSize: "0.82rem", fontWeight: 600, color: "#475569" }}>Payment</span>
-                  <select value={tipDraft.paymentMode} onChange={e => setTipDraft(d => ({ ...d, paymentMode: e.target.value }))} style={{ padding: "8px 10px", border: "1px solid #cbd5e1", borderRadius: 6, fontSize: "0.9rem" }}>
+                  <CustomDropdown value={tipDraft.paymentMode} onChange={e => setTipDraft(d => ({ ...d, paymentMode: e.target.value }))} style={{ padding: "8px 10px", border: "1px solid #cbd5e1", borderRadius: 6, fontSize: "0.9rem" }}>
                     <option value="CASH">Cash</option>
                     <option value="ONLINE">Online</option>
                     <option value="UPI">UPI</option>
                     <option value="CARD">Card</option>
-                  </select>
+                  </CustomDropdown>
                 </label>
                 <button type="button" onClick={addTipEntry} style={{ padding: "8px 12px", background: "#2563eb", color: "#fff", border: "none", borderRadius: 6, fontWeight: 600, cursor: "pointer", fontSize: "0.85rem", whiteSpace: "nowrap" }}>Add</button>
               </div>

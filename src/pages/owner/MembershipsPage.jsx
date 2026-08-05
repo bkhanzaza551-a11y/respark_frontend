@@ -10,6 +10,8 @@ import ModuleTabs from "../../components/ModuleTabs";
 import PageLoader from "../../components/PageLoader";
 import "./MembershipsPage.css";
 
+import CustomDropdown from '../../components/common/CustomDropdown';
+
 const emptyMembership = {
   membershipType: "Fixed", // 'Fixed' or 'Percentage'
   name: "",
@@ -843,7 +845,7 @@ export default function MembershipsPage() {
               {/* Service Category + Selected Services + Individual Services */}
               <div style={{ background: "#f8fafc", padding: "16px", borderRadius: "8px", border: "1px solid #e2e8f0" }}>
                 <label style={{ display: "block", fontSize: "0.85rem", color: "#475569", fontWeight: 600, marginBottom: "8px" }}>Service Category</label>
-                <select
+                <CustomDropdown
                   value={packageForm.selectedCategoryId}
                   onChange={(e) => handleCategorySelect(e.target.value)}
                   style={{ width: "100%", padding: "10px 12px", borderRadius: "6px", border: "1px solid #cbd5e1", fontSize: "0.85rem", boxSizing: "border-box", outline: "none", marginBottom: "12px" }}
@@ -852,7 +854,7 @@ export default function MembershipsPage() {
                   {serviceCategories.map((cat) => (
                     <option key={cat.id} value={cat.id}>{cat.name}</option>
                   ))}
-                </select>
+                </CustomDropdown>
 
                 {packageForm.services.length > 0 && (
                   <>
@@ -990,7 +992,7 @@ export default function MembershipsPage() {
             {!customerId && (
               <label>
                 <span className="muted">Customer</span>
-                <select value={assignMembershipForm.customerId} onChange={async (event) => {
+                <CustomDropdown value={assignMembershipForm.customerId} onChange={async (event) => {
                   const nextCustomerId = event.target.value;
                   setAssignMembershipForm((current) => ({ ...current, customerId: nextCustomerId }));
                   if (nextCustomerId) await loadAll(nextCustomerId);
@@ -999,15 +1001,15 @@ export default function MembershipsPage() {
                   {loading ? <option value="" disabled>Loading customers...</option> : null}
                   {!loading && !customers.length ? <option value="" disabled>No customers found</option> : null}
                   {customerOptions}
-                </select>
+                </CustomDropdown>
               </label>
             )}
             <label>
               <span className="muted">Membership plan</span>
-              <select value={assignMembershipForm.membershipPlanId} onChange={(event) => setAssignMembershipForm((current) => ({ ...current, membershipPlanId: event.target.value }))}>
+              <CustomDropdown value={assignMembershipForm.membershipPlanId} onChange={(event) => setAssignMembershipForm((current) => ({ ...current, membershipPlanId: event.target.value }))}>
                 <option value="">Select membership plan</option>
                 {filteredMemberships.map((item) => <option key={item.id} value={item.id}>{item.name}</option>)}
-              </select>
+              </CustomDropdown>
             </label>
             <label>
               <span className="muted">Start Date</span>
@@ -1042,7 +1044,7 @@ export default function MembershipsPage() {
             {!customerId && (
               <label>
                 <span className="muted">Customer</span>
-                <select value={assignPackageForm.customerId} onChange={async (event) => {
+                <CustomDropdown value={assignPackageForm.customerId} onChange={async (event) => {
                   const nextCustomerId = event.target.value;
                   setAssignPackageForm((current) => ({ ...current, customerId: nextCustomerId }));
                   if (nextCustomerId) await loadAll(nextCustomerId);
@@ -1051,15 +1053,15 @@ export default function MembershipsPage() {
                   {loading ? <option value="" disabled>Loading customers...</option> : null}
                   {!loading && !customers.length ? <option value="" disabled>No customers found</option> : null}
                   {customerOptions}
-                </select>
+                </CustomDropdown>
               </label>
             )}
             <label>
               <span className="muted">Package</span>
-              <select value={assignPackageForm.packageId} onChange={(event) => setAssignPackageForm((current) => ({ ...current, packageId: event.target.value }))}>
+              <CustomDropdown value={assignPackageForm.packageId} onChange={(event) => setAssignPackageForm((current) => ({ ...current, packageId: event.target.value }))}>
                 <option value="">Select package</option>
                 {filteredPackages.map((item) => <option key={item.id} value={item.id}>{item.name}</option>)}
-              </select>
+              </CustomDropdown>
             </label>
             <label>
               <span className="muted">Start Date</span>
@@ -1096,21 +1098,21 @@ export default function MembershipsPage() {
           }} style={{ display: "grid", gap: 10 }}>
             <label>
               <span className="muted">Customer package</span>
-              <select value={effectiveCustomerPackageId} onChange={(event) => setRedeemForm((current) => ({ ...current, customerPackageId: event.target.value }))}>
+              <CustomDropdown value={effectiveCustomerPackageId} onChange={(event) => setRedeemForm((current) => ({ ...current, customerPackageId: event.target.value }))}>
               <option value="">Select customer package</option>
               {customerPackageOptions.map((item) => (
                 <option key={item.id} value={item.id}>
                   {item.package?.name} - {selectedCustomerHistory?.name || "Customer"} ({item.remainingSessions} left)
                 </option>
               ))}
-            </select>
+            </CustomDropdown>
             </label>
             <label>
               <span className="muted">Service</span>
-              <select value={redeemForm.serviceId} onChange={(event) => setRedeemForm((current) => ({ ...current, serviceId: event.target.value }))}>
+              <CustomDropdown value={redeemForm.serviceId} onChange={(event) => setRedeemForm((current) => ({ ...current, serviceId: event.target.value }))}>
               <option value="">Select service</option>
               {services.map((service) => <option key={service.id} value={service.id}>{service.name}</option>)}
-            </select>
+            </CustomDropdown>
             </label>
             <input type="number" min="1" value={redeemForm.sessionsUsed} onChange={(event) => setRedeemForm((current) => ({ ...current, sessionsUsed: event.target.value }))} placeholder="Sessions used" />
             <textarea rows="3" value={redeemForm.note} onChange={(event) => setRedeemForm((current) => ({ ...current, note: event.target.value }))} placeholder="Redemption note" />
@@ -1164,12 +1166,12 @@ export default function MembershipsPage() {
               <form style={{ display: "grid", gap: 10 }}>
                 <label>
               <span className="muted">Assigned membership</span>
-              <select value={membershipLifecycleForm.customerMembershipId} onChange={(event) => setMembershipLifecycleForm((current) => ({ ...current, customerMembershipId: event.target.value }))}>
+              <CustomDropdown value={membershipLifecycleForm.customerMembershipId} onChange={(event) => setMembershipLifecycleForm((current) => ({ ...current, customerMembershipId: event.target.value }))}>
                   <option value="">Select assigned membership</option>
                   {(selectedCustomerHistory?.memberships || []).map((item) => (
                     <option key={item.id} value={item.id}>{item.membershipPlan?.name} - {item.status}</option>
                   ))}
-                </select>
+                </CustomDropdown>
             </label>
                 <label>
               <span className="muted">Wallet top-up amount</span>
@@ -1177,17 +1179,17 @@ export default function MembershipsPage() {
             </label>
                 <label>
               <span className="muted">Upgrade to plan</span>
-              <select value={membershipLifecycleForm.upgradePlanId} onChange={(event) => setMembershipLifecycleForm((current) => ({ ...current, upgradePlanId: event.target.value }))}>
+              <CustomDropdown value={membershipLifecycleForm.upgradePlanId} onChange={(event) => setMembershipLifecycleForm((current) => ({ ...current, upgradePlanId: event.target.value }))}>
                   <option value="">Upgrade to plan</option>
                   {filteredMemberships.map((item) => <option key={item.id} value={item.id}>{item.name}</option>)}
-                </select>
+                </CustomDropdown>
             </label>
                 <label>
               <span className="muted">Transfer to another customer</span>
-              <select value={membershipLifecycleForm.transferCustomerId} onChange={(event) => setMembershipLifecycleForm((current) => ({ ...current, transferCustomerId: event.target.value }))}>
+              <CustomDropdown value={membershipLifecycleForm.transferCustomerId} onChange={(event) => setMembershipLifecycleForm((current) => ({ ...current, transferCustomerId: event.target.value }))}>
                   <option value="">Transfer to another customer</option>
                   {customers.filter((customer) => customer.id !== customerId).map((customer) => <option key={customer.id} value={customer.id}>{customer.name}</option>)}
-                </select>
+                </CustomDropdown>
             </label>
                 <textarea rows="3" value={membershipLifecycleForm.note} placeholder="Lifecycle note" onChange={(event) => setMembershipLifecycleForm((current) => ({ ...current, note: event.target.value }))} />
                 <div className="inline-actions">
@@ -1231,12 +1233,12 @@ export default function MembershipsPage() {
               <form style={{ display: "grid", gap: 10 }}>
                 <label>
               <span className="muted">Assigned package</span>
-              <select value={packageLifecycleForm.customerPackageId} onChange={(event) => setPackageLifecycleForm((current) => ({ ...current, customerPackageId: event.target.value }))}>
+              <CustomDropdown value={packageLifecycleForm.customerPackageId} onChange={(event) => setPackageLifecycleForm((current) => ({ ...current, customerPackageId: event.target.value }))}>
                   <option value="">Select assigned package</option>
                   {(selectedCustomerHistory?.packages || []).map((item) => (
                     <option key={item.id} value={item.id}>{item.package?.name} - {item.status}</option>
                   ))}
-                </select>
+                </CustomDropdown>
             </label>
                 <label>
               <span className="muted">Extra sessions on renewal</span>
@@ -1244,10 +1246,10 @@ export default function MembershipsPage() {
             </label>
                 <label>
               <span className="muted">Transfer to another customer</span>
-              <select value={packageLifecycleForm.transferCustomerId} onChange={(event) => setPackageLifecycleForm((current) => ({ ...current, transferCustomerId: event.target.value }))}>
+              <CustomDropdown value={packageLifecycleForm.transferCustomerId} onChange={(event) => setPackageLifecycleForm((current) => ({ ...current, transferCustomerId: event.target.value }))}>
                   <option value="">Transfer to another customer</option>
                   {customers.filter((customer) => customer.id !== customerId).map((customer) => <option key={customer.id} value={customer.id}>{customer.name}</option>)}
-                </select>
+                </CustomDropdown>
             </label>
                 <textarea rows="3" value={packageLifecycleForm.note} placeholder="Lifecycle note" onChange={(event) => setPackageLifecycleForm((current) => ({ ...current, note: event.target.value }))} />
                 <div className="inline-actions">

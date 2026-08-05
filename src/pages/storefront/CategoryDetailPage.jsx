@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import { useParams, Link, useOutletContext } from "react-router-dom";
 import { api } from "../../api/client";
 
+import CustomDropdown from '../../components/common/CustomDropdown';
+
 export default function CategoryDetailPage() {
   const { salon } = useOutletContext();
   const { categoryId } = useParams();
@@ -44,12 +46,12 @@ export default function CategoryDetailPage() {
 
               <h3 className="sf-filter-heading" style={{ marginTop: 32 }}>Sort By</h3>
               <div className="sf-select-wrapper">
-                <select className="sf-select">
+                <CustomDropdown className="sf-select">
                   <option>Featured</option>
                   <option>Price: Low to High</option>
                   <option>Price: High to Low</option>
                   <option>Newest Arrivals</option>
-                </select>
+                </CustomDropdown>
                 <span className="sf-select-icon">▼</span>
               </div>
             </div>

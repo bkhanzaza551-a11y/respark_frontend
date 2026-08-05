@@ -2,6 +2,8 @@ import { useState } from "react";
 import { customerApi } from "../../api/customerClient";
 import { formatApiError } from "../../utils/apiError";
 
+import CustomDropdown from '../common/CustomDropdown';
+
 export default function AppointmentFeedbackForm({ appointmentId, onSubmitted }) {
   const [form, setForm] = useState({ rating: 5, message: "" });
   const [status, setStatus] = useState({ loading: false, error: "", success: "" });
@@ -29,9 +31,9 @@ export default function AppointmentFeedbackForm({ appointmentId, onSubmitted }) 
       {status.error && <p className="error-text">{status.error}</p>}
       {status.success && <p className="success-text">{status.success}</p>}
       <form className="form-grid" onSubmit={submit} style={{ marginTop: 12 }}>
-        <select value={form.rating} onChange={(event) => setForm((current) => ({ ...current, rating: event.target.value }))}>
+        <CustomDropdown value={form.rating} onChange={(event) => setForm((current) => ({ ...current, rating: event.target.value }))}>
           {[5, 4, 3, 2, 1].map((rating) => <option key={rating} value={rating}>{rating} Star{rating > 1 ? "s" : ""}</option>)}
-        </select>
+        </CustomDropdown>
         <textarea rows="4" placeholder="Share your experience" value={form.message} onChange={(event) => setForm((current) => ({ ...current, message: event.target.value }))} />
         <button disabled={status.loading}>{status.loading ? "Submitting..." : "Submit Feedback"}</button>
       </form>

@@ -27,6 +27,8 @@ import {
 import { useBranch } from "../context/BranchContext";
 import { api } from "../api/client";
 
+import CustomDropdown from './common/CustomDropdown';
+
 const GROUP_ICONS = {
   "My Workspace":  <User size={17} />,
   "Operations":    <Zap size={17} />,
@@ -151,7 +153,7 @@ export default function Sidebar({ groups, auth, onLogout, sidebarExpanded = true
             {isOwner && branches.length > 0 && (
               <div style={{ marginBottom: 12 }}>
                 <div style={{ fontSize: 11, fontWeight: 600, color: "#64748b", marginBottom: 6, textTransform: "uppercase", letterSpacing: "0.5px" }}>Selected Branch</div>
-                <select 
+                <CustomDropdown 
                   value={selectedBranchId}
                   onChange={(e) => setSelectedBranchId(e.target.value)}
                   style={{ width: "100%", padding: "8px 10px", borderRadius: 8, border: "1px solid #e2e8f0", fontSize: 13, backgroundColor: "#f8fafc", color: "#334155", fontWeight: 500, outline: "none", cursor: "pointer" }}
@@ -160,7 +162,7 @@ export default function Sidebar({ groups, auth, onLogout, sidebarExpanded = true
                   {branches.map(b => (
                     <option key={b.id} value={b.id}>{b.name}</option>
                   ))}
-                </select>
+                </CustomDropdown>
               </div>
             )}
             

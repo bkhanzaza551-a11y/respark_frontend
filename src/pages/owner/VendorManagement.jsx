@@ -3,6 +3,8 @@ import { Search, Plus, ChevronLeft, Save, Trash2 } from "lucide-react";
 import { api } from "../../api/client";
 import { formatApiError } from "../../utils/apiError";
 
+import CustomDropdown from '../../components/common/CustomDropdown';
+
 const emptyVendor = {
   name: "",
   firmName: "",
@@ -421,10 +423,10 @@ export default function VendorManagement({ branches = [], formatMoney }) {
 
                 <div style={formGroupStyle}>
                   <label style={labelStyle}>Branch</label>
-                  <select value={form.branchId} onChange={(e) => setForm({ ...form, branchId: e.target.value })} style={inputStyle}>
+                  <CustomDropdown value={form.branchId} onChange={(e) => setForm({ ...form, branchId: e.target.value })} style={inputStyle}>
                     <option value="">Salon wide</option>
                     {branches.map((branch) => <option key={branch.id} value={branch.id}>{branch.name}</option>)}
-                  </select>
+                  </CustomDropdown>
                 </div>
                 <TextInput label="Notes" value={form.notes} onChange={(v) => setForm({ ...form, notes: v })} placeholder="Notes" />
               </div>

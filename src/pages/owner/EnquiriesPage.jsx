@@ -8,6 +8,8 @@ import ModuleTabs from "../../components/ModuleTabs";
 import { formatApiError } from "../../utils/apiError";
 import PageLoader from "../../components/PageLoader";
 import { 
+import CustomDropdown from '../../components/common/CustomDropdown';
+
   Users, UserPlus, Phone, Mail, FileText, Share2, AlertCircle, CheckCircle2, 
   BarChart3, RefreshCw, Filter, CalendarClock, MessageSquare, Briefcase, Plus,
   Calendar, Edit3, Trash2, CheckSquare, Sparkles, MapPin, X
@@ -553,7 +555,7 @@ export default function EnquiriesPage() {
                 {/* Service * */}
                 <div style={{ gridColumn: "span 2" }}>
                   <label className="eq-label">Service *</label>
-                  <select 
+                  <CustomDropdown 
                     className="eq-input"
                     required
                     value={form.interestedServiceId}
@@ -563,7 +565,7 @@ export default function EnquiriesPage() {
                     {services.map(s => (
                       <option key={s.id} value={s.id}>{s.name}</option>
                     ))}
-                  </select>
+                  </CustomDropdown>
                 </div>
 
                 {/* Description / Notes */}
@@ -581,7 +583,7 @@ export default function EnquiriesPage() {
                 {/* Priority */}
                 <div>
                   <label className="eq-label">Priority</label>
-                  <select 
+                  <CustomDropdown 
                     className="eq-input"
                     value={form.priority}
                     onChange={(e) => setForm({ ...form, priority: e.target.value })}
@@ -589,13 +591,13 @@ export default function EnquiriesPage() {
                     {PRIORITY_OPTIONS.map(p => (
                       <option key={p} value={p}>{p}</option>
                     ))}
-                  </select>
+                  </CustomDropdown>
                 </div>
 
                 {/* Status */}
                 <div>
                   <label className="eq-label">Status</label>
-                  <select 
+                  <CustomDropdown 
                     className="eq-input"
                     value={form.status}
                     onChange={(e) => setForm({ ...form, status: e.target.value })}
@@ -603,7 +605,7 @@ export default function EnquiriesPage() {
                     {STATUS_OPTIONS.map(s => (
                       <option key={s} value={s}>{s}</option>
                     ))}
-                  </select>
+                  </CustomDropdown>
                 </div>
 
               </div>
@@ -636,7 +638,7 @@ export default function EnquiriesPage() {
                 </div>
                 <div>
                   <label className="eq-label">New Status</label>
-                  <select 
+                  <CustomDropdown 
                     className="eq-input"
                     value={newStatus}
                     onChange={(e) => setNewStatus(e.target.value)}
@@ -644,7 +646,7 @@ export default function EnquiriesPage() {
                     {STATUS_OPTIONS.map(s => (
                       <option key={s} value={s}>{s}</option>
                     ))}
-                  </select>
+                  </CustomDropdown>
                 </div>
                 <div>
                   <label className="eq-label">Notes / Action Summary</label>

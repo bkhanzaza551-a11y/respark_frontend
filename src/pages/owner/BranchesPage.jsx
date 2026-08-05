@@ -7,6 +7,8 @@ import { formatApiError } from "../../utils/apiError";
 import { useBranch } from "../../context/BranchContext";
 import { Search, Plus, Edit3, Trash2, MapPin, X } from "lucide-react";
 
+import CustomDropdown from '../../components/common/CustomDropdown';
+
 const emptyForm = { name: "", phone: "", email: "", address: "", businessHours: "", weeklyOff: "", latitude: "", longitude: "", geofenceRadiusMeters: "200" };
 
 export default function BranchesPage() {
@@ -279,7 +281,7 @@ export default function BranchesPage() {
                 <div className="settings-input-group" style={{ gridColumn: "1 / -1", display: "flex", flexDirection: "column", gap: 6 }}>
                   <span className="muted" style={{ fontSize: 13, fontWeight: 500, color: "#475569" }}>Business hours</span>
                   <div style={{ display: "flex", gap: 12 }}>
-                    <select 
+                    <CustomDropdown 
                       style={{ flex: 1, padding: "8px 12px", border: "1px solid #cbd5e1", borderRadius: 6 }}
                       value={form.businessHours.split(" - ")[0] || ""} 
                       onChange={(e) => {
@@ -289,8 +291,8 @@ export default function BranchesPage() {
                     >
                       <option value="">Open Time</option>
                       {timeOptions.map(t => <option key={`open-${t}`} value={t}>{t}</option>)}
-                    </select>
-                    <select 
+                    </CustomDropdown>
+                    <CustomDropdown 
                       style={{ flex: 1, padding: "8px 12px", border: "1px solid #cbd5e1", borderRadius: 6 }}
                       value={form.businessHours.split(" - ")[1] || ""} 
                       onChange={(e) => {
@@ -300,13 +302,13 @@ export default function BranchesPage() {
                     >
                       <option value="">Close Time</option>
                       {timeOptions.map(t => <option key={`close-${t}`} value={t}>{t}</option>)}
-                    </select>
+                    </CustomDropdown>
                   </div>
                 </div>
                 
                 <label className="settings-input-group" style={{ gridColumn: "1 / -1", display: "flex", flexDirection: "column", gap: 6 }}>
                   <span className="muted" style={{ fontSize: 13, fontWeight: 500, color: "#475569" }}>Weekly off</span>
-                  <select value={form.weeklyOff} onChange={(event) => setForm({ ...form, weeklyOff: event.target.value })} style={{ padding: "8px 12px", border: "1px solid #cbd5e1", borderRadius: 6 }}>
+                  <CustomDropdown value={form.weeklyOff} onChange={(event) => setForm({ ...form, weeklyOff: event.target.value })} style={{ padding: "8px 12px", border: "1px solid #cbd5e1", borderRadius: 6 }}>
                     <option value="">None / Open 7 days</option>
                     <option value="Monday">Monday</option>
                     <option value="Tuesday">Tuesday</option>
@@ -315,7 +317,7 @@ export default function BranchesPage() {
                     <option value="Friday">Friday</option>
                     <option value="Saturday">Saturday</option>
                     <option value="Sunday">Sunday</option>
-                  </select>
+                  </CustomDropdown>
                 </label>
                 
               </form>

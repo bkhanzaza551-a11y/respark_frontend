@@ -4,6 +4,8 @@ import EmptyState from "../../components/EmptyState";
 import PageLoader from "../../components/PageLoader";
 import { formatApiError } from "../../utils/apiError";
 
+import CustomDropdown from '../../components/common/CustomDropdown';
+
 const formatAttachmentValue = (value) => String(value || "").trim();
 const isAttachmentLink = (value) => /^https?:\/\//i.test(formatAttachmentValue(value));
 
@@ -91,11 +93,11 @@ export default function SupportTicketsPage() {
             </label>
             <label>
               <span className="muted">Low</span>
-              <select value={form.priority} onChange={(event) => setForm({ ...form, priority: event.target.value })}>
+              <CustomDropdown value={form.priority} onChange={(event) => setForm({ ...form, priority: event.target.value })}>
               <option value="LOW">Low</option>
               <option value="MEDIUM">Medium</option>
               <option value="HIGH">High</option>
-            </select>
+            </CustomDropdown>
             </label>
             <textarea rows="5" value={form.description} placeholder="Describe the issue clearly" onChange={(event) => setForm({ ...form, description: event.target.value })} />
             <label>
@@ -117,22 +119,22 @@ export default function SupportTicketsPage() {
             </label>
             <label>
               <span className="muted">Statuses</span>
-              <select value={filters.status} onChange={(event) => setFilters((current) => ({ ...current, status: event.target.value }))}>
+              <CustomDropdown value={filters.status} onChange={(event) => setFilters((current) => ({ ...current, status: event.target.value }))}>
               <option value="">All statuses</option>
               <option value="OPEN">Open</option>
               <option value="PENDING">Pending</option>
               <option value="RESOLVED">Resolved</option>
               <option value="CLOSED">Closed</option>
-            </select>
+            </CustomDropdown>
             </label>
             <label>
               <span className="muted">Priorities</span>
-              <select value={filters.priority} onChange={(event) => setFilters((current) => ({ ...current, priority: event.target.value }))}>
+              <CustomDropdown value={filters.priority} onChange={(event) => setFilters((current) => ({ ...current, priority: event.target.value }))}>
               <option value="">All priorities</option>
               <option value="LOW">Low</option>
               <option value="MEDIUM">Medium</option>
               <option value="HIGH">High</option>
-            </select>
+            </CustomDropdown>
             </label>
             <button type="button" className="secondary-button" onClick={() => setFilters({ q: "", status: "", priority: "" })}>Reset</button>
           </div>

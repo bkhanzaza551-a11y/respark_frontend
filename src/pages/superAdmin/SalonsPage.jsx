@@ -4,6 +4,8 @@ import EmptyState from "../../components/EmptyState";
 import PageLoader from "../../components/PageLoader";
 import IndianPhoneInput from "../../components/IndianPhoneInput";
 
+import CustomDropdown from '../../components/common/CustomDropdown';
+
 const businessTypes = ["Salon", "Spa", "Beauty Clinic", "Nail Studio", "Tattoo Studio", "Pet Grooming", "Wellness Center"];
 const featureFlagKeys = [
   "pos",
@@ -225,13 +227,13 @@ export default function SalonsPage() {
       <div className="panel-card" style={{ marginBottom: 18 }}>
         <div className="form-grid">
           <input value={query} placeholder="Search salon, slug, email, phone, city, or country" onChange={(event) => setQuery(event.target.value)} />
-          <select value={statusFilter} onChange={(event) => setStatusFilter(event.target.value)}>
+          <CustomDropdown value={statusFilter} onChange={(event) => setStatusFilter(event.target.value)}>
             <option value="">All statuses</option>
             <option value="ACTIVE">Active</option>
             <option value="TRIAL">Trial</option>
             <option value="EXPIRED">Expired</option>
             <option value="SUSPENDED">Suspended</option>
-          </select>
+          </CustomDropdown>
           <button type="button" className="secondary-button" onClick={() => load(query, statusFilter)}>Apply Filters</button>
           <button type="button" className="secondary-button" onClick={() => { setQuery(""); setStatusFilter(""); }}>Reset</button>
         </div>
@@ -242,9 +244,9 @@ export default function SalonsPage() {
           <form onSubmit={createOrUpdateSalon} className="form-grid">
             <input placeholder="Salon name" value={form.name} onChange={(event) => setForm({ ...form, name: event.target.value })} />
             <input placeholder="Slug" value={form.slug} onChange={(event) => setForm({ ...form, slug: event.target.value })} />
-            <select value={form.businessType} onChange={(event) => setForm({ ...form, businessType: event.target.value })}>
+            <CustomDropdown value={form.businessType} onChange={(event) => setForm({ ...form, businessType: event.target.value })}>
               {businessTypes.map((item) => <option key={item} value={item}>{item}</option>)}
-            </select>
+            </CustomDropdown>
             <input placeholder="Email" value={form.email} onChange={(event) => setForm({ ...form, email: event.target.value })} />
             <IndianPhoneInput value={form.phone} onChange={(phone) => setForm((prev) => ({ ...prev, phone }))} />
             <input placeholder="Address" value={form.address} onChange={(event) => setForm({ ...form, address: event.target.value })} />

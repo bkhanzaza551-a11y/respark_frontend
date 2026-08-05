@@ -8,6 +8,8 @@ import EmptyState from "../../components/EmptyState";
 import ModuleTabs from "../../components/ModuleTabs";
 import PageLoader from "../../components/PageLoader";
 
+import CustomDropdown from '../../components/common/CustomDropdown';
+
 const reportSections = [
   { key: "overview", label: "Overview", to: "/admin/reports", hint: "KPIs" },
   { key: "operations", label: "Operations", to: "/admin/reports/appointments", hint: "Service Ops" },
@@ -273,9 +275,9 @@ export default function ReportsPage() {
           <>
             <label>
               <span className="muted">Select Option</span>
-              <select value={reportView} onChange={(event) => jumpToReport(event.target.value)}>
+              <CustomDropdown value={reportView} onChange={(event) => jumpToReport(event.target.value)}>
               {reportSections.map((item) => <option key={item.key} value={item.key}>{item.label}</option>)}
-            </select>
+            </CustomDropdown>
             </label>
             <div style={{ display: "flex", gap: 6, alignItems: "center", flexWrap: "wrap" }}>
               {QUICK_RANGES.map((qr) => (

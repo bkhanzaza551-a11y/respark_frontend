@@ -3,6 +3,8 @@ import { api } from "../../api/client";
 import { formatApiError } from "../../utils/apiError";
 import IndianPhoneInput from "../IndianPhoneInput";
 
+import CustomDropdown from '../common/CustomDropdown';
+
 const addMinutes = (value, minutes) => {
   if (!value) return "";
   const date = new Date(value);
@@ -92,16 +94,16 @@ export default function PublicBookingForm({ slug, data, onSuccess, onTrack, init
         <input placeholder="Your name" value={form.customerName} onChange={(event) => setForm((current) => ({ ...current, customerName: event.target.value }))} />
         <IndianPhoneInput value={form.customerPhone} onChange={(phone) => setForm((current) => ({ ...current, customerPhone: phone }))} />
         <input placeholder="Email" value={form.customerEmail} onChange={(event) => setForm((current) => ({ ...current, customerEmail: event.target.value }))} />
-        <select value={form.branchId} onChange={(event) => setForm((current) => ({ ...current, branchId: event.target.value, staffMembershipId: "" }))}>
+        <CustomDropdown value={form.branchId} onChange={(event) => setForm((current) => ({ ...current, branchId: event.target.value, staffMembershipId: "" }))}>
           {branches.map((branch) => <option key={branch.id} value={branch.id}>{branch.name}</option>)}
-        </select>
-        <select value={form.serviceId} onChange={(event) => setForm((current) => ({ ...current, serviceId: event.target.value, staffMembershipId: "" }))}>
+        </CustomDropdown>
+        <CustomDropdown value={form.serviceId} onChange={(event) => setForm((current) => ({ ...current, serviceId: event.target.value, staffMembershipId: "" }))}>
           {services.map((service) => <option key={service.id} value={service.id}>{service.name}</option>)}
-        </select>
-        <select value={form.staffMembershipId} onChange={(event) => setForm((current) => ({ ...current, staffMembershipId: event.target.value }))}>
+        </CustomDropdown>
+        <CustomDropdown value={form.staffMembershipId} onChange={(event) => setForm((current) => ({ ...current, staffMembershipId: event.target.value }))}>
           <option value="">Select staff</option>
           {eligibleStaff.map((member) => <option key={member.id} value={member.id}>{member.user?.name || member.name || "Staff"}{member.branch?.name ? ` - ${member.branch.name}` : ""}</option>)}
-        </select>
+        </CustomDropdown>
         <input type="datetime-local" value={form.startAt} onChange={(event) => setForm((current) => ({ ...current, startAt: event.target.value }))} />
         <input value={selectedService?.durationMin || ""} readOnly placeholder="Duration" />
         <textarea placeholder="Notes" value={form.notes} onChange={(event) => setForm((current) => ({ ...current, notes: event.target.value }))} />

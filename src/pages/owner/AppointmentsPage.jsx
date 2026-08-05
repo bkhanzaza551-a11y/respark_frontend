@@ -8,6 +8,8 @@ import { formatApiError } from "../../utils/apiError";
 import PageLoader from "../../components/PageLoader";
 import AppointmentCheckoutModal from "./AppointmentCheckoutModal";
 
+import CustomDropdown from '../../components/common/CustomDropdown';
+
 const APPOINTMENT_START_HOUR = 9;
 const APPOINTMENT_END_HOUR = 21;
 const APPOINTMENT_SLOT_MINUTES = 15;
@@ -1998,7 +2000,7 @@ export default function AppointmentsPage() {
                     <div key={idx} style={{ marginBottom: 16, paddingBottom: 16, borderBottom: "1px dashed #e2e8f0" }}>
                       <label style={{ fontSize: "0.8rem", color: "#94a3b8", display: "block", marginBottom: 4 }}>Service {idx + 1}</label>
                       <div className="sp-input-group">
-                        <select className="sp-select" value={item.serviceId} onChange={(event) => handleUpdateItem(idx, "serviceId", event.target.value)} required>
+                        <CustomDropdown className="sp-select" value={item.serviceId} onChange={(event) => handleUpdateItem(idx, "serviceId", event.target.value)} required>
                           <option value="">Select Service</option>
                           {serviceGroups.map((group) => (
                             <optgroup key={group.title} label={`${group.title} ${serviceGenderFilter !== "ALL" ? `(${serviceGenderFilter === "MALE" ? "M" : "F"})` : ""}`}>
@@ -2009,12 +2011,12 @@ export default function AppointmentsPage() {
                               ))}
                             </optgroup>
                           ))}
-                        </select>
+                        </CustomDropdown>
                       </div>
 
                       <label style={{ fontSize: "0.8rem", color: "#94a3b8", display: "block", marginBottom: 4 }}>Expert {idx + 1}</label>
                       <div className="sp-input-group">
-                        <select className="sp-select" value={item.staffUserIds[0] || ""} onChange={(event) => handleUpdateItem(idx, "staffUserIds", [event.target.value])} required>
+                        <CustomDropdown className="sp-select" value={item.staffUserIds[0] || ""} onChange={(event) => handleUpdateItem(idx, "staffUserIds", [event.target.value])} required>
                           <option value="">Select Expert</option>
                           {filteredStaffUsers
                             .filter((staff) => {
@@ -2023,14 +2025,14 @@ export default function AppointmentsPage() {
                               return assignedServiceIds.length === 0 || assignedServiceIds.includes(item.serviceId);
                             })
                             .map((staff) => <option key={staff.id} value={staff.id}>{staff.user?.name}</option>)}
-                        </select>
+                        </CustomDropdown>
                       </div>
 
                       <div className="add-link" style={{ margin: "12px 0", cursor: "pointer" }} onClick={() => { const nextItems = [...form.items]; const nextItem = { ...nextItems[idx], staffUserIds: [...(nextItems[idx].staffUserIds || []), ""] }; nextItems[idx] = nextItem; setForm((current) => ({ ...current, items: nextItems })); }}>Add more staff +</div>
                       <div className="sp-time-grid">
                         <div>
                           <label style={{ fontSize: "0.8rem", color: "#94a3b8", display: "block", marginBottom: 4 }}>From Time</label>
-                          <select className="sp-input" value={item.startAt ? formatTimeForSelect(item.startAt) : ""} onChange={(event) => handleUpdateItem(idx, "startAt", combineDateAndTime(currentDate, event.target.value))} required>
+                          <CustomDropdown className="sp-input" value={item.startAt ? formatTimeForSelect(item.startAt) : ""} onChange={(event) => handleUpdateItem(idx, "startAt", combineDateAndTime(currentDate, event.target.value))} required>
                             <option value="">Select Time</option>
                             {TIME_SLOTS.filter(slot => {
                               if (!item.endAt) return true;
@@ -2038,11 +2040,11 @@ export default function AppointmentsPage() {
                               const slotIdx = TIME_SLOT_INDEX.get(slot) ?? 0;
                               return slotIdx < endIdx;
                             }).map(slot => <option key={slot} value={slot}>{slot}</option>)}
-                          </select>
+                          </CustomDropdown>
                         </div>
                         <div>
                           <label style={{ fontSize: "0.8rem", color: "#94a3b8", display: "block", marginBottom: 4 }}>To Time</label>
-                          <select className="sp-input" value={item.endAt ? formatTimeForSelect(item.endAt) : ""} onChange={(event) => handleUpdateItem(idx, "endAt", combineDateAndTime(currentDate, event.target.value))} required disabled={!item.startAt}>
+                          <CustomDropdown className="sp-input" value={item.endAt ? formatTimeForSelect(item.endAt) : ""} onChange={(event) => handleUpdateItem(idx, "endAt", combineDateAndTime(currentDate, event.target.value))} required disabled={!item.startAt}>
                             <option value="">Select Time</option>
                             {TIME_SLOTS.filter(slot => {
                               if (!item.startAt) return true;
@@ -2052,7 +2054,7 @@ export default function AppointmentsPage() {
                               if (slotIdx > startIdx + 8) return false;
                               return true;
                             }).map(slot => <option key={slot} value={slot}>{slot}</option>)}
-                          </select>
+                          </CustomDropdown>
                         </div>
                       </div>
                     </div>

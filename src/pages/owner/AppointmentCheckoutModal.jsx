@@ -6,6 +6,8 @@ import { useSalonSettings } from "../../context/SalonSettingsContext";
 import { downloadFromApi } from "../../utils/download";
 import PosReceipt from "../../components/PosReceipt";
 
+import CustomDropdown from '../../components/common/CustomDropdown';
+
 const toAmount = (value, fallback = 0) => {
   const next = Number(value);
   return Number.isFinite(next) ? next : fallback;
@@ -666,7 +668,7 @@ export default function AppointmentCheckoutModal({ appointment, onClose, onCompl
                             {item.itemType === 'PRODUCT' ? (
                               <span style={{ color: "#94a3b8" }}>N/A</span>
                             ) : (
-                              <select 
+                              <CustomDropdown 
                                 value={item.staffUserSalonId || ""} 
                                 onChange={(e) => updateItemStaff(index, e.target.value)}
                                 style={{ width: "100%", padding: "4px", borderRadius: "4px", border: item.staffUserSalonId ? "1px solid #cbd5e1" : "1px solid #ef4444", fontSize: "0.7rem", outline: "none", background: item.staffUserSalonId ? "white" : "#fef2f2" }}
@@ -675,7 +677,7 @@ export default function AppointmentCheckoutModal({ appointment, onClose, onCompl
                                 {posContext.staffUsers.map(staff => (
                                   <option key={staff.id} value={staff.id}>{staff.user?.name}</option>
                                 ))}
-                              </select>
+                              </CustomDropdown>
                             )}
                           </div>
 
@@ -883,10 +885,10 @@ export default function AppointmentCheckoutModal({ appointment, onClose, onCompl
                 </div>
                 <div>
                   <div style={{ fontSize: "0.75rem", color: "#475569", fontWeight: 600, marginBottom: "4px" }}>Staff</div>
-                  <select value={gcDraft.staffId} onChange={(e) => setGcDraft({...gcDraft, staffId: e.target.value})} style={{ width: "100%", padding: "8px 12px", borderRadius: "6px", border: "1px solid #cbd5e1", fontSize: "0.75rem", outline: "none", height: "36px", boxSizing: "border-box", background: "white" }}>
+                  <CustomDropdown value={gcDraft.staffId} onChange={(e) => setGcDraft({...gcDraft, staffId: e.target.value})} style={{ width: "100%", padding: "8px 12px", borderRadius: "6px", border: "1px solid #cbd5e1", fontSize: "0.75rem", outline: "none", height: "36px", boxSizing: "border-box", background: "white" }}>
                     <option value="" disabled>Select Staff</option>
                     {posContext.staffUsers.map(s => <option key={s.id} value={s.id}>{s.user?.name}</option>)}
-                  </select>
+                  </CustomDropdown>
                 </div>
               </div>
 
@@ -995,10 +997,10 @@ export default function AppointmentCheckoutModal({ appointment, onClose, onCompl
                 </div>
                 <div>
                   <div style={{ fontSize: "0.75rem", color: "#475569", fontWeight: 600, marginBottom: "4px" }}>Staff</div>
-                  <select value={membershipDraft.staffId} onChange={(e) => setMembershipDraft({...membershipDraft, staffId: e.target.value})} style={{ width: "100%", padding: "8px 12px", borderRadius: "6px", border: "1px solid #cbd5e1", fontSize: "0.75rem", outline: "none", height: "36px", boxSizing: "border-box", background: "white" }}>
+                  <CustomDropdown value={membershipDraft.staffId} onChange={(e) => setMembershipDraft({...membershipDraft, staffId: e.target.value})} style={{ width: "100%", padding: "8px 12px", borderRadius: "6px", border: "1px solid #cbd5e1", fontSize: "0.75rem", outline: "none", height: "36px", boxSizing: "border-box", background: "white" }}>
                     <option value="" disabled>Select Staff</option>
                     {posContext.staffUsers.map(s => <option key={s.id} value={s.id}>{s.user?.name}</option>)}
-                  </select>
+                  </CustomDropdown>
                 </div>
                 <div>
                   <div style={{ fontSize: "0.75rem", color: "#475569", fontWeight: 600, marginBottom: "4px" }}>Purchase date</div>
@@ -1128,10 +1130,10 @@ export default function AppointmentCheckoutModal({ appointment, onClose, onCompl
                 </div>
                 <div>
                   <div style={{ fontSize: "0.75rem", color: "#475569", fontWeight: 600, marginBottom: "4px" }}>Staff</div>
-                  <select value={packageDraft.staffId} onChange={(e) => setPackageDraft({...packageDraft, staffId: e.target.value})} style={{ width: "100%", padding: "8px 12px", borderRadius: "6px", border: "1px solid #cbd5e1", fontSize: "0.75rem", outline: "none", height: "36px", boxSizing: "border-box", background: "white" }}>
+                  <CustomDropdown value={packageDraft.staffId} onChange={(e) => setPackageDraft({...packageDraft, staffId: e.target.value})} style={{ width: "100%", padding: "8px 12px", borderRadius: "6px", border: "1px solid #cbd5e1", fontSize: "0.75rem", outline: "none", height: "36px", boxSizing: "border-box", background: "white" }}>
                     <option value="" disabled>Select Staff</option>
                     {posContext.staffUsers.map(s => <option key={s.id} value={s.id}>{s.user?.name}</option>)}
-                  </select>
+                  </CustomDropdown>
                 </div>
                 <div>
                   <div style={{ fontSize: "0.75rem", color: "#475569", fontWeight: 600, marginBottom: "4px" }}>Purchase date</div>

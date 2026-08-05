@@ -4,6 +4,8 @@ import { useAuth } from "../../context/AuthContext";
 import { useSalonSettings } from "../../context/SalonSettingsContext";
 import { useBranch } from '../../context/BranchContext';
 import {
+import CustomDropdown from '../../components/common/CustomDropdown';
+
   PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip,
   ResponsiveContainer, Legend, Line, ComposedChart
 } from "recharts";
@@ -1868,23 +1870,23 @@ export default function ReportsHubPage() {
                       style={{ padding: "4px 8px", border: "1px solid #e2e8f0", borderRadius: "5px", fontSize: "0.72rem", minWidth: 130 }}
                     />
                   ) : (
-                    <select value={value} onChange={(e) => setReportFilters((current) => ({ ...current, [f.key]: e.target.value }))}>
+                    <CustomDropdown value={value} onChange={(e) => setReportFilters((current) => ({ ...current, [f.key]: e.target.value }))}>
                       {opts.map((opt) => <option key={opt.value} value={opt.value}>{opt.label}</option>)}
-                    </select>
+                    </CustomDropdown>
                   )}
                 </div>
               );
             })}
 
             {canSelectBranch && (
-              <select
+              <CustomDropdown
                 value={reportBranchId}
                 onChange={(e) => setReportBranchId(e.target.value)}
                 style={{ padding: "4px 10px", border: "1px solid #e2e8f0", borderRadius: "5px", fontSize: "0.72rem", minWidth: 130, fontWeight: 600, color: "#334155", background: "white" }}
               >
                 <option value="">All Branches</option>
                 {branches.map((b) => <option key={b.id} value={b.id}>{b.name}</option>)}
-              </select>
+              </CustomDropdown>
             )}
         </div>
 

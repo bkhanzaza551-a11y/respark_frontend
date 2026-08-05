@@ -6,6 +6,8 @@ import { formatApiError } from "../../utils/apiError";
 import ModuleTabs from "../../components/ModuleTabs";
 import PageLoader from "../../components/PageLoader";
 
+import CustomDropdown from '../../components/common/CustomDropdown';
+
 const statusOptions = ["PENDING", "CONFIRMED", "CHECKED_IN", "IN_PROGRESS", "COMPLETED", "CANCELLED", "NO_SHOW"];
 
 function formatMoney(val) {
@@ -186,9 +188,9 @@ export default function AppointmentDetailPage() {
             <div className="form-grid">
               <label>
               <span className="muted">Select Option</span>
-              <select value={statusValue} onChange={(event) => setStatusValue(event.target.value)}>
+              <CustomDropdown value={statusValue} onChange={(event) => setStatusValue(event.target.value)}>
                 {statusOptions.map((item) => <option key={item} value={item}>{item}</option>)}
-              </select>
+              </CustomDropdown>
             </label>
               <label>
               <span className="muted">Status note</span>

@@ -5,6 +5,8 @@ import { useAuth } from "../context/AuthContext";
 import { readSalonSettingsCache } from "../utils/salonSettings";
 import { api } from "../api/client";
 
+import CustomDropdown from './common/CustomDropdown';
+
 const Divider = ({ dashed = false, style = {} }) => (
   <div aria-hidden="true" style={{ borderTop: `1px ${dashed ? "dashed" : "solid"} #cbd5e1`, margin: "14px 0", ...style }} />
 );
@@ -158,9 +160,9 @@ export default function PosReceipt({ invoice, salonName, salonAddress, salonPhon
         {/* Action Bar */}
         <div style={{ position: "sticky", top: 0, zIndex: 10, display: "flex", justifyContent: "flex-end", alignItems: "center", gap: 6, padding: isThermal ? "8px 8px" : "12px 16px", background: "rgba(255,255,255,0.95)", backdropFilter: "blur(8px)", borderBottom: "1px solid #f1f5f9", borderRadius: isThermal ? "8px 8px 0 0" : "16px 16px 0 0" }} className="no-print">
           {/* Format Selector */}
-          <select value={format} onChange={(e) => handleFormatChange(e.target.value)} style={{ padding: "4px 6px", borderRadius: 6, border: "1px solid #e2e8f0", fontSize: 11, fontWeight: 600, color: "#475569", background: "#f8fafc", cursor: "pointer", marginRight: "auto" }}>
+          <CustomDropdown value={format} onChange={(e) => handleFormatChange(e.target.value)} style={{ padding: "4px 6px", borderRadius: 6, border: "1px solid #e2e8f0", fontSize: 11, fontWeight: 600, color: "#475569", background: "#f8fafc", cursor: "pointer", marginRight: "auto" }}>
             {FORMATS.map(f => <option key={f.key} value={f.key}>{f.label}</option>)}
-          </select>
+          </CustomDropdown>
           {onPrint && <div style={{ width: 32, height: 32, display: "flex", alignItems: "center", justifyContent: "center", borderRadius: 8, border: "1px solid #e2e8f0", background: "#f8fafc", color: "#475569", cursor: "pointer" }} title="Print" onClick={handleLocalPrint}><Printer size={14} /></div>}
           {onDownload && <div style={{ width: 32, height: 32, display: "flex", alignItems: "center", justifyContent: "center", borderRadius: 8, border: "1px solid #e2e8f0", background: "#f8fafc", color: "#475569", cursor: "pointer" }} title="Download" onClick={onDownload}><Download size={14} /></div>}
           {onClose && !inline && <div style={{ width: 32, height: 32, display: "flex", alignItems: "center", justifyContent: "center", borderRadius: 8, border: "1px solid #e2e8f0", background: "#f8fafc", color: "#ef4444", cursor: "pointer" }} title="Close" onClick={onClose}><X size={14} /></div>}

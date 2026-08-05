@@ -4,6 +4,8 @@ import { formatApiError } from "../../utils/apiError";
 import EmptyState from "../../components/EmptyState";
 import PageLoader from "../../components/PageLoader";
 
+import CustomDropdown from '../../components/common/CustomDropdown';
+
 const emptyDraft = {
   planId: "",
   salonName: "",
@@ -160,12 +162,12 @@ export default function DemoLeadsPage() {
             </label>
           <label>
               <span className="muted">Statuses</span>
-              <select value={filters.status} onChange={(event) => setFilters((current) => ({ ...current, status: event.target.value }))}>
+              <CustomDropdown value={filters.status} onChange={(event) => setFilters((current) => ({ ...current, status: event.target.value }))}>
             <option value="">All statuses</option>
             <option value="PENDING">Pending</option>
             <option value="APPROVED">Approved</option>
             <option value="REJECTED">Rejected</option>
-          </select>
+          </CustomDropdown>
             </label>
           <button type="button" className="secondary-button" onClick={() => load(filters)}>Apply Filters</button>
           <button type="button" className="secondary-button" onClick={() => setFilters({ q: "", status: "" })}>Reset</button>
@@ -215,7 +217,7 @@ export default function DemoLeadsPage() {
             </label>
                         <label>
               <span className="muted">Select Option</span>
-              <select
+              <CustomDropdown
                           value={draft.planId}
                           onChange={(event) => patchDraft(row.id, { planId: event.target.value })}
                           disabled={row.status !== "PENDING"}
@@ -225,7 +227,7 @@ export default function DemoLeadsPage() {
                               {plan.name}
                             </option>
                           ))}
-                        </select>
+                        </CustomDropdown>
             </label>
                         <div style={{ display: "grid", gridTemplateColumns: "1fr 120px", gap: 8 }}>
                           <label>

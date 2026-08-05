@@ -7,6 +7,8 @@ import ModuleTabs from "../../components/ModuleTabs";
 import { formatApiError } from "../../utils/apiError";
 import PageLoader from "../../components/PageLoader";
 
+import CustomDropdown from '../../components/common/CustomDropdown';
+
 export default function FeedbackPage() {
   const location = useLocation();
   const { selectedBranchId } = useBranch();
@@ -138,13 +140,13 @@ export default function FeedbackPage() {
           <>
             <label>
               <span className="muted">Statuses</span>
-              <select value={filters.status} onChange={(event) => setFilters((current) => ({ ...current, status: event.target.value }))}>
+              <CustomDropdown value={filters.status} onChange={(event) => setFilters((current) => ({ ...current, status: event.target.value }))}>
               <option value="">All statuses</option>
               <option value="NEW">New</option>
               <option value="REVIEWED">Reviewed</option>
               <option value="CONTACTED">Contacted</option>
               <option value="RESOLVED">Resolved</option>
-            </select>
+            </CustomDropdown>
             </label>
             <button type="button" className="secondary-button" onClick={() => setFilters({ status: "" })}>Reset</button>
           </>

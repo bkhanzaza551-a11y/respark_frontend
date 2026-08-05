@@ -2,6 +2,8 @@ import { useState } from "react";
 import { api } from "../../api/client";
 import { formatApiError } from "../../utils/apiError";
 
+import CustomDropdown from '../common/CustomDropdown';
+
 const emptyBanner = {
   title: "",
   subtitle: "",
@@ -110,10 +112,10 @@ export default function CatalogContentManager({ type, rows, branches, onReload, 
               <input placeholder="Image URL" value={form.imageUrl} onChange={(event) => setForm((current) => ({ ...current, imageUrl: event.target.value }))} />
               <input placeholder="CTA Label" value={form.ctaLabel} onChange={(event) => setForm((current) => ({ ...current, ctaLabel: event.target.value }))} />
               <input placeholder="CTA URL" value={form.ctaUrl} onChange={(event) => setForm((current) => ({ ...current, ctaUrl: event.target.value }))} />
-              <select value={form.branchId} onChange={(event) => setForm((current) => ({ ...current, branchId: event.target.value }))}>
+              <CustomDropdown value={form.branchId} onChange={(event) => setForm((current) => ({ ...current, branchId: event.target.value }))}>
                 <option value="">All branches</option>
                 {(branches || []).map((branch) => <option key={branch.id} value={branch.id}>{branch.name}</option>)}
-              </select>
+              </CustomDropdown>
               <input type="datetime-local" value={form.startsAt} onChange={(event) => setForm((current) => ({ ...current, startsAt: event.target.value }))} />
               <input type="datetime-local" value={form.endsAt} onChange={(event) => setForm((current) => ({ ...current, endsAt: event.target.value }))} />
             </>

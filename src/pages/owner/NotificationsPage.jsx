@@ -8,6 +8,8 @@ import { downloadFromApi } from "../../utils/download";
 import { Bell, Search as SearchIcon, Filter, CheckCircle2, AlertCircle, Info, ExternalLink, Check } from "lucide-react";
 import "./NotificationsPage.css";
 
+import CustomDropdown from '../../components/common/CustomDropdown';
+
 export default function NotificationsPage() {
   const [rows, setRows] = useState([]);
   const [filters, setFilters] = useState({ q: "", type: "", isRead: "" });
@@ -143,11 +145,11 @@ export default function NotificationsPage() {
             />
           </div>
           <div className="noti-filter-group select-group">
-            <select value={filters.isRead} onChange={(event) => setFilters((current) => ({ ...current, isRead: event.target.value }))}>
+            <CustomDropdown value={filters.isRead} onChange={(event) => setFilters((current) => ({ ...current, isRead: event.target.value }))}>
               <option value="">All Statuses</option>
               <option value="false">Unread Only</option>
               <option value="true">Read Only</option>
-            </select>
+            </CustomDropdown>
           </div>
           <button type="button" className="secondary-button btn-reset" onClick={() => setFilters({ q: "", type: "", isRead: "" })}>Clear</button>
         </div>

@@ -4,6 +4,8 @@ import { api } from "../../api/client";
 import EmptyState from "../../components/EmptyState";
 import PageLoader from "../../components/PageLoader";
 
+import CustomDropdown from '../../components/common/CustomDropdown';
+
 export default function SuperAdminDashboard() {
   const [data, setData] = useState(null);
   const [period, setPeriod] = useState("month");
@@ -43,11 +45,11 @@ export default function SuperAdminDashboard() {
             <div className="item-meta" style={{ marginBottom: 8 }}>Reporting window</div>
             <label>
               <span className="muted">Today</span>
-              <select value={period} onChange={(event) => setPeriod(event.target.value)}>
+              <CustomDropdown value={period} onChange={(event) => setPeriod(event.target.value)}>
               <option value="today">Today</option>
               <option value="month">This Month</option>
               <option value="year">This Year</option>
-            </select>
+            </CustomDropdown>
             </label>
           </div>
         </div>

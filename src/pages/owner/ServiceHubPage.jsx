@@ -7,6 +7,8 @@ import { useBranch } from '../../context/BranchContext';
 import PageLoader from '../../components/PageLoader';
 import './ServiceHubPage.css';
 
+import CustomDropdown from '../../components/common/CustomDropdown';
+
 const DURATION_OPTIONS = [
   { value: 15, label: "15 min" },
   { value: 30, label: "30 min" },
@@ -520,7 +522,7 @@ export default function ServiceHubPage() {
               <div className="hub-form-row">
                 <div className="hub-form-group">
                   <label>Category</label>
-                  <select className="hub-input" value={srvForm.categoryId} onChange={e => setSrvForm({...srvForm, categoryId: e.target.value})}>
+                  <CustomDropdown className="hub-input" value={srvForm.categoryId} onChange={e => setSrvForm({...srvForm, categoryId: e.target.value})}>
                     <option value="">Select category</option>
                     {categories.flatMap(c => [
                       <option key={c.id} value={c.id}>{c.name}</option>,
@@ -528,7 +530,7 @@ export default function ServiceHubPage() {
                         <option key={sub.id} value={sub.id}>&nbsp;&nbsp;{c.name} / {sub.name}</option>
                       ))
                     ])}
-                  </select>
+                  </CustomDropdown>
                 </div>
               </div>
 
@@ -536,11 +538,11 @@ export default function ServiceHubPage() {
               <div className="hub-form-row">
                 <div className="hub-form-group">
                   <label>Duration (min)</label>
-                  <select className="hub-input" value={srvForm.durationMin} onChange={e => setSrvForm({...srvForm, durationMin: e.target.value})}>
+                  <CustomDropdown className="hub-input" value={srvForm.durationMin} onChange={e => setSrvForm({...srvForm, durationMin: e.target.value})}>
                     {DURATION_OPTIONS.map((option) => (
                       <option key={option.value} value={option.value}>{option.label}</option>
                     ))}
-                  </select>
+                  </CustomDropdown>
                 </div>
                 <div className="hub-form-group">
                   <label>Position *</label>
@@ -653,7 +655,7 @@ export default function ServiceHubPage() {
                       <div key={prodIdx} style={{ background: "#f8fafc", border: "1px solid #e2e8f0", borderRadius: 8, padding: "10px 12px", marginBottom: 8 }}>
                         <div style={{ display: "flex", gap: 8, alignItems: "flex-end" }}>
                           <div style={{ flex: 2, minWidth: 0 }}>
-                            <select className="hub-input" value={prod.productId} onChange={e => {
+                            <CustomDropdown className="hub-input" value={prod.productId} onChange={e => {
                               const ni = [...consumables];
                               const pr = products.find(p => p.id === e.target.value);
                               ni[prodIdx] = {...ni[prodIdx], productId: e.target.value, productName: pr?.name || ''};
@@ -662,7 +664,7 @@ export default function ServiceHubPage() {
                             }} style={{ width: "100%" }}>
                               <option value="">Select product</option>
                               {products.filter(p => p.isActive && p.productType === "CONSUMABLE").map(p => <option key={p.id} value={p.id}>{p.name}</option>)}
-                            </select>
+                            </CustomDropdown>
                           </div>
                           <div style={{ flex: 1, minWidth: 70 }}>
                             <div style={{ display: "flex", alignItems: "center", gap: 4 }}>

@@ -13,6 +13,8 @@ import PosReceipt from "../../components/PosReceipt";
 
 import { useNavigate } from "react-router-dom";
 
+import CustomDropdown from '../../components/common/CustomDropdown';
+
 const EMPTY_ADVANCED_FILTERS = {
   gender: "",
   specialDay: "",
@@ -1044,12 +1046,12 @@ export default function CustomersPage() {
         return (
           <div className="form-group">
             <label>Gender</label>
-            <select value={draftFilters.gender} onChange={(event) => setDraftFilters((current) => ({ ...current, gender: event.target.value }))}>
+            <CustomDropdown value={draftFilters.gender} onChange={(event) => setDraftFilters((current) => ({ ...current, gender: event.target.value }))}>
               <option value="">All</option>
               <option value="FEMALE">Female</option>
               <option value="MALE">Male</option>
               <option value="OTHER">Other</option>
-            </select>
+            </CustomDropdown>
           </div>
         );
       case "specialDay":
@@ -1057,11 +1059,11 @@ export default function CustomersPage() {
           <>
             <div className="form-group">
               <label>Special Day</label>
-              <select value={draftFilters.specialDay} onChange={(event) => setDraftFilters((current) => ({ ...current, specialDay: event.target.value }))}>
+              <CustomDropdown value={draftFilters.specialDay} onChange={(event) => setDraftFilters((current) => ({ ...current, specialDay: event.target.value }))}>
                 <option value="">All</option>
                 <option value="birthday">Birthday</option>
                 <option value="anniversary">Anniversary</option>
-              </select>
+              </CustomDropdown>
             </div>
             <div className="form-group">
               <label>Starting Date</label>
@@ -1105,33 +1107,33 @@ export default function CustomersPage() {
         return (
           <div className="form-group">
             <label>Advance Status</label>
-            <select value={draftFilters.advanceState} onChange={(event) => setDraftFilters((current) => ({ ...current, advanceState: event.target.value }))}>
+            <CustomDropdown value={draftFilters.advanceState} onChange={(event) => setDraftFilters((current) => ({ ...current, advanceState: event.target.value }))}>
               <option value="">All</option>
               <option value="yes">Has Advance</option>
               <option value="no">No Advance</option>
-            </select>
+            </CustomDropdown>
           </div>
         );
       case "balance":
         return (
           <div className="form-group">
             <label>Balance Status</label>
-            <select value={draftFilters.balanceState} onChange={(event) => setDraftFilters((current) => ({ ...current, balanceState: event.target.value }))}>
+            <CustomDropdown value={draftFilters.balanceState} onChange={(event) => setDraftFilters((current) => ({ ...current, balanceState: event.target.value }))}>
               <option value="">All</option>
               <option value="yes">Has Balance</option>
               <option value="no">No Balance</option>
-            </select>
+            </CustomDropdown>
           </div>
         );
       case "clientRetention":
         return (
           <div className="form-group">
             <label>Retention Type</label>
-            <select value={draftFilters.clientRetention} onChange={(event) => setDraftFilters((current) => ({ ...current, clientRetention: event.target.value }))}>
+            <CustomDropdown value={draftFilters.clientRetention} onChange={(event) => setDraftFilters((current) => ({ ...current, clientRetention: event.target.value }))}>
               <option value="">All</option>
               <option value="new">New Guest</option>
               <option value="repeat">Repetitive Guest</option>
-            </select>
+            </CustomDropdown>
           </div>
         );
       case "totalPurchaseAmount":
@@ -1164,34 +1166,34 @@ export default function CustomersPage() {
         return (
           <div className="form-group">
             <label>Membership Status</label>
-            <select value={draftFilters.membershipState} onChange={(event) => setDraftFilters((current) => ({ ...current, membershipState: event.target.value }))}>
+            <CustomDropdown value={draftFilters.membershipState} onChange={(event) => setDraftFilters((current) => ({ ...current, membershipState: event.target.value }))}>
               <option value="">All</option>
               <option value="active">Active Membership</option>
               <option value="any">Has Membership</option>
               <option value="none">No Membership</option>
-            </select>
+            </CustomDropdown>
           </div>
         );
       case "loyalty":
         return (
           <div className="form-group">
             <label>Loyalty Status</label>
-            <select value={draftFilters.loyaltyState} onChange={(event) => setDraftFilters((current) => ({ ...current, loyaltyState: event.target.value }))}>
+            <CustomDropdown value={draftFilters.loyaltyState} onChange={(event) => setDraftFilters((current) => ({ ...current, loyaltyState: event.target.value }))}>
               <option value="">All</option>
               <option value="yes">Has Loyalty</option>
               <option value="no">No Loyalty</option>
-            </select>
+            </CustomDropdown>
           </div>
         );
       case "package":
         return (
           <div className="form-group">
             <label>Package Status</label>
-            <select value={draftFilters.packageState} onChange={(event) => setDraftFilters((current) => ({ ...current, packageState: event.target.value }))}>
+            <CustomDropdown value={draftFilters.packageState} onChange={(event) => setDraftFilters((current) => ({ ...current, packageState: event.target.value }))}>
               <option value="">All</option>
               <option value="yes">Has Package</option>
               <option value="no">No Package</option>
-            </select>
+            </CustomDropdown>
           </div>
         );
       default:
@@ -1363,7 +1365,7 @@ export default function CustomersPage() {
               <div className="filter-options">
                 <div className="form-group">
                   <label>Quick Filter</label>
-                  <select value={filterType} onChange={(event) => setFilterType(event.target.value)}>
+                  <CustomDropdown value={filterType} onChange={(event) => setFilterType(event.target.value)}>
                     <option value="">All Customers</option>
                     <option value="high_spender">High Spenders (INR 10k+)</option>
                     <option value="lost_customer">Non-Returning (90+ Days)</option>
@@ -1371,7 +1373,7 @@ export default function CustomersPage() {
                     <option value="active_package">Active Package</option>
                     <option value="birthday_month">Birthday This Month</option>
                     <option value="anniversary_month">Anniversary This Month</option>
-                  </select>
+                  </CustomDropdown>
                 </div>
                 {renderFilterContent()}
               </div>
@@ -1418,12 +1420,12 @@ export default function CustomersPage() {
               </div>
               <div className="form-group">
                 <label>Target Customer</label>
-                <select value={mergeTargetId} onChange={(event) => setMergeTargetId(event.target.value)}>
+                <CustomDropdown value={mergeTargetId} onChange={(event) => setMergeTargetId(event.target.value)}>
                   <option value="">Select target customer</option>
                   {rows.filter((row) => row.id !== mergeSourceRow.id).map((row) => (
                     <option key={row.id} value={row.id}>{row.name || "-"} ({row.phone || "-"})</option>
                   ))}
-                </select>
+                </CustomDropdown>
               </div>
               <div style={{ color: "#64748b", fontSize: "0.92rem" }}>
                 Linked invoices, appointments, memberships, packages, loyalty, notifications, timeline, and WhatsApp logs will move into the target customer.
@@ -2122,12 +2124,12 @@ export default function CustomersPage() {
                             </div>
                             <div className="form-group">
                               <label>Gender</label>
-                              <select value={updateForm.gender} onChange={(e) => setUpdateForm(prev => ({ ...prev, gender: e.target.value }))}>
+                              <CustomDropdown value={updateForm.gender} onChange={(e) => setUpdateForm(prev => ({ ...prev, gender: e.target.value }))}>
                                 <option value="">Unknown</option>
                                 <option value="FEMALE">Female</option>
                                 <option value="MALE">Male</option>
                                 <option value="OTHER">Other</option>
-                              </select>
+                              </CustomDropdown>
                             </div>
                             <div className="form-group">
                               <label>Date of Birth</label>
@@ -2464,7 +2466,7 @@ export default function CustomersPage() {
                       </div>
                       <div className="form-group" style={{ margin: 0 }}>
                         <label style={{ fontSize: "0.8rem", fontWeight: 600, color: "#475569", display: "block", marginBottom: "6px" }}>Staff</label>
-                        <select 
+                        <CustomDropdown 
                           value={membershipForm.staffId} 
                           onChange={(e) => setMembershipForm((prev) => ({ ...prev, staffId: e.target.value }))} 
                           style={{ 
@@ -2483,7 +2485,7 @@ export default function CustomersPage() {
                           {staffUsers.map((s) => (
                             <option key={s.id} value={s.id} style={{ color: "#0f172a", backgroundColor: "#ffffff" }}>{s.user?.name || s.name || s.id}</option>
                           ))}
-                        </select>
+                        </CustomDropdown>
                         {!membershipForm.staffId && (
                           <div style={{ color: "#d97706", fontSize: "0.75rem", fontWeight: 500, marginTop: "4px", display: "flex", alignItems: "center", gap: "4px" }}>
                             <AlertCircle size={12} /> Staff selection is required
@@ -2816,14 +2818,14 @@ export default function CustomersPage() {
               </div>
               <div className="form-group" style={{ margin: 0 }}>
                 <label style={{ fontSize: "0.8rem", fontWeight: 600, color: "#475569", marginBottom: "6px", display: "block" }}>Staff</label>
-                <select value={giftCardForm.staffId || ""} onChange={(e) => setGiftCardForm(prev => ({...prev, staffId: e.target.value}))} style={{ width: "100%", padding: "10px", border: "1px solid #cbd5e1", borderRadius: 6, fontSize: "0.85rem", boxSizing: "border-box", color: "#0f172a", backgroundColor: "#ffffff" }}>
+                <CustomDropdown value={giftCardForm.staffId || ""} onChange={(e) => setGiftCardForm(prev => ({...prev, staffId: e.target.value}))} style={{ width: "100%", padding: "10px", border: "1px solid #cbd5e1", borderRadius: 6, fontSize: "0.85rem", boxSizing: "border-box", color: "#0f172a", backgroundColor: "#ffffff" }}>
                   <option value="" style={{ color: "#0f172a", backgroundColor: "#ffffff" }}>Select Staff</option>
                   {staffUsers.map(s => (
                     <option key={s.id} value={s.id} style={{ color: "#0f172a", backgroundColor: "#ffffff" }}>
                       {s.user?.name || s.name || s.id}
                     </option>
                   ))}
-                </select>
+                </CustomDropdown>
               </div>
             </div>
 
@@ -3211,10 +3213,10 @@ export default function CustomersPage() {
                  </div>
                  <div style={{ flex: 1 }}>
                     <label style={{ fontSize: "0.8rem", color: "#0f172a", marginBottom: "6px", display: "block", fontWeight: 700 }}>Staff Assignment</label>
-                    <select value={packageForm.staffId} onChange={(e) => setPackageForm(prev => ({...prev, staffId: e.target.value}))} style={{ border: "1px solid #cbd5e1", borderRadius: 6, outline: "none", width: "100%", padding: "10px", fontSize: "0.9rem", boxSizing: "border-box", background: "#fff", color: "#0f172a" }}>
+                    <CustomDropdown value={packageForm.staffId} onChange={(e) => setPackageForm(prev => ({...prev, staffId: e.target.value}))} style={{ border: "1px solid #cbd5e1", borderRadius: 6, outline: "none", width: "100%", padding: "10px", fontSize: "0.9rem", boxSizing: "border-box", background: "#fff", color: "#0f172a" }}>
                       <option value="" style={{ color: "#0f172a", backgroundColor: "#ffffff" }}>Select Staff</option>
                       {staffUsers.map(s => <option key={s.id} value={s.id} style={{ color: "#0f172a", backgroundColor: "#ffffff" }}>{s.user?.name || s.name || s.id}</option>)}
-                    </select>
+                    </CustomDropdown>
                  </div>
               </div>
 
@@ -3356,12 +3358,12 @@ export default function CustomersPage() {
               </div>
               <div className="form-group">
                 <label>Assigned Staff *</label>
-                <select value={followUpForm.staffUserId} onChange={(e) => setFollowUpForm(prev => ({ ...prev, staffUserId: e.target.value }))}>
+                <CustomDropdown value={followUpForm.staffUserId} onChange={(e) => setFollowUpForm(prev => ({ ...prev, staffUserId: e.target.value }))}>
                   <option value="">Select Staff</option>
                   {staffUsers.map((s) => (
                     <option key={s.id} value={s.id}>{s.user?.name || s.name || s.user?.email || s.id}</option>
                   ))}
-                </select>
+                </CustomDropdown>
               </div>
               <div className="form-group">
                 <label>Message *</label>

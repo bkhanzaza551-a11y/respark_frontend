@@ -4,6 +4,8 @@ import { formatApiError } from "../../utils/apiError";
 import EmptyState from "../../components/EmptyState";
 import PageLoader from "../../components/PageLoader";
 
+import CustomDropdown from '../../components/common/CustomDropdown';
+
 const emptyForm = { salonId: "", planId: "", status: "ACTIVE", paymentStatus: "PAID", manualDiscount: 0, notes: "", startsAt: "", endsAt: "" };
 
 export default function SubscriptionsPage() {
@@ -180,22 +182,22 @@ export default function SubscriptionsPage() {
             </label>
           <label>
               <span className="muted">Statuses</span>
-              <select value={filters.status} onChange={(event) => setFilters((current) => ({ ...current, status: event.target.value }))}>
+              <CustomDropdown value={filters.status} onChange={(event) => setFilters((current) => ({ ...current, status: event.target.value }))}>
             <option value="">All statuses</option>
             <option value="ACTIVE">Active</option>
             <option value="TRIAL">Trial</option>
             <option value="EXPIRED">Expired</option>
             <option value="SUSPENDED">Suspended</option>
-          </select>
+          </CustomDropdown>
             </label>
           <label>
               <span className="muted">Payment states</span>
-              <select value={filters.paymentStatus} onChange={(event) => setFilters((current) => ({ ...current, paymentStatus: event.target.value }))}>
+              <CustomDropdown value={filters.paymentStatus} onChange={(event) => setFilters((current) => ({ ...current, paymentStatus: event.target.value }))}>
             <option value="">All payment states</option>
             <option value="PAID">Paid</option>
             <option value="PENDING">Pending</option>
             <option value="FAILED">Failed</option>
-          </select>
+          </CustomDropdown>
             </label>
           <button type="button" className="secondary-button" onClick={() => load(filters)}>Apply Filters</button>
           <button type="button" className="secondary-button" onClick={() => setFilters({ q: "", status: "", paymentStatus: "" })}>Reset</button>
@@ -207,34 +209,34 @@ export default function SubscriptionsPage() {
           <form onSubmit={submit} style={{ display: "grid", gap: 10 }}>
             <label>
               <span className="muted">Salon</span>
-              <select value={form.salonId} onChange={(event) => setForm({ ...form, salonId: event.target.value })}>
+              <CustomDropdown value={form.salonId} onChange={(event) => setForm({ ...form, salonId: event.target.value })}>
               <option value="">Select salon</option>
               {salons.map((salon) => <option key={salon.id} value={salon.id}>{salon.name}</option>)}
-            </select>
+            </CustomDropdown>
             </label>
             <label>
               <span className="muted">Plan</span>
-              <select value={form.planId} onChange={(event) => setForm({ ...form, planId: event.target.value })}>
+              <CustomDropdown value={form.planId} onChange={(event) => setForm({ ...form, planId: event.target.value })}>
               <option value="">Select plan</option>
               {plans.map((plan) => <option key={plan.id} value={plan.id}>{plan.name}{plan.isCustom ? " (Custom)" : ""}</option>)}
-            </select>
+            </CustomDropdown>
             </label>
             <label>
               <span className="muted">Active</span>
-              <select value={form.status} onChange={(event) => setForm({ ...form, status: event.target.value })}>
+              <CustomDropdown value={form.status} onChange={(event) => setForm({ ...form, status: event.target.value })}>
               <option value="ACTIVE">Active</option>
               <option value="TRIAL">Trial</option>
               <option value="EXPIRED">Expired</option>
               <option value="SUSPENDED">Suspended</option>
-            </select>
+            </CustomDropdown>
             </label>
             <label>
               <span className="muted">Paid</span>
-              <select value={form.paymentStatus} onChange={(event) => setForm({ ...form, paymentStatus: event.target.value })}>
+              <CustomDropdown value={form.paymentStatus} onChange={(event) => setForm({ ...form, paymentStatus: event.target.value })}>
               <option value="PAID">Paid</option>
               <option value="PENDING">Pending</option>
               <option value="FAILED">Failed</option>
-            </select>
+            </CustomDropdown>
             </label>
             <label>
               <span className="muted">Manual discount</span>
@@ -287,10 +289,10 @@ export default function SubscriptionsPage() {
                 <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginTop: 8 }}>
                   <label>
               <span className="muted">Change plan</span>
-              <select value={selectedPlanChange[row.id] || ""} onChange={(event) => setSelectedPlanChange((current) => ({ ...current, [row.id]: event.target.value }))}>
+              <CustomDropdown value={selectedPlanChange[row.id] || ""} onChange={(event) => setSelectedPlanChange((current) => ({ ...current, [row.id]: event.target.value }))}>
                     <option value="">Change plan</option>
                     {plans.map((plan) => <option key={`${row.id}-${plan.id}`} value={plan.id}>{plan.name}{plan.isCustom ? " (Custom)" : ""}</option>)}
-                  </select>
+                  </CustomDropdown>
             </label>
                   <button
                     type="button"
@@ -310,19 +312,19 @@ export default function SubscriptionsPage() {
                       </button>
                       <label>
               <span className="muted">Select Option</span>
-              <select value={convertDraft.planId} onChange={(event) => patchConvertDraft(row.id, { planId: event.target.value }, row.plan?.id)}>
+              <CustomDropdown value={convertDraft.planId} onChange={(event) => patchConvertDraft(row.id, { planId: event.target.value }, row.plan?.id)}>
                         {plans.map((plan) => <option key={`${row.id}-convert-${plan.id}`} value={plan.id}>{plan.name}{plan.isCustom ? " (Custom)" : ""}</option>)}
-                      </select>
+                      </CustomDropdown>
             </label>
                       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
                         <input type="date" value={convertDraft.endsAt} onChange={(event) => patchConvertDraft(row.id, { endsAt: event.target.value }, row.plan?.id)} />
                         <label>
               <span className="muted">Paid</span>
-              <select value={convertDraft.paymentStatus} onChange={(event) => patchConvertDraft(row.id, { paymentStatus: event.target.value }, row.plan?.id)}>
+              <CustomDropdown value={convertDraft.paymentStatus} onChange={(event) => patchConvertDraft(row.id, { paymentStatus: event.target.value }, row.plan?.id)}>
                           <option value="PAID">Paid</option>
                           <option value="PENDING">Pending</option>
                           <option value="FAILED">Failed</option>
-                        </select>
+                        </CustomDropdown>
             </label>
                       </div>
                       <label>

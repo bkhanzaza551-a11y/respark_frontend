@@ -9,6 +9,8 @@ import { downloadFromApi } from "../../utils/download";
 import PageLoader from "../../components/PageLoader";
 import IndianPhoneInput from "../../components/IndianPhoneInput";
 
+import CustomDropdown from '../../components/common/CustomDropdown';
+
 const emptySettings = {
   providerName: "",
   senderName: "",
@@ -267,21 +269,21 @@ export default function WhatsAppPage() {
           <div className="panel-card">
             <h3>Manual WhatsApp Share</h3>
             <form className="form-grid" onSubmit={sendManual}>
-              <select value="" onChange={(e) => applyTemplate("manual", e.target.value)}>
+              <CustomDropdown value="" onChange={(e) => applyTemplate("manual", e.target.value)}>
                 <option value="">Apply saved message template</option>
                 {templates.map((template) => (
                   <option key={template.id} value={template.type}>
                     {template.title}
                   </option>
                 ))}
-              </select>
+              </CustomDropdown>
               <IndianPhoneInput value={message.phone} onChange={(phone) => setMessage((prev) => ({ ...prev, phone }))} />
               <input placeholder="Template type" value={message.templateType} onChange={(e) => setMessage({ ...message, templateType: e.target.value })} />
-              <select value={message.mediaKind} onChange={(e) => setMessage({ ...message, mediaKind: e.target.value })}>
+              <CustomDropdown value={message.mediaKind} onChange={(e) => setMessage({ ...message, mediaKind: e.target.value })}>
                 <option value="IMAGE">Image</option>
                 <option value="VIDEO">Video</option>
                 <option value="DOCUMENT">Document</option>
-              </select>
+              </CustomDropdown>
               <input placeholder="Media URL (optional)" value={message.mediaUrl} onChange={(e) => setMessage({ ...message, mediaUrl: e.target.value })} />
               <textarea rows="4" placeholder="Message" value={message.message} onChange={(e) => setMessage({ ...message, message: e.target.value })} />
               <div className="summary-box" style={{ gridColumn: "1 / -1" }}>
@@ -296,15 +298,15 @@ export default function WhatsAppPage() {
           <div className="panel-card">
             <h3>Bulk Placeholder</h3>
             <form className="form-grid" onSubmit={sendBulkPlaceholder}>
-              <select value="" onChange={(e) => applyTemplate("bulk", e.target.value)}>
+              <CustomDropdown value="" onChange={(e) => applyTemplate("bulk", e.target.value)}>
                 <option value="">Apply saved message template</option>
                 {templates.map((template) => (
                   <option key={template.id} value={template.type}>
                     {template.title}
                   </option>
                 ))}
-              </select>
-              <select value={bulkMessage.audienceFilter} onChange={(e) => setBulkMessage({ ...bulkMessage, audienceFilter: e.target.value })}>
+              </CustomDropdown>
+              <CustomDropdown value={bulkMessage.audienceFilter} onChange={(e) => setBulkMessage({ ...bulkMessage, audienceFilter: e.target.value })}>
                 <option value="ALL_CUSTOMERS">All customers</option>
                 <option value="BIRTHDAY_CUSTOMERS">Birthday customers</option>
                 <option value="ANNIVERSARY_CUSTOMERS">Anniversary customers</option>
@@ -313,13 +315,13 @@ export default function WhatsAppPage() {
                 <option value="MEMBERSHIP_CUSTOMERS">Membership customers</option>
                 <option value="PACKAGE_CUSTOMERS">Package customers</option>
                 <option value="SERVICE_BASED_CUSTOMERS">Service-based customers</option>
-              </select>
+              </CustomDropdown>
               <input placeholder="Template type" value={bulkMessage.templateType} onChange={(e) => setBulkMessage({ ...bulkMessage, templateType: e.target.value })} />
-              <select value={bulkMessage.mediaKind} onChange={(e) => setBulkMessage({ ...bulkMessage, mediaKind: e.target.value })}>
+              <CustomDropdown value={bulkMessage.mediaKind} onChange={(e) => setBulkMessage({ ...bulkMessage, mediaKind: e.target.value })}>
                 <option value="IMAGE">Image</option>
                 <option value="VIDEO">Video</option>
                 <option value="DOCUMENT">Document</option>
-              </select>
+              </CustomDropdown>
               <input placeholder="Media URL (preview only)" value={bulkMessage.mediaUrl} onChange={(e) => setBulkMessage({ ...bulkMessage, mediaUrl: e.target.value })} />
               <textarea rows="4" placeholder="Message" value={bulkMessage.message} onChange={(e) => setBulkMessage({ ...bulkMessage, message: e.target.value })} />
               <div className="summary-box" style={{ gridColumn: "1 / -1" }}>
@@ -360,13 +362,13 @@ export default function WhatsAppPage() {
           <div className="form-grid" style={{ marginBottom: 16 }}>
             <input value={logFilters.q} placeholder="Search phone, customer, campaign, or message" onChange={(e) => setLogFilters((current) => ({ ...current, q: e.target.value }))} />
             <input value={logFilters.templateType} placeholder="Filter by template type" onChange={(e) => setLogFilters((current) => ({ ...current, templateType: e.target.value }))} />
-            <select value={logFilters.status} onChange={(e) => setLogFilters((current) => ({ ...current, status: e.target.value }))}>
+            <CustomDropdown value={logFilters.status} onChange={(e) => setLogFilters((current) => ({ ...current, status: e.target.value }))}>
               <option value="">All statuses</option>
               <option value="SENT">Sent</option>
               <option value="FAILED">Failed</option>
               <option value="DELIVERED">Delivered</option>
               <option value="READ">Read</option>
-            </select>
+            </CustomDropdown>
             <button type="button" className="secondary-button" onClick={() => setLogFilters({ q: "", status: "", templateType: "" })}>Reset</button>
           </div>
           <div className="list-stack">
@@ -411,20 +413,20 @@ export default function WhatsAppPage() {
           <div className="panel-card">
             <h3>{editingAutomationId ? "Edit Automation" : "Create Automation"}</h3>
             <form className="form-grid" onSubmit={saveAutomation}>
-              <select value={automationForm.eventKey} onChange={(e) => setAutomationForm({ ...automationForm, eventKey: e.target.value })}>
+              <CustomDropdown value={automationForm.eventKey} onChange={(e) => setAutomationForm({ ...automationForm, eventKey: e.target.value })}>
                 <option value="">Select automation event</option>
                 {automationEventOptions.map((eventKey) => <option key={eventKey} value={eventKey}>{eventKey}</option>)}
-              </select>
-              <select value={automationForm.templateType} onChange={(e) => setAutomationForm({ ...automationForm, templateType: e.target.value })}>
+              </CustomDropdown>
+              <CustomDropdown value={automationForm.templateType} onChange={(e) => setAutomationForm({ ...automationForm, templateType: e.target.value })}>
                 <option value="">Select message template</option>
                 {templates.map((template) => <option key={template.id} value={template.type}>{template.title}</option>)}
-              </select>
+              </CustomDropdown>
               <input placeholder="Audience filter (optional)" value={automationForm.audienceFilter} onChange={(e) => setAutomationForm({ ...automationForm, audienceFilter: e.target.value })} />
-              <select value={automationForm.mediaKind} onChange={(e) => setAutomationForm({ ...automationForm, mediaKind: e.target.value })}>
+              <CustomDropdown value={automationForm.mediaKind} onChange={(e) => setAutomationForm({ ...automationForm, mediaKind: e.target.value })}>
                 <option value="IMAGE">Image</option>
                 <option value="VIDEO">Video</option>
                 <option value="DOCUMENT">Document</option>
-              </select>
+              </CustomDropdown>
               <input placeholder="Automation media URL (optional)" value={automationForm.mediaUrl} onChange={(e) => setAutomationForm({ ...automationForm, mediaUrl: e.target.value })} />
               <textarea rows="4" placeholder="Notes" value={automationForm.notes} onChange={(e) => setAutomationForm({ ...automationForm, notes: e.target.value })} />
               <label className="badge"><input type="checkbox" checked={Boolean(automationForm.isEnabled)} onChange={(e) => setAutomationForm({ ...automationForm, isEnabled: e.target.checked })} /> Enabled</label>

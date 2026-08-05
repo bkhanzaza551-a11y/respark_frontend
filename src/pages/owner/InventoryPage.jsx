@@ -10,6 +10,8 @@ import IndianPhoneInput from "../../components/IndianPhoneInput";
 import { Package, Search, ShoppingCart, CheckCircle, XCircle, AlertTriangle, ArrowLeft, Tag, Layers, RefreshCw, Users, FileText, Activity, Plus, Trash2, ChevronDown, Save, Upload, Download } from "lucide-react";
 import "./InventoryPage.css";
 
+import CustomDropdown from '../../components/common/CustomDropdown';
+
 const emptyCategory = { name: "", description: "", imageUrl: "", sortOrder: 0, isPublicVisible: true };
 const emptyProduct = { branchId: "", categoryId: "", name: "", productType: "RETAIL", costPrice: 0, sellingPrice: 0, currentStock: 0, minStock: 0, sku: "", barcode: "", imageUrl: "", unit: "", unitConversion: "", favourite: false };
 const emptyMovement = { productId: "", branchId: "", movementType: "STOCK_IN", quantity: 1, note: "" };
@@ -1204,7 +1206,7 @@ export default function InventoryPage() {
                 {/* Category Select */}
                 <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
                   <span style={{ fontWeight: 600, color: "#475569", fontSize: "0.95rem" }}>Category:</span>
-                  <select
+                  <CustomDropdown
                     value={reconCategoryId}
                     onChange={(e) => setReconCategoryId(e.target.value)}
                     style={{
@@ -1222,7 +1224,7 @@ export default function InventoryPage() {
                     {categories.map(c => (
                       <option key={c.id} value={c.id}>{c.name}</option>
                     ))}
-                  </select>
+                  </CustomDropdown>
                 </div>
               </div>
 
@@ -1461,10 +1463,10 @@ export default function InventoryPage() {
                 </div>
                 <div className="sp-group">
                   <label className="sp-label">Type</label>
-                  <select className="sp-input" value={productForm.productType} onChange={e => setProductForm({...productForm, productType: e.target.value})}>
+                  <CustomDropdown className="sp-input" value={productForm.productType} onChange={e => setProductForm({...productForm, productType: e.target.value})}>
                     <option value="RETAIL">Retail</option>
                     <option value="CONSUMABLE">Consumable</option>
-                  </select>
+                  </CustomDropdown>
                 </div>
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
                   <div className="sp-group">
@@ -1488,18 +1490,18 @@ export default function InventoryPage() {
                 </div>
                 <div className="sp-group">
                   <label className="sp-label">Category</label>
-                  <select className="sp-input" value={productForm.categoryId} onChange={e => setProductForm({...productForm, categoryId: e.target.value})}>
+                  <CustomDropdown className="sp-input" value={productForm.categoryId} onChange={e => setProductForm({...productForm, categoryId: e.target.value})}>
                     <option value="">No Category</option>
                     {categories.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
-                  </select>
+                  </CustomDropdown>
                 </div>
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
                   <div className="sp-group">
                     <label className="sp-label">Unit</label>
-                    <select className="sp-input" value={productForm.unit} onChange={e => setProductForm({...productForm, unit: e.target.value})}>
+                    <CustomDropdown className="sp-input" value={productForm.unit} onChange={e => setProductForm({...productForm, unit: e.target.value})}>
                       <option value="">None</option>
                       {["pcs", "ml", "gm", "kg", "ltr", "box", "pack", "tube", "bottle", "jar", "sachet", "strip"].map(u => <option key={u} value={u}>{u}</option>)}
-                    </select>
+                    </CustomDropdown>
                   </div>
                   <div className="sp-group">
                     <label className="sp-label">Unit Conversion</label>
@@ -1585,18 +1587,18 @@ export default function InventoryPage() {
                 {status.error && <div style={{ color: '#ef4444', padding: 12, background: '#fef2f2', borderRadius: 8, fontSize: '0.9rem' }}>{status.error}</div>}
                 <div className="sp-group">
                   <label className="sp-label">Product</label>
-                  <select className="sp-input" required value={movementForm.productId} onChange={e => setMovementForm({...movementForm, productId: e.target.value})}>
+                  <CustomDropdown className="sp-input" required value={movementForm.productId} onChange={e => setMovementForm({...movementForm, productId: e.target.value})}>
                     <option value="">Select product...</option>
                     {products.map(p => <option key={p.id} value={p.id}>{p.name}</option>)}
-                  </select>
+                  </CustomDropdown>
                 </div>
                 <div className="sp-group">
                   <label className="sp-label">Movement Type</label>
-                  <select className="sp-input" value={movementForm.movementType} onChange={e => setMovementForm({...movementForm, movementType: e.target.value})}>
+                  <CustomDropdown className="sp-input" value={movementForm.movementType} onChange={e => setMovementForm({...movementForm, movementType: e.target.value})}>
                     <option value="STOCK_IN">Stock In</option>
                     <option value="STOCK_OUT">Stock Out</option>
                     <option value="ADJUSTMENT">Adjustment</option>
-                  </select>
+                  </CustomDropdown>
                 </div>
                 <div className="sp-group">
                   <label className="sp-label">Quantity</label>
@@ -1627,10 +1629,10 @@ export default function InventoryPage() {
                 </div>
                 <div className="sp-group">
                   <label className="sp-label">Branch</label>
-                  <select className="sp-input" value={vendorForm.branchId} onChange={e => setVendorForm({ ...vendorForm, branchId: e.target.value })}>
+                  <CustomDropdown className="sp-input" value={vendorForm.branchId} onChange={e => setVendorForm({ ...vendorForm, branchId: e.target.value })}>
                     <option value="">Salon wide</option>
                     {branches.map((branch) => <option key={branch.id} value={branch.id}>{branch.name}</option>)}
-                  </select>
+                  </CustomDropdown>
                 </div>
                 <div className="sp-group">
                   <label className="sp-label">Phone</label>
@@ -1670,17 +1672,17 @@ export default function InventoryPage() {
                 <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
                   <div className="sp-group">
                     <label className="sp-label">Branch</label>
-                    <select className="sp-input" required value={purchaseOrderForm.branchId} onChange={e => setPurchaseOrderForm({ ...purchaseOrderForm, branchId: e.target.value })}>
+                    <CustomDropdown className="sp-input" required value={purchaseOrderForm.branchId} onChange={e => setPurchaseOrderForm({ ...purchaseOrderForm, branchId: e.target.value })}>
                       <option value="">Select branch</option>
                       {branches.map((branch) => <option key={branch.id} value={branch.id}>{branch.name}</option>)}
-                    </select>
+                    </CustomDropdown>
                   </div>
                   <div className="sp-group">
                     <label className="sp-label">Vendor</label>
-                    <select className="sp-input" required value={purchaseOrderForm.vendorId} onChange={e => setPurchaseOrderForm({ ...purchaseOrderForm, vendorId: e.target.value })}>
+                    <CustomDropdown className="sp-input" required value={purchaseOrderForm.vendorId} onChange={e => setPurchaseOrderForm({ ...purchaseOrderForm, vendorId: e.target.value })}>
                       <option value="">Select vendor</option>
                       {vendors.map((vendor) => <option key={vendor.id} value={vendor.id}>{vendor.name}</option>)}
-                    </select>
+                    </CustomDropdown>
                   </div>
                 </div>
 
@@ -1702,7 +1704,7 @@ export default function InventoryPage() {
                     <div key={`${item.productId || "item"}-${index}`} style={{ background: "white", border: "1px solid #e2e8f0", borderRadius: 12, padding: 16, display: "grid", gridTemplateColumns: "2fr 1fr 1fr auto", gap: 12, alignItems: "end" }}>
                       <div className="sp-group">
                         <label className="sp-label">Product</label>
-                        <select
+                        <CustomDropdown
                           className="sp-input"
                           required
                           value={item.productId}
@@ -1714,7 +1716,7 @@ export default function InventoryPage() {
                         >
                           <option value="">Select product</option>
                           {products.map((product) => <option key={product.id} value={product.id}>{product.name}</option>)}
-                        </select>
+                        </CustomDropdown>
                       </div>
                       <div className="sp-group">
                         <label className="sp-label">Qty</label>

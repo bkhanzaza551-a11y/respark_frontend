@@ -4,6 +4,8 @@ import { formatApiError } from "../../utils/apiError";
 import EmptyState from "../../components/EmptyState";
 import PageLoader from "../../components/PageLoader";
 
+import CustomDropdown from '../../components/common/CustomDropdown';
+
 export default function SuperAdminSupportTicketsPage() {
   const [rows, setRows] = useState([]);
   const [filters, setFilters] = useState({ q: "", status: "", priority: "" });
@@ -104,23 +106,23 @@ export default function SuperAdminSupportTicketsPage() {
             </label>
           <label>
               <span className="muted">Statuses</span>
-              <select value={filters.status} onChange={(event) => setFilters((current) => ({ ...current, status: event.target.value }))}>
+              <CustomDropdown value={filters.status} onChange={(event) => setFilters((current) => ({ ...current, status: event.target.value }))}>
             <option value="">All statuses</option>
             <option value="OPEN">Open</option>
             <option value="PENDING">Pending</option>
             <option value="RESOLVED">Resolved</option>
             <option value="CLOSED">Closed</option>
-          </select>
+          </CustomDropdown>
             </label>
           <label>
               <span className="muted">Priorities</span>
-              <select value={filters.priority} onChange={(event) => setFilters((current) => ({ ...current, priority: event.target.value }))}>
+              <CustomDropdown value={filters.priority} onChange={(event) => setFilters((current) => ({ ...current, priority: event.target.value }))}>
             <option value="">All priorities</option>
             <option value="LOW">Low</option>
             <option value="MEDIUM">Medium</option>
             <option value="HIGH">High</option>
             <option value="URGENT">Urgent</option>
-          </select>
+          </CustomDropdown>
             </label>
           <button type="button" className="secondary-button" onClick={() => load(filters)}>Apply Filters</button>
           <button type="button" className="secondary-button" onClick={() => setFilters({ q: "", status: "", priority: "" })}>Reset</button>

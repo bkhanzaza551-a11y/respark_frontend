@@ -13,6 +13,8 @@ import { readSalonSettingsCache, writeSalonSettingsCache } from "../../utils/sal
 import { SETTINGS_WORKSPACE_SECTIONS, getSettingsSection } from "./settingsWorkspaceConfig";
 import "./SettingsPage.css";
 
+import CustomDropdown from '../../components/common/CustomDropdown';
+
 const WEEK_DAYS = [
   { key: "sun", label: "Sun", dayOfWeekValue: 0 },
   { key: "mon", label: "Mon", dayOfWeekValue: 1 },
@@ -1583,7 +1585,7 @@ export default function SettingsPage() {
             </label>
             <label className="settings-input-group">
               <span className="muted">Use Currency :</span>
-              <select
+              <CustomDropdown
                 value={normalizeCurrencyCode(generic.currency || "INR")}
                 onChange={(event) => updateGeneric("currency", event.target.value)}
               >
@@ -1593,7 +1595,7 @@ export default function SettingsPage() {
                 <option value="GBP">British Pound (GBP)</option>
                 <option value="AED">UAE Dirham (AED)</option>
                 <option value="SAR">Saudi Riyal (SAR)</option>
-              </select>
+              </CustomDropdown>
             </label>
           </div>
         </div>
@@ -2215,7 +2217,7 @@ export default function SettingsPage() {
               style={{ width: 60, padding: "8px 10px", border: "1px solid #cbd5e1", borderRadius: 6, fontSize: 14, textAlign: "center" }}
             />
             <span style={{ fontSize: 13, fontWeight: 600, color: "#475569" }}>Days:</span>
-            <select
+            <CustomDropdown
               disabled={!rosterModuleEnabled}
               value={roster.useShiftId}
               onChange={(event) => updateAdvancedObject("rosterManagement", { useShiftId: event.target.value })}
@@ -2223,7 +2225,7 @@ export default function SettingsPage() {
             >
               <option value="">Select shift template</option>
               {shifts.filter((shift) => shift.active !== false).map((shift) => <option key={shift.id} value={shift.id}>{shift.name || "Unnamed Shift"}</option>)}
-            </select>
+            </CustomDropdown>
           </div>
           <div style={{ flex: 1 }} />
           <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
@@ -3412,11 +3414,11 @@ export default function SettingsPage() {
         <div className="settings-form-grid">
           <label className="settings-input-group">
             <span className="muted">Gateway provider</span>
-            <select value={form.smsSettings.gatewayProvider} onChange={(event) => setForm((current) => ({ ...current, smsSettings: { ...current.smsSettings, gatewayProvider: event.target.value } }))}>
+            <CustomDropdown value={form.smsSettings.gatewayProvider} onChange={(event) => setForm((current) => ({ ...current, smsSettings: { ...current.smsSettings, gatewayProvider: event.target.value } }))}>
               <option value="TWILIO_PLACEHOLDER">Twilio</option>
               <option value="MSG91_PLACEHOLDER">Msg91</option>
               <option value="GUPSHUP_PLACEHOLDER">Gupshup</option>
-            </select>
+            </CustomDropdown>
           </label>
           <label className="settings-input-group">
             <span className="muted">Sender ID</span>
@@ -3454,7 +3456,7 @@ export default function SettingsPage() {
                 <label className="settings-input-group"><span className="muted">Description</span><input value={segment.description} onChange={(event) => updateSegment(segment.id, { description: event.target.value })} /></label>
                 <label className="settings-input-group">
                   <span className="muted">Audience rule</span>
-                  <select value={segment.filterType || "ALL_CUSTOMERS"} onChange={(event) => updateSegment(segment.id, { filterType: event.target.value, serviceId: event.target.value === "SERVICE_BASED_CUSTOMERS" ? segment.serviceId || "" : "" })}>
+                  <CustomDropdown value={segment.filterType || "ALL_CUSTOMERS"} onChange={(event) => updateSegment(segment.id, { filterType: event.target.value, serviceId: event.target.value === "SERVICE_BASED_CUSTOMERS" ? segment.serviceId || "" : "" })}>
                     <option value="ALL_CUSTOMERS">All customers</option>
                     <option value="BIRTHDAY_CUSTOMERS">Birthday customers</option>
                     <option value="ANNIVERSARY_CUSTOMERS">Anniversary customers</option>
@@ -3463,15 +3465,15 @@ export default function SettingsPage() {
                     <option value="MEMBERSHIP_CUSTOMERS">Membership customers</option>
                     <option value="PACKAGE_CUSTOMERS">Package customers</option>
                     <option value="SERVICE_BASED_CUSTOMERS">Service-based customers</option>
-                  </select>
+                  </CustomDropdown>
                 </label>
                 {(segment.filterType || "ALL_CUSTOMERS") === "SERVICE_BASED_CUSTOMERS" ? (
                   <label className="settings-input-group">
                     <span className="muted">Service</span>
-                    <select value={segment.serviceId || ""} onChange={(event) => updateSegment(segment.id, { serviceId: event.target.value })}>
+                    <CustomDropdown value={segment.serviceId || ""} onChange={(event) => updateSegment(segment.id, { serviceId: event.target.value })}>
                       <option value="">Select service</option>
                       {summary.services.map((service) => <option key={service.id} value={service.id}>{service.name}</option>)}
-                    </select>
+                    </CustomDropdown>
                   </label>
                 ) : null}
                 <ToggleRow checked={segment.active} label="Active" onChange={(value) => updateSegment(segment.id, { active: value })} />
@@ -3996,13 +3998,13 @@ export default function SettingsPage() {
                   </label>
                   <label className="settings-input-group">
                     <span className="muted">Category Type</span>
-                    <select
+                    <CustomDropdown
                       value={draftPnlCategory?.type ?? editing.type ?? "Expense"}
                       onChange={(event) => draftPnlCategory && setDraftPnlCategory({ ...draftPnlCategory, type: event.target.value })}
                     >
                       <option value="INCOME">Income</option>
                       <option value="EXPENSE">Expense</option>
-                    </select>
+                    </CustomDropdown>
                   </label>
                 </div>
                 <label style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 13, fontWeight: 600, color: "#334155", cursor: "pointer", marginBottom: 20 }}>
