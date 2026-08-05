@@ -46,6 +46,8 @@ const defaultAdvancedSettings = {
   allowRosterMgtSettings: true,
   genericSettings: {
     salonName: "",
+    salonPhone: "",
+    salonAddress: "",
     businessOpen: true,
     businessStart: "09:00",
     businessEnd: "21:00",

@@ -909,25 +909,25 @@ export default function PosDashboardPage() {
           </div>
         </div>
       </div>
-      <div className="pos-dash-header">
-        <div className="pos-dash-header-left">
-          <div className="pos-dash-date-picker">
-            <input type="date" value={startDate} onChange={(event) => setStartDate(event.target.value)} max={endDate || undefined} style={{ border: "none", outline: "none", background: "transparent" }} />
+      <div className="pos-dash-header" style={{ display: "flex", flexWrap: "nowrap", gap: "8px", overflowX: "auto", padding: "12px 16px" }}>
+        <div className="pos-dash-header-left" style={{ display: "flex", flexWrap: "nowrap", gap: "8px" }}>
+          <div className="pos-dash-date-picker" style={{ padding: "4px 8px", fontSize: "0.8rem" }}>
+            <input type="date" value={startDate} onChange={(event) => setStartDate(event.target.value)} max={endDate || undefined} style={{ border: "none", outline: "none", background: "transparent", fontSize: "0.8rem" }} />
             <span style={{ color: "#64748b" }}>-</span>
-            <input type="date" value={endDate} onChange={(event) => setEndDate(event.target.value)} min={startDate || undefined} style={{ border: "none", outline: "none", background: "transparent" }} />
+            <input type="date" value={endDate} onChange={(event) => setEndDate(event.target.value)} min={startDate || undefined} style={{ border: "none", outline: "none", background: "transparent", fontSize: "0.8rem" }} />
           </div>
-          <button className="pos-dash-show-btn" onClick={load}>Show Orders</button>
-          <button className="pos-dash-show-btn" style={{ background: "#64748b" }} onClick={showAllOrders}>All Orders</button>
+          <button className="pos-dash-show-btn" style={{ fontSize: "0.8rem", padding: "4px 10px", whiteSpace: "nowrap" }} onClick={load}>Show Orders</button>
+          <button className="pos-dash-show-btn" style={{ background: "#64748b", fontSize: "0.8rem", padding: "4px 10px", whiteSpace: "nowrap" }} onClick={showAllOrders}>All Orders</button>
         </div>
 
-        <div className="pos-dash-header-right">
-          <button className={`pos-dash-filter-pill ${statusFilter === "STARTED" ? "active" : ""}`} onClick={() => setStatusFilter("STARTED")} style={{ background: statusFilter === "STARTED" ? "#dbeafe" : undefined, borderColor: statusFilter === "STARTED" ? "#93c5fd" : undefined, color: statusFilter === "STARTED" ? "#1d4ed8" : undefined }}>In Progress <span>{summary?.startedInvoices || 0}</span></button>
-          <button className={`pos-dash-filter-pill ${statusFilter === "SCHEDULED" ? "active" : ""}`} onClick={() => setStatusFilter("SCHEDULED")} style={{ background: statusFilter === "SCHEDULED" ? "#faf5ff" : undefined, borderColor: statusFilter === "SCHEDULED" ? "#d8b4fe" : undefined, color: statusFilter === "SCHEDULED" ? "#7c3aed" : undefined }}>Scheduled <span>{summary?.scheduledAppointments || 0}</span></button>
-          <button className={`pos-dash-filter-pill ${statusFilter === "UNPAID" ? "active" : ""}`} onClick={() => setStatusFilter("UNPAID")}>Unpaid <span>{summary?.unpaidInvoices || 0}</span></button>
-          <button className={`pos-dash-filter-pill ${statusFilter === "PARTIAL" ? "active" : ""}`} onClick={() => setStatusFilter("PARTIAL")}>Partial <span>{summary?.partialInvoices || 0}</span></button>
-          <button className={`pos-dash-filter-pill ${statusFilter === "PAID" ? "active" : ""}`} onClick={() => setStatusFilter("PAID")}>Paid <span>{summary?.paidInvoices || 0}</span></button>
-          <button className={`pos-dash-filter-pill ${statusFilter === "CANCELLED" ? "active" : ""}`} onClick={() => setStatusFilter("CANCELLED")}>Cancelled <span>{summary?.cancelledInvoices || 0}</span></button>
-          <button className={`pos-dash-filter-pill ${!statusFilter ? "active" : ""}`} onClick={() => setStatusFilter("")}>Total <span>{summary?.totalInvoices || 0}</span></button>
+        <div className="pos-dash-header-right" style={{ display: "flex", flexWrap: "nowrap", gap: "6px" }}>
+          <button className={`pos-dash-filter-pill ${statusFilter === "STARTED" ? "active" : ""}`} onClick={() => setStatusFilter("STARTED")} style={{ fontSize: "0.8rem", padding: "4px 10px", whiteSpace: "nowrap", background: statusFilter === "STARTED" ? "#dbeafe" : undefined, borderColor: statusFilter === "STARTED" ? "#93c5fd" : undefined, color: statusFilter === "STARTED" ? "#1d4ed8" : undefined }}>In Progress <span>{summary?.startedInvoices || 0}</span></button>
+          <button className={`pos-dash-filter-pill ${statusFilter === "SCHEDULED" ? "active" : ""}`} onClick={() => setStatusFilter("SCHEDULED")} style={{ fontSize: "0.8rem", padding: "4px 10px", whiteSpace: "nowrap", background: statusFilter === "SCHEDULED" ? "#faf5ff" : undefined, borderColor: statusFilter === "SCHEDULED" ? "#d8b4fe" : undefined, color: statusFilter === "SCHEDULED" ? "#7c3aed" : undefined }}>Scheduled <span>{summary?.scheduledAppointments || 0}</span></button>
+          <button className={`pos-dash-filter-pill ${statusFilter === "UNPAID" ? "active" : ""}`} onClick={() => setStatusFilter("UNPAID")} style={{ fontSize: "0.8rem", padding: "4px 10px", whiteSpace: "nowrap" }}>Unpaid <span>{summary?.unpaidInvoices || 0}</span></button>
+          <button className={`pos-dash-filter-pill ${statusFilter === "PARTIAL" ? "active" : ""}`} onClick={() => setStatusFilter("PARTIAL")} style={{ fontSize: "0.8rem", padding: "4px 10px", whiteSpace: "nowrap" }}>Partial <span>{summary?.partialInvoices || 0}</span></button>
+          <button className={`pos-dash-filter-pill ${statusFilter === "PAID" ? "active" : ""}`} onClick={() => setStatusFilter("PAID")} style={{ fontSize: "0.8rem", padding: "4px 10px", whiteSpace: "nowrap" }}>Paid <span>{summary?.paidInvoices || 0}</span></button>
+          <button className={`pos-dash-filter-pill ${statusFilter === "CANCELLED" ? "active" : ""}`} onClick={() => setStatusFilter("CANCELLED")} style={{ fontSize: "0.8rem", padding: "4px 10px", whiteSpace: "nowrap" }}>Cancelled <span>{summary?.cancelledInvoices || 0}</span></button>
+          <button className={`pos-dash-filter-pill ${!statusFilter ? "active" : ""}`} onClick={() => setStatusFilter("")} style={{ fontSize: "0.8rem", padding: "4px 10px", whiteSpace: "nowrap" }}>Total <span>{summary?.totalInvoices || 0}</span></button>
         </div>
       </div>
 
@@ -958,11 +958,11 @@ export default function PosDashboardPage() {
                       title="Download Invoice"
                       onClick={(event) => downloadInvoiceFromCard(event, row.id, row.invoiceNumber)}
                     >
-                      <Download size={16} />
+                      <Download size={20} />
                     </button>
                   ) : null}
                   <div className="pos-dash-card-icon">
-                    <FileText size={16} />
+                    <FileText size={20} />
                   </div>
                 </div>
                 <div className="pos-dash-card-id">{isAppointment ? (row.appointmentData?.title || "Appointment") : row.invoiceNumber}</div>
