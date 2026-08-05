@@ -1,0 +1,65 @@
+/* ════════════════════════════════════════════
+   GLOBAL FORM FIELDS STANDARDIZATION (PREMIUM)
+════════════════════════════════════════════ */
+
+/* Standardize Inputs, Selects, Textareas */
+input:not([type="checkbox"]):not([type="radio"]):not([type="color"]):not([type="range"]):not([type="file"]), 
+select, 
+textarea, 
+.hub-input {
+  background: #f8fafc !important;
+  border: 1px solid #cbd5e1 !important;
+  color: #0f172a !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  padding: 12px 16px !important;
+  border-radius: 12px !important;
+  transition: all 0.2s ease !important;
+  min-height: 48px !important;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.02) !important;
+}
+
+/* Focus States */
+input:not([type="checkbox"]):not([type="radio"]):not([type="color"]):not([type="range"]):not([type="file"]):focus, 
+select:focus, 
+textarea:focus, 
+.hub-input:focus {
+  background: #ffffff !important;
+  border-color: #0ea5e9 !important;
+  box-shadow: 0 0 0 4px rgba(14, 165, 233, 0.15) !important;
+  outline: none !important;
+}
+
+/* Hover States */
+input:not([type="checkbox"]):not([type="radio"]):not([type="color"]):not([type="range"]):not([type="file"]):hover:not(:focus), 
+select:hover:not(:focus), 
+textarea:hover:not(:focus), 
+.hub-input:hover:not(:focus) {
+  border-color: #94a3b8 !important;
+}
+
+/* Fix Chrome Yellow Autofill */
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus, 
+input:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 50px #ffffff inset !important;
+    -webkit-text-fill-color: #0f172a !important;
+    border: 1px solid #0ea5e9 !important;
+}
+
+/* Standardize Labels */
+.hub-form-group label, 
+.modal-content label:not([style*="align-items: center"]):not([style*="display: flex"]),
+.modal-body label:not([style*="align-items: center"]):not([style*="display: flex"]) {
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  color: #475569 !important;
+  margin-bottom: 6px !important;
+  display: block !important;
+}
+
+/* Clean up input group borders/backgrounds where applied locally */
+.hub-form-group {
+    margin-bottom: 0px;
+}
