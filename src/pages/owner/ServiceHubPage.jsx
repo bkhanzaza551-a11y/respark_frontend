@@ -20,6 +20,16 @@ const DURATION_OPTIONS = [
   { value: 300, label: "5 hours" }
 ];
 
+const ToggleSwitch = ({ label, checked, onChange, color = "#0ea5e9", labelColor = "#475569" }) => (
+  <label style={{ display: "flex", alignItems: "center", gap: 10, cursor: "pointer", userSelect: "none" }}>
+    <input type="checkbox" checked={checked} onChange={onChange} style={{ display: "none" }} />
+    <div style={{ position: "relative", width: 40, height: 22, background: checked ? color : "#cbd5e1", borderRadius: 20, transition: "background 0.25s ease" }}>
+      <div style={{ position: "absolute", top: 2, left: checked ? 20 : 2, width: 18, height: 18, background: "#fff", borderRadius: "50%", transition: "left 0.25s ease", boxShadow: "0 1px 3px rgba(0,0,0,0.2)" }} />
+    </div>
+    {label && <span style={{ fontSize: 13, fontWeight: 600, color: checked ? color : labelColor, transition: "color 0.2s" }}>{label}</span>}
+  </label>
+);
+
 export default function ServiceHubPage() {
   const { selectedBranchId, branches: ctxBranches } = useBranch();
   const [categories, setCategories] = useState([]);
@@ -510,11 +520,8 @@ export default function ServiceHubPage() {
                   <label>Name *</label>
                   <input type="text" className="hub-input" value={srvForm.name} onChange={e => setSrvForm({...srvForm, name: e.target.value})} placeholder="Haircut, Beard Trim..." />
                 </div>
-                <div className="hub-form-group" style={{ flex: 1, display: "flex", alignItems: "end", gap: 12 }}>
-                  <label style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 14, color: "#334155", cursor: "pointer", whiteSpace: "nowrap" }}>
-                    <input type="checkbox" checked={srvForm.isActive} onChange={e => setSrvForm({...srvForm, isActive: e.target.checked})} style={{ width: 18, height: 18, accentColor: "#2563eb" }} />
-                    Active
-                  </label>
+                <div className="hub-form-group" style={{ flex: 1, display: "flex", alignItems: "end", paddingBottom: 6 }}>
+                  <ToggleSwitch label="Active Service" checked={srvForm.isActive} onChange={e => setSrvForm({...srvForm, isActive: e.target.checked})} color="#10b981" />
                 </div>
               </div>
 
@@ -557,10 +564,7 @@ export default function ServiceHubPage() {
               {/* Group (Gender) + Hide from catalogue */}
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "12px 0", borderTop: "1px solid #f1f5f9", marginBottom: 8 }}>
                 <span style={{ fontSize: 14, fontWeight: 500, color: "#0f172a" }}>Group</span>
-                <label style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 14, color: "#334155", cursor: "pointer" }}>
-                  <input type="checkbox" checked={srvForm.hideFromCatalogue} onChange={e => setSrvForm({...srvForm, hideFromCatalogue: e.target.checked})} style={{ width: 18, height: 18, accentColor: "#2563eb" }} />
-                  Hide from catalogue
-                </label>
+                <ToggleSwitch label="Hide from catalogue" checked={srvForm.hideFromCatalogue} onChange={e => setSrvForm({...srvForm, hideFromCatalogue: e.target.checked})} color="#f59e0b" />
               </div>
               <div style={{ display: "flex", gap: 16, marginBottom: 16 }}>
                 {[{value: "UNISEX", label: "Both"}, {value: "FEMALE", label: "Female"}, {value: "MALE", label: "Male"}].map(opt => (
@@ -581,11 +585,8 @@ export default function ServiceHubPage() {
                   <label>Sale Price (₹)</label>
                   <input type="number" min="0" className="hub-input" value={srvForm.salePrice} onChange={e => setSrvForm({...srvForm, salePrice: e.target.value})} placeholder="Optional" />
                 </div>
-                <div className="hub-form-group" style={{ flex: 1, display: "flex", alignItems: "end", paddingBottom: 2 }}>
-                  <label style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 14, color: "#334155", cursor: "pointer", whiteSpace: "nowrap" }}>
-                    <input type="checkbox" checked={srvForm.nonDiscountable} onChange={e => setSrvForm({...srvForm, nonDiscountable: e.target.checked})} style={{ width: 18, height: 18, accentColor: "#2563eb" }} />
-                    Non Discountable
-                  </label>
+                <div className="hub-form-group" style={{ flex: 1, display: "flex", alignItems: "end", paddingBottom: 8 }}>
+                  <ToggleSwitch label="Non Discountable" checked={srvForm.nonDiscountable} onChange={e => setSrvForm({...srvForm, nonDiscountable: e.target.checked})} color="#ef4444" />
                 </div>
               </div>
 
@@ -746,19 +747,10 @@ export default function ServiceHubPage() {
               </div>
 
               {/* Toggle Row */}
-              <div className="hub-form-row" style={{ marginTop: 8, flexWrap: 'wrap', borderTop: "1px solid #f1f5f9", paddingTop: 12 }}>
-                <div className="hub-toggle-group">
-                  <input type="checkbox" checked={srvForm.onlineBookingEnabled} onChange={e => setSrvForm({...srvForm, onlineBookingEnabled: e.target.checked})} />
-                  <span>Enable Online Booking</span>
-                </div>
-                <div className="hub-toggle-group">
-                  <input type="checkbox" checked={srvForm.isFeatured} onChange={e => setSrvForm({...srvForm, isFeatured: e.target.checked})} />
-                  <span>Featured</span>
-                </div>
-                <div className="hub-toggle-group">
-                  <input type="checkbox" checked={srvForm.isPopular} onChange={e => setSrvForm({...srvForm, isPopular: e.target.checked})} />
-                  <span>Popular</span>
-                </div>
+              <div className="hub-form-row" style={{ marginTop: 8, flexWrap: 'wrap', borderTop: "1px solid #f1f5f9", paddingTop: 20, paddingBottom: 8, gap: 24 }}>
+                <ToggleSwitch label="Enable Online Booking" checked={srvForm.onlineBookingEnabled} onChange={e => setSrvForm({...srvForm, onlineBookingEnabled: e.target.checked})} color="#10b981" />
+                <ToggleSwitch label="Featured Service" checked={srvForm.isFeatured} onChange={e => setSrvForm({...srvForm, isFeatured: e.target.checked})} color="#8b5cf6" />
+                <ToggleSwitch label="Popular Service" checked={srvForm.isPopular} onChange={e => setSrvForm({...srvForm, isPopular: e.target.checked})} color="#f43f5e" />
               </div>
             </div>
 
