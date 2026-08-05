@@ -1250,7 +1250,7 @@ export default function CustomersPage() {
           .filter-options { flex:1; padding:24px; overflow-y:auto; display:flex; flex-direction: column; gap:20px; }
           .sidebar-modal-footer { padding:20px 24px; background:#f8fafc; border-top:1px solid #e2e8f0; display:flex; justify-content:flex-end; gap:12px; }
           .crm-row-action { position:relative; overflow:visible; }
-          .crm-row-action-trigger { width:32px; height:32px; border-radius:6px; border:1px solid #e2e8f0; background:#f8fafc; color:#475569; display:inline-flex; align-items:center; justify-content:center; cursor:pointer; min-height:unset; box-shadow:none; }
+          .crm-row-action-trigger { width:38px; height:38px; border-radius:8px; border:1px solid #e2e8f0; background:#f8fafc; color:#1e293b; display:inline-flex; align-items:center; justify-content:center; cursor:pointer; min-height:unset; box-shadow:none; }
           .crm-row-action-trigger:hover { background:#eff6ff; color:#2563eb; border-color:#bfdbfe; transform:none; filter:none; }
           .crm-row-menu { position:absolute; top:calc(100% + 4px); right:0; min-width:170px; background:#fff; border:1px solid #e2e8f0; border-radius:10px; box-shadow: none; padding:6px; z-index:3000; }
           .crm-row-menu button { width:100%; border:none; background:#fff; border-radius:8px; display:flex; align-items:center; gap:8px; padding:9px 12px; font-size:0.82rem; color:#0f172a; cursor:pointer; margin-bottom:4px; min-height:unset; box-shadow:none; }
@@ -1572,7 +1572,11 @@ export default function CustomersPage() {
                     <td>{formatCompactDate(row.dateOfBirth, false)}</td>
                     <td className="crm-row-action" onClick={(e) => e.stopPropagation()}>
                       <button className="crm-row-action-trigger" onClick={(e) => { e.stopPropagation(); setActiveMenuRowId((current) => current === row.id ? "" : row.id); }}>
-                        <MoreHorizontal size={24} strokeWidth={3} color="#1e293b" />
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ color: "currentColor" }}>
+                          <circle cx="5" cy="12" r="2.5" fill="currentColor"/>
+                          <circle cx="12" cy="12" r="2.5" fill="currentColor"/>
+                          <circle cx="19" cy="12" r="2.5" fill="currentColor"/>
+                        </svg>
                       </button>
                       {activeMenuRowId === row.id && (
                         <div className="crm-row-menu" ref={actionMenuRef}>
