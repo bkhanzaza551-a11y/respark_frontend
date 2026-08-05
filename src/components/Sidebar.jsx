@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import CustomDropdown from './common/CustomDropdown';
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import {
   Zap,
@@ -27,7 +28,6 @@ import {
 import { useBranch } from "../context/BranchContext";
 import { api } from "../api/client";
 
-import CustomDropdown from './common/CustomDropdown';
 
 const GROUP_ICONS = {
   "My Workspace":  <User size={17} />,

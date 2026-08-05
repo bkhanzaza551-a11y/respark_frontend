@@ -1,8 +1,8 @@
 import { useState } from "react";
+import CustomDropdown from '../common/CustomDropdown';
 import { customerApi } from "../../api/customerClient";
 import { formatApiError } from "../../utils/apiError";
 
-import CustomDropdown from '../common/CustomDropdown';
 
 export default function AppointmentFeedbackForm({ appointmentId, onSubmitted }) {
   const [form, setForm] = useState({ rating: 5, message: "" });

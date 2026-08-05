@@ -1,4 +1,5 @@
 /* eslint-disable react-hooks/set-state-in-effect */
+import CustomDropdown from '../../components/common/CustomDropdown';
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import { api } from "../../api/client";
@@ -7,7 +8,6 @@ import ModuleTabs from "../../components/ModuleTabs";
 import EmptyState from "../../components/EmptyState";
 import PageLoader from "../../components/PageLoader";
 
-import CustomDropdown from '../../components/common/CustomDropdown';
 
 const emptyForm = {
   name: "",

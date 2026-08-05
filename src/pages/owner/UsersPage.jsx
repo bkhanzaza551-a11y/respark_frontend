@@ -1,4 +1,5 @@
 import { startTransition, useDeferredValue, useEffect, useMemo, useRef, useState } from "react";
+import CustomDropdown from '../../components/common/CustomDropdown';
 import { X } from "lucide-react";
 import { api } from "../../api/client";
 import { useBranch } from '../../context/BranchContext';
@@ -18,7 +19,6 @@ import { formatApiError } from "../../utils/apiError";
 import { isValidIndianPhone } from "../../utils/phone";
 import { ensureSingleFaceInImage, loadFaceVerificationModels } from "../../utils/faceVerification";
 import {
-import CustomDropdown from '../../components/common/CustomDropdown';
 
   clonePermissions,
   countGrantedActions,

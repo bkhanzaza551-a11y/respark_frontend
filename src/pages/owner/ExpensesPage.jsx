@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import CustomDropdown from '../../components/common/CustomDropdown';
 import { useLocation, useNavigate } from "react-router-dom";
 import { api } from "../../api/client";
 import EmptyState from "../../components/EmptyState";
@@ -8,7 +9,6 @@ import { useBranch } from "../../context/BranchContext";
 import { useSalonSettings } from "../../context/SalonSettingsContext";
 import { formatApiError } from "../../utils/apiError";
 import { 
-import CustomDropdown from '../../components/common/CustomDropdown';
 
   Receipt, Wallet, Search, Filter, FolderKanban, PlusCircle, 
   Calendar, CheckCircle2, Clock, AlertCircle, XCircle, LayoutDashboard,

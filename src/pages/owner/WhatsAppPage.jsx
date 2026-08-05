@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
+import CustomDropdown from '../../components/common/CustomDropdown';
 import { useLocation } from "react-router-dom";
 import { api } from "../../api/client";
 import { useBranch } from "../../context/BranchContext";
@@ -9,7 +10,6 @@ import { downloadFromApi } from "../../utils/download";
 import PageLoader from "../../components/PageLoader";
 import IndianPhoneInput from "../../components/IndianPhoneInput";
 
-import CustomDropdown from '../../components/common/CustomDropdown';
 
 const emptySettings = {
   providerName: "",

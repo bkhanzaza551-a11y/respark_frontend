@@ -1,4 +1,5 @@
 import { useState, useMemo, useEffect } from "react";
+import CustomDropdown from '../../components/common/CustomDropdown';
 import { X, Trash2, FlaskConical, Plus } from "lucide-react";
 import { api } from "../../api/client";
 import { useAuth } from "../../context/AuthContext";
@@ -6,7 +7,6 @@ import { useSalonSettings } from "../../context/SalonSettingsContext";
 import { downloadFromApi } from "../../utils/download";
 import PosReceipt from "../../components/PosReceipt";
 
-import CustomDropdown from '../../components/common/CustomDropdown';
 
 const toAmount = (value, fallback = 0) => {
   const next = Number(value);

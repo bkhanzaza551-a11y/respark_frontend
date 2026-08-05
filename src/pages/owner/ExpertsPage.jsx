@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import CustomDropdown from '../../components/common/CustomDropdown';
 import { api } from "../../api/client";
 import { useBranch } from "../../context/BranchContext";
 import IndianPhoneInput from "../../components/IndianPhoneInput";
@@ -7,7 +8,6 @@ import PageLoader from "../../components/PageLoader";
 import PasswordStrengthMeter from "../../components/PasswordStrengthMeter";
 import { formatApiError } from "../../utils/apiError";
 
-import CustomDropdown from '../../components/common/CustomDropdown';
 
 const emptyForm = {
   name: "",

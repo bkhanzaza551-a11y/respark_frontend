@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
+import CustomDropdown from './common/CustomDropdown';
 import { Download, Printer, X } from "lucide-react";
 import { formatCurrency } from "../utils/currency";
 import { useAuth } from "../context/AuthContext";
 import { readSalonSettingsCache } from "../utils/salonSettings";
 import { api } from "../api/client";
 
-import CustomDropdown from './common/CustomDropdown';
 
 const Divider = ({ dashed = false, style = {} }) => (
   <div aria-hidden="true" style={{ borderTop: `1px ${dashed ? "dashed" : "solid"} #cbd5e1`, margin: "14px 0", ...style }} />

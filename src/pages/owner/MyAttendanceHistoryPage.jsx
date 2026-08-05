@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import CustomDropdown from '../../components/common/CustomDropdown';
 import { CalendarDays, CheckCircle2, Clock, Filter, LogIn, LogOut, RotateCcw, Timer, XCircle, Camera, Building2, CalendarOff } from "lucide-react";
 import { api } from "../../api/client";
 import EmptyState from "../../components/EmptyState";
@@ -6,7 +7,6 @@ import ModuleTabs from "../../components/ModuleTabs";
 import PageLoader from "../../components/PageLoader";
 import { formatApiError } from "../../utils/apiError";
 
-import CustomDropdown from '../../components/common/CustomDropdown';
 
 const statusColor = (status) => {
   switch (status) {

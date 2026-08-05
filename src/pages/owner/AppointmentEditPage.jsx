@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import CustomDropdown from '../../components/common/CustomDropdown';
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { api } from "../../api/client";
 import { useBranch } from "../../context/BranchContext";
@@ -7,7 +8,6 @@ import EmptyState from "../../components/EmptyState";
 import ModuleTabs from "../../components/ModuleTabs";
 import PageLoader from "../../components/PageLoader";
 
-import CustomDropdown from '../../components/common/CustomDropdown';
 
 export default function AppointmentEditPage() {
   const { id } = useParams();

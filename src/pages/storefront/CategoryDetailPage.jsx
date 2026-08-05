@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
+import CustomDropdown from '../../components/common/CustomDropdown';
 import { useParams, Link, useOutletContext } from "react-router-dom";
 import { api } from "../../api/client";
 
-import CustomDropdown from '../../components/common/CustomDropdown';
 
 export default function CategoryDetailPage() {
   const { salon } = useOutletContext();

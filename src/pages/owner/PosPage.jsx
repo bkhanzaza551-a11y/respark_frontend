@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import CustomDropdown from '../../components/common/CustomDropdown';
 import { useNavigate } from "react-router-dom";
 import { CheckCircle2, AlertCircle, AlarmClock, Gift, Droplet, X, FlaskConical, Plus } from "lucide-react";
 import { downloadFromApi } from "../../utils/download";
@@ -12,7 +13,6 @@ import PageLoader from "../../components/PageLoader";
 import IndianPhoneInput from "../../components/IndianPhoneInput";
 import './PosPage.css';
 
-import CustomDropdown from '../../components/common/CustomDropdown';
 
 const emptyServiceItem = { itemType: "SERVICE", serviceId: "", staffUserId: "", qty: 1, taxPct: 0, consumableItems: [], complimentaryRemark: "" };
 const emptyProductItem = { itemType: "PRODUCT", productId: "", qty: 1, taxPct: 0, batchNumber: "", variationName: "" };

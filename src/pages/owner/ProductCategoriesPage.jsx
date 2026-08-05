@@ -1,4 +1,5 @@
 import { useEffect, useState, useCallback, useRef } from "react";
+import CustomDropdown from '../../components/common/CustomDropdown';
 import { X, Trash2, Edit2, Search, Plus, Package, ClipboardList, Check } from "lucide-react";
 import { api } from "../../api/client";
 import { formatApiError } from "../../utils/apiError";
@@ -7,7 +8,6 @@ import { useBranch } from "../../context/BranchContext";
 import PageLoader from "../../components/PageLoader";
 import "./ServiceHubPage.css";
 
-import CustomDropdown from '../../components/common/CustomDropdown';
 
 const defaultProductForm = {
   name: "",

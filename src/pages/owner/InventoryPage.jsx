@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
+import CustomDropdown from '../../components/common/CustomDropdown';
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { api } from "../../api/client";
 import { useSalonSettings } from "../../context/SalonSettingsContext";
@@ -10,7 +11,6 @@ import IndianPhoneInput from "../../components/IndianPhoneInput";
 import { Package, Search, ShoppingCart, CheckCircle, XCircle, AlertTriangle, ArrowLeft, Tag, Layers, RefreshCw, Users, FileText, Activity, Plus, Trash2, ChevronDown, Save, Upload, Download } from "lucide-react";
 import "./InventoryPage.css";
 
-import CustomDropdown from '../../components/common/CustomDropdown';
 
 const emptyCategory = { name: "", description: "", imageUrl: "", sortOrder: 0, isPublicVisible: true };
 const emptyProduct = { branchId: "", categoryId: "", name: "", productType: "RETAIL", costPrice: 0, sellingPrice: 0, currentStock: 0, minStock: 0, sku: "", barcode: "", imageUrl: "", unit: "", unitConversion: "", favourite: false };

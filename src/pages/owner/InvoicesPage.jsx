@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
+import CustomDropdown from '../../components/common/CustomDropdown';
 import { useNavigate, useParams } from "react-router-dom";
 import { api } from "../../api/client";
 import EmptyState from "../../components/EmptyState";
@@ -9,7 +10,6 @@ import { useBranch } from '../../context/BranchContext';
 import PosReceipt from "../../components/PosReceipt";
 import { Eye, Download, FileText, ChevronLeft, ChevronRight } from "lucide-react";
 
-import CustomDropdown from '../../components/common/CustomDropdown';
 
 export default function InvoicesPage() {
   const { id: routeInvoiceId } = useParams();

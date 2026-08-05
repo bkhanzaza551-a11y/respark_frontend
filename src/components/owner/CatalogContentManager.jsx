@@ -1,8 +1,8 @@
 import { useState } from "react";
+import CustomDropdown from '../common/CustomDropdown';
 import { api } from "../../api/client";
 import { formatApiError } from "../../utils/apiError";
 
-import CustomDropdown from '../common/CustomDropdown';
 
 const emptyBanner = {
   title: "",

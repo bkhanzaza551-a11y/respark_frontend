@@ -1,4 +1,5 @@
 import { useCallback, useDeferredValue, useEffect, useMemo, useRef, useState } from "react";
+import CustomDropdown from '../../components/common/CustomDropdown';
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Edit2, Trash2, RefreshCw, ChevronLeft, ChevronRight, Plus } from "lucide-react";
 import { api } from "../../api/client";
@@ -13,7 +14,6 @@ import { readSalonSettingsCache, writeSalonSettingsCache } from "../../utils/sal
 import { SETTINGS_WORKSPACE_SECTIONS, getSettingsSection } from "./settingsWorkspaceConfig";
 import "./SettingsPage.css";
 
-import CustomDropdown from '../../components/common/CustomDropdown';
 
 const WEEK_DAYS = [
   { key: "sun", label: "Sun", dayOfWeekValue: 0 },

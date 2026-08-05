@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
+import CustomDropdown from '../../components/common/CustomDropdown';
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { Clock3, DownloadCloud, FileText, Gift, ScissorsLineDashed, TicketPercent, Trash2, X, FlaskConical, Plus } from "lucide-react";
 import { api } from "../../api/client";
@@ -12,7 +13,6 @@ import { downloadFromApi } from "../../utils/download";
 import { formatApiError } from "../../utils/apiError";
 import "./PosDashboard.css";
 import "./PosPage.css";
-import CustomDropdown from '../../components/common/CustomDropdown';
 
 const invoiceLabel = (item) => item?.serviceName || item?.productName || item?.name || "Item";
 const invoiceStatusClass = (status) => {

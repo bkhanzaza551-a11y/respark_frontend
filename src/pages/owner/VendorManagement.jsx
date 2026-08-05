@@ -1,9 +1,9 @@
 import { useEffect, useMemo, useState } from "react";
+import CustomDropdown from '../../components/common/CustomDropdown';
 import { Search, Plus, ChevronLeft, Save, Trash2 } from "lucide-react";
 import { api } from "../../api/client";
 import { formatApiError } from "../../utils/apiError";
 
-import CustomDropdown from '../../components/common/CustomDropdown';
 
 const emptyVendor = {
   name: "",

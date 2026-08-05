@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
+import CustomDropdown from '../../components/common/CustomDropdown';
 import { Link, useLocation, useParams } from "react-router-dom";
 import { Trash2, Edit2, Plus, PackageOpen, Package } from "lucide-react";
 import { api } from "../../api/client";
@@ -10,7 +11,6 @@ import ModuleTabs from "../../components/ModuleTabs";
 import PageLoader from "../../components/PageLoader";
 import "./MembershipsPage.css";
 
-import CustomDropdown from '../../components/common/CustomDropdown';
 
 const emptyMembership = {
   membershipType: "Fixed", // 'Fixed' or 'Percentage'

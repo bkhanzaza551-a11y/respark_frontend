@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState, useMemo } from "react";
+import CustomDropdown from '../../components/common/CustomDropdown';
 import { Search, Filter, Plus, Download, Upload, MoreVertical, MoreHorizontal, ChevronsLeft, ChevronLeft, ChevronRight, ChevronsRight, X, ChevronDown, Trash2, GitMerge, MessageCircle, User, FileText, CreditCard, Gift, Wallet, AlertCircle, Package, Users, UserCog, Tag, Phone, StickyNote, Edit3, CheckCircle, Circle, Eye, Monitor } from "lucide-react";
 import { api } from "../../api/client";
 import IndianPhoneInput from "../../components/IndianPhoneInput";
@@ -13,7 +14,6 @@ import PosReceipt from "../../components/PosReceipt";
 
 import { useNavigate } from "react-router-dom";
 
-import CustomDropdown from '../../components/common/CustomDropdown';
 
 const EMPTY_ADVANCED_FILTERS = {
   gender: "",

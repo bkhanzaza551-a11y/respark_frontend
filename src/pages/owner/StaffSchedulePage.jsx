@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
+import CustomDropdown from '../../components/common/CustomDropdown';
 import { api } from "../../api/client";
 import { useBranch } from "../../context/BranchContext";
 import EmptyState from "../../components/EmptyState";
 import PageLoader from "../../components/PageLoader";
 
-import CustomDropdown from '../../components/common/CustomDropdown';
 
 const emptySchedule = { userSalonId: "", branchId: "", weekday: 1, startTime: "09:00", endTime: "18:00", isOffDay: false };
 const emptyBreak = { userSalonId: "", weekday: 1, startTime: "13:00", endTime: "14:00" };

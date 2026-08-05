@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
+import CustomDropdown from '../../components/common/CustomDropdown';
 import { api } from "../../api/client";
 import EmptyState from "../../components/EmptyState";
 import ModuleTabs from "../../components/ModuleTabs";
@@ -8,7 +9,6 @@ import { downloadFromApi } from "../../utils/download";
 import { Bell, Search as SearchIcon, Filter, CheckCircle2, AlertCircle, Info, ExternalLink, Check } from "lucide-react";
 import "./NotificationsPage.css";
 
-import CustomDropdown from '../../components/common/CustomDropdown';
 
 export default function NotificationsPage() {
   const [rows, setRows] = useState([]);

@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState, useRef } from "react";
+import CustomDropdown from '../../components/common/CustomDropdown';
 import { useNavigate } from "react-router-dom";
 import { ChevronLeft, ChevronRight, Search, X, ArrowLeft, CheckCircle2, Calendar, XCircle, PlusCircle, Trash2, User, Edit3, FileText, CreditCard, Gift, Wallet, AlertCircle, Package, Users, UserCog, Tag, Phone, StickyNote } from "lucide-react";
 import { api } from "../../api/client";
@@ -8,7 +9,6 @@ import { formatApiError } from "../../utils/apiError";
 import PageLoader from "../../components/PageLoader";
 import AppointmentCheckoutModal from "./AppointmentCheckoutModal";
 
-import CustomDropdown from '../../components/common/CustomDropdown';
 
 const APPOINTMENT_START_HOUR = 9;
 const APPOINTMENT_END_HOUR = 21;
