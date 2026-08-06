@@ -863,13 +863,18 @@ export default function PosPage() {
     setForm(c => {
       const activeItems = c.items.filter((item) => item.serviceId || item.productId || item.membershipPlanId || item.packageId || item.giftCardId || item.itemType === "GIFT_CARD");
       const next = { ...c };
+      const unitPrice = toAmount(product.sellingPrice);
+      const pDisType = product.discountType || "NONE";
+      const pDisVal = Number(product.discountValue) || 0;
+      const autoDiscPct = pDisType === "PERCENTAGE" ? pDisVal : 0;
+      const autoDiscAmt = pDisType === "FLAT" ? pDisVal : (pDisType === "PERCENTAGE" ? Math.round((unitPrice * pDisVal / 100) * 100) / 100 : 0);
       next.items = [...activeItems, {
         ...emptyProductItem,
         productId: product.id,
-        unitPrice: toAmount(product.sellingPrice),
-        originalUnitPrice: toAmount(product.sellingPrice),
-        discountPct: 0,
-        discountAmt: 0,
+        unitPrice,
+        originalUnitPrice: unitPrice,
+        discountPct: autoDiscPct,
+        discountAmt: autoDiscAmt,
         taxPct: product.taxPct || product.taxRate || 0
       }];
       return next;
@@ -881,14 +886,19 @@ export default function PosPage() {
     setForm(c => {
       const activeItems = c.items.filter((item) => item.serviceId || item.productId || item.membershipPlanId || item.packageId || item.giftCardId || item.itemType === "GIFT_CARD");
       const next = { ...c };
+      const unitPrice = variation.price != null ? variation.price : toAmount(product.sellingPrice);
+      const pDisType = product.discountType || "NONE";
+      const pDisVal = Number(product.discountValue) || 0;
+      const autoDiscPct = pDisType === "PERCENTAGE" ? pDisVal : 0;
+      const autoDiscAmt = pDisType === "FLAT" ? pDisVal : (pDisType === "PERCENTAGE" ? Math.round((unitPrice * pDisVal / 100) * 100) / 100 : 0);
       next.items = [...activeItems, {
         ...emptyProductItem,
         productId: product.id,
         productName: `${product.name} (${variation.name})`,
-        unitPrice: variation.price != null ? variation.price : toAmount(product.sellingPrice),
-        originalUnitPrice: variation.price != null ? variation.price : toAmount(product.sellingPrice),
-        discountPct: 0,
-        discountAmt: 0,
+        unitPrice,
+        originalUnitPrice: unitPrice,
+        discountPct: autoDiscPct,
+        discountAmt: autoDiscAmt,
         taxPct: product.taxPct || product.taxRate || 0,
         variationName: variation.name || ""
       }];
