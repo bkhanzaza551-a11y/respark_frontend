@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import CustomDropdown from '../../components/common/CustomDropdown';
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-import { Clock3, DownloadCloud, FileText, Gift, ScissorsLineDashed, TicketPercent, Trash2, X, FlaskConical, Plus } from "lucide-react";
+import { Clock3, Download, FileText, Gift, ScissorsLineDashed, TicketPercent, Trash2, X, FlaskConical, Plus } from "lucide-react";
 import { api } from "../../api/client";
 import EmptyState from "../../components/EmptyState";
 import PageLoader from "../../components/PageLoader";
@@ -960,7 +960,7 @@ export default function PosDashboardPage() {
                       title="Download Invoice"
                       onClick={(event) => downloadInvoiceFromCard(event, row.id, row.invoiceNumber)}
                     >
-                      <DownloadCloud size={22} color="#3b82f6" style={{ width: '22px', height: '22px' }} />
+                      <Download size={18} color="#3b82f6" />
                     </button>
                   ) : null}
                   <div className="pos-dash-card-icon">
