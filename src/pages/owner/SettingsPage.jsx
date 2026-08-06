@@ -2038,46 +2038,38 @@ export default function SettingsPage() {
                 </div>
 
                 <div style={{ display: "flex", gap: 32, marginBottom: 16 }}>
-                  <label style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 13, fontWeight: 600, color: "#334155", cursor: "pointer" }}>
-                    <input
-                      type="checkbox"
-                      checked={draftTax?.active ?? editing.active}
-                      onChange={(e) => draftTax && setDraftTax({ ...draftTax, active: e.target.checked })}
-                      style={{ width: 18, height: 18, accentColor: "var(--accent, #3b82f6)", cursor: "pointer" }}
-                    />
-                    Active
-                  </label>
-                  <label style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 13, fontWeight: 600, color: "#334155", cursor: "pointer" }}>
-                    <input
-                      type="checkbox"
-                      checked={inclusiveTax}
-                      onChange={(e) => updateAdvancedObject("taxMapping", { inclusiveTax: e.target.checked })}
-                      style={{ width: 18, height: 18, accentColor: "var(--accent, #3b82f6)", cursor: "pointer" }}
-                    />
-                    Inclusive Taxes
-                  </label>
+                  <ToggleSwitch
+                    checked={draftTax?.active ?? editing.active}
+                    onChange={(e) => draftTax && setDraftTax({ ...draftTax, active: e.target.checked })}
+                    label="Active"
+                    color="#14b8a6"
+                  />
+                  <ToggleSwitch
+                    checked={inclusiveTax}
+                    onChange={(e) => updateAdvancedObject("taxMapping", { inclusiveTax: e.target.checked })}
+                    label="Inclusive Taxes"
+                    color="#14b8a6"
+                  />
                 </div>
 
                 <div style={{ marginBottom: 16 }}>
-                  <div style={{ fontWeight: 600, fontSize: 13, color: "#334155", marginBottom: 8 }}>Applicable For</div>
-                  <div style={{ display: "flex", gap: 20, flexWrap: "wrap" }}>
+                  <div style={{ fontWeight: 600, fontSize: 13, color: "#334155", marginBottom: 12 }}>Applicable For</div>
+                  <div style={{ display: "flex", gap: 24, flexWrap: "wrap", padding: "16px", background: "#f8fafc", borderRadius: 12, border: "1px solid #e2e8f0" }}>
                     {[{ key: "SERVICE", label: "Service" }, { key: "PRODUCT", label: "Product" }, { key: "MEMBERSHIP", label: "Membership" }, { key: "PACKAGE", label: "Packages" }].map(({ key, label }) => (
-                      <label key={key} style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 13, color: "#334155", cursor: "pointer" }}>
-                        <input
-                          type="checkbox"
-                          checked={(draftTax?.applicableFor ?? (typeof editing.applicableFor === "string" ? editing.applicableFor.split(",") : (editing.applicableFor || []))).includes(key)}
-                          onChange={() => draftTax && toggleApplicable(key)}
-                          style={{ width: 16, height: 16, accentColor: "var(--accent, #3b82f6)", cursor: "pointer" }}
-                        />
-                        {label}
-                      </label>
+                      <ToggleSwitch
+                        key={key}
+                        checked={(draftTax?.applicableFor ?? (typeof editing.applicableFor === "string" ? editing.applicableFor.split(",") : (editing.applicableFor || []))).includes(key)}
+                        onChange={() => draftTax && toggleApplicable(key)}
+                        label={label}
+                        color="#3b82f6"
+                      />
                     ))}
                   </div>
                 </div>
 
                 <div style={{ display: "flex", gap: 8, justifyContent: "flex-end", marginTop: 20, paddingTop: 16, borderTop: "1px solid #f1f5f9" }}>
                   <button type="button" onClick={cancelDraft} style={{ padding: "10px 24px", background: "#f1f5f9", border: "1px solid #cbd5e1", borderRadius: 8, fontWeight: 600, cursor: "pointer", color: "#475569", fontSize: 13 }}>Cancel</button>
-                  <button type="button" onClick={saveDraft} style={{ padding: "10px 24px", background: "var(--button-bg-solid, #3b82f6)", color: "white", border: "none", borderRadius: 8, fontWeight: 700, cursor: "pointer", fontSize: 13 }}>Save</button>
+                  <button type="button" onClick={saveDraft} style={{ padding: "10px 24px", background: "var(--button-bg-solid, #14b8a6)", color: "white", border: "none", borderRadius: 8, fontWeight: 700, cursor: "pointer", fontSize: 13 }}>Save</button>
                 </div>
               </div>
             ) : (
