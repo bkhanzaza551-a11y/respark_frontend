@@ -1739,48 +1739,54 @@ export default function SettingsPage() {
           </div>
         ) : null}
 
-        <div style={{ display: "flex", alignItems: "center", gap: 16, marginBottom: 16, flexWrap: "wrap" }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-            <span style={{ fontSize: 13, fontWeight: 600, color: "#475569" }}>Apply Shift for</span>
+        <div style={{ display: "flex", alignItems: "center", gap: 20, marginBottom: 24, flexWrap: "wrap", background: "#f8fafc", padding: "16px 20px", borderRadius: 12, border: "1px solid #e2e8f0" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+            <span style={{ fontSize: 13, fontWeight: 700, color: "#334155", textTransform: "uppercase", letterSpacing: 0.5 }}>Apply Shift for</span>
             <input
               type="number"
               min="1"
               disabled={!rosterModuleEnabled}
               value={roster.applyFor || 1}
               onChange={(event) => updateAdvancedObject("rosterManagement", { applyFor: Number(event.target.value) || 1 })}
-              style={{ width: 60, padding: "8px 10px", border: "1px solid #cbd5e1", borderRadius: 6, fontSize: 14, textAlign: "center" }}
+              style={{ width: 64, padding: "10px", border: "1px solid #cbd5e1", borderRadius: 8, fontSize: 14, textAlign: "center", outline: "none", transition: "all 0.2s" }}
+              onFocus={(e) => { e.target.style.borderColor = "#3b82f6"; e.target.style.boxShadow = "0 0 0 3px rgba(59, 130, 246, 0.1)"; }}
+              onBlur={(e) => { e.target.style.borderColor = "#cbd5e1"; e.target.style.boxShadow = "none"; }}
             />
-            <span style={{ fontSize: 13, fontWeight: 600, color: "#475569" }}>Days:</span>
+            <span style={{ fontSize: 13, fontWeight: 700, color: "#334155", textTransform: "uppercase", letterSpacing: 0.5 }}>Days:</span>
             <CustomDropdown
               disabled={!rosterModuleEnabled}
               value={roster.useShiftId}
               onChange={(event) => updateAdvancedObject("rosterManagement", { useShiftId: event.target.value })}
-              style={{ minWidth: 200, padding: "8px 10px", border: "1px solid #cbd5e1", borderRadius: 6, fontSize: 14, background: "#fff" }}
+              style={{ minWidth: 220, padding: "10px 14px", border: "1px solid #cbd5e1", borderRadius: 8, fontSize: 14, background: "#fff", outline: "none" }}
             >
               <option value="">Select shift template</option>
               {shifts.filter((shift) => shift.active !== false).map((shift) => <option key={shift.id} value={shift.id}>{shift.name || "Unnamed Shift"}</option>)}
             </CustomDropdown>
           </div>
           <div style={{ flex: 1 }} />
-          <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 8, background: "#fff", padding: "6px", borderRadius: 10, border: "1px solid #cbd5e1", boxShadow: "0 2px 4px rgba(0,0,0,0.02)" }}>
             <button
               type="button"
               onClick={() => handleDateNav(-1)}
               disabled={!rosterModuleEnabled}
               title="Previous Day"
-              style={{ display: "flex", alignItems: "center", justifyContent: "center", width: 34, height: 34, border: "1px solid #cbd5e1", background: "#fff", borderRadius: 6, cursor: "pointer", color: "#475569" }}
+              style={{ display: "flex", alignItems: "center", justifyContent: "center", width: 32, height: 32, border: "none", background: "transparent", borderRadius: 6, cursor: "pointer", color: "#475569", transition: "all 0.2s" }}
+              onMouseEnter={(e) => e.currentTarget.style.background = "#f1f5f9"}
+              onMouseLeave={(e) => e.currentTarget.style.background = "transparent"}
             >
-              <ChevronLeft size={16} />
+              <ChevronLeft size={18} />
             </button>
             <button
               type="button"
               onClick={() => updateAdvancedObject("rosterManagement", { selectedDate: new Date().toISOString().split("T")[0] })}
               disabled={!rosterModuleEnabled}
-              style={{ height: 34, padding: "0 12px", border: "1px solid #cbd5e1", background: "#fff", borderRadius: 6, cursor: "pointer", fontSize: 12, fontWeight: 600, color: "#2563eb", display: "flex", alignItems: "center", justifyContent: "center" }}
+              style={{ height: 32, padding: "0 12px", border: "none", background: "#eff6ff", borderRadius: 6, cursor: "pointer", fontSize: 12, fontWeight: 700, color: "#2563eb", display: "flex", alignItems: "center", justifyContent: "center", transition: "all 0.2s" }}
+              onMouseEnter={(e) => e.currentTarget.style.background = "#dbeafe"}
+              onMouseLeave={(e) => e.currentTarget.style.background = "#eff6ff"}
             >
               TODAY
             </button>
-            <span style={{ padding: "0 12px", fontSize: 14, fontWeight: 600, color: "#0f172a", minWidth: 110, textAlign: "center", display: "inline-flex", alignItems: "center", justifyContent: "center" }}>
+            <span style={{ padding: "0 8px", fontSize: 14, fontWeight: 700, color: "#0f172a", minWidth: 100, textAlign: "center" }}>
               {formatDate(roster.selectedDate)}
             </span>
             <button
@@ -1788,25 +1794,29 @@ export default function SettingsPage() {
               onClick={() => handleDateNav(1)}
               disabled={!rosterModuleEnabled}
               title="Next Day"
-              style={{ display: "flex", alignItems: "center", justifyContent: "center", width: 34, height: 34, border: "1px solid #cbd5e1", background: "#fff", borderRadius: 6, cursor: "pointer", color: "#475569" }}
+              style={{ display: "flex", alignItems: "center", justifyContent: "center", width: 32, height: 32, border: "none", background: "transparent", borderRadius: 6, cursor: "pointer", color: "#475569", transition: "all 0.2s" }}
+              onMouseEnter={(e) => e.currentTarget.style.background = "#f1f5f9"}
+              onMouseLeave={(e) => e.currentTarget.style.background = "transparent"}
             >
-              <ChevronRight size={16} />
-            </button>
-            <button
-              type="button"
-              onClick={applyShiftTemplate}
-              disabled={!rosterModuleEnabled}
-              style={{ marginLeft: 8, height: 34, padding: "0 16px", background: "#2563eb", color: "#fff", border: "none", borderRadius: 6, cursor: "pointer", fontSize: 13, fontWeight: 600, display: "flex", alignItems: "center", justifyContent: "center" }}
-            >
-              Apply
+              <ChevronRight size={18} />
             </button>
           </div>
+          <button
+            type="button"
+            onClick={applyShiftTemplate}
+            disabled={!rosterModuleEnabled}
+            style={{ marginLeft: 4, height: 46, padding: "0 24px", background: "linear-gradient(135deg, #2563eb, #1d4ed8)", color: "#fff", border: "none", borderRadius: 10, cursor: "pointer", fontSize: 14, fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center", transition: "all 0.2s", boxShadow: "0 4px 12px rgba(37, 99, 235, 0.2)" }}
+            onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(-1px)'; e.currentTarget.style.boxShadow = '0 6px 16px rgba(37, 99, 235, 0.3)'; }}
+            onMouseLeave={(e) => { e.currentTarget.style.transform = 'none'; e.currentTarget.style.boxShadow = '0 4px 12px rgba(37, 99, 235, 0.2)'; }}
+          >
+            Apply Pattern
+          </button>
         </div>
 
-        <div className="settings-table-wrap" style={{ background: "#fff", border: "1px solid #e2e8f0", borderRadius: 8, overflowX: "auto" }}>
-          <div style={{ minWidth: 850 }}>
-            <div style={{ padding: "12px 16px", borderBottom: "1px solid #f1f5f9", background: "#f8fafc", display: "grid", gridTemplateColumns: "100px 1fr 180px 180px 120px 1fr", alignItems: "center", gap: 12, fontSize: 14, fontWeight: 600, color: "#475569" }}>
-            <label style={{ display: "flex", alignItems: "center", gap: 8, cursor: "pointer" }}>
+        <div className="settings-table-wrap cpn-card" style={{ background: "#fff", borderRadius: 12, overflow: "hidden", border: "1px solid #e2e8f0", boxShadow: "0 4px 12px rgba(0,0,0,0.03)" }}>
+          <div style={{ minWidth: 900 }}>
+            <div style={{ padding: "16px 20px", borderBottom: "1px solid #e2e8f0", background: "#f8fafc", display: "grid", gridTemplateColumns: "120px 1fr 180px 180px 120px 1fr", alignItems: "center", gap: 16, fontSize: 13, fontWeight: 700, color: "#64748b", textTransform: "uppercase", letterSpacing: 0.5 }}>
+            <label style={{ display: "flex", alignItems: "center", gap: 10, cursor: "pointer" }}>
               <input
                 type="checkbox"
                 disabled={!rosterModuleEnabled}
@@ -1817,81 +1827,87 @@ export default function SettingsPage() {
                     rows: roster.rows.map((row) => visibleIds.has(row.id) ? { ...row, applyToAll: event.target.checked } : row)
                   });
                 }}
-                style={{ width: 16, height: 16 }}
+                style={{ width: 18, height: 18, accentColor: "#2563eb", cursor: "pointer" }}
               />
-              <span>Apply to All</span>
+              <span>Apply All</span>
             </label>
             <div>Staff Name</div>
             <div>From Time</div>
             <div>To Time</div>
-            <div>Is Working</div>
+            <div>Working?</div>
             <div>Add Break</div>
           </div>
           {visibleRosterRows.map((row) => (
-            <div key={row.id} style={{ padding: "12px 16px", borderBottom: "1px solid #f1f5f9", display: "grid", gridTemplateColumns: "100px 1fr 180px 180px 120px 1fr", alignItems: "center", gap: 12 }}>
+            <div key={row.id} style={{ padding: "12px 20px", borderBottom: "1px solid #f1f5f9", display: "grid", gridTemplateColumns: "120px 1fr 180px 180px 120px 1fr", alignItems: "center", gap: 16, background: "#fff", transition: "background 0.2s" }} onMouseEnter={(e) => e.currentTarget.style.background = "#f8fafc"} onMouseLeave={(e) => e.currentTarget.style.background = "#fff"}>
               <input
                 type="checkbox"
                 disabled={!rosterModuleEnabled}
                 checked={Boolean(row.applyToAll)}
                 onChange={(event) => updateRow(row.id, { applyToAll: event.target.checked })}
-                style={{ width: 16, height: 16 }}
+                style={{ width: 18, height: 18, accentColor: "#2563eb", cursor: "pointer" }}
               />
-              <div style={{ fontSize: 14, color: "#0f172a", fontWeight: 500 }}>{row.staffName}</div>
+              <div style={{ fontSize: 15, color: "#1e293b", fontWeight: 600 }}>{row.staffName}</div>
               <input
                 type="time"
-                disabled={!rosterModuleEnabled}
+                disabled={!rosterModuleEnabled || !row.isWorking}
                 value={row.fromTime || "09:00"}
                 onChange={(event) => updateRow(row.id, { fromTime: event.target.value })}
-                style={{ width: "100%", padding: "8px 10px", border: "1px solid #cbd5e1", borderRadius: 6, fontSize: 13, background: "#f8fafc" }}
+                style={{ width: "100%", padding: "10px 12px", border: "1px solid #cbd5e1", borderRadius: 8, fontSize: 14, outline: "none", transition: "all 0.2s", opacity: row.isWorking ? 1 : 0.5 }}
+                onFocus={(e) => { e.target.style.borderColor = "#3b82f6"; e.target.style.boxShadow = "0 0 0 3px rgba(59, 130, 246, 0.1)"; }}
+                onBlur={(e) => { e.target.style.borderColor = "#cbd5e1"; e.target.style.boxShadow = "none"; }}
               />
               <input
                 type="time"
-                disabled={!rosterModuleEnabled}
+                disabled={!rosterModuleEnabled || !row.isWorking}
                 value={row.toTime || "21:00"}
                 onChange={(event) => updateRow(row.id, { toTime: event.target.value })}
-                style={{ width: "100%", padding: "8px 10px", border: "1px solid #cbd5e1", borderRadius: 6, fontSize: 13, background: "#f8fafc" }}
+                style={{ width: "100%", padding: "10px 12px", border: "1px solid #cbd5e1", borderRadius: 8, fontSize: 14, outline: "none", transition: "all 0.2s", opacity: row.isWorking ? 1 : 0.5 }}
+                onFocus={(e) => { e.target.style.borderColor = "#3b82f6"; e.target.style.boxShadow = "0 0 0 3px rgba(59, 130, 246, 0.1)"; }}
+                onBlur={(e) => { e.target.style.borderColor = "#cbd5e1"; e.target.style.boxShadow = "none"; }}
               />
-              <input
-                type="checkbox"
-                disabled={!rosterModuleEnabled}
-                checked={Boolean(row.isWorking)}
-                onChange={(event) => updateRow(row.id, { isWorking: event.target.checked })}
-                style={{ width: 18, height: 18 }}
-              />
+              <label style={{ display: "flex", alignItems: "center" }}>
+                <ToggleSwitch checked={Boolean(row.isWorking)} onChange={(e) => updateRow(row.id, { isWorking: e.target.checked })} />
+              </label>
               <input
                 type="text"
-                disabled={!rosterModuleEnabled}
+                disabled={!rosterModuleEnabled || !row.isWorking}
                 value={row.breakLabel || ""}
                 onChange={(event) => updateRow(row.id, { breakLabel: event.target.value })}
-                placeholder="Add Break"
-                style={{ width: "100%", padding: "8px 10px", border: "1px solid #cbd5e1", borderRadius: 6, fontSize: 13 }}
+                placeholder="e.g. Lunch (1pm-2pm)"
+                style={{ width: "100%", padding: "10px 12px", border: "1px solid #cbd5e1", borderRadius: 8, fontSize: 14, outline: "none", transition: "all 0.2s", opacity: row.isWorking ? 1 : 0.5 }}
+                onFocus={(e) => { e.target.style.borderColor = "#3b82f6"; e.target.style.boxShadow = "0 0 0 3px rgba(59, 130, 246, 0.1)"; }}
+                onBlur={(e) => { e.target.style.borderColor = "#cbd5e1"; e.target.style.boxShadow = "none"; }}
               />
             </div>
           ))}
           {visibleRosterRows.length === 0 && (
-            <div style={{ padding: "30px", textAlign: "center", color: "#64748b" }}>
+            <div style={{ padding: "40px", textAlign: "center", color: "#64748b", fontSize: 15, background: "#f8fafc" }}>
               <strong>No staff members found in this branch</strong>
             </div>
           )}
           </div>
         </div>
 
-        <div style={{ display: "flex", justifyContent: "flex-end", gap: 10, marginTop: 20 }}>
+        <div style={{ display: "flex", justifyContent: "flex-end", gap: 12, marginTop: 24, paddingRight: 4 }}>
           <button
             type="button"
             onClick={() => {
               updateAdvancedObject("rosterManagement", { rows: [], selectedDate: new Date().toISOString().split("T")[0], useShiftId: "", applyFor: 1 });
             }}
-            style={{ padding: "10px 24px", background: "#fff", border: "1px solid #cbd5e1", color: "#475569", borderRadius: 8, fontWeight: 600, cursor: "pointer", fontSize: 14 }}
+            style={{ padding: "12px 24px", background: "#fff", border: "1px solid #cbd5e1", color: "#475569", borderRadius: 10, fontWeight: 600, cursor: "pointer", fontSize: 14, transition: "all 0.2s" }}
+            onMouseEnter={(e) => e.currentTarget.style.background = "#f1f5f9"}
+            onMouseLeave={(e) => e.currentTarget.style.background = "#fff"}
           >
             Cancel
           </button>
           <button
             type="button"
             onClick={handleSaveRoster}
-            style={{ padding: "10px 32px", background: "var(--button-bg-solid, #3b82f6)", color: "#fff", border: "none", borderRadius: 8, fontWeight: 700, cursor: "pointer", fontSize: 14 }}
+            style={{ padding: "12px 32px", background: "linear-gradient(135deg, #2563eb, #1d4ed8)", color: "#fff", border: "none", borderRadius: 10, fontWeight: 700, cursor: "pointer", fontSize: 14, transition: "all 0.2s", boxShadow: "0 4px 12px rgba(37, 99, 235, 0.2)" }}
+            onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(-1px)'; e.currentTarget.style.boxShadow = '0 6px 16px rgba(37, 99, 235, 0.3)'; }}
+            onMouseLeave={(e) => { e.currentTarget.style.transform = 'none'; e.currentTarget.style.boxShadow = '0 4px 12px rgba(37, 99, 235, 0.2)'; }}
           >
-            Save
+            Save Roster
           </button>
         </div>
       </>
