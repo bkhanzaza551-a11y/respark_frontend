@@ -351,7 +351,6 @@ export default function ReferralProgramPage() {
               )}
             </>
           ) : (
-          ) : (
             <form onSubmit={handleCouponSubmit} className="cpn-card anim-fade" style={{ padding: "32px", maxWidth: 900, margin: "0 auto", background: "#ffffff", borderRadius: 16, boxShadow: "0 10px 25px -5px rgba(0,0,0,0.05), 0 8px 10px -6px rgba(0,0,0,0.01)", border: "1px solid #e2e8f0" }}>
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 32, borderBottom: "1px solid #f1f5f9", paddingBottom: 20 }}>
                 <h2 style={{ margin: 0, fontSize: '1.5rem', fontWeight: 800, color: '#0f172a' }}>{editingCoupon ? "Edit Referral Coupon" : "Create New Referral Coupon"}</h2>
