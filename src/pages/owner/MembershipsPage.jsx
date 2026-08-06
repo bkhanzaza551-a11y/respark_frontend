@@ -85,6 +85,7 @@ export default function MembershipsPage() {
   const [status, setStatus] = useState({ error: "", success: "" });
   const [loading, setLoading] = useState(true);
   const [deletingId, setDeletingId] = useState(null);
+  const [searchQuery, setSearchQuery] = useState("");
   
   const [showMembershipModal, setShowMembershipModal] = useState(false);
   const [showPackageModal, setShowPackageModal] = useState(false);
