@@ -8,6 +8,7 @@ import ModuleTabs from "../../components/ModuleTabs";
 import { formatApiError } from "../../utils/apiError";
 import { normalizeImageUrl } from "../../utils/imageUrl";
 import PageLoader from "../../components/PageLoader";
+import ToggleSwitch from "../../components/common/ToggleSwitch";
 import { CalendarDays, CheckCircle2, ChevronLeft, ChevronRight, Clock, Download, Edit3, Eye, FileText, History, LogIn, LogOut, MapPin, PlusCircle, Printer, RotateCcw, Save, Timer, User, UserPlus, Users, XCircle, Activity, List, LayoutDashboard } from "lucide-react";
 
 const emptyAttendanceSettings = {
@@ -615,24 +616,33 @@ export default function PayrollPage() {
               </div>
 
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginTop: 24, background: "white", padding: 20, borderRadius: 12, border: "1px solid #e2e8f0" }}>
-                <label style={{ display: "flex", alignItems: "center", gap: 12, cursor: "pointer" }}>
-                  <input type="checkbox" style={{ width: 18, height: 18 }} checked={attendanceSettings.overtimeEnabled} onChange={(e) => setAttendanceSettings((current) => ({ ...current, overtimeEnabled: e.target.checked }))} />
-                  <span style={{ fontWeight: 500 }}>Enable overtime calculation</span>
-                </label>
+                <ToggleSwitch 
+                  checked={attendanceSettings.overtimeEnabled} 
+                  onChange={(e) => setAttendanceSettings((current) => ({ ...current, overtimeEnabled: e.target.checked }))} 
+                  label="Enable overtime calculation" 
+                  color="#2563eb"
+                  labelColor="#0f172a"
+                />
                 {attendanceSettings.overtimeEnabled && (
                   <label style={{ display: "flex", alignItems: "center", gap: 12 }}>
                     <span style={{ fontWeight: 500, color: "#475569" }}>Threshold (mins)</span>
                     <input type="number" min="60" max="720" style={{ padding: "8px 12px", borderRadius: 8, border: "1px solid #cbd5e1", width: 100 }} value={attendanceSettings.overtimeThresholdMinutes} onChange={(e) => setAttendanceSettings((current) => ({ ...current, overtimeThresholdMinutes: e.target.value }))} />
                   </label>
                 )}
-                <label style={{ display: "flex", alignItems: "center", gap: 12, cursor: "pointer" }}>
-                  <input type="checkbox" style={{ width: 18, height: 18 }} checked={attendanceSettings.checkoutSelfieRequired} onChange={(e) => setAttendanceSettings((current) => ({ ...current, checkoutSelfieRequired: e.target.checked }))} />
-                  <span style={{ fontWeight: 500 }}>Require selfie on check-out</span>
-                </label>
-                <label style={{ display: "flex", alignItems: "center", gap: 12, cursor: "pointer" }}>
-                  <input type="checkbox" style={{ width: 18, height: 18 }} checked={attendanceSettings.allowManualAttendanceEdits} onChange={(e) => setAttendanceSettings((current) => ({ ...current, allowManualAttendanceEdits: e.target.checked }))} />
-                  <span style={{ fontWeight: 500 }}>Allow manual attendance edits</span>
-                </label>
+                <ToggleSwitch 
+                  checked={attendanceSettings.checkoutSelfieRequired} 
+                  onChange={(e) => setAttendanceSettings((current) => ({ ...current, checkoutSelfieRequired: e.target.checked }))} 
+                  label="Require selfie on check-out" 
+                  color="#2563eb"
+                  labelColor="#0f172a"
+                />
+                <ToggleSwitch 
+                  checked={attendanceSettings.allowManualAttendanceEdits} 
+                  onChange={(e) => setAttendanceSettings((current) => ({ ...current, allowManualAttendanceEdits: e.target.checked }))} 
+                  label="Allow manual attendance edits" 
+                  color="#2563eb"
+                  labelColor="#0f172a"
+                />
               </div>
 
               <div style={{ display: "flex", justifyContent: "flex-end", marginTop: 24 }}>
