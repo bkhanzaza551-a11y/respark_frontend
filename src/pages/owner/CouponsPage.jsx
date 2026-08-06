@@ -1,3 +1,4 @@
+import { Search, Plus, Edit2, Trash2, X, Power, PowerOff } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { api } from "../../api/client";
@@ -38,6 +39,8 @@ export default function CouponsPage() {
   const [giftCardForm, setGiftCardForm] = useState(emptyGiftCard);
   const [status, setStatus] = useState({ error: "", success: "" });
   const [loading, setLoading] = useState(true);
+  const [showCouponModal, setShowCouponModal] = useState(false);
+  const [showGiftCardModal, setShowGiftCardModal] = useState(false);
   const [gcSearch, setGcSearch] = useState("");
   const [editingGc, setEditingGc] = useState(null);
   const [couponSearch, setCouponSearch] = useState("");
@@ -127,6 +130,7 @@ export default function CouponsPage() {
       }
       setCouponForm(defaultCouponForm);
       setEditingCoupon(null);
+      setShowCouponModal(false);
       await load();
     } catch (error) {
       setStatus({ error: formatApiError(error, "Could not save coupon"), success: "" });
@@ -168,6 +172,7 @@ export default function CouponsPage() {
       }
       setGiftCardForm(emptyGiftCard);
       setEditingGc(null);
+      setShowGiftCardModal(false);
       await load();
     } catch (error) {
       setStatus({ error: formatApiError(error, "Could not save gift card"), success: "" });
@@ -280,378 +285,141 @@ export default function CouponsPage() {
       {loading && <PageLoader title="Loading promotions workspace" message="Bringing together coupon rules, gift card balances, and redemption insights." />}
 
       {!loading && mode === "coupons" && (
-        <div className="coupons-layout anim-fade">
-          {/* Left Column - List of Coupons */}
-          <div className="coupons-left-col cpn-card" style={{ display: "flex", flexDirection: "column", padding: "20px" }}>
-            <div style={{ marginBottom: 16 }}>
+        <div className="panel-card anim-fade">
+          <div className="rpt-topbar" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24, flexWrap: 'wrap', gap: 16 }}>
+            <div style={{ position: 'relative', width: '300px' }}>
+              <Search style={{ position: 'absolute', left: 12, top: 10, color: '#94a3b8' }} size={18} />
               <input 
-                placeholder="Search" 
+                placeholder="Search coupons..." 
                 value={couponSearch} 
                 onChange={(e) => setCouponSearch(e.target.value)} 
-                className="cpn-input"
-                style={{ background: "#f8fafc" }}
+                style={{ width: '100%', padding: '10px 16px 10px 40px', borderRadius: 8, border: '1px solid #cbd5e1', fontSize: '0.95rem', outline: 'none' }}
               />
             </div>
-            
-            <div style={{ flex: 1, overflowY: "auto", display: "flex", flexDirection: "column", gap: 8, maxHeight: 480, paddingRight: 4 }}>
-              {filteredCoupons.map((row) => {
-                const isSelected = editingCoupon && editingCoupon.id === row.id;
-                return (
-                  <div 
-                    key={row.id} 
-                    style={{ 
-                      padding: "16px 20px", 
-                      borderRadius: 12, 
-                      cursor: "pointer", 
-                      background: isSelected ? "#eff6ff" : "white",
-                      border: isSelected ? "2px solid #3b82f6" : "1px solid #e2e8f0",
-                      transition: "all 0.2s",
-                      display: "flex",
-                      justifyContent: "space-between",
-                      alignItems: "center",
-                      gap: 12,
-                      boxShadow: isSelected ? "0 4px 12px rgba(59, 130, 246, 0.1)" : "none"
-                    }}
-                    onClick={() => handleEditCoupon(row)}
-                  >
-                    <div>
-                      <div style={{ fontWeight: 800, color: isSelected ? "#1e40af" : "#0f172a", fontSize: "1rem" }}>
-                        {row.discountType === "PERCENT" ? `FLAT ${Number(row.discountValue)}% OFF` : row.discountType === "CAMPAIGN" ? `CAMPAIGN ${Number(row.discountValue)}% OFF` : `FLAT ${Number(row.discountValue)} Rs OFF`}
-                      </div>
-                      <div style={{ color: isSelected ? "#3b82f6" : "#64748b", fontSize: "0.85rem", marginTop: 6, fontWeight: 600, letterSpacing: 0.5, textTransform: "uppercase" }}>
-                        {row.code}
-                      </div>
-                    </div>
-                    <button
-                      onClick={(e) => { e.stopPropagation(); deleteCoupon(row.id); }}
-                      title="Delete coupon"
-                      style={{
-                        width: 32,
-                        height: 32,
-                        borderRadius: "50%",
-                        background: "#fee2e2",
-                        border: "none",
-                        color: "#ef4444",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        cursor: "pointer",
-                        transition: "all 0.2s"
-                      }}
-                      onMouseEnter={(e) => e.currentTarget.style.background = "#fecaca"}
-                      onMouseLeave={(e) => e.currentTarget.style.background = "#fee2e2"}
-                    >
-                      ✕
-                    </button>
-                  </div>
-                );
-              })}
-              {!filteredCoupons.length && (
-                <div style={{ textAlign: "center", color: "#94a3b8", padding: "40px 10px", fontSize: "0.9rem" }}>No coupons found</div>
-              )}
-            </div>
             <button 
-              onClick={() => { setEditingCoupon(null); setCouponForm(defaultCouponForm); setStatus({ error: "", success: "" }); }}
-              className="cpn-btn cpn-btn-primary"
-              style={{ marginTop: 20, width: "100%", justifyContent: "center" }}
+              className="primary-button" 
+              onClick={() => { setEditingCoupon(null); setCouponForm(defaultCouponForm); setShowCouponModal(true); setStatus({ error: "", success: "" }); }}
+              style={{ display: 'flex', alignItems: 'center', gap: 8 }}
             >
-              + Create New Coupon
+              <Plus size={18} /> Create Coupon
             </button>
           </div>
-
-          {/* Right Column - Coupon Form */}
-          <div className="coupons-right-col cpn-card" style={{ display: "flex", flexDirection: "column" }}>
-            <h2 style={{ marginTop: 0, marginBottom: 28, fontSize: "1.5rem", fontWeight: 800, color: "#0f172a", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-              <span>{editingCoupon ? "Update Coupon" : "Create Coupon"}</span>
-              <label style={{ display: "flex", alignItems: "center", gap: 10, cursor: "pointer", background: couponForm.isActive ? "#dcfce7" : "#f1f5f9", padding: "8px 16px", borderRadius: 30, transition: "all 0.3s" }}>
-                <span style={{ fontSize: "0.85rem", fontWeight: 700, color: couponForm.isActive ? "#166534" : "#64748b", textTransform: "uppercase" }}>{couponForm.isActive ? "Active" : "Inactive"}</span>
-                <input 
-                  type="checkbox" 
-                  checked={couponForm.isActive} 
-                  onChange={(e) => setCouponForm({ ...couponForm, isActive: e.target.checked })}
-                  style={{ width: 18, height: 18, cursor: "pointer", accentColor: "#16a34a" }}
-                />
-              </label>
-            </h2>
-            
-            <form onSubmit={saveCoupon} style={{ display: "flex", flexDirection: "column", gap: 24, flex: 1 }}>
-              
-              <div className="coupons-form-grid-1">
-                <label>
-                  <span className="cpn-label">Name</span>
-                  <input 
-                    placeholder="e.g. Summer Special" 
-                    required 
-                    value={couponForm.title} 
-                    onChange={(e) => setCouponForm({ ...couponForm, title: e.target.value })}
-                    className="cpn-input"
-                  />
-                </label>
-                
-                <label>
-                  <span className="cpn-label">Code</span>
-                  <input 
-                    placeholder="e.g. SUMMER20" 
-                    required 
-                    value={couponForm.code} 
-                    onChange={(e) => setCouponForm({ ...couponForm, code: e.target.value.toUpperCase() })}
-                    className="cpn-input"
-                    style={{ textTransform: "uppercase", fontWeight: 700, letterSpacing: 1 }}
-                  />
-                </label>
-              </div>
-
-              <label>
-                <span className="cpn-label">Description (Optional)</span>
-                <input 
-                  placeholder="e.g. Valid only for first-time customers..." 
-                  value={couponForm.description} 
-                  onChange={(e) => setCouponForm({ ...couponForm, description: e.target.value })}
-                  className="cpn-input"
-                />
-              </label>
-
-              <div className="coupons-form-grid-2">
-                <div>
-                  <span className="cpn-label">Benefit Type</span>
-                  <div className="cpn-radio-group">
-                    <div 
-                      className={`cpn-radio-option ${couponForm.discountType === "FIXED" ? "active" : ""}`}
-                      onClick={() => setCouponForm({ ...couponForm, discountType: "FIXED" })}
-                    >
-                      ₹ Fixed
-                    </div>
-                    <div 
-                      className={`cpn-radio-option ${couponForm.discountType === "PERCENT" ? "active" : ""}`}
-                      onClick={() => setCouponForm({ ...couponForm, discountType: "PERCENT" })}
-                    >
-                      % Percent
-                    </div>
-                    <div 
-                      className={`cpn-radio-option ${couponForm.discountType === "CAMPAIGN" ? "active" : ""}`}
-                      onClick={() => setCouponForm({ ...couponForm, discountType: "CAMPAIGN" })}
-                    >
-                      📣 Campaign
-                    </div>
-                  </div>
-                </div>
-                
-                <label>
-                  <span className="cpn-label">Benefit Value {couponForm.discountType === "FIXED" ? "(₹)" : "(%)"}</span>
-                  <input 
-                    type="number" 
-                    min="0" 
-                    placeholder="50" 
-                    required 
-                    value={couponForm.discountValue} 
-                    onChange={(e) => setCouponForm({ ...couponForm, discountValue: e.target.value })}
-                    className="cpn-input"
-                  />
-                </label>
-                
-                <label>
-                  <span className="cpn-label">Coupon Activated Date</span>
-                  <input 
-                    type="date" 
-                    required 
-                    value={couponForm.startsAt} 
-                    onChange={(e) => setCouponForm({ ...couponForm, startsAt: e.target.value })}
-                    min={new Date().toISOString().slice(0, 10)}
-                    className="cpn-input"
-                  />
-                </label>
-              </div>
-
-              <div className="coupons-form-grid-2">
-                <label>
-                  <span className="cpn-label">Min. Bill Amount (₹)</span>
-                  <input 
-                    type="number" 
-                    min="0" 
-                    placeholder="0 for none" 
-                    value={couponForm.minBillAmount} 
-                    onChange={(e) => setCouponForm({ ...couponForm, minBillAmount: e.target.value })}
-                    className="cpn-input"
-                  />
-                </label>
-                
-                <label>
-                  <span className="cpn-label">Usage Limit (Total)</span>
-                  <input 
-                    type="number" 
-                    min="0" 
-                    placeholder="Leave empty for unlimited" 
-                    value={couponForm.usageLimit} 
-                    onChange={(e) => setCouponForm({ ...couponForm, usageLimit: e.target.value })}
-                    className="cpn-input"
-                  />
-                </label>
-                
-                <label>
-                  <span className="cpn-label">Validity (Days)</span>
-                  <input 
-                    type="number" 
-                    min="1" 
-                    placeholder="90" 
-                    required 
-                    value={couponForm.validityDays} 
-                    onChange={(e) => setCouponForm({ ...couponForm, validityDays: e.target.value })}
-                    className="cpn-input"
-                  />
-                </label>
-              </div>
-
-              {/* Toggle Row: Private */}
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "16px 20px", border: "1px solid #e2e8f0", borderRadius: 12, background: "#f8fafc", marginTop: 10 }}>
-                <div>
-                  <div style={{ fontWeight: 600, color: "#1e293b", fontSize: "0.9rem" }}>Private</div>
-                  <div style={{ fontSize: "0.8rem", color: "#64748b", marginTop: 2 }}>This coupon will not be visible on the public online catalog.</div>
-                </div>
-                <div 
-                  onClick={() => setCouponForm({ ...couponForm, isPrivate: !couponForm.isPrivate })}
-                  style={{ 
-                    width: 44, 
-                    height: 22, 
-                    background: couponForm.isPrivate ? "#3b82f6" : "#cbd5e1", 
-                    borderRadius: 11, 
-                    padding: 2, 
-                    cursor: "pointer", 
-                    display: "flex", 
-                    alignItems: "center", 
-                    justifyContent: couponForm.isPrivate ? "flex-end" : "flex-start",
-                    transition: "all 0.2s",
-                    boxSizing: "border-box"
-                  }}
-                >
-                  <div style={{ width: 18, height: 18, background: "white", borderRadius: "50%", boxShadow: "0 1px 3px rgba(0,0,0,0.15)" }} />
-                </div>
-              </div>
-
-              {/* Form Buttons */}
-              <div style={{ display: "flex", justifyContent: "flex-end", gap: 12, marginTop: "auto", paddingTop: 20 }}>
-                {editingCoupon && (
-                  <button 
-                    type="button" 
-                    onClick={() => deleteCoupon(editingCoupon.id)}
-                    className="cpn-btn cpn-btn-secondary"
-                    style={{ marginRight: "auto", color: "#dc2626", borderColor: "#fca5a5", background: "#fef2f2" }}
-                  >
-                    Delete Coupon
-                  </button>
-                )}
-                
-                <button 
-                  type="button" 
-                  onClick={() => { setEditingCoupon(null); setCouponForm(defaultCouponForm); setStatus({ error: "", success: "" }); }}
-                  className="cpn-btn cpn-btn-secondary"
-                >
-                  Cancel
-                </button>
-                
-                <button 
-                  type="submit" 
-                  className="cpn-btn cpn-btn-primary"
-                >
-                  {editingCoupon ? "Save Changes" : "Create Coupon"}
-                </button>
-              </div>
-            </form>
+          
+          <div className="table-responsive">
+            <table className="rpt-table">
+              <thead>
+                <tr>
+                  <th>Coupon Title</th>
+                  <th>Code</th>
+                  <th>Benefit</th>
+                  <th>Status</th>
+                  <th style={{ textAlign: 'right' }}>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {filteredCoupons.map((row) => (
+                  <tr key={row.id}>
+                    <td style={{ fontWeight: 600, color: '#1e293b' }}>{row.title}</td>
+                    <td><span style={{ background: '#f1f5f9', padding: '4px 8px', borderRadius: 6, fontWeight: 700, fontSize: '0.85rem', color: '#475569', letterSpacing: 1 }}>{row.code}</span></td>
+                    <td style={{ fontWeight: 600, color: '#3b82f6' }}>{row.discountType === "PERCENT" ? `${Number(row.discountValue)}% OFF` : row.discountType === "CAMPAIGN" ? `CAMPAIGN ${Number(row.discountValue)}%` : `₹${Number(row.discountValue)} OFF`}</td>
+                    <td>
+                      <span className={`badge badge-${!row.isArchived ? "active" : "inactive"}`} style={{ fontSize: '0.75rem', padding: '4px 8px', borderRadius: '20px', background: !row.isArchived ? '#dcfce7' : '#f1f5f9', color: !row.isArchived ? '#166534' : '#64748b' }}>
+                        {!row.isArchived ? "Active" : "Inactive"}
+                      </span>
+                    </td>
+                    <td style={{ textAlign: 'right' }}>
+                      <div style={{ display: 'flex', gap: 8, justifyContent: 'flex-end' }}>
+                        <button onClick={() => { handleEditCoupon(row); setShowCouponModal(true); }} style={{ background: 'transparent', border: 'none', color: '#64748b', cursor: 'pointer', padding: 6, borderRadius: '50%' }} onMouseEnter={(e) => e.currentTarget.style.background = '#f1f5f9'} onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'} title="Edit">
+                          <Edit2 size={16} />
+                        </button>
+                        <button onClick={() => deleteCoupon(row.id)} style={{ background: 'transparent', border: 'none', color: '#ef4444', cursor: 'pointer', padding: 6, borderRadius: '50%' }} onMouseEnter={(e) => e.currentTarget.style.background = '#fee2e2'} onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'} title="Delete">
+                          <Trash2 size={16} />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            {!filteredCoupons.length && (
+              <EmptyState title="No coupons found" message="Try adjusting your search or create a new coupon." />
+            )}
           </div>
         </div>
       )}
 
       {!loading && mode === "giftCards" && (
-        <div className="anim-fade">
-          <div className="cpn-card" style={{ marginBottom: 24 }}>
-            <h3 style={{ marginTop: 0, marginBottom: 20, fontSize: "1.4rem", fontWeight: 800, color: "#0f172a" }}>
-              {editingGc ? "Edit Gift Card" : "Issue New Gift Card"}
-            </h3>
-            <form onSubmit={saveGiftCard}>
-              <div className="coupons-form-grid-1" style={{ gridTemplateColumns: "1fr 1fr 1fr 1fr" }}>
-                <label>
-                  <span className="cpn-label">Code</span>
-                  <input className="cpn-input" placeholder="e.g. GC-2024-001" required value={giftCardForm.code} onChange={(e) => setGiftCardForm({ ...giftCardForm, code: e.target.value.toUpperCase() })} style={{ textTransform: "uppercase", fontWeight: 600 }} />
-                </label>
-                <label>
-                  <span className="cpn-label">Title</span>
-                  <input className="cpn-input" placeholder="e.g. Birthday Voucher" required value={giftCardForm.title} onChange={(e) => setGiftCardForm({ ...giftCardForm, title: e.target.value })} />
-                </label>
-                <label>
-                  <span className="cpn-label">Amount (₹)</span>
-                  <input className="cpn-input" type="number" min="1" placeholder="e.g. 1000" required value={giftCardForm.originalAmount} onChange={(e) => setGiftCardForm({ ...giftCardForm, originalAmount: e.target.value })} />
-                </label>
-                <label>
-                  <span className="cpn-label">Note (Optional)</span>
-                  <input className="cpn-input" placeholder="Internal note" value={giftCardForm.note} onChange={(e) => setGiftCardForm({ ...giftCardForm, note: e.target.value })} />
-                </label>
-              </div>
-              <div style={{ display: "flex", gap: 12, justifyContent: "flex-end", marginTop: 24 }}>
-                {editingGc && <button type="button" className="cpn-btn cpn-btn-secondary" onClick={() => { setEditingGc(null); setGiftCardForm(emptyGiftCard); }}>Cancel Edit</button>}
-                <button type="submit" className="cpn-btn cpn-btn-primary">{editingGc ? "Update Gift Card" : "Create Gift Card"}</button>
-              </div>
-            </form>
+        <div className="panel-card anim-fade">
+          <div className="rpt-topbar" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24, flexWrap: 'wrap', gap: 16 }}>
+            <div style={{ position: 'relative', width: '300px' }}>
+              <Search style={{ position: 'absolute', left: 12, top: 10, color: '#94a3b8' }} size={18} />
+              <input 
+                placeholder="Search gift cards..." 
+                value={gcSearch} 
+                onChange={(e) => setGcSearch(e.target.value)} 
+                style={{ width: '100%', padding: '10px 16px 10px 40px', borderRadius: 8, border: '1px solid #cbd5e1', fontSize: '0.95rem', outline: 'none' }}
+              />
+            </div>
+            <button 
+              className="primary-button" 
+              onClick={() => { setEditingGc(null); setGiftCardForm(emptyGiftCard); setShowGiftCardModal(true); setStatus({ error: "", success: "" }); }}
+              style={{ display: 'flex', alignItems: 'center', gap: 8, background: '#7c3aed' }}
+            >
+              <Plus size={18} /> Issue Gift Card
+            </button>
           </div>
-
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
-            <h2 style={{ margin: 0, fontSize: "1.2rem", fontWeight: 700, color: "#1e293b" }}>Gift Card Inventory</h2>
-            <input 
-              className="cpn-input" 
-              placeholder="Search by code or title..." 
-              value={gcSearch} 
-              onChange={(e) => setGcSearch(e.target.value)} 
-              style={{ width: "300px", background: "white", padding: "10px 16px" }} 
-            />
-          </div>
-
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(min(100%, 300px), 1fr))", gap: 12, marginTop: 12 }}>
-            {filteredGiftCards.map((gc) => {
-              const balance = Number(gc.balanceAmount || 0);
-              const original = Number(gc.originalAmount || 0);
-              const usedPct = original > 0 ? Math.round(((original - balance) / original) * 100) : 0;
-              const isExpired = gc.expiresAt && new Date(gc.expiresAt) < new Date();
-              const daysLeft = gc.expiresAt ? Math.max(0, Math.ceil((new Date(gc.expiresAt) - new Date()) / (1000 * 60 * 60 * 24))) : null;
-              return (
-                <div key={gc.id} style={{ background: gc.isActive ? "linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%)" : "#f8fafc", border: gc.isActive ? "none" : "1px solid #e2e8f0", borderRadius: 16, padding: 24, color: gc.isActive ? "#fff" : "#64748b", position: "relative", overflow: "hidden", boxShadow: gc.isActive ? "0 10px 25px -5px rgba(79, 70, 229, 0.4)" : "none", transition: "transform 0.2s" }}>
-                  {gc.isActive && <div style={{ position: "absolute", top: -20, right: -20, width: 120, height: 120, borderRadius: "50%", background: "radial-gradient(circle, rgba(255,255,255,0.15) 0%, rgba(0,0,0,0) 70%)" }} />}
-                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 16, position: "relative", zIndex: 1 }}>
-                    <div>
-                      <div style={{ fontSize: 11, fontWeight: 600, textTransform: "uppercase", letterSpacing: 1, opacity: 0.8, marginBottom: 4 }}>Gift Card</div>
-                      <div style={{ fontSize: 18, fontWeight: 700, letterSpacing: 0.5 }}>{gc.code}</div>
-                    </div>
-                    <div style={{ display: "flex", gap: 4 }}>
-                      <span style={{ padding: "2px 8px", borderRadius: 20, fontSize: 11, fontWeight: 600, background: gc.isActive ? "rgba(255,255,255,0.2)" : "#e2e8f0" }}>
+          
+          <div className="table-responsive">
+            <table className="rpt-table">
+              <thead>
+                <tr>
+                  <th>Gift Card Code</th>
+                  <th>Title</th>
+                  <th>Balance</th>
+                  <th>Expires</th>
+                  <th>Status</th>
+                  <th style={{ textAlign: 'right' }}>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {filteredGiftCards.map((gc) => {
+                  const balance = Number(gc.balanceAmount || 0);
+                  const original = Number(gc.originalAmount || 0);
+                  const isExpired = gc.expiresAt && new Date(gc.expiresAt) < new Date();
+                  const daysLeft = gc.expiresAt ? Math.max(0, Math.ceil((new Date(gc.expiresAt) - new Date()) / (1000 * 60 * 60 * 24))) : null;
+                  
+                  return (
+                  <tr key={gc.id}>
+                    <td><span style={{ background: '#f3e8ff', padding: '4px 8px', borderRadius: 6, fontWeight: 700, fontSize: '0.85rem', color: '#6d28d9', letterSpacing: 1 }}>{gc.code}</span></td>
+                    <td style={{ fontWeight: 600, color: '#1e293b' }}>{gc.title}</td>
+                    <td><span style={{ fontWeight: 700, color: '#0f172a' }}>₹{balance.toFixed(0)}</span> <span style={{ fontSize: '0.85rem', color: '#64748b' }}>/ ₹{original.toFixed(0)}</span></td>
+                    <td style={{ color: isExpired ? '#ef4444' : '#475569' }}>{daysLeft !== null ? (isExpired ? "Expired" : `${daysLeft} days`) : "Never"}</td>
+                    <td>
+                      <span className="badge" style={{ fontSize: '0.75rem', padding: '4px 8px', borderRadius: '20px', background: isExpired ? '#fee2e2' : gc.isActive ? '#dcfce7' : '#f1f5f9', color: isExpired ? '#b91c1c' : gc.isActive ? '#166534' : '#64748b' }}>
                         {isExpired ? "Expired" : gc.isActive ? "Active" : "Inactive"}
                       </span>
-                    </div>
-                  </div>
-                  <div style={{ fontSize: 13, opacity: 0.9, marginBottom: 4 }}>{gc.title}</div>
-                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: 12, padding: "8px 0", borderTop: `1px solid ${gc.isActive ? "rgba(255,255,255,0.2)" : "#e2e8f0"}` }}>
-                    <div>
-                      <div style={{ fontSize: 11, opacity: 0.7 }}>Balance</div>
-                      <div style={{ fontSize: 20, fontWeight: 700 }}>₹{balance.toFixed(0)} <span style={{ fontSize: 12, opacity: 0.6 }}>/ ₹{original.toFixed(0)}</span></div>
-                    </div>
-                    {daysLeft !== null && (
-                      <div style={{ textAlign: "right" }}>
-                        <div style={{ fontSize: 11, opacity: 0.7 }}>Expires</div>
-                        <div style={{ fontSize: 13, fontWeight: 600 }}>{isExpired ? "Expired" : `${daysLeft} days`}</div>
+                    </td>
+                    <td style={{ textAlign: 'right' }}>
+                      <div style={{ display: 'flex', gap: 8, justifyContent: 'flex-end' }}>
+                        <button onClick={() => toggleGiftCardActive(gc)} style={{ background: 'transparent', border: 'none', color: gc.isActive ? '#f59e0b' : '#10b981', cursor: 'pointer', padding: 6, borderRadius: '50%' }} onMouseEnter={(e) => e.currentTarget.style.background = gc.isActive ? '#fef3c7' : '#d1fae5'} onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'} title={gc.isActive ? "Deactivate" : "Activate"}>
+                          {gc.isActive ? <PowerOff size={16} /> : <Power size={16} />}
+                        </button>
+                        <button onClick={() => { setEditingGc(gc); setGiftCardForm({ code: gc.code, title: gc.title, originalAmount: gc.originalAmount, note: gc.note || "" }); setShowGiftCardModal(true); }} style={{ background: 'transparent', border: 'none', color: '#64748b', cursor: 'pointer', padding: 6, borderRadius: '50%' }} onMouseEnter={(e) => e.currentTarget.style.background = '#f1f5f9'} onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'} title="Edit">
+                          <Edit2 size={16} />
+                        </button>
+                        <button onClick={() => deleteGiftCard(gc.id)} style={{ background: 'transparent', border: 'none', color: '#ef4444', cursor: 'pointer', padding: 6, borderRadius: '50%' }} onMouseEnter={(e) => e.currentTarget.style.background = '#fee2e2'} onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'} title="Delete">
+                          <Trash2 size={16} />
+                        </button>
                       </div>
-                    )}
-                  </div>
-                  {usedPct > 0 && (
-                    <div style={{ marginTop: 12, height: 6, borderRadius: 3, background: gc.isActive ? "rgba(255,255,255,0.1)" : "#e2e8f0", overflow: "hidden" }}>
-                      <div style={{ height: "100%", width: `${usedPct}%`, borderRadius: 3, background: gc.isActive ? "#38bdf8" : "#94a3b8" }} />
-                    </div>
-                  )}
-                  <div style={{ display: "flex", gap: 8, marginTop: 16, position: "relative", zIndex: 1 }}>
-                    <button onClick={() => { setEditingGc(gc); setGiftCardForm({ code: gc.code, title: gc.title, originalAmount: gc.originalAmount, note: gc.note || "" }); setStatus({ error: "", success: "" }); }} style={{ flex: 1, padding: "8px 0", fontSize: 13, background: gc.isActive ? "rgba(255,255,255,0.1)" : "#fff", border: `1px solid ${gc.isActive ? "rgba(255,255,255,0.2)" : "#cbd5e1"}`, borderRadius: 8, cursor: "pointer", color: gc.isActive ? "#fff" : "#3b82f6", fontWeight: 700, transition: "all 0.2s" }} onMouseEnter={e => e.currentTarget.style.background = gc.isActive ? "rgba(255,255,255,0.2)" : "#f8fafc"} onMouseLeave={e => e.currentTarget.style.background = gc.isActive ? "rgba(255,255,255,0.1)" : "#fff"}>Edit</button>
-                    <button onClick={() => toggleGiftCardActive(gc)} style={{ flex: 1, padding: "8px 0", fontSize: 13, background: gc.isActive ? "rgba(255,255,255,0.1)" : "#f0fdf4", border: `1px solid ${gc.isActive ? "rgba(255,255,255,0.2)" : "#bbf7d0"}`, borderRadius: 8, cursor: "pointer", color: gc.isActive ? "#e2e8f0" : "#166534", fontWeight: 700, transition: "all 0.2s" }} onMouseEnter={e => e.currentTarget.style.background = gc.isActive ? "rgba(255,255,255,0.2)" : "#dcfce7"} onMouseLeave={e => e.currentTarget.style.background = gc.isActive ? "rgba(255,255,255,0.1)" : "#f0fdf4"}>{gc.isActive ? "Deactivate" : "Activate"}</button>
-                    <button onClick={() => deleteGiftCard(gc.id)} style={{ padding: "8px 12px", fontSize: 13, background: "transparent", border: `1px solid ${gc.isActive ? "rgba(248,113,113,0.3)" : "#fecaca"}`, borderRadius: 8, cursor: "pointer", color: gc.isActive ? "#fca5a5" : "#ef4444", fontWeight: 700, transition: "all 0.2s" }} onMouseEnter={e => e.currentTarget.style.background = gc.isActive ? "rgba(248,113,113,0.15)" : "#fee2e2"} onMouseLeave={e => e.currentTarget.style.background = "transparent"}>&#x2715;</button>
-                  </div>
-                </div>
-              );
-            })}
+                    </td>
+                  </tr>
+                )})}
+              </tbody>
+            </table>
+            {!filteredGiftCards.length && (
+              <EmptyState title="No gift cards found" message="Try adjusting your search or issue a new gift card." />
+            )}
           </div>
-          {!filteredGiftCards.length && <EmptyState title="No gift cards found" message={gcSearch ? "No gift cards match your search." : "Create a gift card to issue vouchers for salon credit."} />}
         </div>
       )}
 
@@ -669,6 +437,70 @@ export default function CouponsPage() {
               </div>
             ))}
             {!reports.redemptions?.length && <EmptyState title="No promotion redemptions yet" message="Savings and gift card usage will appear here once customers begin using promotions." />}
+          </div>
+        </div>
+      )}
+      {showCouponModal && (
+        <div className="premium-modal-overlay" onClick={() => setShowCouponModal(false)} style={{ zIndex: 9999, background: 'rgba(0,0,0,0.6)' }}>
+          <div className="premium-modal-content" onClick={e => e.stopPropagation()} style={{ maxWidth: 600, padding: 32, borderRadius: 16 }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 }}>
+              <h2 style={{ margin: 0, fontSize: '1.5rem', fontWeight: 800, color: '#0f172a' }}>{editingCoupon ? "Update Coupon" : "Create Coupon"}</h2>
+              <button onClick={() => setShowCouponModal(false)} style={{ background: '#f1f5f9', border: 'none', color: '#475569', cursor: 'pointer', padding: 8, borderRadius: '50%', display: 'flex' }}><X size={18} /></button>
+            </div>
+            
+            <form onSubmit={saveCoupon} style={{ display: "flex", flexDirection: "column", gap: 20 }}>
+              <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: -10 }}>
+                <label style={{ display: "flex", alignItems: "center", gap: 10, cursor: "pointer", background: couponForm.isActive ? "#dcfce7" : "#f1f5f9", padding: "6px 14px", borderRadius: 30, transition: "all 0.3s" }}>
+                  <span style={{ fontSize: "0.8rem", fontWeight: 700, color: couponForm.isActive ? "#166534" : "#64748b", textTransform: "uppercase" }}>{couponForm.isActive ? "Active" : "Inactive"}</span>
+                  <input type="checkbox" checked={couponForm.isActive} onChange={(e) => setCouponForm({ ...couponForm, isActive: e.target.checked })} style={{ width: 16, height: 16, cursor: "pointer", accentColor: "#16a34a" }} />
+                </label>
+              </div>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
+                <label><span style={{ display: 'block', fontSize: '0.85rem', fontWeight: 700, color: '#475569', marginBottom: 6 }}>Name</span><input placeholder="e.g. Summer Special" required value={couponForm.title} onChange={(e) => setCouponForm({ ...couponForm, title: e.target.value })} style={{ width: '100%', padding: '10px 14px', borderRadius: 8, border: '1px solid #cbd5e1', boxSizing: 'border-box' }}/></label>
+                <label><span style={{ display: 'block', fontSize: '0.85rem', fontWeight: 700, color: '#475569', marginBottom: 6 }}>Code</span><input placeholder="e.g. SUMMER20" required value={couponForm.code} onChange={(e) => setCouponForm({ ...couponForm, code: e.target.value.toUpperCase() })} style={{ width: '100%', padding: '10px 14px', borderRadius: 8, border: '1px solid #cbd5e1', boxSizing: 'border-box', textTransform: 'uppercase', fontWeight: 700, letterSpacing: 1 }}/></label>
+              </div>
+              <label><span style={{ display: 'block', fontSize: '0.85rem', fontWeight: 700, color: '#475569', marginBottom: 6 }}>Description (Optional)</span><input placeholder="e.g. Valid only for first-time customers..." value={couponForm.description} onChange={(e) => setCouponForm({ ...couponForm, description: e.target.value })} style={{ width: '100%', padding: '10px 14px', borderRadius: 8, border: '1px solid #cbd5e1', boxSizing: 'border-box' }}/></label>
+              <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr 1fr', gap: 16 }}>
+                <div><span style={{ display: 'block', fontSize: '0.85rem', fontWeight: 700, color: '#475569', marginBottom: 6 }}>Benefit Type</span><div style={{ display: 'flex', background: '#f8fafc', padding: 4, borderRadius: 8, border: '1px solid #e2e8f0' }}><div onClick={() => setCouponForm({ ...couponForm, discountType: "FIXED" })} style={{ flex: 1, textAlign: 'center', padding: '6px 4px', borderRadius: 6, fontSize: '0.8rem', fontWeight: 600, cursor: 'pointer', background: couponForm.discountType === "FIXED" ? 'white' : 'transparent', boxShadow: couponForm.discountType === "FIXED" ? '0 1px 3px rgba(0,0,0,0.1)' : 'none', color: couponForm.discountType === "FIXED" ? '#0f172a' : '#64748b' }}>₹ Fixed</div><div onClick={() => setCouponForm({ ...couponForm, discountType: "PERCENT" })} style={{ flex: 1, textAlign: 'center', padding: '6px 4px', borderRadius: 6, fontSize: '0.8rem', fontWeight: 600, cursor: 'pointer', background: couponForm.discountType === "PERCENT" ? 'white' : 'transparent', boxShadow: couponForm.discountType === "PERCENT" ? '0 1px 3px rgba(0,0,0,0.1)' : 'none', color: couponForm.discountType === "PERCENT" ? '#0f172a' : '#64748b' }}>% Pct</div><div onClick={() => setCouponForm({ ...couponForm, discountType: "CAMPAIGN" })} style={{ flex: 1, textAlign: 'center', padding: '6px 4px', borderRadius: 6, fontSize: '0.8rem', fontWeight: 600, cursor: 'pointer', background: couponForm.discountType === "CAMPAIGN" ? 'white' : 'transparent', boxShadow: couponForm.discountType === "CAMPAIGN" ? '0 1px 3px rgba(0,0,0,0.1)' : 'none', color: couponForm.discountType === "CAMPAIGN" ? '#0f172a' : '#64748b' }}>📣 Camp</div></div></div>
+                <label><span style={{ display: 'block', fontSize: '0.85rem', fontWeight: 700, color: '#475569', marginBottom: 6 }}>Value {couponForm.discountType === "FIXED" ? "(₹)" : "(%)"}</span><input type="number" min="0" placeholder="50" required value={couponForm.discountValue} onChange={(e) => setCouponForm({ ...couponForm, discountValue: e.target.value })} style={{ width: '100%', padding: '10px 14px', borderRadius: 8, border: '1px solid #cbd5e1', boxSizing: 'border-box' }}/></label>
+                <label><span style={{ display: 'block', fontSize: '0.85rem', fontWeight: 700, color: '#475569', marginBottom: 6 }}>Activated Date</span><input type="date" required value={couponForm.startsAt} onChange={(e) => setCouponForm({ ...couponForm, startsAt: e.target.value })} min={new Date().toISOString().slice(0, 10)} style={{ width: '100%', padding: '10px 14px', borderRadius: 8, border: '1px solid #cbd5e1', boxSizing: 'border-box' }}/></label>
+              </div>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 16 }}>
+                <label><span style={{ display: 'block', fontSize: '0.85rem', fontWeight: 700, color: '#475569', marginBottom: 6 }}>Min. Bill (₹)</span><input type="number" min="0" placeholder="0 for none" value={couponForm.minBillAmount} onChange={(e) => setCouponForm({ ...couponForm, minBillAmount: e.target.value })} style={{ width: '100%', padding: '10px 14px', borderRadius: 8, border: '1px solid #cbd5e1', boxSizing: 'border-box' }}/></label>
+                <label><span style={{ display: 'block', fontSize: '0.85rem', fontWeight: 700, color: '#475569', marginBottom: 6 }}>Usage Limit</span><input type="number" min="0" placeholder="Unlimited" value={couponForm.usageLimit} onChange={(e) => setCouponForm({ ...couponForm, usageLimit: e.target.value })} style={{ width: '100%', padding: '10px 14px', borderRadius: 8, border: '1px solid #cbd5e1', boxSizing: 'border-box' }}/></label>
+                <label><span style={{ display: 'block', fontSize: '0.85rem', fontWeight: 700, color: '#475569', marginBottom: 6 }}>Validity (Days)</span><input type="number" min="1" placeholder="90" required value={couponForm.validityDays} onChange={(e) => setCouponForm({ ...couponForm, validityDays: e.target.value })} style={{ width: '100%', padding: '10px 14px', borderRadius: 8, border: '1px solid #cbd5e1', boxSizing: 'border-box' }}/></label>
+              </div>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px 16px', border: '1px solid #e2e8f0', borderRadius: 10, background: '#f8fafc' }}>
+                <div><div style={{ fontWeight: 600, color: '#1e293b', fontSize: '0.9rem' }}>Private Coupon</div><div style={{ fontSize: '0.8rem', color: '#64748b' }}>Will not be visible on the public online catalog.</div></div>
+                <div onClick={() => setCouponForm({ ...couponForm, isPrivate: !couponForm.isPrivate })} style={{ width: 44, height: 24, background: couponForm.isPrivate ? '#3b82f6' : '#cbd5e1', borderRadius: 12, padding: 2, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: couponForm.isPrivate ? 'flex-end' : 'flex-start', transition: 'all 0.2s', boxSizing: 'border-box' }}><div style={{ width: 20, height: 20, background: 'white', borderRadius: '50%', boxShadow: '0 1px 3px rgba(0,0,0,0.15)' }} /></div>
+              </div>
+              <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 12, marginTop: 16 }}>
+                <button type="button" onClick={() => setShowCouponModal(false)} className="secondary-button">Cancel</button>
+                <button type="submit" className="primary-button">{editingCoupon ? "Save Changes" : "Create Coupon"}</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {showGiftCardModal && (
+        <div className="premium-modal-overlay" onClick={() => setShowGiftCardModal(false)} style={{ zIndex: 9999, background: 'rgba(0,0,0,0.6)' }}>
+          <div className="premium-modal-content" onClick={e => e.stopPropagation()} style={{ maxWidth: 500, padding: 32, borderRadius: 16 }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 }}>
+              <h2 style={{ margin: 0, fontSize: '1.5rem', fontWeight: 800, color: '#0f172a' }}>{editingGc ? "Update Gift Card" : "Issue Gift Card"}</h2>
+              <button onClick={() => setShowGiftCardModal(false)} style={{ background: '#f1f5f9', border: 'none', color: '#475569', cursor: 'pointer', padding: 8, borderRadius: '50%', display: 'flex' }}><X size={18} /></button>
+            </div>
+            
+            <form onSubmit={saveGiftCard} style={{ display: "flex", flexDirection: "column", gap: 20 }}>
+              <label><span style={{ display: 'block', fontSize: '0.85rem', fontWeight: 700, color: '#475569', marginBottom: 6 }}>Gift Card Code</span><input placeholder="e.g. GC-2024-001" required value={giftCardForm.code} onChange={(e) => setGiftCardForm({ ...giftCardForm, code: e.target.value.toUpperCase() })} style={{ width: '100%', padding: '10px 14px', borderRadius: 8, border: '1px solid #cbd5e1', boxSizing: 'border-box', textTransform: 'uppercase', fontWeight: 700, letterSpacing: 1 }}/></label>
+              <label><span style={{ display: 'block', fontSize: '0.85rem', fontWeight: 700, color: '#475569', marginBottom: 6 }}>Title</span><input placeholder="e.g. Birthday Voucher" required value={giftCardForm.title} onChange={(e) => setGiftCardForm({ ...giftCardForm, title: e.target.value })} style={{ width: '100%', padding: '10px 14px', borderRadius: 8, border: '1px solid #cbd5e1', boxSizing: 'border-box' }}/></label>
+              <label><span style={{ display: 'block', fontSize: '0.85rem', fontWeight: 700, color: '#475569', marginBottom: 6 }}>Amount (₹)</span><input type="number" min="1" placeholder="e.g. 1000" required value={giftCardForm.originalAmount} onChange={(e) => setGiftCardForm({ ...giftCardForm, originalAmount: e.target.value })} style={{ width: '100%', padding: '10px 14px', borderRadius: 8, border: '1px solid #cbd5e1', boxSizing: 'border-box' }}/></label>
+              <label><span style={{ display: 'block', fontSize: '0.85rem', fontWeight: 700, color: '#475569', marginBottom: 6 }}>Note (Optional)</span><input placeholder="Internal note..." value={giftCardForm.note} onChange={(e) => setGiftCardForm({ ...giftCardForm, note: e.target.value })} style={{ width: '100%', padding: '10px 14px', borderRadius: 8, border: '1px solid #cbd5e1', boxSizing: 'border-box' }}/></label>
+              <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 12, marginTop: 16 }}>
+                <button type="button" onClick={() => setShowGiftCardModal(false)} className="secondary-button">Cancel</button>
+                <button type="submit" className="primary-button" style={{ background: '#7c3aed' }}>{editingGc ? "Update Gift Card" : "Issue Gift Card"}</button>
+              </div>
+            </form>
           </div>
         </div>
       )}
