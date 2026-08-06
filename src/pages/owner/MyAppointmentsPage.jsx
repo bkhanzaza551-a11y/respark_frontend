@@ -39,7 +39,66 @@ export default function MyAppointmentsPage() {
   };
 
   return (
-    <div className="page-shell">
+    <div className="page-shell" style={{ background: "#f1f5f9", minHeight: "100vh", paddingBottom: 60 }}>
+      <style>{`
+        .glass-panel {
+          background: rgba(255, 255, 255, 0.95);
+          backdrop-filter: blur(10px);
+          border-radius: 24px;
+          border: 1px solid rgba(255,255,255,0.8);
+          box-shadow: 0 20px 40px rgba(0,0,0,0.04);
+        }
+        .premium-card {
+          background: #ffffff;
+          border-radius: 20px;
+          padding: 24px;
+          position: relative;
+          overflow: hidden;
+          box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+          transition: transform 0.3s ease, box-shadow 0.3s ease;
+          border: 1px solid rgba(226, 232, 240, 0.8);
+        }
+        .premium-card:hover {
+          transform: translateY(-4px);
+          box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+        }
+        .premium-btn {
+          padding: 12px;
+          border-radius: 12px;
+          font-weight: 700;
+          font-size: 14px;
+          transition: all 0.2s;
+          border: none;
+          cursor: pointer;
+        }
+        .premium-btn:disabled {
+          cursor: not-allowed;
+          opacity: 0.6;
+          box-shadow: none !important;
+        }
+        .premium-btn-primary {
+          background: linear-gradient(135deg, #3b82f6, #2563eb);
+          color: white;
+          box-shadow: 0 4px 12px rgba(59,130,246,0.2);
+        }
+        .premium-btn-primary:hover:not(:disabled) {
+          transform: translateY(-2px);
+          box-shadow: 0 6px 16px rgba(59,130,246,0.3);
+        }
+        .premium-btn-success {
+          background: linear-gradient(135deg, #10b981, #059669);
+          color: white;
+          box-shadow: 0 4px 12px rgba(16,185,129,0.2);
+        }
+        .premium-btn-success:hover:not(:disabled) {
+          transform: translateY(-2px);
+          box-shadow: 0 6px 16px rgba(16,185,129,0.3);
+        }
+        .premium-btn-disabled {
+          background: #f1f5f9;
+          color: #94a3b8;
+        }
+      `}</style>
       <ModuleTabs
         title="My Appointments"
         description="Only your assigned bookings are visible here unless broader permissions are granted."
@@ -84,15 +143,15 @@ export default function MyAppointmentsPage() {
       <div style={{ display: "grid", gap: 20 }}>
         {rows.map((item) => {
           const statusColors = {
-            SCHEDULED: { bg: "#eff6ff", color: "#2563eb", border: "#bfdbfe", label: "Scheduled" },
-            IN_PROGRESS: { bg: "#fffbeb", color: "#d97706", border: "#fde68a", label: "In Progress" },
-            COMPLETED: { bg: "#ecfdf5", color: "#059669", border: "#a7f3d0", label: "Completed" },
-            CANCELLED: { bg: "#f1f5f9", color: "#475569", border: "#cbd5e1", label: "Cancelled" }
+            SCHEDULED: { bg: "linear-gradient(135deg, #eff6ff, #dbeafe)", color: "#1d4ed8", border: "#bfdbfe", label: "Scheduled" },
+            IN_PROGRESS: { bg: "linear-gradient(135deg, #fffbeb, #fef3c7)", color: "#b45309", border: "#fde68a", label: "In Progress" },
+            COMPLETED: { bg: "linear-gradient(135deg, #ecfdf5, #d1fae5)", color: "#047857", border: "#a7f3d0", label: "Completed" },
+            CANCELLED: { bg: "linear-gradient(135deg, #f1f5f9, #e2e8f0)", color: "#475569", border: "#cbd5e1", label: "Cancelled" }
           };
           const sc = statusColors[item.status] || statusColors.SCHEDULED;
 
           return (
-            <div key={item.id} style={{ background: "#fff", border: "1px solid rgba(226, 232, 240, 0.8)", borderRadius: 16, padding: 24, boxShadow: "0 4px 20px rgba(0,0,0,0.03)", display: "flex", flexDirection: "column", gap: 18, transition: "transform 0.2s, box-shadow 0.2s" }} onMouseEnter={(e) => { e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.boxShadow = "0 8px 30px rgba(0,0,0,0.06)"; }} onMouseLeave={(e) => { e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.boxShadow = "0 4px 20px rgba(0,0,0,0.03)"; }}>
+            <div key={item.id} className="premium-card" style={{ display: "flex", flexDirection: "column", gap: 18 }}>
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 16, flexWrap: "wrap" }}>
                 <div>
                   <h3 style={{ margin: "0 0 6px 0", fontSize: 18, fontWeight: 800, color: "#1e293b" }}>{item.customer?.name}</h3>
@@ -102,16 +161,16 @@ export default function MyAppointmentsPage() {
                     <span style={{ display: "inline-flex", alignItems: "center", gap: 4, fontWeight: 600, color: "#475569" }}>🕒 {new Date(item.startAt).toLocaleString([], { weekday: 'short', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}</span>
                   </div>
                 </div>
-                <span style={{ background: sc.bg, color: sc.color, border: `1px solid ${sc.border}`, padding: "6px 14px", borderRadius: 20, fontSize: 12, fontWeight: 700, letterSpacing: 0.5, textTransform: "uppercase" }}>
+                <span style={{ background: sc.bg, color: sc.color, border: `1px solid ${sc.border}`, padding: "6px 14px", borderRadius: 20, fontSize: 12, fontWeight: 800, letterSpacing: 0.5, textTransform: "uppercase", boxShadow: "0 2px 4px rgba(0,0,0,0.05)" }}>
                   {sc.label}
                 </span>
               </div>
               
-              <div style={{ background: "#f8fafc", padding: "16px 20px", borderRadius: 12, border: "1px solid #f1f5f9" }}>
-                <div style={{ fontSize: 11, color: "#94a3b8", textTransform: "uppercase", fontWeight: 700, letterSpacing: 0.5, marginBottom: 10 }}>Services Requested</div>
+              <div style={{ background: "#f8fafc", padding: "16px 20px", borderRadius: 16, border: "1px solid #e2e8f0" }}>
+                <div style={{ fontSize: 11, color: "#64748b", textTransform: "uppercase", fontWeight: 800, letterSpacing: 0.5, marginBottom: 12 }}>Services Requested</div>
                 <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
                   {(item.items || []).map((serviceItem) => (
-                    <span key={serviceItem.id} style={{ background: "#fff", border: "1px solid #e2e8f0", padding: "6px 12px", borderRadius: 8, fontSize: 13, color: "#334155", fontWeight: 600, boxShadow: "0 1px 3px rgba(0,0,0,0.02)" }}>
+                    <span key={serviceItem.id} style={{ background: "#ffffff", border: "1px solid #cbd5e1", padding: "6px 14px", borderRadius: 10, fontSize: 13, color: "#0f172a", fontWeight: 600, boxShadow: "0 2px 4px rgba(0,0,0,0.02)" }}>
                       {serviceItem.service?.name}
                     </span>
                   ))}
@@ -119,18 +178,19 @@ export default function MyAppointmentsPage() {
               </div>
 
               {(item.customerPreferences || item.customer?.notes) && (
-                <div style={{ background: "#fffbeb", border: "1px solid #fef08a", padding: "16px 20px", borderRadius: 12, display: "flex", flexDirection: "column", gap: 4 }}>
-                  <div style={{ fontSize: 11, color: "#a16207", fontWeight: 700, textTransform: "uppercase", letterSpacing: 0.5 }}>Customer Note</div>
-                  <div style={{ color: "#854d0e", fontSize: 13, lineHeight: 1.5, fontWeight: 500 }}>{item.customerPreferences || item.customer?.notes}</div>
+                <div style={{ background: "linear-gradient(135deg, #fffbeb, #fef3c7)", border: "1px solid #fde68a", padding: "16px 20px", borderRadius: 16, display: "flex", flexDirection: "column", gap: 6 }}>
+                  <div style={{ fontSize: 11, color: "#92400e", fontWeight: 800, textTransform: "uppercase", letterSpacing: 0.5 }}>Customer Note</div>
+                  <div style={{ color: "#78350f", fontSize: 13, lineHeight: 1.6, fontWeight: 600 }}>{item.customerPreferences || item.customer?.notes}</div>
                 </div>
               )}
 
-              <div style={{ display: "flex", gap: 12, borderTop: "1px dashed #e2e8f0", paddingTop: 18 }}>
+              <div style={{ display: "flex", gap: 12, borderTop: "1px dashed #e2e8f0", paddingTop: 20 }}>
                 <button 
                   type="button" 
                   disabled={updatingId === item.id || item.status === "IN_PROGRESS" || item.status === "COMPLETED"} 
                   onClick={() => updateStatus(item.id, "IN_PROGRESS")}
-                  style={{ flex: 1, padding: "12px", borderRadius: 10, background: item.status === "SCHEDULED" ? "#3b82f6" : "#f1f5f9", color: item.status === "SCHEDULED" ? "#fff" : "#94a3b8", border: "none", fontWeight: 700, fontSize: 14, cursor: item.status === "SCHEDULED" ? "pointer" : "not-allowed", transition: "all 0.2s", boxShadow: item.status === "SCHEDULED" ? "0 4px 12px rgba(59,130,246,0.2)" : "none" }}
+                  className={`premium-btn ${item.status === "SCHEDULED" ? "premium-btn-primary" : "premium-btn-disabled"}`}
+                  style={{ flex: 1 }}
                 >
                   {updatingId === item.id && item.status === "SCHEDULED" ? "Starting..." : "Start Service"}
                 </button>
@@ -138,7 +198,8 @@ export default function MyAppointmentsPage() {
                   type="button" 
                   disabled={updatingId === item.id || item.status === "COMPLETED"} 
                   onClick={() => updateStatus(item.id, "COMPLETED")}
-                  style={{ flex: 1, padding: "12px", borderRadius: 10, background: item.status === "IN_PROGRESS" ? "#10b981" : "#f1f5f9", color: item.status === "IN_PROGRESS" ? "#fff" : "#94a3b8", border: "none", fontWeight: 700, fontSize: 14, cursor: item.status === "IN_PROGRESS" || item.status === "SCHEDULED" ? "pointer" : "not-allowed", transition: "all 0.2s", boxShadow: item.status === "IN_PROGRESS" ? "0 4px 12px rgba(16,185,129,0.2)" : "none" }}
+                  className={`premium-btn ${item.status === "IN_PROGRESS" ? "premium-btn-success" : "premium-btn-disabled"}`}
+                  style={{ flex: 1 }}
                 >
                   {updatingId === item.id && item.status === "IN_PROGRESS" ? "Completing..." : "Mark Completed"}
                 </button>

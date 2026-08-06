@@ -594,7 +594,7 @@ export default function MyDashboardPage() {
 
 
   return (
-    <div className="page-shell">
+    <div className="page-shell" style={{ background: "#f1f5f9", minHeight: "100vh", paddingBottom: 60 }}>
       <ModuleTabs
         title="My Dashboard"
         description="Staff-scoped summary for assigned bookings, attendance actions, and quick daily awareness."
@@ -662,7 +662,7 @@ export default function MyDashboardPage() {
         <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
           
           {/* Attendance Section */}
-          <div style={{ background: "#fff", borderRadius: 16, padding: 28, boxShadow: "0 4px 24px rgba(0,0,0,0.04)", border: "1px solid rgba(226,232,240,0.8)", position: "relative" }}>
+          <div className="glass-panel" style={{ padding: 32, position: "relative" }}>
             <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 4, background: isCheckedIn ? "linear-gradient(90deg, #10b981, #34d399)" : "linear-gradient(90deg, #0ea5e9, #38bdf8)", borderTopLeftRadius: 16, borderTopRightRadius: 16 }} />
             
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 20, flexWrap: "wrap", borderBottom: "1px solid #f1f5f9", paddingBottom: 20, marginBottom: 20 }}>
@@ -785,7 +785,7 @@ export default function MyDashboardPage() {
           </div>
 
           {/* Today's Appointments Section */}
-          <div style={{ background: "#fff", borderRadius: 16, padding: 28, boxShadow: "0 4px 24px rgba(0,0,0,0.04)", border: "1px solid rgba(226,232,240,0.8)" }}>
+          <div className="glass-panel" style={{ padding: 32 }}>
             <h3 style={{ margin: "0 0 4px 0", fontSize: 18, fontWeight: 800, color: "#1e293b", display: "flex", alignItems: "center", gap: 8 }}>
               <span>📅</span> Today's Assigned Appointments
             </h3>
@@ -802,7 +802,7 @@ export default function MyDashboardPage() {
                 const sc = statusColors[item.status] || statusColors.SCHEDULED;
 
                 return (
-                  <div key={item.id} style={{ display: "flex", flexDirection: "column", background: "#fff", border: "1px solid #e2e8f0", borderRadius: 16, padding: 18, boxShadow: "0 2px 4px rgba(0,0,0,0.01)", transition: "transform 0.2s" }} onMouseEnter={(e) => e.currentTarget.style.transform = "translateY(-2px)"} onMouseLeave={(e) => e.currentTarget.style.transform = "translateY(0)"}>
+                  <div key={item.id} className="premium-card" style={{ padding: 20, display: "flex", flexDirection: "column" }}>
                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 10, marginBottom: 12 }}>
                       <strong style={{ fontSize: 15, color: "#1e293b", fontWeight: 700 }}>{item.customer?.name}</strong>
                       <span style={{ background: sc.bg, color: sc.color, border: `1px solid ${sc.border}`, padding: "3px 8px", borderRadius: 12, fontSize: 10, fontWeight: 700, textTransform: "uppercase" }}>
@@ -825,7 +825,7 @@ export default function MyDashboardPage() {
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(360px, 1fr))", gap: 24 }}>
             
             {/* Services */}
-            <div style={{ background: "#fff", borderRadius: 16, padding: 28, boxShadow: "0 4px 24px rgba(0,0,0,0.04)", border: "1px solid rgba(226,232,240,0.8)" }}>
+            <div className="glass-panel" style={{ padding: 32 }}>
               <h3 style={{ margin: "0 0 4px 0", fontSize: 17, fontWeight: 800, color: "#1e293b", display: "flex", alignItems: "center", gap: 8 }}>
                 <span>🎯</span> My Services
               </h3>
@@ -842,7 +842,7 @@ export default function MyDashboardPage() {
             </div>
 
             {/* Notifications */}
-            <div style={{ background: "#fff", borderRadius: 16, padding: 28, boxShadow: "0 4px 24px rgba(0,0,0,0.04)", border: "1px solid rgba(226,232,240,0.8)" }}>
+            <div className="glass-panel" style={{ padding: 32 }}>
               <h3 style={{ margin: "0 0 4px 0", fontSize: 17, fontWeight: 800, color: "#1e293b", display: "flex", alignItems: "center", gap: 8 }}>
                 <span>🔔</span> Notifications
               </h3>
@@ -872,8 +872,53 @@ export default function MyDashboardPage() {
         </div>
       )}
       
-      <style>{`
+            <style>{`
         @keyframes spinAround { to { transform: rotate(360deg); } }
+        .glass-panel {
+          background: rgba(255, 255, 255, 0.95);
+          backdrop-filter: blur(10px);
+          border-radius: 24px;
+          border: 1px solid rgba(255,255,255,0.8);
+          box-shadow: 0 20px 40px rgba(0,0,0,0.04);
+        }
+        .premium-card {
+          background: #ffffff;
+          border-radius: 20px;
+          padding: 24px;
+          position: relative;
+          overflow: hidden;
+          box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+          transition: transform 0.3s ease, box-shadow 0.3s ease;
+          border: 1px solid rgba(226, 232, 240, 0.8);
+        }
+        .premium-card:hover {
+          transform: translateY(-4px);
+          box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+        }
+        .premium-btn {
+          background: linear-gradient(135deg, #2563eb, #1d4ed8);
+          color: white;
+          border: none;
+          padding: 12px 24px;
+          border-radius: 12px;
+          font-weight: 600;
+          cursor: pointer;
+          transition: all 0.2s;
+          box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+        }
+        .premium-btn:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 6px 16px rgba(37, 99, 235, 0.3);
+        }
+        .premium-badge {
+          display: inline-flex;
+          align-items: center;
+          gap: 6px;
+          padding: 6px 14px;
+          border-radius: 20px;
+          font-size: 12px;
+          font-weight: 700;
+        }
       `}</style>
     </div>
   );

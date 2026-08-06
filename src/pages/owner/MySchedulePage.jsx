@@ -16,7 +16,60 @@ export default function MySchedulePage() {
   }, []);
 
   return (
-    <div className="page-shell">
+    <div className="page-shell" style={{ background: "#f1f5f9", minHeight: "100vh", paddingBottom: 60 }}>
+      <style>{`
+        .glass-panel {
+          background: rgba(255, 255, 255, 0.95);
+          backdrop-filter: blur(10px);
+          border-radius: 24px;
+          border: 1px solid rgba(255,255,255,0.8);
+          box-shadow: 0 20px 40px rgba(0,0,0,0.04);
+        }
+        .premium-card {
+          background: #ffffff;
+          border-radius: 20px;
+          padding: 32px;
+          position: relative;
+          overflow: hidden;
+          box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+          transition: transform 0.3s ease, box-shadow 0.3s ease;
+          border: 1px solid rgba(226, 232, 240, 0.8);
+        }
+        .premium-card:hover {
+          transform: translateY(-4px);
+          box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+        }
+        .schedule-row {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 16px 20px;
+          border-radius: 16px;
+          transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .schedule-row:hover {
+          transform: scale(1.02);
+        }
+        .schedule-row.active {
+          background: linear-gradient(135deg, #f0fdfa, #ccfbf1);
+          border: 1px solid #99f6e4;
+        }
+        .schedule-row.off {
+          background: #f8fafc;
+          border: 1px solid #e2e8f0;
+        }
+        .schedule-row.break {
+          background: linear-gradient(135deg, #fffbeb, #fef3c7);
+          border: 1px solid #fde68a;
+        }
+        .time-badge {
+          font-size: 14px;
+          font-weight: 800;
+          padding: 6px 16px;
+          border-radius: 20px;
+          box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+      `}</style>
       <ModuleTabs
         title="My Schedule"
         description="Your working hours and break windows are scoped to your own membership."
@@ -57,21 +110,21 @@ export default function MySchedulePage() {
       </div>
 
       {loading ? <PageLoader title="Loading your schedule" message="Collecting weekly working hours and break windows." /> : (
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))", gap: 24 }}>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(350px, 1fr))", gap: 24 }}>
         {/* Weekly Hours Card */}
-        <div style={{ background: "#fff", borderRadius: 16, padding: 28, boxShadow: "0 4px 24px rgba(0,0,0,0.04)", border: "1px solid rgba(226,232,240,0.8)" }}>
-          <h3 style={{ margin: "0 0 4px 0", fontSize: 17, fontWeight: 800, color: "#1e293b", display: "flex", alignItems: "center", gap: 8 }}>
+        <div className="premium-card">
+          <h3 style={{ margin: "0 0 4px 0", fontSize: 18, fontWeight: 800, color: "#1e293b", display: "flex", alignItems: "center", gap: 8 }}>
             <span>📅</span> Weekly Hours
           </h3>
-          <p style={{ margin: "0 0 20px 0", color: "#94a3b8", fontSize: 13 }}>Your recurring roster shifts and active duty times</p>
+          <p style={{ margin: "0 0 24px 0", color: "#64748b", fontSize: 13 }}>Your recurring roster shifts and active duty times</p>
           
-          <div style={{ display: "grid", gap: 12 }}>
+          <div style={{ display: "grid", gap: 14 }}>
             {data.schedules.map((item) => (
-              <div key={item.id} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "14px 18px", background: item.isOffDay ? "#f8fafc" : "#f0fdfa", border: `1px solid ${item.isOffDay ? "#e2e8f0" : "#bbf7d0"}`, borderRadius: 12 }}>
-                <strong style={{ color: item.isOffDay ? "#64748b" : "#166534", fontSize: "0.95rem" }}>
+              <div key={item.id} className={`schedule-row ${item.isOffDay ? "off" : "active"}`}>
+                <strong style={{ color: item.isOffDay ? "#64748b" : "#0f766e", fontSize: 16, fontWeight: 800 }}>
                   {["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"][item.weekday] || `Day ${item.weekday}`}
                 </strong>
-                <div style={{ color: item.isOffDay ? "#94a3b8" : "#15803d", fontSize: "0.9rem", fontWeight: 700, background: item.isOffDay ? "#f1f5f9" : "#fff", padding: "4px 12px", borderRadius: 20, boxShadow: item.isOffDay ? "none" : "0 2px 4px rgba(22,101,52,0.05)" }}>
+                <div className="time-badge" style={{ color: item.isOffDay ? "#94a3b8" : "#0d9488", background: "#fff" }}>
                   {item.isOffDay ? "Off Day" : `${item.startTime} - ${item.endTime}`}
                 </div>
               </div>
@@ -81,19 +134,19 @@ export default function MySchedulePage() {
         </div>
         
         {/* Protected Breaks Card */}
-        <div style={{ background: "#fff", borderRadius: 16, padding: 28, boxShadow: "0 4px 24px rgba(0,0,0,0.04)", border: "1px solid rgba(226,232,240,0.8)" }}>
-          <h3 style={{ margin: "0 0 4px 0", fontSize: 17, fontWeight: 800, color: "#1e293b", display: "flex", alignItems: "center", gap: 8 }}>
+        <div className="premium-card">
+          <h3 style={{ margin: "0 0 4px 0", fontSize: 18, fontWeight: 800, color: "#1e293b", display: "flex", alignItems: "center", gap: 8 }}>
             <span>☕</span> Protected Breaks
           </h3>
-          <p style={{ margin: "0 0 20px 0", color: "#94a3b8", fontSize: 13 }}>Scheduled rest intervals when booking is blocked</p>
+          <p style={{ margin: "0 0 24px 0", color: "#64748b", fontSize: 13 }}>Scheduled rest intervals when booking is blocked</p>
           
-          <div style={{ display: "grid", gap: 12 }}>
+          <div style={{ display: "grid", gap: 14 }}>
             {data.breaks.map((item) => (
-              <div key={item.id} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "14px 18px", background: "#fffbeb", border: "1px solid #fef08a", borderRadius: 12 }}>
-                <strong style={{ color: "#a16207", fontSize: "0.95rem" }}>
+              <div key={item.id} className="schedule-row break">
+                <strong style={{ color: "#b45309", fontSize: 16, fontWeight: 800 }}>
                   {["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"][item.weekday] || `Day ${item.weekday}`}
                 </strong>
-                <div style={{ color: "#854d0e", fontSize: "0.9rem", fontWeight: 700, background: "#fff", padding: "4px 12px", borderRadius: 20, boxShadow: "0 2px 4px rgba(161,98,7,0.05)" }}>
+                <div className="time-badge" style={{ color: "#d97706", background: "#fff" }}>
                   {item.startTime} - {item.endTime}
                 </div>
               </div>
