@@ -867,11 +867,12 @@ export default function PosPage() {
       const pDisType = product.discountType || "NONE";
       const pDisVal = Number(product.discountValue) || 0;
       const autoDiscPct = pDisType === "PERCENTAGE" ? pDisVal : 0;
-      const autoDiscAmt = pDisType === "FLAT" ? pDisVal : (pDisType === "PERCENTAGE" ? Math.round((unitPrice * pDisVal / 100) * 100) / 100 : 0);
+      const autoDiscAmt = pDisType === "FLAT" ? pDisVal : 0;
+      const discountedUnitPrice = Math.max(0, unitPrice - ((unitPrice * autoDiscPct) / 100) - autoDiscAmt);
       next.items = [...activeItems, {
         ...emptyProductItem,
         productId: product.id,
-        unitPrice,
+        unitPrice: Number(discountedUnitPrice.toFixed(2)),
         originalUnitPrice: unitPrice,
         discountPct: autoDiscPct,
         discountAmt: autoDiscAmt,
@@ -890,12 +891,13 @@ export default function PosPage() {
       const pDisType = product.discountType || "NONE";
       const pDisVal = Number(product.discountValue) || 0;
       const autoDiscPct = pDisType === "PERCENTAGE" ? pDisVal : 0;
-      const autoDiscAmt = pDisType === "FLAT" ? pDisVal : (pDisType === "PERCENTAGE" ? Math.round((unitPrice * pDisVal / 100) * 100) / 100 : 0);
+      const autoDiscAmt = pDisType === "FLAT" ? pDisVal : 0;
+      const discountedUnitPrice = Math.max(0, unitPrice - ((unitPrice * autoDiscPct) / 100) - autoDiscAmt);
       next.items = [...activeItems, {
         ...emptyProductItem,
         productId: product.id,
         productName: `${product.name} (${variation.name})`,
-        unitPrice,
+        unitPrice: Number(discountedUnitPrice.toFixed(2)),
         originalUnitPrice: unitPrice,
         discountPct: autoDiscPct,
         discountAmt: autoDiscAmt,
