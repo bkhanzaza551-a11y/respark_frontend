@@ -1,6 +1,12 @@
 {
   "rewrites": [
     {
+      "source": "/((?!assets/).*)",
+      "destination": "/index.html"
+    }
+  ],
+  "headers": [
+    {
       "source": "/assets/(.*)",
       "headers": [
         {
@@ -9,12 +15,6 @@
         }
       ]
     },
-    {
-      "source": "/((?!assets/).*)",
-      "destination": "/index.html"
-    }
-  ],
-  "headers": [
     {
       "source": "/(.*)",
       "headers": [
