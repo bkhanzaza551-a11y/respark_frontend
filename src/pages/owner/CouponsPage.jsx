@@ -441,7 +441,7 @@ export default function CouponsPage() {
         </div>
       )}
       {showCouponModal && (
-        <div className="premium-modal-overlay" onClick={() => setShowCouponModal(false)} style={{ zIndex: 9999, background: 'rgba(0,0,0,0.6)' }}>
+        <div className="premium-modal-overlay" onClick={() => setShowCouponModal(false)} style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 9999, background: 'rgba(0,0,0,0.6)' }}>
           <div className="premium-modal-content" onClick={e => e.stopPropagation()} style={{ maxWidth: 800, padding: 32, borderRadius: 16, background: '#ffffff', maxHeight: '90vh', overflowY: 'auto' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 }}>
               <h2 style={{ margin: 0, fontSize: '1.5rem', fontWeight: 800, color: '#0f172a' }}>{editingCoupon ? "Update Coupon" : "Create Coupon"}</h2>
@@ -492,8 +492,8 @@ export default function CouponsPage() {
       )}
 
       {showGiftCardModal && (
-        <div className="premium-modal-overlay" onClick={() => setShowGiftCardModal(false)} style={{ zIndex: 9999, background: 'rgba(0,0,0,0.6)' }}>
-          <div className="premium-modal-content" onClick={e => e.stopPropagation()} style={{ maxWidth: 500, padding: 32, borderRadius: 16 }}>
+        <div className="premium-modal-overlay" onClick={() => setShowGiftCardModal(false)} style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 9999, background: 'rgba(0,0,0,0.6)' }}>
+          <div className="premium-modal-content" onClick={e => e.stopPropagation()} style={{ maxWidth: 500, padding: 32, borderRadius: 16, background: '#ffffff', width: '100%', maxHeight: '90vh', overflowY: 'auto' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 }}>
               <h2 style={{ margin: 0, fontSize: '1.5rem', fontWeight: 800, color: '#0f172a' }}>{editingGc ? "Update Gift Card" : "Issue Gift Card"}</h2>
               <button onClick={() => setShowGiftCardModal(false)} style={{ background: '#f1f5f9', border: 'none', color: '#475569', cursor: 'pointer', padding: 8, borderRadius: '50%', display: 'flex' }}><X size={18} /></button>
