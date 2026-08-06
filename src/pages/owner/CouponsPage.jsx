@@ -26,7 +26,9 @@ const emptyGiftCard = {
   code: "",
   title: "",
   originalAmount: 1000,
-  note: ""
+  note: "",
+  isActive: true,
+  validityDays: 365
 };
 
 export default function CouponsPage() {
@@ -404,7 +406,7 @@ export default function CouponsPage() {
                         <button onClick={() => toggleGiftCardActive(gc)} style={{ background: 'transparent', border: 'none', color: gc.isActive ? '#f59e0b' : '#10b981', cursor: 'pointer', padding: 6, borderRadius: '50%' }} onMouseEnter={(e) => e.currentTarget.style.background = gc.isActive ? '#fef3c7' : '#d1fae5'} onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'} title={gc.isActive ? "Deactivate" : "Activate"}>
                           {gc.isActive ? <PowerOff size={16} /> : <Power size={16} />}
                         </button>
-                        <button onClick={() => { setEditingGc(gc); setGiftCardForm({ code: gc.code, title: gc.title, originalAmount: gc.originalAmount, note: gc.note || "" }); setShowGiftCardModal(true); }} style={{ background: 'transparent', border: 'none', color: '#64748b', cursor: 'pointer', padding: 6, borderRadius: '50%' }} onMouseEnter={(e) => e.currentTarget.style.background = '#f1f5f9'} onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'} title="Edit">
+                        <button onClick={() => { setEditingGc(gc); setGiftCardForm({ code: gc.code, title: gc.title, originalAmount: gc.originalAmount, note: gc.note || "", isActive: gc.isActive ?? true, validityDays: gc.expiresAt ? Math.max(1, Math.round((new Date(gc.expiresAt) - new Date()) / (1000 * 60 * 60 * 24))) : 365 }); setShowGiftCardModal(true); }} style={{ background: 'transparent', border: 'none', color: '#64748b', cursor: 'pointer', padding: 6, borderRadius: '50%' }} onMouseEnter={(e) => e.currentTarget.style.background = '#f1f5f9'} onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'} title="Edit">
                           <Edit2 size={16} />
                         </button>
                         <button onClick={() => deleteGiftCard(gc.id)} style={{ background: 'transparent', border: 'none', color: '#ef4444', cursor: 'pointer', padding: 6, borderRadius: '50%' }} onMouseEnter={(e) => e.currentTarget.style.background = '#fee2e2'} onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'} title="Delete">
