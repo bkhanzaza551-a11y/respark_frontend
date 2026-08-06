@@ -430,14 +430,6 @@ const SectionHeader = ({ title, description, badges, action }) => (
       <h2>{title}</h2>
       <p>{description}</p>
     </div>
-    <div className="settings-section-head-actions">
-      {badges?.length ? (
-        <div className="badge-row">
-          {badges.map((badge) => <span key={badge} className="badge">{badge}</span>)}
-        </div>
-      ) : null}
-      {action}
-    </div>
   </div>
 );
 
@@ -1061,10 +1053,6 @@ export default function SettingsPage() {
           ]}
           action={<Link className="secondary-button" to="/site">Open Storefront</Link>}
         />
-
-        <div className="muted" style={{ marginBottom: 12, fontSize: 12 }}>
-          Currency, storefront product layout, minimum online order value, cancellation/reschedule permissions, and cancelled-appointment visibility are already wired into live customer/storefront flows. Appointment tags and service-PDP preferences are kept here as saved rollout metadata unless noted otherwise.
-        </div>
 
         <div className="settings-panel-card">
           <div className="settings-panel-header-with-toggle" style={{ borderBottom: "none", marginBottom: 16, paddingBottom: 0 }}>
@@ -2436,9 +2424,6 @@ export default function SettingsPage() {
     return (
       <>
         <SectionHeader title="Tax Mapping" description="Define named tax mappings for billing, services, packages, and reporting labels." badges={["Tax label: " + form.taxLabel, taxRows.length + " tax rows", inclusiveTax ? "Inclusive" : "Exclusive"]} />
-        <div className="muted" style={{ marginBottom: 12, fontSize: 12 }}>
-          New services without an explicit tax rate now inherit the first active tax mapping automatically.
-        </div>
 
         <div className="shift-layout-grid">
           {/* LEFT PANEL — Tax List */}
@@ -2814,9 +2799,6 @@ export default function SettingsPage() {
           badges={[feedback.enabled ? "Feedback On" : "Feedback Off", `${feedbackTypesList.length} types`, `${activeCount} active`]}
           action={<Link className="secondary-button" to="/admin/feedback">Open Feedback Module</Link>}
         />
-        <div className="muted" style={{ marginBottom: 16, fontSize: 12 }}>
-          These values feed the live feedback settings endpoint, low-rating alert flow, and owner feedback workspace.
-        </div>
 
         <div className="settings-panel-card" style={{ marginBottom: 20 }}>
           <div className="settings-toggle-grid">
@@ -3407,9 +3389,6 @@ export default function SettingsPage() {
   const renderSmsSection = () => (
     <>
       <SectionHeader title="Messaging Center" description="Review delivery-provider defaults. Email is sent through backend SMTP; SMS and WhatsApp values stay ready for live gateway integration." badges={[form.smsSettings.gatewayProvider.replace("_PLACEHOLDER", ""), form.smsSettings.senderId || "No Sender ID"]} action={<Link className="secondary-button" to="/admin/whatsapp">Open Messaging</Link>} />
-      <div className="muted" style={{ marginBottom: 12, fontSize: 12 }}>
-        SMTP credentials are configured on the backend environment. SMS/WhatsApp provider details are saved here so the UI stays ready when the real gateway API is connected.
-      </div>
       <div className="settings-panel-card">
         <div className="settings-form-grid">
           <label className="settings-input-group">
@@ -3704,9 +3683,6 @@ export default function SettingsPage() {
           badges={[`${rows.length} entries`]}
           action={<Link className="secondary-button" to="/admin/users">Open Staff Users</Link>}
         />
-        <div className="muted" style={{ marginBottom: 12, fontSize: 12 }}>
-          Saved designations appear in the staff create/edit form and are stored against each staff profile.
-        </div>
         <div className="settings-list-stack">
           {rows.map((row) => (
             <div key={row.id} className="settings-panel-card" style={{ position: "relative" }}>
@@ -3845,9 +3821,6 @@ export default function SettingsPage() {
         badges={[form.advancedSettings.legalContent[key] ? "Configured" : "Draft", salonSlug ? "Storefront linked" : "Portal linked"]}
         action={salonSlug ? <Link className="secondary-button" to={`/site/${salonSlug}/${key === "privacyPolicy" ? "privacy" : "terms"}`}>Preview Page</Link> : null}
       />
-      <div className="muted" style={{ marginBottom: 12, fontSize: 12 }}>
-        Saved legal copy is returned by the public salon API and rendered on the linked storefront legal page.
-      </div>
       <div className="settings-panel-card">
         <textarea rows="14" value={form.advancedSettings.legalContent[key]} onChange={(event) => updateAdvancedObject("legalContent", { [key]: event.target.value })} placeholder={`Write ${title.toLowerCase()} here`} />
       </div>
@@ -3924,9 +3897,6 @@ export default function SettingsPage() {
           badges={[`${rows.length} entries`, `${summary.expenseAccountInjections.length} account injections`]}
           action={<div className="inline-actions"><Link className="secondary-button" to="/admin/expenses/categories">Expense Types</Link><Link className="secondary-button" to="/admin/expenses/accounts">Ledger Accounts</Link></div>}
         />
-        <div className="muted" style={{ marginBottom: 12, fontSize: 12 }}>
-          These categories behave like a finance taxonomy: income buckets, expense buckets, and ordered report rows. The active list is stored in salon settings and reused by report and expense modules.
-        </div>
 
         <div className="shift-layout-grid">
           <div style={{ width: "100%", flexShrink: 0 }}>
@@ -4227,9 +4197,6 @@ export default function SettingsPage() {
           badges={[`${rows.length} live coupons`, `${activeCount} active`, `${archivedCount} archived`]}
           action={<Link className="secondary-button" to="/admin/coupons">Open Module</Link>}
         />
-        <div className="muted" style={{ marginBottom: 12, fontSize: 12 }}>
-          Coupon settings control whether discounts are stackable and how high a coupon can go. The records below are the live coupons used by POS, invoices, and campaigns.
-        </div>
 
         <div className="settings-panel-card" style={{ marginBottom: 16 }}>
           <div className="settings-toggle-grid">
@@ -4616,9 +4583,6 @@ export default function SettingsPage() {
     return (
       <>
         <SectionHeader title="PNL Income Taxes" description="Track tax slabs used in PNL and financial reporting." badges={[`${rows.length} entries`]} action={<Link className="secondary-button" to="/admin/services">Open Services</Link>} />
-        <div className="muted" style={{ marginBottom: 12, fontSize: 12 }}>
-          These slabs are kept for finance reporting. Billing tax behavior for services and products stays controlled from Tax Mapping.
-        </div>
 
         <div className="shift-layout-grid">
           <div style={{ width: "100%", flexShrink: 0 }}>
@@ -4708,9 +4672,6 @@ export default function SettingsPage() {
     return (
       <>
         <SectionHeader title="Footer Content" description="Manage receipt footer messaging and brand footer copy from one polished editor." badges={[form.invoiceFooter ? "Invoice Footer Ready" : "Invoice Footer Empty"]} action={<Link className="secondary-button" to="/site">Open Storefront</Link>} />
-        <div className="muted" style={{ marginBottom: 12, fontSize: 12 }}>
-          Invoice footer is used in POS billing, while support/social/brand footer copy is rendered on the storefront footer.
-        </div>
         <div className="settings-panel-card">
           <div className="settings-form-grid">
             <label className="settings-input-group"><span className="muted">Invoice footer</span><textarea rows="4" value={form.invoiceFooter} onChange={(event) => setForm((current) => ({ ...current, invoiceFooter: event.target.value }))} /></label>
@@ -4749,9 +4710,6 @@ export default function SettingsPage() {
           description="Customize the brand identity, dashboard layout color schemes, and fonts of your partner portal."
           badges={["Live Preview Active", "Theme Customizer"]}
         />
-        <div className="muted" style={{ marginBottom: 20, fontSize: 12 }}>
-          Choose preset colors or pick your own custom palette. Changes are reflected in the instant interactive dashboard mockup below.
-        </div>
 
         <div style={{ display: "flex", gap: 24, alignItems: "flex-start", flexWrap: "wrap" }}>
           <div style={{ flex: 1, minWidth: 320 }}>
