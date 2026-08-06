@@ -264,6 +264,13 @@ export default function CouponsPage() {
           .coupons-right-col { padding: 20px !important; }
           .coupons-form-grid-1, .coupons-form-grid-2 { grid-template-columns: 1fr !important; }
         }
+
+        /* Premium Table Additions */
+        .table-row-hover { transition: background 0.2s ease; }
+        .table-row-hover:hover { background: #f8fafc !important; }
+        .icon-btn { border-radius: 50%; transition: all 0.2s ease; }
+        .icon-btn:hover { background: #f1f5f9 !important; transform: scale(1.05); }
+        .icon-btn[title="Delete"]:hover { background: #fee2e2 !important; color: #dc2626 !important; }
       `}</style>
       <ModuleTabs
         title="Coupons & Gift Cards"
@@ -312,34 +319,40 @@ export default function CouponsPage() {
             </button>
           </div>
           
-          <div className="table-responsive">
-            <table className="rpt-table">
+          <div style={{ overflowX: "auto" }}>
+            <table style={{ width: "100%", borderCollapse: "collapse", textAlign: "left", minWidth: 800 }}>
               <thead>
-                <tr>
-                  <th>Coupon Title</th>
-                  <th>Code</th>
-                  <th>Benefit</th>
-                  <th>Status</th>
-                  <th style={{ textAlign: 'right' }}>Actions</th>
+                <tr style={{ backgroundColor: "#f8fafc", borderBottom: "1px solid #e2e8f0" }}>
+                  <th style={{ padding: "12px 16px", fontWeight: 600, color: "#475569", fontSize: 13 }}>Coupon Title</th>
+                  <th style={{ padding: "12px 16px", fontWeight: 600, color: "#475569", fontSize: 13 }}>Code</th>
+                  <th style={{ padding: "12px 16px", fontWeight: 600, color: "#475569", fontSize: 13 }}>Benefit</th>
+                  <th style={{ padding: "12px 16px", fontWeight: 600, color: "#475569", fontSize: 13 }}>Status</th>
+                  <th style={{ padding: "12px 16px", fontWeight: 600, color: "#475569", fontSize: 13, textAlign: "right" }}>Actions</th>
                 </tr>
               </thead>
               <tbody>
                 {filteredCoupons.map((row) => (
-                  <tr key={row.id}>
-                    <td style={{ fontWeight: 600, color: '#1e293b' }}>{row.title}</td>
-                    <td><span style={{ background: '#f1f5f9', padding: '4px 8px', borderRadius: 6, fontWeight: 700, fontSize: '0.85rem', color: '#475569', letterSpacing: 1 }}>{row.code}</span></td>
-                    <td style={{ fontWeight: 600, color: '#3b82f6' }}>{row.discountType === "PERCENT" ? `${Number(row.discountValue)}% OFF` : row.discountType === "CAMPAIGN" ? `CAMPAIGN ${Number(row.discountValue)}%` : `₹${Number(row.discountValue)} OFF`}</td>
-                    <td>
-                      <span className={`badge badge-${!row.isArchived ? "active" : "inactive"}`} style={{ fontSize: '0.75rem', padding: '4px 8px', borderRadius: '20px', background: !row.isArchived ? '#dcfce7' : '#f1f5f9', color: !row.isArchived ? '#166534' : '#64748b' }}>
-                        {!row.isArchived ? "Active" : "Inactive"}
-                      </span>
+                  <tr key={row.id} style={{ borderBottom: "1px solid #f1f5f9" }} className="table-row-hover">
+                    <td style={{ padding: "12px 16px" }}>
+                      <div style={{ fontWeight: 600, color: "#0f172a", fontSize: 14 }}>{row.title}</div>
                     </td>
-                    <td style={{ textAlign: 'right' }}>
-                      <div style={{ display: 'flex', gap: 8, justifyContent: 'flex-end' }}>
-                        <button onClick={() => { handleEditCoupon(row); setShowCouponModal(true); }} style={{ background: 'transparent', border: 'none', color: '#64748b', cursor: 'pointer', padding: 6, borderRadius: '50%' }} onMouseEnter={(e) => e.currentTarget.style.background = '#f1f5f9'} onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'} title="Edit">
+                    <td style={{ padding: "12px 16px" }}>
+                      <div style={{ display: "inline-block", background: "#f1f5f9", padding: "4px 8px", borderRadius: 6, fontWeight: 700, fontSize: 13, color: "#475569", letterSpacing: 1 }}>{row.code}</div>
+                    </td>
+                    <td style={{ padding: "12px 16px" }}>
+                      <div style={{ fontWeight: 600, color: "#3b82f6", fontSize: 14 }}>{row.discountType === "PERCENT" ? `${Number(row.discountValue)}% OFF` : row.discountType === "CAMPAIGN" ? `CAMPAIGN ${Number(row.discountValue)}%` : `₹${Number(row.discountValue)} OFF`}</div>
+                    </td>
+                    <td style={{ padding: "12px 16px" }}>
+                      <div style={{ display: "inline-block", fontSize: 11, padding: "2px 6px", borderRadius: 4, background: !row.isArchived ? "#dcfce7" : "#f1f5f9", color: !row.isArchived ? "#166534" : "#475569", fontWeight: 600 }}>
+                        {!row.isArchived ? "Active" : "Inactive"}
+                      </div>
+                    </td>
+                    <td style={{ padding: "12px 16px", textAlign: "right" }}>
+                      <div style={{ display: "flex", alignItems: "center", justifyContent: "flex-end", gap: 8 }}>
+                        <button onClick={() => { handleEditCoupon(row); setShowCouponModal(true); }} className="icon-btn" style={{ background: "transparent", border: "none", color: "#64748b", cursor: "pointer", padding: 6, display: "flex" }} title="Edit">
                           <Edit2 size={16} />
                         </button>
-                        <button onClick={() => deleteCoupon(row.id)} style={{ background: 'transparent', border: 'none', color: '#ef4444', cursor: 'pointer', padding: 6, borderRadius: '50%' }} onMouseEnter={(e) => e.currentTarget.style.background = '#fee2e2'} onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'} title="Delete">
+                        <button onClick={() => deleteCoupon(row.id)} className="icon-btn" style={{ background: "transparent", border: "none", color: "#ef4444", cursor: "pointer", padding: 6, display: "flex" }} title="Delete">
                           <Trash2 size={16} />
                         </button>
                       </div>
@@ -376,16 +389,16 @@ export default function CouponsPage() {
             </button>
           </div>
           
-          <div className="table-responsive">
-            <table className="rpt-table">
+          <div style={{ overflowX: "auto" }}>
+            <table style={{ width: "100%", borderCollapse: "collapse", textAlign: "left", minWidth: 800 }}>
               <thead>
-                <tr>
-                  <th>Gift Card Code</th>
-                  <th>Title</th>
-                  <th>Balance</th>
-                  <th>Expires</th>
-                  <th>Status</th>
-                  <th style={{ textAlign: 'right' }}>Actions</th>
+                <tr style={{ backgroundColor: "#f8fafc", borderBottom: "1px solid #e2e8f0" }}>
+                  <th style={{ padding: "12px 16px", fontWeight: 600, color: "#475569", fontSize: 13 }}>Gift Card Code</th>
+                  <th style={{ padding: "12px 16px", fontWeight: 600, color: "#475569", fontSize: 13 }}>Title</th>
+                  <th style={{ padding: "12px 16px", fontWeight: 600, color: "#475569", fontSize: 13 }}>Balance</th>
+                  <th style={{ padding: "12px 16px", fontWeight: 600, color: "#475569", fontSize: 13 }}>Expires</th>
+                  <th style={{ padding: "12px 16px", fontWeight: 600, color: "#475569", fontSize: 13 }}>Status</th>
+                  <th style={{ padding: "12px 16px", fontWeight: 600, color: "#475569", fontSize: 13, textAlign: "right" }}>Actions</th>
                 </tr>
               </thead>
               <tbody>
@@ -396,25 +409,33 @@ export default function CouponsPage() {
                   const daysLeft = gc.expiresAt ? Math.max(0, Math.ceil((new Date(gc.expiresAt) - new Date()) / (1000 * 60 * 60 * 24))) : null;
                   
                   return (
-                  <tr key={gc.id}>
-                    <td><span style={{ background: '#f3e8ff', padding: '4px 8px', borderRadius: 6, fontWeight: 700, fontSize: '0.85rem', color: '#6d28d9', letterSpacing: 1 }}>{gc.code}</span></td>
-                    <td style={{ fontWeight: 600, color: '#1e293b' }}>{gc.title}</td>
-                    <td><span style={{ fontWeight: 700, color: '#0f172a' }}>₹{balance.toFixed(0)}</span> <span style={{ fontSize: '0.85rem', color: '#64748b' }}>/ ₹{original.toFixed(0)}</span></td>
-                    <td style={{ color: isExpired ? '#ef4444' : '#475569' }}>{daysLeft !== null ? (isExpired ? "Expired" : `${daysLeft} days`) : "Never"}</td>
-                    <td>
-                      <span className="badge" style={{ fontSize: '0.75rem', padding: '4px 8px', borderRadius: '20px', background: isExpired ? '#fee2e2' : gc.isActive ? '#dcfce7' : '#f1f5f9', color: isExpired ? '#b91c1c' : gc.isActive ? '#166534' : '#64748b' }}>
-                        {isExpired ? "Expired" : gc.isActive ? "Active" : "Inactive"}
-                      </span>
+                  <tr key={gc.id} style={{ borderBottom: "1px solid #f1f5f9" }} className="table-row-hover">
+                    <td style={{ padding: "12px 16px" }}>
+                      <div style={{ display: "inline-block", background: "#f3e8ff", padding: "4px 8px", borderRadius: 6, fontWeight: 700, fontSize: 13, color: "#6d28d9", letterSpacing: 1 }}>{gc.code}</div>
                     </td>
-                    <td style={{ textAlign: 'right' }}>
-                      <div style={{ display: 'flex', gap: 8, justifyContent: 'flex-end' }}>
-                        <button onClick={() => toggleGiftCardActive(gc)} style={{ background: 'transparent', border: 'none', color: gc.isActive ? '#f59e0b' : '#10b981', cursor: 'pointer', padding: 6, borderRadius: '50%' }} onMouseEnter={(e) => e.currentTarget.style.background = gc.isActive ? '#fef3c7' : '#d1fae5'} onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'} title={gc.isActive ? "Deactivate" : "Activate"}>
+                    <td style={{ padding: "12px 16px" }}>
+                      <div style={{ fontWeight: 600, color: "#0f172a", fontSize: 14 }}>{gc.title}</div>
+                    </td>
+                    <td style={{ padding: "12px 16px" }}>
+                      <span style={{ fontWeight: 600, color: "#0f172a", fontSize: 14 }}>₹{balance.toFixed(0)}</span> <span style={{ fontSize: 13, color: "#64748b" }}>/ ₹{original.toFixed(0)}</span>
+                    </td>
+                    <td style={{ padding: "12px 16px" }}>
+                      <div style={{ fontSize: 13, color: isExpired ? "#ef4444" : "#475569" }}>{daysLeft !== null ? (isExpired ? "Expired" : `${daysLeft} days`) : "Never"}</div>
+                    </td>
+                    <td style={{ padding: "12px 16px" }}>
+                      <div style={{ display: "inline-block", fontSize: 11, padding: "2px 6px", borderRadius: 4, background: isExpired ? "#fee2e2" : gc.isActive ? "#dcfce7" : "#f1f5f9", color: isExpired ? "#b91c1c" : gc.isActive ? "#166534" : "#475569", fontWeight: 600 }}>
+                        {isExpired ? "Expired" : gc.isActive ? "Active" : "Inactive"}
+                      </div>
+                    </td>
+                    <td style={{ padding: "12px 16px", textAlign: "right" }}>
+                      <div style={{ display: "flex", alignItems: "center", justifyContent: "flex-end", gap: 8 }}>
+                        <button onClick={() => toggleGiftCardActive(gc)} className="icon-btn" style={{ background: "transparent", border: "none", color: gc.isActive ? "#f59e0b" : "#10b981", cursor: "pointer", padding: 6, display: "flex" }} title={gc.isActive ? "Deactivate" : "Activate"}>
                           {gc.isActive ? <PowerOff size={16} /> : <Power size={16} />}
                         </button>
-                        <button onClick={() => { setEditingGc(gc); setGiftCardForm({ code: gc.code, title: gc.title, originalAmount: gc.originalAmount, note: gc.note || "", isActive: gc.isActive ?? true, validityDays: gc.expiresAt ? Math.max(1, Math.round((new Date(gc.expiresAt) - new Date()) / (1000 * 60 * 60 * 24))) : 365 }); setShowGiftCardModal(true); }} style={{ background: 'transparent', border: 'none', color: '#64748b', cursor: 'pointer', padding: 6, borderRadius: '50%' }} onMouseEnter={(e) => e.currentTarget.style.background = '#f1f5f9'} onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'} title="Edit">
+                        <button onClick={() => { setEditingGc(gc); setGiftCardForm({ code: gc.code, title: gc.title, originalAmount: gc.originalAmount, note: gc.note || "", isActive: gc.isActive ?? true, validityDays: gc.expiresAt ? Math.max(1, Math.round((new Date(gc.expiresAt) - new Date()) / (1000 * 60 * 60 * 24))) : 365 }); setShowGiftCardModal(true); }} className="icon-btn" style={{ background: "transparent", border: "none", color: "#64748b", cursor: "pointer", padding: 6, display: "flex" }} title="Edit">
                           <Edit2 size={16} />
                         </button>
-                        <button onClick={() => deleteGiftCard(gc.id)} style={{ background: 'transparent', border: 'none', color: '#ef4444', cursor: 'pointer', padding: 6, borderRadius: '50%' }} onMouseEnter={(e) => e.currentTarget.style.background = '#fee2e2'} onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'} title="Delete">
+                        <button onClick={() => deleteGiftCard(gc.id)} className="icon-btn" style={{ background: "transparent", border: "none", color: "#ef4444", cursor: "pointer", padding: 6, display: "flex" }} title="Delete">
                           <Trash2 size={16} />
                         </button>
                       </div>
