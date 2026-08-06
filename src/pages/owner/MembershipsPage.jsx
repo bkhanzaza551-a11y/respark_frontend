@@ -420,45 +420,39 @@ export default function MembershipsPage() {
               }
             }} style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
 
-              {/* Membership Type Radio */}
+              {/* Membership Type Toggles */}
               <div>
-                <label style={{ display: "block", fontSize: "0.85rem", color: "#475569", fontWeight: 600, marginBottom: "8px" }}>Membership Type:</label>
-                <div style={{ display: "flex", gap: "20px", alignItems: "center" }}>
-                  <label style={{ display: "flex", alignItems: "center", gap: "6px", cursor: "pointer", fontSize: "0.9rem", color: "#0f172a" }}>
-                    <input 
-                      type="radio" 
-                      name="membershipType" 
-                      value="Fixed" 
-                      checked={membershipForm.membershipType === "Fixed"} 
-                      onChange={() => setMembershipForm({ ...membershipForm, membershipType: "Fixed" })}
-                      style={{ accentColor: "#e11d48", width: "16px", height: "16px" }}
-                    />
-                    Fixed
-                  </label>
-                  <label style={{ display: "flex", alignItems: "center", gap: "6px", cursor: "pointer", fontSize: "0.9rem", color: "#0f172a" }}>
-                    <input 
-                      type="radio" 
-                      name="membershipType" 
-                      value="Percentage" 
-                      checked={membershipForm.membershipType === "Percentage"} 
-                      onChange={() => setMembershipForm({ ...membershipForm, membershipType: "Percentage" })}
-                      style={{ accentColor: "#e11d48", width: "16px", height: "16px" }}
-                    />
+                <label style={{ display: "block", fontSize: "0.85rem", color: "#475569", fontWeight: 600, marginBottom: "8px" }}>Membership Type</label>
+                <div style={{ display: "flex", background: "#f1f5f9", padding: "4px", borderRadius: "10px", width: "fit-content" }}>
+                  <button 
+                    type="button" 
+                    onClick={() => setMembershipForm({ ...membershipForm, membershipType: "Fixed" })}
+                    style={{ padding: "8px 24px", borderRadius: "8px", fontSize: "0.9rem", fontWeight: 600, border: "none", cursor: "pointer", transition: "all 0.2s", background: membershipForm.membershipType === "Fixed" ? "#fff" : "transparent", color: membershipForm.membershipType === "Fixed" ? "#0f172a" : "#64748b", boxShadow: membershipForm.membershipType === "Fixed" ? "0 1px 3px rgba(0,0,0,0.1)" : "none" }}
+                  >
+                    Fixed Value
+                  </button>
+                  <button 
+                    type="button" 
+                    onClick={() => setMembershipForm({ ...membershipForm, membershipType: "Percentage" })}
+                    style={{ padding: "8px 24px", borderRadius: "8px", fontSize: "0.9rem", fontWeight: 600, border: "none", cursor: "pointer", transition: "all 0.2s", background: membershipForm.membershipType === "Percentage" ? "#fff" : "transparent", color: membershipForm.membershipType === "Percentage" ? "#0f172a" : "#64748b", boxShadow: membershipForm.membershipType === "Percentage" ? "0 1px 3px rgba(0,0,0,0.1)" : "none" }}
+                  >
                     Percentage
-                  </label>
+                  </button>
                 </div>
               </div>
 
               {/* Name & Active */}
               <div style={{ display: "flex", gap: "24px", alignItems: "flex-end", flexWrap: "wrap" }}>
                 <div style={{ flex: 1, minWidth: "250px" }}>
-                  <label style={{ display: "block", fontSize: "0.85rem", color: "#475569", fontWeight: 600, marginBottom: "6px" }}>Name</label>
+                  <label style={{ display: "block", fontSize: "0.85rem", color: "#475569", fontWeight: 600, marginBottom: "8px" }}>Name</label>
                   <input 
                     type="text" 
                     placeholder="Enter Name" 
                     value={membershipForm.name} 
                     onChange={(e) => setMembershipForm({ ...membershipForm, name: e.target.value })} 
-                   
+                    style={{ width: "100%", padding: "10px 14px", borderRadius: "8px", border: "1px solid #cbd5e1", fontSize: "0.95rem", color: "#0f172a", outline: "none", boxSizing: "border-box", transition: "all 0.2s", boxShadow: "0 1px 2px rgba(0,0,0,0.02)" }}
+                    onFocus={(e) => { e.target.style.borderColor = "#3b82f6"; e.target.style.boxShadow = "0 0 0 3px rgba(59, 130, 246, 0.1)"; }}
+                    onBlur={(e) => { e.target.style.borderColor = "#cbd5e1"; e.target.style.boxShadow = "0 1px 2px rgba(0,0,0,0.02)"; }}
                   />
                 </div>
                 <ToggleSwitch label="Active" checked={membershipForm.isActive} onChange={(e) => setMembershipForm({ ...membershipForm, isActive: e.target.checked })} />
@@ -467,44 +461,52 @@ export default function MembershipsPage() {
               {/* Fees, Validity, Renewal Reminder, Standard Discount */}
               <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: "16px" }}>
                 <div>
-                  <label style={{ display: "block", fontSize: "0.85rem", color: "#475569", fontWeight: 600, marginBottom: "6px" }}>Fees</label>
+                  <label style={{ display: "block", fontSize: "0.85rem", color: "#475569", fontWeight: 600, marginBottom: "8px" }}>Fees</label>
                   <input 
                     type="number" 
                     placeholder="Enter Fee" 
                     value={membershipForm.price} 
                     onChange={(e) => setMembershipForm({ ...membershipForm, price: e.target.value })} 
-                   
+                    style={{ width: "100%", padding: "10px 14px", borderRadius: "8px", border: "1px solid #cbd5e1", fontSize: "0.95rem", color: "#0f172a", outline: "none", boxSizing: "border-box", transition: "all 0.2s", boxShadow: "0 1px 2px rgba(0,0,0,0.02)" }}
+                    onFocus={(e) => { e.target.style.borderColor = "#3b82f6"; e.target.style.boxShadow = "0 0 0 3px rgba(59, 130, 246, 0.1)"; }}
+                    onBlur={(e) => { e.target.style.borderColor = "#cbd5e1"; e.target.style.boxShadow = "0 1px 2px rgba(0,0,0,0.02)"; }}
                   />
                 </div>
                 <div>
-                  <label style={{ display: "block", fontSize: "0.85rem", color: "#475569", fontWeight: 600, marginBottom: "6px" }}>Validity</label>
+                  <label style={{ display: "block", fontSize: "0.85rem", color: "#475569", fontWeight: 600, marginBottom: "8px" }}>Validity</label>
                   <input 
                     type="number" 
                     placeholder="In Days" 
                     value={membershipForm.validityDays} 
                     onChange={(e) => setMembershipForm({ ...membershipForm, validityDays: e.target.value })} 
-                   
+                    style={{ width: "100%", padding: "10px 14px", borderRadius: "8px", border: "1px solid #cbd5e1", fontSize: "0.95rem", color: "#0f172a", outline: "none", boxSizing: "border-box", transition: "all 0.2s", boxShadow: "0 1px 2px rgba(0,0,0,0.02)" }}
+                    onFocus={(e) => { e.target.style.borderColor = "#3b82f6"; e.target.style.boxShadow = "0 0 0 3px rgba(59, 130, 246, 0.1)"; }}
+                    onBlur={(e) => { e.target.style.borderColor = "#cbd5e1"; e.target.style.boxShadow = "0 1px 2px rgba(0,0,0,0.02)"; }}
                   />
                 </div>
                 <div>
-                  <label style={{ display: "block", fontSize: "0.85rem", color: "#475569", fontWeight: 600, marginBottom: "6px" }}>Renewal Reminder</label>
+                  <label style={{ display: "block", fontSize: "0.85rem", color: "#475569", fontWeight: 600, marginBottom: "8px" }}>Renewal Reminder</label>
                   <input 
                     type="number" 
                     placeholder="In Days" 
                     value={membershipForm.renewalReminder} 
                     onChange={(e) => setMembershipForm({ ...membershipForm, renewalReminder: e.target.value })} 
-                   
+                    style={{ width: "100%", padding: "10px 14px", borderRadius: "8px", border: "1px solid #cbd5e1", fontSize: "0.95rem", color: "#0f172a", outline: "none", boxSizing: "border-box", transition: "all 0.2s", boxShadow: "0 1px 2px rgba(0,0,0,0.02)" }}
+                    onFocus={(e) => { e.target.style.borderColor = "#3b82f6"; e.target.style.boxShadow = "0 0 0 3px rgba(59, 130, 246, 0.1)"; }}
+                    onBlur={(e) => { e.target.style.borderColor = "#cbd5e1"; e.target.style.boxShadow = "0 1px 2px rgba(0,0,0,0.02)"; }}
                   />
                 </div>
                 {membershipForm.membershipType === "Percentage" && (
                   <div>
-                    <label style={{ display: "block", fontSize: "0.85rem", color: "#475569", fontWeight: 600, marginBottom: "6px" }}>Standard Discount '%'</label>
+                    <label style={{ display: "block", fontSize: "0.85rem", color: "#475569", fontWeight: 600, marginBottom: "8px" }}>Standard Discount '%'</label>
                     <input 
                       type="number" 
                       placeholder="Enter %" 
                       value={membershipForm.discountValue} 
                       onChange={(e) => setMembershipForm({ ...membershipForm, discountValue: e.target.value })} 
-                     
+                      style={{ width: "100%", padding: "10px 14px", borderRadius: "8px", border: "1px solid #cbd5e1", fontSize: "0.95rem", color: "#0f172a", outline: "none", boxSizing: "border-box", transition: "all 0.2s", boxShadow: "0 1px 2px rgba(0,0,0,0.02)" }}
+                      onFocus={(e) => { e.target.style.borderColor = "#3b82f6"; e.target.style.boxShadow = "0 0 0 3px rgba(59, 130, 246, 0.1)"; }}
+                      onBlur={(e) => { e.target.style.borderColor = "#cbd5e1"; e.target.style.boxShadow = "0 1px 2px rgba(0,0,0,0.02)"; }}
                     />
                   </div>
                 )}
@@ -513,13 +515,15 @@ export default function MembershipsPage() {
               {/* Benefit Amount (Fixed Only) */}
               {membershipForm.membershipType === "Fixed" && (
                 <div style={{ width: "200px" }}>
-                  <label style={{ display: "block", fontSize: "0.85rem", color: "#475569", fontWeight: 600, marginBottom: "6px" }}>Benefit Amount</label>
+                  <label style={{ display: "block", fontSize: "0.85rem", color: "#475569", fontWeight: 600, marginBottom: "8px" }}>Benefit Amount</label>
                   <input 
                     type="number" 
                     placeholder="Enter Amount" 
                     value={membershipForm.walletValue} 
                     onChange={(e) => setMembershipForm({ ...membershipForm, walletValue: e.target.value })} 
-                   
+                    style={{ width: "100%", padding: "10px 14px", borderRadius: "8px", border: "1px solid #cbd5e1", fontSize: "0.95rem", color: "#0f172a", outline: "none", boxSizing: "border-box", transition: "all 0.2s", boxShadow: "0 1px 2px rgba(0,0,0,0.02)" }}
+                    onFocus={(e) => { e.target.style.borderColor = "#3b82f6"; e.target.style.boxShadow = "0 0 0 3px rgba(59, 130, 246, 0.1)"; }}
+                    onBlur={(e) => { e.target.style.borderColor = "#cbd5e1"; e.target.style.boxShadow = "0 1px 2px rgba(0,0,0,0.02)"; }}
                   />
                 </div>
               )}
@@ -546,7 +550,9 @@ export default function MembershipsPage() {
                     placeholder="Search services..." 
                     value={serviceSearch} 
                     onChange={(e) => setServiceSearch(e.target.value)} 
-                   
+                    style={{ width: "100%", padding: "10px 14px", borderRadius: "8px", border: "1px solid #cbd5e1", fontSize: "0.95rem", color: "#0f172a", outline: "none", boxSizing: "border-box", marginBottom: "12px", transition: "all 0.2s", boxShadow: "0 1px 2px rgba(0,0,0,0.02)" }}
+                    onFocus={(e) => { e.target.style.borderColor = "#3b82f6"; e.target.style.boxShadow = "0 0 0 3px rgba(59, 130, 246, 0.1)"; }}
+                    onBlur={(e) => { e.target.style.borderColor = "#cbd5e1"; e.target.style.boxShadow = "0 1px 2px rgba(0,0,0,0.02)"; }}
                   />
                   <div style={{ display: "flex", flexWrap: "wrap", gap: "8px", maxHeight: "150px", overflowY: "auto" }}>
                     {services.filter(s => s.name.toLowerCase().includes(serviceSearch.toLowerCase())).map((service) => {
@@ -594,8 +600,8 @@ export default function MembershipsPage() {
 
               {/* Actions */}
               <div style={{ display: "flex", justifyContent: "flex-end", gap: "12px", marginTop: "10px" }}>
-                <button type="button" onClick={() => { setMembershipForm(emptyMembership); setShowMembershipModal(false); }} style={{ padding: "8px 24px", borderRadius: "6px", border: "1px solid #cbd5e1", background: "#f1f5f9", color: "#475569", fontWeight: 600, cursor: "pointer" }}>Cancel</button>
-                <button type="submit" style={{ padding: "8px 32px", borderRadius: "6px", border: "none", background: "var(--button-bg-solid, #3b82f6)", color: "white", fontWeight: 600, cursor: "pointer", transition: "opacity 0.2s" }}>Save</button>
+                <button type="button" onClick={() => { setMembershipForm(emptyMembership); setShowMembershipModal(false); }} style={{ padding: "10px 24px", borderRadius: "8px", border: "1px solid #cbd5e1", background: "white", color: "#475569", fontWeight: 600, cursor: "pointer", transition: "all 0.2s" }} onMouseEnter={(e) => e.target.style.background = "#f8fafc"} onMouseLeave={(e) => e.target.style.background = "white"}>Cancel</button>
+                <button type="submit" style={{ padding: "10px 32px", borderRadius: "8px", border: "none", background: "#0f172a", color: "white", fontWeight: 700, cursor: "pointer", transition: "all 0.2s", boxShadow: "0 2px 4px rgba(0,0,0,0.1)" }} onMouseEnter={(e) => { e.target.style.transform = "translateY(-1px)"; e.target.style.boxShadow = "0 4px 6px rgba(0,0,0,0.15)"; }} onMouseLeave={(e) => { e.target.style.transform = "translateY(0)"; e.target.style.boxShadow = "0 2px 4px rgba(0,0,0,0.1)"; }}>Save Plan</button>
               </div>
 
             </form>
