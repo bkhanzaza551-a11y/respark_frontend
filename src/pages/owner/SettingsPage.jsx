@@ -1551,61 +1551,57 @@ export default function SettingsPage() {
               )}
 
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20, paddingTop: 16 }}>
-                <h3 style={{ margin: 0, fontSize: 18, fontWeight: 800, color: "#1e293b", display: "flex", alignItems: "center", gap: 8 }}>
-                  <span style={{ color: "#8b5cf6" }}><Coffee size={20} /></span> Break Types
+                <h3 style={{ margin: 0, fontSize: 16, fontWeight: 800, color: "#1e293b", display: "flex", alignItems: "center", gap: 10 }}>
+                  <span style={{ background: "#f5f3ff", color: "#7c3aed", width: 34, height: 34, display: "flex", justifyContent: "center", alignItems: "center", borderRadius: 8 }}><Coffee size={16} /></span> Break Types
                 </h3>
-                <button type="button" onClick={addBreakToDraft} style={{ padding: "8px 16px", background: "#f1f5f9", color: "#334155", border: "1px solid #cbd5e1", borderRadius: 8, fontWeight: 600, cursor: "pointer", fontSize: 13, display: "flex", alignItems: "center", gap: 6, transition: "all 0.2s" }} onMouseEnter={(e) => { e.currentTarget.style.background = "#e2e8f0"; }} onMouseLeave={(e) => { e.currentTarget.style.background = "#f1f5f9"; }}>
+                <button type="button" onClick={addBreakToDraft} style={{ padding: "8px 16px", background: "#fff", color: "#334155", border: "1px solid #e2e8f0", borderRadius: 8, fontWeight: 600, cursor: "pointer", fontSize: 13, display: "flex", alignItems: "center", gap: 6, transition: "all 0.2s" }} onMouseEnter={(e) => { e.currentTarget.style.background = "#f8fafc"; e.currentTarget.style.borderColor = "#cbd5e1"; }} onMouseLeave={(e) => { e.currentTarget.style.background = "#fff"; e.currentTarget.style.borderColor = "#e2e8f0"; }}>
                   <Plus size={14} /> Add Break
                 </button>
               </div>
 
               {(shiftDraft.breaks || []).length === 0 && (
-                <div style={{ padding: "32px", textAlign: "center", color: "#94a3b8", fontSize: 15, background: "#f8fafc", borderRadius: 16, border: "2px dashed #cbd5e1", marginBottom: 32 }}>
-                  No breaks added yet. Add lunch or rest breaks here.
+                <div style={{ padding: "32px", textAlign: "center", color: "#94a3b8", fontSize: 14, background: "#fafafa", borderRadius: 12, border: "1px dashed #e2e8f0", marginBottom: 28 }}>
+                  No breaks added yet. Click "+ Add Break" to add lunch or rest breaks.
                 </div>
               )}
 
-              <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: 16, marginBottom: 28 }}>
+              <div style={{ display: "flex", flexDirection: "column", gap: 12, marginBottom: 28 }}>
                 {(shiftDraft.breaks || []).map((brk, idx) => (
-                  <div key={idx} style={{ padding: 20, background: "#fff", borderRadius: 12, border: "1px solid #e2e8f0", position: "relative", boxShadow: "0 2px 8px rgba(0,0,0,0.02)" }}>
-                    <button type="button" onClick={() => removeBreakFromDraft(idx)} style={{ position: "absolute", top: 16, right: 16, background: "#fee2e2", color: "#991b1b", border: "none", cursor: "pointer", width: 28, height: 28, borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center", transition: "background 0.2s" }} onMouseEnter={(e) => e.currentTarget.style.background = "#fca5a5"} onMouseLeave={(e) => e.currentTarget.style.background = "#fee2e2"}><X size={14} /></button>
-                    <div style={{ display: "grid", gridTemplateColumns: "1fr 100px", gap: 20, marginBottom: 16, paddingRight: 40 }}>
-                      <label>
-                        <div style={{ fontSize: 12, color: "#64748b", marginBottom: 6, fontWeight: 700, textTransform: "uppercase", letterSpacing: 0.5 }}>Break Name</div>
-                        <input value={brk.name || ""} onChange={(e) => updateBreakInDraft(idx, { name: e.target.value })} placeholder="e.g. Lunch Break" style={{ padding: "10px 14px", border: "1px solid #cbd5e1", borderRadius: 8, width: "100%", fontSize: 14, outline: "none", boxSizing: "border-box", transition: "all 0.2s" }} onFocus={(e) => { e.target.style.borderColor = "#3b82f6"; e.target.style.boxShadow = "0 0 0 3px rgba(59, 130, 246, 0.1)"; }} onBlur={(e) => { e.target.style.borderColor = "#cbd5e1"; e.target.style.boxShadow = "none"; }} />
-                      </label>
-                      <div style={{ display: "flex", flexDirection: "column" }}>
-                        <div style={{ fontSize: 12, color: "#64748b", marginBottom: 6, fontWeight: 700, textTransform: "uppercase", letterSpacing: 0.5 }}>Status</div>
-                        <label style={{ display: "flex", alignItems: "center", gap: 8, cursor: "pointer", height: 42 }}>
-                          <ToggleSwitch checked={brk.active !== false} onChange={(e) => updateBreakInDraft(idx, { active: e.target.checked })} />
-                        </label>
+                  <div key={idx} style={{ padding: "16px 20px", background: "#fafbfc", borderRadius: 12, border: "1px solid #e2e8f0", transition: "all 0.2s" }} onMouseEnter={(e) => e.currentTarget.style.borderColor = "#cbd5e1"} onMouseLeave={(e) => e.currentTarget.style.borderColor = "#e2e8f0"}>
+                    <div style={{ display: "grid", gridTemplateColumns: "1fr 160px 160px auto auto", gap: 14, alignItems: "end" }}>
+                      <div>
+                        <div style={{ fontSize: 11, color: "#64748b", marginBottom: 5, fontWeight: 700, textTransform: "uppercase", letterSpacing: 0.5 }}>Break Name</div>
+                        <input value={brk.name || ""} onChange={(e) => updateBreakInDraft(idx, { name: e.target.value })} placeholder="e.g. Lunch Break" style={{ padding: "10px 12px", border: "1px solid #e2e8f0", borderRadius: 8, width: "100%", fontSize: 14, outline: "none", boxSizing: "border-box", background: "#fff", transition: "all 0.2s" }} onFocus={(e) => { e.target.style.borderColor = "#3b82f6"; e.target.style.boxShadow = "0 0 0 3px rgba(59, 130, 246, 0.08)"; }} onBlur={(e) => { e.target.style.borderColor = "#e2e8f0"; e.target.style.boxShadow = "none"; }} />
                       </div>
-                    </div>
-                    <div style={{ borderTop: "1px solid #f1f5f9", paddingTop: 16 }}>
-                      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20 }}>
-                        <label>
-                          <div style={{ fontSize: 12, color: "#64748b", marginBottom: 6, fontWeight: 700, textTransform: "uppercase", letterSpacing: 0.5 }}>From Time</div>
-                          <input type="time" value={brk.fromTime || ""} onChange={(e) => updateBreakInDraft(idx, { fromTime: e.target.value })} style={{ padding: "10px 14px", border: "1px solid #cbd5e1", borderRadius: 8, width: "100%", outline: "none", boxSizing: "border-box", transition: "all 0.2s", fontSize: 14 }} onFocus={(e) => { e.target.style.borderColor = "#3b82f6"; e.target.style.boxShadow = "0 0 0 3px rgba(59, 130, 246, 0.1)"; }} onBlur={(e) => { e.target.style.borderColor = "#cbd5e1"; e.target.style.boxShadow = "none"; }} />
-                        </label>
-                        <label>
-                          <div style={{ fontSize: 12, color: "#64748b", marginBottom: 6, fontWeight: 700, textTransform: "uppercase", letterSpacing: 0.5 }}>To Time</div>
-                          <input type="time" value={brk.toTime || ""} onChange={(e) => updateBreakInDraft(idx, { toTime: e.target.value })} style={{ padding: "10px 14px", border: "1px solid #cbd5e1", borderRadius: 8, width: "100%", outline: "none", boxSizing: "border-box", transition: "all 0.2s", fontSize: 14 }} onFocus={(e) => { e.target.style.borderColor = "#3b82f6"; e.target.style.boxShadow = "0 0 0 3px rgba(59, 130, 246, 0.1)"; }} onBlur={(e) => { e.target.style.borderColor = "#cbd5e1"; e.target.style.boxShadow = "none"; }} />
-                        </label>
+                      <div>
+                        <div style={{ fontSize: 11, color: "#64748b", marginBottom: 5, fontWeight: 700, textTransform: "uppercase", letterSpacing: 0.5 }}>From</div>
+                        <input type="time" value={brk.fromTime || ""} onChange={(e) => updateBreakInDraft(idx, { fromTime: e.target.value })} style={{ padding: "10px 12px", border: "1px solid #e2e8f0", borderRadius: 8, width: "100%", outline: "none", boxSizing: "border-box", background: "#fff", transition: "all 0.2s", fontSize: 14 }} onFocus={(e) => { e.target.style.borderColor = "#3b82f6"; e.target.style.boxShadow = "0 0 0 3px rgba(59, 130, 246, 0.08)"; }} onBlur={(e) => { e.target.style.borderColor = "#e2e8f0"; e.target.style.boxShadow = "none"; }} />
                       </div>
+                      <div>
+                        <div style={{ fontSize: 11, color: "#64748b", marginBottom: 5, fontWeight: 700, textTransform: "uppercase", letterSpacing: 0.5 }}>To</div>
+                        <input type="time" value={brk.toTime || ""} onChange={(e) => updateBreakInDraft(idx, { toTime: e.target.value })} style={{ padding: "10px 12px", border: "1px solid #e2e8f0", borderRadius: 8, width: "100%", outline: "none", boxSizing: "border-box", background: "#fff", transition: "all 0.2s", fontSize: 14 }} onFocus={(e) => { e.target.style.borderColor = "#3b82f6"; e.target.style.boxShadow = "0 0 0 3px rgba(59, 130, 246, 0.08)"; }} onBlur={(e) => { e.target.style.borderColor = "#e2e8f0"; e.target.style.boxShadow = "none"; }} />
+                      </div>
+                      <div style={{ paddingBottom: 2 }}>
+                        <ToggleSwitch checked={brk.active !== false} onChange={(e) => updateBreakInDraft(idx, { active: e.target.checked })} />
+                      </div>
+                      <button type="button" onClick={() => removeBreakFromDraft(idx)} style={{ background: "transparent", border: "none", cursor: "pointer", color: "#94a3b8", width: 32, height: 32, borderRadius: 6, display: "flex", alignItems: "center", justifyContent: "center", transition: "all 0.2s", marginBottom: 2 }} onMouseEnter={(e) => { e.currentTarget.style.background = "#fef2f2"; e.currentTarget.style.color = "#ef4444"; }} onMouseLeave={(e) => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = "#94a3b8"; }}>
+                        <Trash2 size={15} />
+                      </button>
                     </div>
                   </div>
                 ))}
               </div>
 
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: 28, paddingTop: 20, borderTop: "1px solid #f1f5f9" }}>
-                <button type="button" onClick={() => deleteShift(selectedShift.id)} disabled={shiftSaving} style={{ padding: "10px 20px", background: "#fff", border: "1px solid #ef4444", color: "#ef4444", borderRadius: 10, fontWeight: 600, cursor: shiftSaving ? "not-allowed" : "pointer", fontSize: 14, transition: "background 0.2s" }} onMouseEnter={(e) => { e.currentTarget.style.background = "#fef2f2"; }} onMouseLeave={(e) => { e.currentTarget.style.background = "#fff"; }}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: 8, paddingTop: 20, borderTop: "1px solid #f1f5f9" }}>
+                <button type="button" onClick={() => deleteShift(selectedShift.id)} disabled={shiftSaving} style={{ padding: "10px 18px", background: "transparent", border: "none", color: "#94a3b8", borderRadius: 10, fontWeight: 600, cursor: shiftSaving ? "not-allowed" : "pointer", fontSize: 13, transition: "all 0.2s", display: "flex", alignItems: "center", gap: 6 }} onMouseEnter={(e) => { e.currentTarget.style.color = "#ef4444"; }} onMouseLeave={(e) => { e.currentTarget.style.color = "#94a3b8"; }}>
+                  <Trash2 size={14} />
                   {shiftSaving ? "Deleting..." : "Delete Shift"}
                 </button>
-                <div style={{ display: "flex", gap: 12 }}>
-                  <button type="button" onClick={() => setSelectedShiftId(null)} style={{ padding: "10px 20px", background: "#f8fafc", color: "#475569", border: "1px solid #cbd5e1", borderRadius: 10, fontWeight: 600, cursor: "pointer", fontSize: 14, transition: "all 0.2s" }} onMouseEnter={(e) => { e.currentTarget.style.background = "#f1f5f9"; }} onMouseLeave={(e) => { e.currentTarget.style.background = "#f8fafc"; }}>
+                <div style={{ display: "flex", gap: 10 }}>
+                  <button type="button" onClick={() => setSelectedShiftId(null)} style={{ padding: "10px 22px", background: "#fff", color: "#475569", border: "1px solid #e2e8f0", borderRadius: 10, fontWeight: 600, cursor: "pointer", fontSize: 14, transition: "all 0.2s" }} onMouseEnter={(e) => { e.currentTarget.style.background = "#f8fafc"; e.currentTarget.style.borderColor = "#cbd5e1"; }} onMouseLeave={(e) => { e.currentTarget.style.background = "#fff"; e.currentTarget.style.borderColor = "#e2e8f0"; }}>
                     Cancel
                   </button>
-                  <button type="button" onClick={saveShift} disabled={shiftSaving} style={{ padding: "10px 24px", background: "linear-gradient(135deg, #2563eb, #1d4ed8)", color: "#fff", border: "none", borderRadius: 10, fontWeight: 600, cursor: shiftSaving ? "not-allowed" : "pointer", fontSize: 14, transition: "all 0.2s", boxShadow: "0 4px 12px rgba(37, 99, 235, 0.2)" }} onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(-1px)'; e.currentTarget.style.boxShadow = '0 6px 16px rgba(37, 99, 235, 0.3)'; }} onMouseLeave={(e) => { e.currentTarget.style.transform = 'none'; e.currentTarget.style.boxShadow = '0 4px 12px rgba(37, 99, 235, 0.2)'; }}>
+                  <button type="button" onClick={saveShift} disabled={shiftSaving} style={{ padding: "10px 28px", background: "linear-gradient(135deg, #2563eb, #1d4ed8)", color: "#fff", border: "none", borderRadius: 10, fontWeight: 700, cursor: shiftSaving ? "not-allowed" : "pointer", fontSize: 14, transition: "all 0.2s", boxShadow: "0 4px 12px rgba(37, 99, 235, 0.2)" }} onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(-1px)'; e.currentTarget.style.boxShadow = '0 6px 16px rgba(37, 99, 235, 0.3)'; }} onMouseLeave={(e) => { e.currentTarget.style.transform = 'none'; e.currentTarget.style.boxShadow = '0 4px 12px rgba(37, 99, 235, 0.2)'; }}>
                     {shiftSaving ? "Saving..." : "Save Shift"}
                   </button>
                 </div>
