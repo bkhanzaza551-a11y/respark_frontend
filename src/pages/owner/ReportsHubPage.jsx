@@ -1759,7 +1759,7 @@ export default function ReportsHubPage() {
       </div>
 
       <div id="printable-report" className="rpt-main">
-        <div className="rpt-topbar" style={{ justifyContent: "space-between" }}>
+                <div className="rpt-topbar" style={{ justifyContent: "space-between" }}>
           <div style={{ display: "flex", alignItems: "center", gap: 8, flexShrink: 0 }}>
             {REPORTS_WITH_CHARTS.has(activeReport) && activeReport !== "sales_summary" && (
               <button
@@ -1805,36 +1805,6 @@ export default function ReportsHubPage() {
             <h2 className="rpt-title">{currentReport?.label || "Report"}</h2>
           </div>
           <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap", flexShrink: 0 }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 4, background: "#f1f5f9", borderRadius: 8, padding: "3px 6px" }}>
-              {QUICK_RANGES.map((qr) => (
-                <button
-                  key={qr.key}
-                  type="button"
-                  onClick={() => {
-                    const range = computeQuickRange(qr.key);
-                    setQuickRange(qr.key);
-                    setFilters((current) => ({ ...current, start: range.start, end: range.end }));
-                  }}
-                  style={{
-                    padding: "4px 10px", borderRadius: 6, border: "none", fontSize: 11,
-                    fontWeight: 700, cursor: "pointer", transition: "all 0.15s",
-                    background: quickRange === qr.key ? "#6366f1" : "transparent",
-                    color: quickRange === qr.key ? "white" : "#64748b",
-                  }}
-                >{qr.label}</button>
-              ))}
-            </div>
-            <div className="rpt-filter-chip" style={{ display: "flex", alignItems: "center", gap: 6 }}>
-              <span className="rpt-filter-label">From:</span>
-              <input type="date" value={filters.start} onChange={(e) => { setQuickRange(""); setFilters((current) => ({ ...current, start: e.target.value })); }} max={filters.end || undefined} style={{ padding: "4px 8px", border: "1px solid #e2e8f0", borderRadius: "5px", fontSize: "0.72rem" }} />
-            </div>
-            <div className="rpt-filter-chip" style={{ display: "flex", alignItems: "center", gap: 6 }}>
-              <span className="rpt-filter-label">To:</span>
-              <input type="date" value={filters.end} onChange={(e) => { setQuickRange(""); setFilters((current) => ({ ...current, end: e.target.value })); }} min={filters.start || undefined} style={{ padding: "4px 8px", border: "1px solid #e2e8f0", borderRadius: "5px", fontSize: "0.72rem" }} />
-            </div>
-            {(filters.start || filters.end) && (
-              <button type="button" className="rpt-btn rpt-btn-clear" onClick={() => { setQuickRange(""); setFilters((current) => ({ ...current, start: "", end: "" })); }}>×</button>
-            )}
             {activeReport !== "sales_summary" && (
               <button type="button" className="rpt-icon-btn" title="Export CSV" onClick={handleExportCSV}>
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -1854,40 +1824,79 @@ export default function ReportsHubPage() {
           </div>
         </div>
 
-        <div id="report-filters" style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap", padding: "6px 14px", background: "#fff", borderBottom: "1px solid #e2e8f0" }}>
+        <div id="report-filters" style={{ display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap", padding: "12px 16px", background: "#f8fafc", borderBottom: "1px solid #e2e8f0" }}>
+            {canSelectBranch && (
+              <div style={{ minWidth: 180, maxWidth: 220 }}>
+                <CustomDropdown
+                  value={reportBranchId}
+                  onChange={(e) => setReportBranchId(e.target.value)}
+                  style={{ padding: "6px 12px", border: "1px solid #cbd5e1", borderRadius: "6px", fontSize: "0.82rem", width: "100%", fontWeight: 600, color: "#0f172a", background: "white", boxShadow: "0 1px 2px rgba(0,0,0,0.05)" }}
+                >
+                  <option value="">All Branches</option>
+                  {branches.map((b) => <option key={b.id} value={b.id}>{b.name}</option>)}
+                </CustomDropdown>
+              </div>
+            )}
+            
+            <div style={{ display: "flex", alignItems: "center", gap: 4, background: "#e2e8f0", borderRadius: 8, padding: "4px 6px" }}>
+              {QUICK_RANGES.map((qr) => (
+                <button
+                  key={qr.key}
+                  type="button"
+                  onClick={() => {
+                    const range = computeQuickRange(qr.key);
+                    setQuickRange(qr.key);
+                    setFilters((current) => ({ ...current, start: range.start, end: range.end }));
+                  }}
+                  style={{
+                    padding: "4px 10px", borderRadius: 6, border: "none", fontSize: 11,
+                    fontWeight: 700, cursor: "pointer", transition: "all 0.15s",
+                    background: quickRange === qr.key ? "#fff" : "transparent",
+                    color: quickRange === qr.key ? "#0f172a" : "#475569",
+                    boxShadow: quickRange === qr.key ? "0 1px 2px rgba(0,0,0,0.1)" : "none"
+                  }}
+                >{qr.label}</button>
+              ))}
+            </div>
+
+            <div className="rpt-filter-chip" style={{ display: "flex", alignItems: "center", gap: 6, background: "white", padding: "4px 8px", borderRadius: 6, border: "1px solid #e2e8f0" }}>
+              <span className="rpt-filter-label" style={{ fontWeight: 600, color: "#64748b" }}>From:</span>
+              <input type="date" value={filters.start} onChange={(e) => { setQuickRange(""); setFilters((current) => ({ ...current, start: e.target.value })); }} max={filters.end || undefined} style={{ padding: "2px", border: "none", outline: "none", fontSize: "0.8rem", color: "#0f172a", background: "transparent" }} />
+            </div>
+
+            <div className="rpt-filter-chip" style={{ display: "flex", alignItems: "center", gap: 6, background: "white", padding: "4px 8px", borderRadius: 6, border: "1px solid #e2e8f0" }}>
+              <span className="rpt-filter-label" style={{ fontWeight: 600, color: "#64748b" }}>To:</span>
+              <input type="date" value={filters.end} onChange={(e) => { setQuickRange(""); setFilters((current) => ({ ...current, end: e.target.value })); }} min={filters.start || undefined} style={{ padding: "2px", border: "none", outline: "none", fontSize: "0.8rem", color: "#0f172a", background: "transparent" }} />
+            </div>
+
+            {(filters.start || filters.end) && (
+              <button type="button" onClick={() => { setQuickRange(""); setFilters((current) => ({ ...current, start: "", end: "" })); }} style={{ padding: "6px 12px", borderRadius: 6, border: "1px solid #e2e8f0", background: "white", color: "#ef4444", fontSize: "0.8rem", fontWeight: 600, cursor: "pointer", boxShadow: "0 1px 2px rgba(0,0,0,0.05)" }}>Clear Dates</button>
+            )}
+
+            <div style={{ width: "1px", height: "24px", background: "#cbd5e1", margin: "0 4px" }}></div>
+
             {filterConfig.map((f) => {
               const opts = getFilterOptions(f, filterOptions);
               const value = reportFilters[f.key] ?? "";
               return (
-                <div key={f.key} className="rpt-filter-chip">
-                  <span className="rpt-filter-label">{f.label}:</span>
+                <div key={f.key} className="rpt-filter-chip" style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                  <span className="rpt-filter-label" style={{ fontWeight: 600, color: "#475569" }}>{f.label}:</span>
                   {f.type === "text" ? (
                     <input
                       type="text"
                       value={value}
                       placeholder={f.placeholder || ""}
                       onChange={(e) => setReportFilters((current) => ({ ...current, [f.key]: e.target.value }))}
-                      style={{ padding: "4px 8px", border: "1px solid #e2e8f0", borderRadius: "5px", fontSize: "0.72rem", minWidth: 130 }}
+                      style={{ padding: "6px 10px", border: "1px solid #cbd5e1", borderRadius: "6px", fontSize: "0.82rem", minWidth: 130, color: "#0f172a" }}
                     />
                   ) : (
-                    <CustomDropdown value={value} onChange={(e) => setReportFilters((current) => ({ ...current, [f.key]: e.target.value }))}>
+                    <CustomDropdown value={value} onChange={(e) => setReportFilters((current) => ({ ...current, [f.key]: e.target.value }))} style={{ padding: "6px 10px", border: "1px solid #cbd5e1", borderRadius: "6px", fontSize: "0.82rem", minWidth: 130, background: "white", color: "#0f172a" }}>
                       {opts.map((opt) => <option key={opt.value} value={opt.value}>{opt.label}</option>)}
                     </CustomDropdown>
                   )}
                 </div>
               );
             })}
-
-            {canSelectBranch && (
-              <CustomDropdown
-                value={reportBranchId}
-                onChange={(e) => setReportBranchId(e.target.value)}
-                style={{ padding: "4px 10px", border: "1px solid #e2e8f0", borderRadius: "5px", fontSize: "0.72rem", minWidth: 130, fontWeight: 600, color: "#334155", background: "white" }}
-              >
-                <option value="">All Branches</option>
-                {branches.map((b) => <option key={b.id} value={b.id}>{b.name}</option>)}
-              </CustomDropdown>
-            )}
         </div>
 
         <div className="rpt-table-wrap" style={{
