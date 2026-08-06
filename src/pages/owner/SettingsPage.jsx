@@ -2399,6 +2399,346 @@ export default function SettingsPage() {
                     <input type="text" value={draftFeedbackType?.name ?? editing.name} onChange={(event) => draftFeedbackType && setDraftFeedbackType({ ...draftFeedbackType, name: event.target.value })} placeholder="Enter Feedback Name" />
                   </label>
                 </div>
+                <div style={{ marginBottom: 20 }}>
+                  <ToggleSwitch 
+                    checked={draftFeedbackType?.active ?? editing.active} 
+                    onChange={(event) => draftFeedbackType && setDraftFeedbackType({ ...draftFeedbackType, active: event.target.checked })} 
+                    label="Active" 
+                    color="#3b82f6" 
+                  />
+                </div>
+                <div style={{ display: "flex", gap: 8, justifyContent: "flex-end", marginTop: 20, paddingTop: 16, borderTop: "1px solid #f1f5f9" }}>
+                  <button type="button" onClick={cancelDraft} style={{ padding: "10px 24px", background: "#f1f5f9", border: "1px solid #cbd5e1", borderRadius: 8, fontWeight: 600, cursor: "pointer", color: "#475569", fontSize: 13 }}>Cancel</button>
+                  <button type="button" onClick={saveDraft} style={{ padding: "10px 24px", background: "var(--button-bg-solid, #14b8a6)", color: "white", border: "none", borderRadius: 8, fontWeight: 700, cursor: "pointer", fontSize: 13 }}>Save</button>
+                </div>
+              </div>
+            ) : (
+              <div className="settings-panel-card" style={{ display: "flex", alignItems: "center", justifyContent: "center", minHeight: 300, color: "#94a3b8", fontSize: 14 }}>
+                Select a tax from the left panel or click "Create New"
+              </div>
+            )}
+          </div>
+        </div>
+      </>
+    );
+  };
+
+  const renderLoyaltySettingsSection = () => {
+    const loyalty = form.advancedSettings.loyaltySettings;
+    const u = (patch) => updateAdvancedObject("loyaltySettings", patch);
+    const uService = (patch) => u({ serviceEarning: { ...loyalty.serviceEarning, ...patch } });
+    const uProduct = (patch) => u({ productEarning: { ...loyalty.productEarning, ...patch } });
+    const uPackage = (patch) => u({ packageEarning: { ...loyalty.packageEarning, ...patch } });
+
+    const summaryText = loyalty.earnIndividually
+      ? `Earn ${formatMoney(loyalty.serviceEarning?.amount || 0)} = ${loyalty.serviceEarning?.points || 0} pts (Service) | ${formatMoney(loyalty.productEarning?.amount || 0)} = ${loyalty.productEarning?.points || 0} pts (Product) | ${formatMoney(loyalty.packageEarning?.amount || 0)} = ${loyalty.packageEarning?.points || 0} pts (Package)`
+      : `Earn ${loyalty.serviceEarning?.points || 0} Points on Every ${formatMoney(loyalty.serviceEarning?.amount || 0)} Spent`;
+    const redeemText = `Redeem ${formatMoney(loyalty.redeemAmount || 0)} on Every ${loyalty.redeemPoints || 0} Point`;
+
+    return (
+      <>
+        <div className="settings-panel-card" style={{ marginBottom: 24 }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 16 }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+              <h3 style={{ margin: 0, border: "none", padding: 0, fontSize: 16 }}>Loyalty</h3>
+              <label style={{ display: "flex", alignItems: "center", gap: 8, cursor: "pointer" }}>
+                <input type="checkbox" checked={loyalty.enabled} onChange={(e) => u({ enabled: e.target.checked })} style={{ width: 20, height: 20, accentColor: "var(--accent, #3b82f6)", cursor: "pointer" }} />
+                <span style={{ fontSize: 13, fontWeight: 600, color: loyalty.enabled ? "#16a34a" : "#64748b" }}>Enabled</span>
+              </label>
+            </div>
+            <div style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 13, color: "#475569" }}>
+              <span style={{ fontWeight: 600 }}>Loyalty Expiration:</span>
+              <input type="number" value={loyalty.expiryDays} onChange={(e) => u({ expiryDays: Number(e.target.value) })} style={{ width: 100, padding: "6px 10px", border: "1px solid #cbd5e1", borderRadius: 6, fontSize: 13, textAlign: "center", outline: "none" }} />
+              <span>Days</span>
+            </div>
+          </div>
+        </div>
+
+        <div className="settings-panel-card" style={{ marginBottom: 24 }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+            <label style={{ display: "flex", alignItems: "center", gap: 10, fontSize: 13, fontWeight: 600, color: "#334155", cursor: "pointer" }}>
+              <input type="checkbox" checked={loyalty.earnIndividually} onChange={(e) => u({ earnIndividually: e.target.checked })} style={{ width: 18, height: 18, accentColor: "var(--accent, #3b82f6)", cursor: "pointer" }} />
+              Earn Loyalty on Service, Product and Package Individually
+            </label>
+            <label style={{ display: "flex", alignItems: "center", gap: 10, fontSize: 13, fontWeight: 600, color: "#334155", cursor: "pointer" }}>
+              <input type="checkbox" checked={loyalty.skipEarnOnRedemption} onChange={(e) => u({ skipEarnOnRedemption: e.target.checked })} style={{ width: 18, height: 18, accentColor: "var(--accent, #3b82f6)", cursor: "pointer" }} />
+              Skip Earning Loyalty on Redemption
+            </label>
+            <label style={{ display: "flex", alignItems: "center", gap: 10, fontSize: 13, fontWeight: 600, color: "#334155", cursor: "pointer" }}>
+              <input type="checkbox" checked={loyalty.earnOnMembershipApplied} onChange={(e) => u({ earnOnMembershipApplied: e.target.checked })} style={{ width: 18, height: 18, accentColor: "var(--accent, #3b82f6)", cursor: "pointer" }} />
+              Earn Loyalty on Service, Product when Percentage Membership is Applied
+            </label>
+          </div>
+        </div>
+
+        <div className="settings-panel-card" style={{ marginBottom: 24 }}>
+          {loyalty.earnIndividually ? (
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 20 }}>
+              {[
+                { key: "service", title: "Service Loyalty Earning", data: loyalty.serviceEarning, updater: uService },
+                { key: "product", title: "Product Loyalty Earning", data: loyalty.productEarning, updater: uProduct },
+                { key: "package", title: "Package Loyalty Earning", data: loyalty.packageEarning, updater: uPackage }
+              ].map((item) => (
+                <div key={item.key}>
+                  <div style={{ fontWeight: 600, fontSize: 13, color: "#334155", marginBottom: 12 }}>Configuration for {item.title}</div>
+                  <div style={{ display: "flex", gap: 10, marginBottom: 10 }}>
+                    <div style={{ flex: 1 }}>
+                      <label style={{ fontSize: 11, color: "#475569", display: "block", marginBottom: 4, fontWeight: 600 }}>Amount</label>
+                      <div style={{ display: "flex", border: "1px solid #cbd5e1", borderRadius: 6, overflow: "hidden", background: "#fff" }}>
+                        <span style={{ padding: "8px 10px", background: "#f1f5f9", color: "#475569", fontWeight: 600, fontSize: 13, borderRight: "1px solid #cbd5e1", display: "flex", alignItems: "center" }}>$</span>
+                        <input type="number" placeholder="Enter Amount" value={item.data?.amount || ""} onChange={(e) => item.updater({ amount: Number(e.target.value) })} style={{ flex: 1, border: "none", padding: "8px 10px", fontSize: 13, outline: "none", background: "transparent" }} />
+                      </div>
+                    </div>
+                    <div style={{ flex: 1 }}>
+                      <label style={{ fontSize: 11, color: "#475569", display: "block", marginBottom: 4, fontWeight: 600 }}>Points</label>
+                      <div style={{ display: "flex", border: "1px solid #cbd5e1", borderRadius: 6, overflow: "hidden", background: "#fff" }}>
+                        <input type="number" placeholder="Enter Points" value={item.data?.points || ""} onChange={(e) => item.updater({ points: Number(e.target.value) })} style={{ flex: 1, border: "none", padding: "8px 10px", fontSize: 13, outline: "none", background: "transparent" }} />
+                        <span style={{ padding: "8px 10px", background: "#f1f5f9", color: "#475569", fontWeight: 600, fontSize: 13, borderLeft: "1px solid #cbd5e1", display: "flex", alignItems: "center" }}>pts</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div style={{ fontSize: 12, color: "#475569" }}>Earn {item.data?.points || 0} Points on Every {formatMoney(item.data?.amount || 0)} Spent</div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div>
+              <div style={{ fontWeight: 600, fontSize: 13, color: "#334155", marginBottom: 12 }}>Configuration for Loyalty Earning</div>
+              <div style={{ display: "flex", gap: 16, marginBottom: 8, flexWrap: "wrap" }}>
+                <div style={{ width: 240 }}>
+                  <label style={{ fontSize: 11, color: "#475569", display: "block", marginBottom: 4, fontWeight: 600 }}>Amount</label>
+                  <div style={{ display: "flex", border: "1px solid #cbd5e1", borderRadius: 6, overflow: "hidden", background: "#fff" }}>
+                    <span style={{ padding: "8px 10px", background: "#f1f5f9", color: "#475569", fontWeight: 600, fontSize: 13, borderRight: "1px solid #cbd5e1", display: "flex", alignItems: "center" }}>$</span>
+                    <input type="number" placeholder="Enter Amount" value={loyalty.serviceEarning?.amount || ""} onChange={(e) => { uService({ amount: Number(e.target.value) }); uProduct({ amount: Number(e.target.value) }); uPackage({ amount: Number(e.target.value) }); }} style={{ flex: 1, border: "none", padding: "8px 10px", fontSize: 13, outline: "none", background: "transparent" }} />
+                  </div>
+                </div>
+                <div style={{ width: 240 }}>
+                  <label style={{ fontSize: 11, color: "#475569", display: "block", marginBottom: 4, fontWeight: 600 }}>Points</label>
+                  <div style={{ display: "flex", border: "1px solid #cbd5e1", borderRadius: 6, overflow: "hidden", background: "#fff" }}>
+                    <input type="number" placeholder="Enter Points" value={loyalty.serviceEarning?.points || ""} onChange={(e) => { uService({ points: Number(e.target.value) }); uProduct({ points: Number(e.target.value) }); uPackage({ points: Number(e.target.value) }); }} style={{ flex: 1, border: "none", padding: "8px 10px", fontSize: 13, outline: "none", background: "transparent" }} />
+                    <span style={{ padding: "8px 10px", background: "#f1f5f9", color: "#475569", fontWeight: 600, fontSize: 13, borderLeft: "1px solid #cbd5e1", display: "flex", alignItems: "center" }}>pts</span>
+                  </div>
+                </div>
+              </div>
+              <div style={{ fontSize: 12, color: "#475569" }}>{summaryText}</div>
+            </div>
+          )}
+        </div>
+
+        <div className="settings-panel-card" style={{ marginBottom: 24 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 16 }}>
+            <h3 style={{ margin: 0, border: "none", padding: 0, fontSize: 16, color: "#94a3b8" }}>Redeem Loyalty on Service, Product and Package Individually</h3>
+            <input type="checkbox" checked={loyalty.redeemIndividually} onChange={(e) => u({ redeemIndividually: e.target.checked })} style={{ width: 18, height: 18, accentColor: "var(--accent, #3b82f6)", cursor: "pointer" }} />
+          </div>
+
+          {loyalty.redeemIndividually ? (
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 16 }}>
+              <div key="service">
+                <div style={{ fontWeight: 600, fontSize: 13, color: "#334155", marginBottom: 12 }}>Service Redeem Config</div>
+                <div style={{ display: "flex", gap: 8, marginBottom: 8 }}>
+                  <div style={{ flex: 1 }}>
+                    <label style={{ fontSize: 11, color: "#64748b", display: "block", marginBottom: 4 }}>Points</label>
+                    <input type="number" placeholder="Points" value={loyalty.serviceEarning?.redeemPoints || ""} onChange={(e) => { const n = { ...loyalty.serviceEarning, redeemPoints: Number(e.target.value) }; uService(n); }} style={{ width: "100%", padding: "8px 10px", border: "1px solid #e2e8f0", borderRadius: 6, fontSize: 13, boxSizing: "border-box" }} />
+                  </div>
+                  <div style={{ flex: 1 }}>
+                    <label style={{ fontSize: 11, color: "#64748b", display: "block", marginBottom: 4 }}>{formatMoney(1).replace(/[\d.,]/g, '').trim()}</label>
+                    <input type="number" placeholder="Amount" value={loyalty.serviceEarning?.redeemAmount || ""} onChange={(e) => { const n = { ...loyalty.serviceEarning, redeemAmount: Number(e.target.value) }; uService(n); }} style={{ width: "100%", padding: "8px 10px", border: "1px solid #e2e8f0", borderRadius: 6, fontSize: 13, boxSizing: "border-box" }} />
+                  </div>
+                </div>
+              </div>
+              <div key="product">
+                <div style={{ fontWeight: 600, fontSize: 13, color: "#334155", marginBottom: 12 }}>Product Redeem Config</div>
+                <div style={{ display: "flex", gap: 8, marginBottom: 8 }}>
+                  <div style={{ flex: 1 }}>
+                    <label style={{ fontSize: 11, color: "#64748b", display: "block", marginBottom: 4 }}>Points</label>
+                    <input type="number" placeholder="Points" value={loyalty.productEarning?.redeemPoints || ""} onChange={(e) => { const n = { ...loyalty.productEarning, redeemPoints: Number(e.target.value) }; uProduct(n); }} style={{ width: "100%", padding: "8px 10px", border: "1px solid #e2e8f0", borderRadius: 6, fontSize: 13, boxSizing: "border-box" }} />
+                  </div>
+                  <div style={{ flex: 1 }}>
+                    <label style={{ fontSize: 11, color: "#64748b", display: "block", marginBottom: 4 }}>{formatMoney(1).replace(/[\d.,]/g, '').trim()}</label>
+                    <input type="number" placeholder="Amount" value={loyalty.productEarning?.redeemAmount || ""} onChange={(e) => { const n = { ...loyalty.productEarning, redeemAmount: Number(e.target.value) }; uProduct(n); }} style={{ width: "100%", padding: "8px 10px", border: "1px solid #e2e8f0", borderRadius: 6, fontSize: 13, boxSizing: "border-box" }} />
+                  </div>
+                </div>
+              </div>
+              <div key="package">
+                <div style={{ fontWeight: 600, fontSize: 13, color: "#334155", marginBottom: 12 }}>Package Redeem Config</div>
+                <div style={{ display: "flex", gap: 8, marginBottom: 8 }}>
+                  <div style={{ flex: 1 }}>
+                    <label style={{ fontSize: 11, color: "#64748b", display: "block", marginBottom: 4 }}>Points</label>
+                    <input type="number" placeholder="Points" value={loyalty.packageEarning?.redeemPoints || ""} onChange={(e) => { const n = { ...loyalty.packageEarning, redeemPoints: Number(e.target.value) }; uPackage(n); }} style={{ width: "100%", padding: "8px 10px", border: "1px solid #e2e8f0", borderRadius: 6, fontSize: 13, boxSizing: "border-box" }} />
+                  </div>
+                  <div style={{ flex: 1 }}>
+                    <label style={{ fontSize: 11, color: "#64748b", display: "block", marginBottom: 4 }}>{formatMoney(1).replace(/[\d.,]/g, '').trim()}</label>
+                    <input type="number" placeholder="Amount" value={loyalty.packageEarning?.redeemAmount || ""} onChange={(e) => { const n = { ...loyalty.packageEarning, redeemAmount: Number(e.target.value) }; uPackage(n); }} style={{ width: "100%", padding: "8px 10px", border: "1px solid #e2e8f0", borderRadius: 6, fontSize: 13, boxSizing: "border-box" }} />
+                  </div>
+                </div>
+              </div>
+            </div>
+          ) : (
+          <>
+          <div style={{ fontWeight: 600, fontSize: 13, color: "#334155", marginBottom: 12 }}>Configuration for Loyalty Redemption</div>
+          <div style={{ display: "flex", gap: 16, marginBottom: 8 }}>
+            <div style={{ width: 200 }}>
+              <label style={{ fontSize: 11, color: "#64748b", display: "block", marginBottom: 4 }}>Points</label>
+              <input type="number" placeholder="Enter Points*" value={loyalty.redeemPoints || ""} onChange={(e) => u({ redeemPoints: Number(e.target.value) })} style={{ width: "100%", padding: "8px 10px", border: "1px solid #e2e8f0", borderRadius: 6, fontSize: 13, boxSizing: "border-box" }} />
+            </div>
+            <div style={{ width: 200 }}>
+              <label style={{ fontSize: 11, color: "#64748b", display: "block", marginBottom: 4 }}>{formatMoney(1).replace(/[\d.,]/g, '').trim()}</label>
+              <input type="number" placeholder="Enter Amount*" value={loyalty.redeemAmount || ""} onChange={(e) => u({ redeemAmount: Number(e.target.value) })} style={{ width: "100%", padding: "8px 10px", border: "1px solid #e2e8f0", borderRadius: 6, fontSize: 13, boxSizing: "border-box" }} />
+            </div>
+          </div>
+          <div style={{ fontSize: 12, color: "#475569", marginBottom: 20 }}>{redeemText}</div>
+          </>
+          )}
+
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 16, marginTop: 12 }}>
+            <div>
+              <label style={{ fontSize: 12, fontWeight: 600, color: "#334155", display: "block", marginBottom: 6 }}>Minimum Points Eligible for Redemption</label>
+              <input type="number" placeholder="Enter Min Points Req*" value={loyalty.minRedeemPoints || ""} onChange={(e) => u({ minRedeemPoints: Number(e.target.value) })} style={{ width: "100%", padding: "8px 10px", border: "1px solid #e2e8f0", borderRadius: 6, fontSize: 13, boxSizing: "border-box" }} />
+            </div>
+            <div>
+              <label style={{ fontSize: 12, fontWeight: 600, color: "#334155", display: "block", marginBottom: 6 }}>Maximum Points Redeemable per Order</label>
+              <input type="number" placeholder="Enter Points*" value={loyalty.maxRedeemPoints || ""} onChange={(e) => u({ maxRedeemPoints: Number(e.target.value) })} style={{ width: "100%", padding: "8px 10px", border: "1px solid #e2e8f0", borderRadius: 6, fontSize: 13, boxSizing: "border-box" }} />
+            </div>
+            <div>
+              <label style={{ fontSize: 12, fontWeight: 600, color: "#334155", display: "block", marginBottom: 6 }}>Percentage Redeemable on Order</label>
+              <input type="number" placeholder="Enter % Of Order Amount*" value={loyalty.maxRedeemPercent || ""} onChange={(e) => u({ maxRedeemPercent: Number(e.target.value) })} style={{ width: "100%", padding: "8px 10px", border: "1px solid #e2e8f0", borderRadius: 6, fontSize: 13, boxSizing: "border-box" }} />
+            </div>
+          </div>
+        </div>
+      </>
+    );
+  };
+
+  const renderFeedbackSection = () => {
+    const feedback = form.advancedSettings.feedbackSetting;
+    const feedbackTypesList = feedbackTypes;
+    const activeCount = feedbackTypesList.filter((type) => type.active).length;
+
+    const selectedRow = feedbackTypesList.find((row) => row.id === selectedFeedbackTypeId) || null;
+    const editing = draftFeedbackType || selectedRow;
+
+    const startCreate = () => {
+      setDraftFeedbackType({ id: null, name: "", slug: "", active: true, _isNew: true });
+      setSelectedFeedbackTypeId(null);
+      setStatus((prev) => ({ ...prev, error: "", success: "" }));
+    };
+
+    const startEdit = (row) => {
+      setDraftFeedbackType({ ...row, _isNew: false });
+      setSelectedFeedbackTypeId(row.id);
+    };
+
+    const cancelDraft = () => {
+      setDraftFeedbackType(null);
+      setSelectedFeedbackTypeId(null);
+      setStatus((prev) => ({ ...prev, error: "", success: "" }));
+    };
+
+    const saveDraft = async () => {
+      if (!draftFeedbackType) return;
+      if (!draftFeedbackType.name?.trim()) return;
+      try {
+        const payload = {
+          name: draftFeedbackType.name.trim(),
+          slug: draftFeedbackType.slug?.trim() || draftFeedbackType.name.trim().toLowerCase().replace(/\s+/g, "-").slice(0, 32),
+          active: draftFeedbackType.active !== false
+        };
+        if (draftFeedbackType._isNew) {
+          const res = await api.post("/owner/feedback-types", payload);
+          setFeedbackTypes((prev) => [...prev, res.data]);
+        } else {
+          const res = await api.patch(`/owner/feedback-types/${draftFeedbackType.id}`, payload);
+          setFeedbackTypes((prev) => prev.map((r) => (r.id === draftFeedbackType.id ? res.data : r)));
+        }
+        cancelDraft();
+        setStatus({ loading: false, error: "", success: "Feedback type saved." });
+      } catch (err) {
+        setStatus({ loading: false, error: formatApiError(err, "Could not save feedback type"), success: "" });
+      }
+    };
+
+    const deleteRow = async (id) => {
+      try {
+        await api.delete(`/owner/feedback-types/${id}`);
+        setFeedbackTypes((prev) => prev.filter((r) => r.id !== id));
+        if (selectedFeedbackTypeId === id) cancelDraft();
+        setStatus({ loading: false, error: "", success: "Feedback type deleted." });
+      } catch (err) {
+        setStatus({ loading: false, error: formatApiError(err, "Could not delete feedback type"), success: "" });
+      }
+    };
+
+    return (
+      <>
+        <SectionHeader
+          title="Feedback Setting"
+          description="Control how guest feedback is requested, escalated, and acknowledged from one polished workspace."
+          badges={[feedback.enabled ? "Feedback On" : "Feedback Off", `${feedbackTypesList.length} types`, `${activeCount} active`]}
+          action={<Link className="secondary-button" to="/admin/feedback">Open Feedback Module</Link>}
+        />
+
+        <div className="settings-panel-card" style={{ marginBottom: 20 }}>
+          <div className="settings-toggle-grid">
+            <ToggleRow checked={feedback.enabled} label="Enable feedback" onChange={(value) => updateAdvancedObject("feedbackSetting", { enabled: value })} />
+            <ToggleRow checked={feedback.sendSms} label="Send feedback SMS" onChange={(value) => updateAdvancedObject("feedbackSetting", { sendSms: value })} />
+            <ToggleRow checked={feedback.sendWhatsapp} label="Send follow-up WhatsApp" onChange={(value) => updateAdvancedObject("feedbackSetting", { sendWhatsapp: value })} />
+          </div>
+          <div className="settings-form-grid" style={{ marginTop: 18 }}>
+            <label className="settings-input-group"><span className="muted">Feedback delay (hours)</span><input type="number" value={feedback.feedbackDelayHours} onChange={(event) => updateAdvancedObject("feedbackSetting", { feedbackDelayHours: Number(event.target.value) })} /></label>
+            <label className="settings-input-group"><span className="muted">Low rating alert email</span><input value={feedback.lowRatingAlertEmail} onChange={(event) => updateAdvancedObject("feedbackSetting", { lowRatingAlertEmail: event.target.value })} /></label>
+            <label className="settings-input-group"><span className="muted">Rating prompt</span><textarea rows="3" value={feedback.ratingPrompt} onChange={(event) => updateAdvancedObject("feedbackSetting", { ratingPrompt: event.target.value })} /></label>
+            <label className="settings-input-group"><span className="muted">Thank you message</span><textarea rows="3" value={feedback.thankYouMessage} onChange={(event) => updateAdvancedObject("feedbackSetting", { thankYouMessage: event.target.value })} /></label>
+          </div>
+        </div>
+
+        <div className="shift-layout-grid">
+          <div style={{ width: "100%", flexShrink: 0 }}>
+            <div className="settings-panel-card" style={{ padding: 0 }}>
+              <div style={{ padding: "16px 16px 12px", borderBottom: "1px solid #f1f5f9" }}>
+                <button type="button" onClick={startCreate} style={{ width: "100%", padding: "10px", background: "var(--button-bg-solid, #3b82f6)", color: "white", border: "none", borderRadius: 8, fontWeight: 700, fontSize: 14, cursor: "pointer" }}>Create New</button>
+              </div>
+              <div style={{ maxHeight: 420, overflowY: "auto" }}>
+                {feedbackTypesList.map((row) => (
+                  <div
+                    key={row.id}
+                    style={{
+                      padding: "14px 16px",
+                      borderBottom: "1px solid #f1f5f9",
+                      cursor: "pointer",
+                      background: selectedFeedbackTypeId === row.id ? "#eff6ff" : "white",
+                      borderLeft: selectedFeedbackTypeId === row.id ? "3px solid #3b82f6" : "3px solid transparent",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between"
+                    }}
+                  >
+                    <div style={{ flex: 1 }} onClick={() => { setSelectedFeedbackTypeId(row.id); setDraftFeedbackType(null); }}>
+                      <div style={{ fontWeight: 600, fontSize: 13, color: "#0f172a" }}>{row.name}</div>
+                      <div style={{ fontSize: 11, color: "#64748b", marginTop: 4, display: "flex", alignItems: "center", gap: 4 }}>
+                        <span style={{ width: 6, height: 6, borderRadius: "50%", background: row.active ? "#22c55e" : "#94a3b8" }} />
+                        <span>{row.active ? "Active" : "Inactive"}</span>
+                      </div>
+                    </div>
+                    <div style={{ display: "flex", gap: 4, flexShrink: 0 }}>
+                      <button type="button" onClick={(event) => { event.stopPropagation(); startEdit(row); }} title="Edit type" style={{ width: 28, height: 28, display: "flex", alignItems: "center", justifyContent: "center", background: "#f1f5f9", border: "1px solid #e2e8f0", borderRadius: 6, cursor: "pointer", color: "#475569", padding: 0 }}><Edit2 size={13} /></button>
+                      <button type="button" onClick={(event) => { event.stopPropagation(); deleteRow(row.id); }} style={{ width: 28, height: 28, display: "flex", alignItems: "center", justifyContent: "center", background: "#fef2f2", border: "1px solid #fecaca", borderRadius: 6, cursor: "pointer", color: "#dc2626", padding: 0 }}><Trash2 size={13} /></button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          <div style={{ flex: 1, minWidth: 0 }}>
+            {editing ? (
+              <div className="settings-panel-card">
+                <h3 style={{ color: "var(--accent, #3b82f6)" }}>{draftFeedbackType?._isNew ? "Create Feedback Type" : "Edit Feedback Type"}</h3>
+                <div className="settings-form-grid" style={{ marginBottom: 16 }}>
+                  <label className="settings-input-group">
+                    <span className="muted">Feedback Name</span>
+                    <input type="text" value={draftFeedbackType?.name ?? editing.name} onChange={(event) => draftFeedbackType && setDraftFeedbackType({ ...draftFeedbackType, name: event.target.value })} placeholder="Enter Feedback Name" />
+                  </label>
+                </div>
                 <label style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 13, fontWeight: 600, color: "#334155", cursor: "pointer", marginBottom: 20 }}>
                   <input type="checkbox" checked={draftFeedbackType?.active ?? editing.active} onChange={(event) => draftFeedbackType && setDraftFeedbackType({ ...draftFeedbackType, active: event.target.checked })} style={{ width: 18, height: 18, accentColor: "var(--accent, #3b82f6)", cursor: "pointer" }} />
                   Active
