@@ -661,7 +661,7 @@ export default function ServiceHubPage() {
                           <div style={{ flex: 1, minWidth: 70 }}>
                             <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
                               <input type="number" min="0" className="hub-input" value={c.reqdQty} onChange={e => { const ni = [...consumables]; ni[idx] = {...ni[idx], reqdQty: e.target.value}; setSrvForm({...srvForm, consumables: ni}); }} style={{ flex: 1, minWidth: 0 }} />
-                              <span style={{ fontSize: 11, color: "#64748b", flexShrink: 0 }}>{products.find(p => p.id === c.productId)?.unit || 'pcs'}</span>
+                              <span style={{ fontSize: 11, color: "#64748b", flexShrink: 0 }}>{products.find(p => p.id === c.productId)?.secondaryUnit || products.find(p => p.id === c.productId)?.unit || 'pcs'}</span>
                             </div>
                           </div>
                           <button type="button" onClick={() => {

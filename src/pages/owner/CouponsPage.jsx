@@ -159,6 +159,8 @@ export default function CouponsPage() {
           title: giftCardForm.title,
           originalAmount: Number(giftCardForm.originalAmount),
           note: giftCardForm.note,
+          isActive: giftCardForm.isActive,
+          validityDays: Number(giftCardForm.validityDays),
           branchId: selectedBranchId || null
         });
         setStatus({ error: "", success: "Gift card updated." });
@@ -168,6 +170,8 @@ export default function CouponsPage() {
           title: giftCardForm.title,
           originalAmount: Number(giftCardForm.originalAmount),
           note: giftCardForm.note,
+          isActive: giftCardForm.isActive,
+          validityDays: Number(giftCardForm.validityDays),
           branchId: selectedBranchId || null
         });
         setStatus({ error: "", success: "Gift card created." });
@@ -490,10 +494,7 @@ export default function CouponsPage() {
               </div>
             </form>
           </div>
-        </div>
-      )}
-
-      {showGiftCardModal && (
+            {showGiftCardModal && (
         <div className="premium-modal-overlay" onClick={() => setShowGiftCardModal(false)} style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 9999, background: 'rgba(0,0,0,0.6)' }}>
           <div className="premium-modal-content" onClick={e => e.stopPropagation()} style={{ maxWidth: 500, padding: 32, borderRadius: 16, background: '#ffffff', width: '100%', maxHeight: '90vh', overflowY: 'auto' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 }}>
@@ -502,9 +503,20 @@ export default function CouponsPage() {
             </div>
             
             <form onSubmit={saveGiftCard} style={{ display: "flex", flexDirection: "column", gap: 20 }}>
+              <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: -10 }}>
+                <ToggleSwitch
+                  checked={giftCardForm.isActive}
+                  onChange={(val) => setGiftCardForm({ ...giftCardForm, isActive: val })}
+                  label={giftCardForm.isActive ? "Active" : "Inactive"}
+                  color="#7c3aed"
+                />
+              </div>
               <label><span style={{ display: 'block', fontSize: '0.85rem', fontWeight: 700, color: '#475569', marginBottom: 6 }}>Gift Card Code</span><input placeholder="e.g. GC-2024-001" required value={giftCardForm.code} onChange={(e) => setGiftCardForm({ ...giftCardForm, code: e.target.value.toUpperCase() })} style={{ width: '100%', padding: '10px 14px', borderRadius: 8, border: '1px solid #cbd5e1', boxSizing: 'border-box', textTransform: 'uppercase', fontWeight: 700, letterSpacing: 1 }}/></label>
               <label><span style={{ display: 'block', fontSize: '0.85rem', fontWeight: 700, color: '#475569', marginBottom: 6 }}>Title</span><input placeholder="e.g. Birthday Voucher" required value={giftCardForm.title} onChange={(e) => setGiftCardForm({ ...giftCardForm, title: e.target.value })} style={{ width: '100%', padding: '10px 14px', borderRadius: 8, border: '1px solid #cbd5e1', boxSizing: 'border-box' }}/></label>
-              <label><span style={{ display: 'block', fontSize: '0.85rem', fontWeight: 700, color: '#475569', marginBottom: 6 }}>Amount (₹)</span><input type="number" min="1" placeholder="e.g. 1000" required value={giftCardForm.originalAmount} onChange={(e) => setGiftCardForm({ ...giftCardForm, originalAmount: e.target.value })} style={{ width: '100%', padding: '10px 14px', borderRadius: 8, border: '1px solid #cbd5e1', boxSizing: 'border-box' }}/></label>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
+                <label><span style={{ display: 'block', fontSize: '0.85rem', fontWeight: 700, color: '#475569', marginBottom: 6 }}>Amount (₹)</span><input type="number" min="1" placeholder="e.g. 1000" required value={giftCardForm.originalAmount} onChange={(e) => setGiftCardForm({ ...giftCardForm, originalAmount: e.target.value })} style={{ width: '100%', padding: '10px 14px', borderRadius: 8, border: '1px solid #cbd5e1', boxSizing: 'border-box' }}/></label>
+                <label><span style={{ display: 'block', fontSize: '0.85rem', fontWeight: 700, color: '#475569', marginBottom: 6 }}>Validity (Days)</span><input type="number" min="1" placeholder="365" required value={giftCardForm.validityDays} onChange={(e) => setGiftCardForm({ ...giftCardForm, validityDays: e.target.value })} style={{ width: '100%', padding: '10px 14px', borderRadius: 8, border: '1px solid #cbd5e1', boxSizing: 'border-box' }}/></label>
+              </div>
               <label><span style={{ display: 'block', fontSize: '0.85rem', fontWeight: 700, color: '#475569', marginBottom: 6 }}>Note (Optional)</span><input placeholder="Internal note..." value={giftCardForm.note} onChange={(e) => setGiftCardForm({ ...giftCardForm, note: e.target.value })} style={{ width: '100%', padding: '10px 14px', borderRadius: 8, border: '1px solid #cbd5e1', boxSizing: 'border-box' }}/></label>
               <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 12, marginTop: 16 }}>
                 <button type="button" onClick={() => setShowGiftCardModal(false)} className="secondary-button">Cancel</button>
@@ -513,6 +525,7 @@ export default function CouponsPage() {
             </form>
           </div>
         </div>
+      )}     </div>
       )}
     </div>
   );

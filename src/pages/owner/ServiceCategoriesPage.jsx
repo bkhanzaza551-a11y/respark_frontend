@@ -749,7 +749,7 @@ export default function ServiceCategoriesPage() {
                             <label style={{ ...labelStyle, fontSize: 11, marginBottom: 4 }}>Qty</label>
                             <div style={{ display: "flex", alignItems: "center", border: "1px solid #cbd5e1", borderRadius: 8, overflow: "hidden", background: "#fff", height: 38, boxSizing: "border-box" }}>
                               <input type="number" min="0" value={c.reqdQty} onChange={e => { const ni = [...consumables]; ni[idx] = {...ni[idx], reqdQty: e.target.value}; setServiceForm({...serviceForm, consumables: ni}); }} style={{ border: "none", outline: "none", padding: "8px 10px", fontSize: 13, flex: 1, minWidth: 0, width: "100%", background: "transparent" }} />
-                              <span style={{ fontSize: 11, color: "#64748b", background: "#f1f5f9", padding: "0 8px", borderLeft: "1px solid #cbd5e1", flexShrink: 0, height: "100%", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 600 }}>{products.find(p => p.id === c.productId)?.unit || 'pcs'}</span>
+                              <span style={{ fontSize: 11, color: "#64748b", background: "#f1f5f9", padding: "0 8px", borderLeft: "1px solid #cbd5e1", flexShrink: 0, height: "100%", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 600 }}>{products.find(p => p.id === c.productId)?.secondaryUnit || products.find(p => p.id === c.productId)?.unit || 'pcs'}</span>
                             </div>
                           </div>
                           <button type="button" onClick={() => {
