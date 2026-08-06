@@ -1046,537 +1046,192 @@ export default function SettingsPage() {
         <SectionHeader
           title="Generic Settings"
           description="Business timing, storefront behavior, booking rules, checkout defaults, and currency propagation are managed from this workspace."
-          badges={[
-            `${normalizeCurrencyCode(generic.currency || "INR")} live currency`,
-            generic.appointmentBookingEnabled ? "Booking Live" : "Booking Off",
-            generic.productOrderingEnabled ? "Store Orders Live" : "Store Orders Off"
-          ]}
-          action={<Link className="secondary-button" to="/site">Open Storefront</Link>}
         />
 
         <div className="settings-panel-card">
-          <div className="settings-panel-header-with-toggle" style={{ borderBottom: "none", marginBottom: 16, paddingBottom: 0 }}>
+          <div className="settings-panel-header-with-toggle" style={{ borderBottom: "1px solid #e2e8f0", paddingBottom: 12, marginBottom: 20 }}>
             <h3>Business Settings</h3>
           </div>
 
           <div className="business-settings-content">
-            <div className="toggle-option-row" style={{ borderBottom: "1px solid #e2e8f0", paddingBottom: 16, marginBottom: 16 }}>
-              <span className="label-text">Is Open ?</span>
-              <div className="header-toggle-container">
-                <label className="toggle-switch-label">
-                  <input
-                    type="checkbox"
-                    checked={generic.businessOpen}
-                    onChange={(e) => updateGeneric("businessOpen", e.target.checked)}
-                  />
-                  <span className="toggle-switch-slider" />
-                </label>
-                <span className="toggle-status-text" style={{ marginLeft: 8 }}>{generic.businessOpen ? "On" : "Off"}</span>
-              </div>
+            <div style={{ marginBottom: 24, paddingBottom: 24, borderBottom: "1px solid #e2e8f0" }}>
+              <ToggleSwitch
+                checked={generic.businessOpen}
+                onChange={(e) => updateGeneric("businessOpen", e.target.checked)}
+                label="Is Business Open?"
+              />
             </div>
 
-            <div className="business-settings-grid" style={{ marginBottom: "24px" }}>
-              <label className="checkbox-option" style={{ gridColumn: "1 / -1" }}>
-                <span style={{ fontWeight: 600, display: "block", marginBottom: 6 }}>Display Salon Name on Invoice :</span>
+            <div className="settings-form-grid" style={{ marginBottom: 24, paddingBottom: 24, borderBottom: "1px solid #e2e8f0" }}>
+              <label className="settings-input-group">
+                <span className="muted">Salon Name on Invoice</span>
                 <input
                   type="text"
                   value={generic.salonName || ""}
                   onChange={(event) => updateGeneric("salonName", event.target.value)}
-                  placeholder="Enter the actual salon name to display on invoices..."
-                  style={{ padding: "8px 12px", border: "1px solid #cbd5e1", borderRadius: "6px", width: "100%", maxWidth: "400px" }}
+                  placeholder="Enter salon name..."
                 />
               </label>
-              <label className="checkbox-option" style={{ gridColumn: "1 / -1" }}>
-                <span style={{ fontWeight: 600, display: "block", marginBottom: 6 }}>Salon Phone on Invoice :</span>
+              <label className="settings-input-group">
+                <span className="muted">Salon Phone on Invoice</span>
                 <input
                   type="text"
                   value={generic.salonPhone || ""}
                   onChange={(event) => updateGeneric("salonPhone", event.target.value)}
-                  placeholder="Enter phone number to display on invoices..."
-                  style={{ padding: "8px 12px", border: "1px solid #cbd5e1", borderRadius: "6px", width: "100%", maxWidth: "400px" }}
+                  placeholder="Enter phone number..."
                 />
               </label>
-              <label className="checkbox-option" style={{ gridColumn: "1 / -1" }}>
-                <span style={{ fontWeight: 600, display: "block", marginBottom: 6 }}>Salon Address on Invoice :</span>
+              <label className="settings-input-group">
+                <span className="muted">Salon Address on Invoice</span>
                 <input
                   type="text"
                   value={generic.salonAddress || ""}
                   onChange={(event) => updateGeneric("salonAddress", event.target.value)}
-                  placeholder="Enter address to display on invoices..."
-                  style={{ padding: "8px 12px", border: "1px solid #cbd5e1", borderRadius: "6px", width: "100%", maxWidth: "400px" }}
+                  placeholder="Enter address..."
                 />
               </label>
             </div>
 
-            <div className="business-settings-grid">
+            <div className="settings-form-grid" style={{ marginBottom: 24 }}>
               <div>
-                <span className="sub-section-title">Business Timing</span>
-                <div className="timing-inputs" style={{ display: "flex", flexDirection: "column", gap: "12px", marginTop: "8px" }}>
-                  <label className="checkbox-option">
-                    <span style={{ minWidth: 40 }}>From :</span>
+                <span className="muted" style={{ display: "block", marginBottom: 12, fontWeight: 600, fontSize: 13, color: "#1e293b" }}>Business Timing</span>
+                <div style={{ display: "flex", gap: 16 }}>
+                  <label className="settings-input-group" style={{ flex: 1 }}>
+                    <span className="muted" style={{ fontSize: 11 }}>From</span>
                     <input
                       type="time"
                       value={generic.businessStart}
                       onChange={(event) => updateGeneric("businessStart", event.target.value)}
-                      style={{ padding: "6px", border: "1px solid #cbd5e1", borderRadius: "4px" }}
                     />
                   </label>
-                  <label className="checkbox-option">
-                    <span style={{ minWidth: 40 }}>To :</span>
+                  <label className="settings-input-group" style={{ flex: 1 }}>
+                    <span className="muted" style={{ fontSize: 11 }}>To</span>
                     <input
                       type="time"
                       value={generic.businessEnd}
                       onChange={(event) => updateGeneric("businessEnd", event.target.value)}
-                      style={{ padding: "6px", border: "1px solid #cbd5e1", borderRadius: "4px" }}
                     />
                   </label>
                 </div>
               </div>
 
               <div>
-                <span className="sub-section-title">Applicable For</span>
-                <div className="radio-group" style={{ display: "flex", flexDirection: "column", gap: "12px", marginTop: "8px" }}>
-                  <label className="radio-option">
-                    <input
-                      type="radio"
-                      name="applicableFor"
-                      value="female"
-                      checked={generic.applicableFor === "female"}
-                      onChange={() => updateGeneric("applicableFor", "female")}
-                    />
-                    Female
+                <span className="muted" style={{ display: "block", marginBottom: 12, fontWeight: 600, fontSize: 13, color: "#1e293b" }}>Applicable For</span>
+                <div style={{ display: "flex", gap: 16, alignItems: "center", height: 42 }}>
+                  <label style={{ display: "flex", alignItems: "center", gap: 8, cursor: "pointer", fontSize: 14 }}>
+                    <input type="radio" name="applicableFor" value="female" checked={generic.applicableFor === "female"} onChange={() => updateGeneric("applicableFor", "female")} style={{ width: 16, height: 16, accentColor: "#3b82f6" }} /> Female
                   </label>
-                  <label className="radio-option">
-                    <input
-                      type="radio"
-                      name="applicableFor"
-                      value="male"
-                      checked={generic.applicableFor === "male"}
-                      onChange={() => updateGeneric("applicableFor", "male")}
-                    />
-                    Male
+                  <label style={{ display: "flex", alignItems: "center", gap: 8, cursor: "pointer", fontSize: 14 }}>
+                    <input type="radio" name="applicableFor" value="male" checked={generic.applicableFor === "male"} onChange={() => updateGeneric("applicableFor", "male")} style={{ width: 16, height: 16, accentColor: "#3b82f6" }} /> Male
                   </label>
-                  <label className="radio-option">
-                    <input
-                      type="radio"
-                      name="applicableFor"
-                      value="both"
-                      checked={generic.applicableFor === "both"}
-                      onChange={() => updateGeneric("applicableFor", "both")}
-                    />
-                    Both
+                  <label style={{ display: "flex", alignItems: "center", gap: 8, cursor: "pointer", fontSize: 14 }}>
+                    <input type="radio" name="applicableFor" value="both" checked={generic.applicableFor === "both"} onChange={() => updateGeneric("applicableFor", "both")} style={{ width: 16, height: 16, accentColor: "#3b82f6" }} /> Both
                   </label>
                 </div>
               </div>
+            </div>
 
-              <div className="weekly-off-section">
-                <span className="sub-section-title">Set weekly off</span>
-                <div className="checkbox-group weekly-off-grid">
-                  <label className="checkbox-option">
-                    <input
-                      type="checkbox"
-                      checked={allChecked}
-                      onChange={(e) => toggleAllWeeklyOff(e.target.checked)}
-                    />
-                    All
+            <div style={{ marginTop: 8 }}>
+              <span className="muted" style={{ display: "block", marginBottom: 12, fontWeight: 600, fontSize: 13, color: "#1e293b" }}>Set Weekly Off</span>
+              <div style={{ display: "flex", flexWrap: "wrap", gap: 20 }}>
+                <label style={{ display: "flex", alignItems: "center", gap: 8, cursor: "pointer", fontSize: 14 }}>
+                  <input type="checkbox" checked={allChecked} onChange={(e) => toggleAllWeeklyOff(e.target.checked)} style={{ width: 16, height: 16, accentColor: "#3b82f6" }} /> All
+                </label>
+                {WEEK_DAYS.map((day) => (
+                  <label key={day.key} style={{ display: "flex", alignItems: "center", gap: 8, cursor: "pointer", fontSize: 14 }}>
+                    <input type="checkbox" checked={generic.weeklyOff.includes(day.key)} onChange={() => toggleWeeklyOff(day.key)} style={{ width: 16, height: 16, accentColor: "#3b82f6" }} /> {day.label}
                   </label>
-                  {WEEK_DAYS.map((day) => (
-                    <label key={day.key} className="checkbox-option">
-                      <input
-                        type="checkbox"
-                        checked={generic.weeklyOff.includes(day.key)}
-                        onChange={() => toggleWeeklyOff(day.key)}
-                      />
-                      {day.label}
-                    </label>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className="payment-section">
-            <span className="sub-section-title">Online payment</span>
-            <div className="checkbox-group">
-              <label className="checkbox-option">
-                <input
-                  type="checkbox"
-                  checked={generic.onlinePaymentEnabled}
-                  onChange={(e) => updateGeneric("onlinePaymentEnabled", e.target.checked)}
-                />
-                Online Payment for Orders & Appointments are Enabled
-              </label>
-            </div>
-            <div className="muted" style={{ marginTop: 8, fontSize: 12 }}>
-              This setting feeds public checkout and booking payment availability.
-            </div>
-          </div>
-
-          <div className="product-ordering-section">
-            <div className="settings-panel-header-with-toggle" style={{ borderBottom: "none", marginBottom: 0, paddingBottom: 0 }}>
-              <h3>Product Ordering</h3>
-              <div className="header-toggle-container">
-                <label className="toggle-switch-label">
-                  <input
-                    type="checkbox"
-                    checked={generic.productOrderingEnabled}
-                    onChange={(e) => updateGeneric("productOrderingEnabled", e.target.checked)}
-                  />
-                  <span className="toggle-switch-slider" />
-                </label>
-                <span className="toggle-status-text">{generic.productOrderingEnabled ? "On" : "Off"}</span>
-              </div>
-            </div>
-
-            <div className="ordering-grid">
-              <div className="ordering-column">
-                <span className="col-header">Delivery Order</span>
-                <label className="checkbox-option">
-                  <input
-                    type="checkbox"
-                    checked={generic.homeDeliveryEnabled}
-                    onChange={(e) => updateGeneric("homeDeliveryEnabled", e.target.checked)}
-                  />
-                  Home Delivery Orders are Enabled
-                </label>
-              </div>
-              <div className="ordering-column">
-                <span className="col-header">Pickup Order</span>
-                <label className="checkbox-option">
-                  <input
-                    type="checkbox"
-                    checked={generic.pickupOrderingEnabled}
-                    onChange={(e) => updateGeneric("pickupOrderingEnabled", e.target.checked)}
-                  />
-                  Pickup ordering is Enabled
-                </label>
-              </div>
-              <div className="ordering-column">
-                <span className="col-header">Cash on pickup</span>
-                <label className="checkbox-option">
-                  <input
-                    type="checkbox"
-                    checked={generic.cashOnPickupEnabled}
-                    onChange={(e) => updateGeneric("cashOnPickupEnabled", e.target.checked)}
-                  />
-                  Cash on pickup is Enabled
-                </label>
-              </div>
-              <div className="ordering-column">
-                <span className="col-header">Cash on delivery</span>
-                <label className="checkbox-option">
-                  <input
-                    type="checkbox"
-                    checked={generic.cashOnDeliveryEnabled}
-                    onChange={(e) => updateGeneric("cashOnDeliveryEnabled", e.target.checked)}
-                  />
-                  Cash on delivery is Enabled
-                </label>
-              </div>
-              <div className="ordering-column">
-                <span className="col-header">Minimum Order Value</span>
-                <input
-                  type="number"
-                  placeholder="Enter Mini Order Amount"
-                  value={generic.minimumOrderValue || ""}
-                  onChange={(e) => updateGeneric("minimumOrderValue", Number(e.target.value))}
-                  style={{ padding: "8px 12px", border: "1px solid #cbd5e1", borderRadius: "6px", width: "100%", outline: "none" }}
-                />
-              </div>
-            </div>
-            <div className="muted" style={{ marginTop: 10, fontSize: 12 }}>
-              Delivery, pickup, COD, and minimum order value are enforced in the live online-order checkout flow.
-            </div>
-          </div>
-        </div>
-
-        <div className="settings-panel-card">
-          <div className="settings-panel-header-with-toggle">
-            <h3>Appointment Booking</h3>
-            <div className="header-toggle-container">
-              <label className="toggle-switch-label">
-                <input
-                  type="checkbox"
-                  checked={generic.appointmentBookingEnabled}
-                  onChange={(e) => updateGeneric("appointmentBookingEnabled", e.target.checked)}
-                />
-                <span className="toggle-switch-slider" />
-              </label>
-              <span className="toggle-status-text">{generic.appointmentBookingEnabled ? "On" : "Off"}</span>
-            </div>
-          </div>
-
-          <div className="appointment-columns-grid">
-            <div className="appointment-col">
-              <div>
-                <span className="sub-section-title">Send appointment notification</span>
-                <label className="checkbox-option">
-                  <input
-                    type="checkbox"
-                    checked={generic.sendAppointmentSms}
-                    onChange={(e) => updateGeneric("sendAppointmentSms", e.target.checked)}
-                  />
-                  Send email/SMS notification to Guests
-                </label>
-              </div>
-              <div>
-                <span className="sub-section-title">Enable Cancellation from catalogue</span>
-                <label className="checkbox-option">
-                  <input
-                    type="checkbox"
-                    checked={generic.allowCancellationFromCatalogue}
-                    onChange={(e) => updateGeneric("allowCancellationFromCatalogue", e.target.checked)}
-                  />
-                  Allow Cancellation from catalogue
-                </label>
-              </div>
-              <div>
-                <span className="sub-section-title">Hide Cancelled Appointment</span>
-                <label className="checkbox-option">
-                  <input
-                    type="checkbox"
-                    checked={generic.hideCancelledAppointments}
-                    onChange={(e) => updateGeneric("hideCancelledAppointments", e.target.checked)}
-                  />
-                  Hide Cancelled Appointment From Dashboard
-                </label>
-              </div>
-            </div>
-
-            <div className="appointment-col">
-              <div>
-                <span className="sub-section-title">Appointment Reminder before days</span>
-                <input
-                  type="number"
-                  value={generic.appointmentReminderDays}
-                  onChange={(e) => updateGeneric("appointmentReminderDays", Number(e.target.value))}
-                  placeholder="Enter days"
-                  style={{ width: "100%", padding: "8px 12px", border: "1px solid #cbd5e1", borderRadius: "6px", outline: "none" }}
-                />
-              </div>
-              <div className="muted" style={{ marginTop: 6, fontSize: 12 }}>
-                Reminder badges and guest-tag metadata stay hidden here until the related appointment badge rollout is wired end-to-end.
-              </div>
-            </div>
-
-            <div className="appointment-col">
-              <div>
-                <span className="sub-section-title">Enable Reschedule from catalogue</span>
-                <label className="checkbox-option">
-                  <input
-                    type="checkbox"
-                    checked={generic.allowRescheduleFromCatalogue}
-                    onChange={(e) => updateGeneric("allowRescheduleFromCatalogue", e.target.checked)}
-                  />
-                  Allow Reschedule from catalogue
-                </label>
-              </div>
-              <div>
-                <span className="sub-section-title">Appointment Reminder before hours</span>
-                <input
-                  type="number"
-                  value={generic.appointmentReminderHours}
-                  onChange={(e) => updateGeneric("appointmentReminderHours", Number(e.target.value))}
-                  placeholder="Enter hours"
-                  style={{ width: "100%", padding: "8px 12px", border: "1px solid #cbd5e1", borderRadius: "6px", outline: "none" }}
-                />
-              </div>
-              <div className="muted" style={{ marginTop: 6, fontSize: 12 }}>
-                Reschedule, cancel, reminder-days, and reminder-hours are the live controls in this section today.
+                ))}
               </div>
             </div>
           </div>
         </div>
 
         <div className="settings-panel-card">
-          <div className="settings-panel-header-with-toggle">
-            <h3>Feedback</h3>
-            <div className="header-toggle-container">
-              <label className="toggle-switch-label">
-                <input
-                  type="checkbox"
-                  checked={form.advancedSettings.feedbackSetting.enabled}
-                  onChange={(e) => updateAdvancedObject("feedbackSetting", { enabled: e.target.checked })}
-                />
-                <span className="toggle-switch-slider" />
-              </label>
-              <span className="toggle-status-text">{form.advancedSettings.feedbackSetting.enabled ? "On" : "Off"}</span>
-            </div>
+          <div className="settings-panel-header-with-toggle" style={{ borderBottom: "1px solid #e2e8f0", paddingBottom: 12, marginBottom: 20 }}>
+            <h3>Online Payment & Orders</h3>
           </div>
-          <div className="appointment-grid">
-            <div className="appointment-col">
-                <span className="sub-section-title">Send feedback notification</span>
-                <label className="checkbox-option">
-                  <input
-                    type="checkbox"
-                    checked={form.advancedSettings.feedbackSetting.sendSms}
-                    onChange={(e) => updateAdvancedObject("feedbackSetting", { sendSms: e.target.checked })}
-                  />
-                  Send feedback SMS to Guests
-                </label>
-              </div>
-              <div className="appointment-col">
-              <span className="sub-section-title">Secondary channel</span>
-              <label className="checkbox-option">
-                <input
-                  type="checkbox"
-                  checked={form.advancedSettings.feedbackSetting.sendWhatsapp}
-                  onChange={(e) => updateAdvancedObject("feedbackSetting", { sendWhatsapp: e.target.checked })}
-                />
-                Keep manual share fallback enabled
-              </label>
+          
+          <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
+            <ToggleSwitch
+              checked={generic.onlinePaymentEnabled}
+              onChange={(e) => updateGeneric("onlinePaymentEnabled", e.target.checked)}
+              label="Enable Online Payment for Orders & Appointments"
+            />
+            <ToggleSwitch
+              checked={generic.productOrderingEnabled}
+              onChange={(e) => updateGeneric("productOrderingEnabled", e.target.checked)}
+              label="Enable Product Ordering"
+            />
+            
+            <div style={{ display: "flex", gap: 40, marginTop: 10, marginLeft: 10, paddingLeft: 20, borderLeft: "2px solid #e2e8f0" }}>
+              <ToggleSwitch
+                checked={generic.homeDeliveryEnabled}
+                onChange={(e) => updateGeneric("homeDeliveryEnabled", e.target.checked)}
+                label="Home Delivery"
+              />
+              <ToggleSwitch
+                checked={generic.pickupOrderingEnabled}
+                onChange={(e) => updateGeneric("pickupOrderingEnabled", e.target.checked)}
+                label="Pickup Orders"
+              />
             </div>
           </div>
         </div>
 
         <div className="settings-panel-card">
-          <div className="settings-panel-header-with-toggle" style={{ borderBottom: "none", marginBottom: 0, paddingBottom: 0 }}>
-            <h3>Discount</h3>
-            <div className="header-toggle-container">
-              <label className="toggle-switch-label">
-                <input
-                  type="checkbox"
-                  checked={form.advancedSettings.couponSettings.enabled}
-                  onChange={(e) => updateAdvancedObject("couponSettings", { enabled: e.target.checked })}
-                />
-                <span className="toggle-switch-slider" />
-              </label>
-              <span className="toggle-status-text">{form.advancedSettings.couponSettings.enabled ? "On" : "Off"}</span>
-            </div>
+          <div className="settings-panel-header-with-toggle" style={{ borderBottom: "1px solid #e2e8f0", paddingBottom: 12, marginBottom: 20 }}>
+            <h3>Storefront Permissions</h3>
           </div>
-        </div>
-
-        <div className="settings-panel-card">
-          <div className="settings-panel-header-with-toggle" style={{ borderBottom: "none", marginBottom: 12 }}>
-            <h3>Catalogue Presentation</h3>
-          </div>
-
-          <div className="toggle-options-grid">
-            <div className="toggle-option-row">
-              <span className="label-text">Show products in grid view on Home Page</span>
-              <label className="toggle-switch-label">
-                <input
-                  type="checkbox"
-                  checked={generic.showProductsOnHome}
-                  onChange={(e) => updateGeneric("showProductsOnHome", e.target.checked)}
-                />
-                <span className="toggle-switch-slider" />
-              </label>
-            </div>
-            <div className="toggle-option-row">
-              <span className="label-text">Show PDP(Product description page) for products</span>
-              <label className="toggle-switch-label">
-                <input
-                  type="checkbox"
-                  checked={generic.showProductPdf}
-                  onChange={(e) => updateGeneric("showProductPdf", e.target.checked)}
-                />
-                <span className="toggle-switch-slider" />
-              </label>
-            </div>
-            <div className="muted" style={{ marginTop: -6, marginBottom: 6, fontSize: 12 }}>
-              Product PDP preference is stored here while current storefront list/detail presentation remains live.
-            </div>
-            <div className="toggle-option-row">
-              <span className="label-text">Show grid view for products listing</span>
-              <label className="toggle-switch-label">
-                <input
-                  type="checkbox"
-                  checked={generic.showProductGrid}
-                  onChange={(e) => updateGeneric("showProductGrid", e.target.checked)}
-                />
-                <span className="toggle-switch-slider" />
-              </label>
-            </div>
-            <div className="toggle-option-row">
-              <span className="label-text">Show thumbnails on product page</span>
-              <label className="toggle-switch-label">
-                <input
-                  type="checkbox"
-                  checked={generic.showProductThumbnails}
-                  onChange={(e) => updateGeneric("showProductThumbnails", e.target.checked)}
-                />
-                <span className="toggle-switch-slider" />
-              </label>
-            </div>
-            <div className="toggle-option-row">
-              <span className="label-text">Show add button on product card</span>
-              <label className="toggle-switch-label">
-                <input
-                  type="checkbox"
-                  checked={generic.showAddButtonOnProductCard}
-                  onChange={(e) => updateGeneric("showAddButtonOnProductCard", e.target.checked)}
-                />
-                <span className="toggle-switch-slider" />
-              </label>
-            </div>
-            <div className="toggle-option-row">
-              <span className="label-text">Show get quote button</span>
-              <label className="toggle-switch-label">
-                <input
-                  type="checkbox"
-                  checked={generic.showGetQuoteButton}
-                  onChange={(e) => updateGeneric("showGetQuoteButton", e.target.checked)}
-                />
-                <span className="toggle-switch-slider" />
-              </label>
-            </div>
-            <div className="toggle-option-row">
-              <span className="label-text">Show all branches(Store Locator) in catalogue</span>
-              <label className="toggle-switch-label">
-                <input
-                  type="checkbox"
-                  checked={generic.showAllBranchesInCatalogue}
-                  onChange={(e) => updateGeneric("showAllBranchesInCatalogue", e.target.checked)}
-                />
-                <span className="toggle-switch-slider" />
-              </label>
-            </div>
-          </div>
-
-          <div className="settings-form-grid">
+          <div className="settings-form-grid" style={{ marginBottom: 24, paddingBottom: 24, borderBottom: "1px solid #e2e8f0" }}>
             <label className="settings-input-group">
-              <span className="muted">Delivery Disclaimer</span>
-              <textarea
-                rows="3"
-                value={generic.deliveryDisclaimer}
-                onChange={(event) => updateGeneric("deliveryDisclaimer", event.target.value)}
-                placeholder="Enter Delivery Disclaimer text..."
+              <span className="muted">Minimum Order Value</span>
+              <input
+                type="number"
+                value={generic.minOrderValue}
+                onChange={(event) => updateGeneric("minOrderValue", Number(event.target.value))}
               />
             </label>
             <label className="settings-input-group">
-              <span className="muted">Pickup Disclaimer</span>
-              <textarea
-                rows="3"
-                value={generic.pickupDisclaimer}
-                onChange={(event) => updateGeneric("pickupDisclaimer", event.target.value)}
-                placeholder="Enter Pickup Disclaimer text..."
+              <span className="muted">Delivery Fee</span>
+              <input
+                type="number"
+                value={generic.deliveryFee}
+                onChange={(event) => updateGeneric("deliveryFee", Number(event.target.value))}
               />
+            </label>
+          </div>
+          <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
+            <ToggleSwitch checked={generic.allowCustomerCancel} onChange={(e) => updateGeneric("allowCustomerCancel", e.target.checked)} label="Customers can cancel appointments" />
+            <ToggleSwitch checked={generic.allowCustomerReschedule} onChange={(e) => updateGeneric("allowCustomerReschedule", e.target.checked)} label="Customers can reschedule appointments" />
+            <ToggleSwitch checked={generic.showCancelledInHistory} onChange={(e) => updateGeneric("showCancelledInHistory", e.target.checked)} label="Show cancelled appointments in customer history" />
+          </div>
+        </div>
+
+        <div className="settings-panel-card">
+          <div className="settings-panel-header-with-toggle" style={{ borderBottom: "1px solid #e2e8f0", paddingBottom: 12, marginBottom: 20 }}>
+            <h3>Storefront Content</h3>
+          </div>
+          <div className="settings-form-grid">
+            <label className="settings-input-group" style={{ gridColumn: "1 / -1" }}>
+              <span className="muted">Delivery Disclaimer</span>
+              <textarea rows="2" value={generic.deliveryDisclaimer} onChange={(event) => updateGeneric("deliveryDisclaimer", event.target.value)} placeholder="Enter Delivery Disclaimer text..." />
+            </label>
+            <label className="settings-input-group" style={{ gridColumn: "1 / -1" }}>
+              <span className="muted">Pickup Disclaimer</span>
+              <textarea rows="2" value={generic.pickupDisclaimer} onChange={(event) => updateGeneric("pickupDisclaimer", event.target.value)} placeholder="Enter Pickup Disclaimer text..." />
             </label>
             <label className="settings-input-group">
               <span className="muted">Service List Heading</span>
-              <input
-                type="text"
-                value={generic.serviceListHeading}
-                onChange={(event) => updateGeneric("serviceListHeading", event.target.value)}
-                placeholder="Our Services"
-              />
+              <input type="text" value={generic.serviceListHeading} onChange={(event) => updateGeneric("serviceListHeading", event.target.value)} placeholder="Our Services" />
             </label>
             <label className="settings-input-group">
               <span className="muted">Product List Heading</span>
-              <input
-                type="text"
-                value={generic.productListHeading}
-                onChange={(event) => updateGeneric("productListHeading", event.target.value)}
-                placeholder="Products For Sale"
-              />
+              <input type="text" value={generic.productListHeading} onChange={(event) => updateGeneric("productListHeading", event.target.value)} placeholder="Products For Sale" />
             </label>
             <label className="settings-input-group">
-              <span className="muted">Use Currency :</span>
-              <CustomDropdown
-                value={normalizeCurrencyCode(generic.currency || "INR")}
-                onChange={(event) => updateGeneric("currency", event.target.value)}
-              >
+              <span className="muted">Use Currency</span>
+              <CustomDropdown value={normalizeCurrencyCode(generic.currency || "INR")} onChange={(event) => updateGeneric("currency", event.target.value)}>
                 <option value="INR">Indian Rupee (INR)</option>
                 <option value="USD">US Dollar (USD)</option>
                 <option value="EUR">Euro (EUR)</option>
@@ -1589,81 +1244,33 @@ export default function SettingsPage() {
         </div>
 
         <div className="settings-panel-card">
-          <div className="settings-panel-header-with-toggle" style={{ borderBottom: "1px solid #e2e8f0", paddingBottom: 12, marginBottom: 16 }}>
+          <div className="settings-panel-header-with-toggle" style={{ borderBottom: "1px solid #e2e8f0", paddingBottom: 12, marginBottom: 20 }}>
             <h3>Payment Modes</h3>
           </div>
-          <div className="toggle-options-grid">
+          <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
             {Object.entries(paymentModes).map(([key, value]) => (
-              <div key={key} className="toggle-option-row">
-                <span className="label-text">{key === "bankTransfer" ? "Bank Transfer" : key.charAt(0).toUpperCase() + key.slice(1)}</span>
-                <label className="toggle-switch-label">
-                  <input type="checkbox" checked={value} onChange={() => togglePaymentMode(key)} />
-                  <span className="toggle-switch-slider" />
-                </label>
-              </div>
+              <ToggleSwitch key={key} checked={value} onChange={() => togglePaymentMode(key)} label={key === "bankTransfer" ? "Bank Transfer" : key.charAt(0).toUpperCase() + key.slice(1)} />
             ))}
           </div>
         </div>
 
         <div className="settings-panel-card">
-          <div className="settings-panel-header-with-toggle" style={{ borderBottom: "1px solid #e2e8f0", paddingBottom: 12, marginBottom: 16 }}>
+          <div className="settings-panel-header-with-toggle" style={{ borderBottom: "1px solid #e2e8f0", paddingBottom: 12, marginBottom: 20 }}>
             <h3>POS & Back-Office Rules</h3>
           </div>
-          <div className="toggle-options-grid">
-            <div className="toggle-option-row">
-              <span className="label-text">Allow future backdated bills</span>
-              <label className="toggle-switch-label">
-                <input type="checkbox" checked={form.advancedSettings.allowFutureBackdatedBills} onChange={(e) => updateAdvancedObject("allowFutureBackdatedBills", e.target.checked)} />
-                <span className="toggle-switch-slider" />
-              </label>
-            </div>
-            <div className="toggle-option-row">
-              <span className="label-text">Allow backdated appointments</span>
-              <label className="toggle-switch-label">
-                <input type="checkbox" checked={form.advancedSettings.allowBackdatedAppointments} onChange={(e) => updateAdvancedObject("allowBackdatedAppointments", e.target.checked)} />
-                <span className="toggle-switch-slider" />
-              </label>
-            </div>
-            <div className="toggle-option-row">
-              <span className="label-text">Allow price edit on bill</span>
-              <label className="toggle-switch-label">
-                <input type="checkbox" checked={form.advancedSettings.allowPriceEditOnBill} onChange={(e) => updateAdvancedObject("allowPriceEditOnBill", e.target.checked)} />
-                <span className="toggle-switch-slider" />
-              </label>
-            </div>
-            <div className="toggle-option-row">
-              <span className="label-text">Allow PO price edit</span>
-              <label className="toggle-switch-label">
-                <input type="checkbox" checked={form.advancedSettings.allowPOPriceEdit} onChange={(e) => updateAdvancedObject("allowPOPriceEdit", e.target.checked)} />
-                <span className="toggle-switch-slider" />
-              </label>
-            </div>
-            <div className="toggle-option-row">
-              <span className="label-text">Allow price edit while PO settlement</span>
-              <label className="toggle-switch-label">
-                <input type="checkbox" checked={form.advancedSettings.allowPriceEditWhilePOSettlement} onChange={(e) => updateAdvancedObject("allowPriceEditWhilePOSettlement", e.target.checked)} />
-                <span className="toggle-switch-slider" />
-              </label>
-            </div>
-            <div className="toggle-option-row">
-              <span className="label-text">Allow edit consumable</span>
-              <label className="toggle-switch-label">
-                <input type="checkbox" checked={form.advancedSettings.allowEditConsumable} onChange={(e) => updateAdvancedObject("allowEditConsumable", e.target.checked)} />
-                <span className="toggle-switch-slider" />
-              </label>
-            </div>
-            <div className="toggle-option-row">
-              <span className="label-text">Allow report date restriction</span>
-              <label className="toggle-switch-label">
-                <input type="checkbox" checked={form.advancedSettings.allowReportDateRestriction} onChange={(e) => updateAdvancedObject("allowReportDateRestriction", e.target.checked)} />
-                <span className="toggle-switch-slider" />
-              </label>
-            </div>
+          <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+            <ToggleSwitch checked={form.advancedSettings.allowFutureBackdatedBills} onChange={(e) => updateAdvancedObject("allowFutureBackdatedBills", e.target.checked)} label="Allow future backdated bills" />
+            <ToggleSwitch checked={form.advancedSettings.allowBackdatedAppointments} onChange={(e) => updateAdvancedObject("allowBackdatedAppointments", e.target.checked)} label="Allow backdated appointments" />
+            <ToggleSwitch checked={form.advancedSettings.allowPriceEditOnBill} onChange={(e) => updateAdvancedObject("allowPriceEditOnBill", e.target.checked)} label="Allow price edit on bill" />
+            <ToggleSwitch checked={form.advancedSettings.allowPOPriceEdit} onChange={(e) => updateAdvancedObject("allowPOPriceEdit", e.target.checked)} label="Allow PO price edit" />
+            <ToggleSwitch checked={form.advancedSettings.allowPriceEditWhilePOSettlement} onChange={(e) => updateAdvancedObject("allowPriceEditWhilePOSettlement", e.target.checked)} label="Allow price edit while PO settlement" />
+            <ToggleSwitch checked={form.advancedSettings.allowEditConsumable} onChange={(e) => updateAdvancedObject("allowEditConsumable", e.target.checked)} label="Allow edit consumable" />
+            <ToggleSwitch checked={form.advancedSettings.allowReportDateRestriction} onChange={(e) => updateAdvancedObject("allowReportDateRestriction", e.target.checked)} label="Allow report date restriction" />
           </div>
         </div>
 
         <div className="settings-panel-card">
-          <div className="settings-panel-header-with-toggle" style={{ borderBottom: "1px solid #e2e8f0", paddingBottom: 12, marginBottom: 16 }}>
+          <div className="settings-panel-header-with-toggle" style={{ borderBottom: "1px solid #e2e8f0", paddingBottom: 12, marginBottom: 20 }}>
             <h3>Booking & Invoice Defaults</h3>
           </div>
           <div className="settings-form-grid">
@@ -1671,11 +1278,11 @@ export default function SettingsPage() {
               <span className="muted">Tax Label</span>
               <input type="text" value={form.taxLabel} onChange={(e) => setForm((c) => ({ ...c, taxLabel: e.target.value }))} placeholder="e.g. GST" />
             </label>
-            <label className="settings-input-group">
+            <label className="settings-input-group" style={{ gridColumn: "1 / -1" }}>
               <span className="muted">Booking Notes</span>
               <textarea value={form.bookingNotes} onChange={(e) => setForm((c) => ({ ...c, bookingNotes: e.target.value }))} placeholder="e.g. Please arrive 10 minutes early" style={{ padding: "10px", border: "1px solid #e2e8f0", borderRadius: 6, width: "100%", boxSizing: "border-box", outline: "none", minHeight: 60, resize: "vertical", fontFamily: "inherit" }} />
             </label>
-            <label className="settings-input-group">
+            <label className="settings-input-group" style={{ gridColumn: "1 / -1" }}>
               <span className="muted">Cancellation Policy</span>
               <textarea value={form.cancellationPolicy} onChange={(e) => setForm((c) => ({ ...c, cancellationPolicy: e.target.value }))} placeholder="e.g. Free cancellation up to 24 hours before" style={{ padding: "10px", border: "1px solid #e2e8f0", borderRadius: 6, width: "100%", boxSizing: "border-box", outline: "none", minHeight: 60, resize: "vertical", fontFamily: "inherit" }} />
             </label>
@@ -3386,36 +2993,7 @@ export default function SettingsPage() {
     );
   };
 
-  const renderSmsSection = () => (
-    <>
-      <SectionHeader title="Messaging Center" description="Review delivery-provider defaults. Email is sent through backend SMTP; SMS and WhatsApp values stay ready for live gateway integration." badges={[form.smsSettings.gatewayProvider.replace("_PLACEHOLDER", ""), form.smsSettings.senderId || "No Sender ID"]} action={<Link className="secondary-button" to="/admin/whatsapp">Open Messaging</Link>} />
-      <div className="settings-panel-card">
-        <div className="settings-form-grid">
-          <label className="settings-input-group">
-            <span className="muted">Gateway provider</span>
-            <CustomDropdown value={form.smsSettings.gatewayProvider} onChange={(event) => setForm((current) => ({ ...current, smsSettings: { ...current.smsSettings, gatewayProvider: event.target.value } }))}>
-              <option value="TWILIO_PLACEHOLDER">Twilio</option>
-              <option value="MSG91_PLACEHOLDER">Msg91</option>
-              <option value="GUPSHUP_PLACEHOLDER">Gupshup</option>
-            </CustomDropdown>
-          </label>
-          <label className="settings-input-group">
-            <span className="muted">Sender ID</span>
-            <input value={form.smsSettings.senderId} onChange={(event) => setForm((current) => ({ ...current, smsSettings: { ...current.smsSettings, senderId: event.target.value } }))} />
-          </label>
-          <label className="settings-input-group">
-            <span className="muted">API key / auth token</span>
-            <textarea rows="3" value={form.smsSettings.apiKey} onChange={(event) => setForm((current) => ({ ...current, smsSettings: { ...current.smsSettings, apiKey: event.target.value } }))} />
-          </label>
-          <div className="settings-input-group" style={{ alignSelf: "end" }}>
-            <span className="muted" style={{ fontSize: 12 }}>
-              Provider, sender ID, and auth token are stored with salon settings. They do not send real SMS until a gateway connector is added.
-            </span>
-          </div>
-        </div>
-      </div>
-    </>
-  );
+
 
   const renderSegmentSection = () => {
     const segments = form.advancedSettings.crmSegments;
@@ -4908,8 +4486,7 @@ export default function SettingsPage() {
         return renderAccessControlSection();
       case "notification-settings":
         return renderNotificationsSection();
-      case "sms-center":
-        return renderSmsSection();
+
       case "crm-segment":
         return renderSegmentSection();
       case "privacy-policy":
