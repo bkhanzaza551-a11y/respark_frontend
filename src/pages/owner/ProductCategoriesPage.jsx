@@ -185,7 +185,7 @@ export default function ProductCategoriesPage() {
         branchId: productForm.branchId || selectedBranchId || null,
         costPrice: Number(productForm.costPrice),
         sellingPrice: Number(productForm.sellingPrice),
-        salePrice: productForm.salePrice ? Number(productForm.salePrice) : null,
+        salePrice: productForm.salePrice !== "" && productForm.salePrice != null ? Number(productForm.salePrice) : 0,
         currentStock: Number(productForm.currentStock),
         onFloor: Number(productForm.onFloor) || 0,
         netWeight: productForm.netWeight !== "" ? Number(productForm.netWeight) : null,
