@@ -442,7 +442,7 @@ export default function CouponsPage() {
       )}
       {showCouponModal && (
         <div className="premium-modal-overlay" onClick={() => setShowCouponModal(false)} style={{ zIndex: 9999, background: 'rgba(0,0,0,0.6)' }}>
-          <div className="premium-modal-content" onClick={e => e.stopPropagation()} style={{ maxWidth: 600, padding: 32, borderRadius: 16 }}>
+          <div className="premium-modal-content" onClick={e => e.stopPropagation()} style={{ maxWidth: 800, padding: 32, borderRadius: 16, background: '#ffffff', maxHeight: '90vh', overflowY: 'auto' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 }}>
               <h2 style={{ margin: 0, fontSize: '1.5rem', fontWeight: 800, color: '#0f172a' }}>{editingCoupon ? "Update Coupon" : "Create Coupon"}</h2>
               <button onClick={() => setShowCouponModal(false)} style={{ background: '#f1f5f9', border: 'none', color: '#475569', cursor: 'pointer', padding: 8, borderRadius: '50%', display: 'flex' }}><X size={18} /></button>
@@ -450,10 +450,12 @@ export default function CouponsPage() {
             
             <form onSubmit={saveCoupon} style={{ display: "flex", flexDirection: "column", gap: 20 }}>
               <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: -10 }}>
-                <label style={{ display: "flex", alignItems: "center", gap: 10, cursor: "pointer", background: couponForm.isActive ? "#dcfce7" : "#f1f5f9", padding: "6px 14px", borderRadius: 30, transition: "all 0.3s" }}>
-                  <span style={{ fontSize: "0.8rem", fontWeight: 700, color: couponForm.isActive ? "#166534" : "#64748b", textTransform: "uppercase" }}>{couponForm.isActive ? "Active" : "Inactive"}</span>
-                  <input type="checkbox" checked={couponForm.isActive} onChange={(e) => setCouponForm({ ...couponForm, isActive: e.target.checked })} style={{ width: 16, height: 16, cursor: "pointer", accentColor: "#16a34a" }} />
-                </label>
+                <ToggleSwitch
+                  checked={couponForm.isActive}
+                  onChange={(val) => setCouponForm({ ...couponForm, isActive: val })}
+                  label={couponForm.isActive ? "Active" : "Inactive"}
+                  color="#16a34a"
+                />
               </div>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
                 <label><span style={{ display: 'block', fontSize: '0.85rem', fontWeight: 700, color: '#475569', marginBottom: 6 }}>Name</span><input placeholder="e.g. Summer Special" required value={couponForm.title} onChange={(e) => setCouponForm({ ...couponForm, title: e.target.value })} style={{ width: '100%', padding: '10px 14px', borderRadius: 8, border: '1px solid #cbd5e1', boxSizing: 'border-box' }}/></label>
@@ -472,7 +474,13 @@ export default function CouponsPage() {
               </div>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px 16px', border: '1px solid #e2e8f0', borderRadius: 10, background: '#f8fafc' }}>
                 <div><div style={{ fontWeight: 600, color: '#1e293b', fontSize: '0.9rem' }}>Private Coupon</div><div style={{ fontSize: '0.8rem', color: '#64748b' }}>Will not be visible on the public online catalog.</div></div>
-                <div onClick={() => setCouponForm({ ...couponForm, isPrivate: !couponForm.isPrivate })} style={{ width: 44, height: 24, background: couponForm.isPrivate ? '#3b82f6' : '#cbd5e1', borderRadius: 12, padding: 2, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: couponForm.isPrivate ? 'flex-end' : 'flex-start', transition: 'all 0.2s', boxSizing: 'border-box' }}><div style={{ width: 20, height: 20, background: 'white', borderRadius: '50%', boxShadow: '0 1px 3px rgba(0,0,0,0.15)' }} /></div>
+                <div style={{ display: "flex", alignItems: "center" }}>
+                    <ToggleSwitch
+                      checked={couponForm.isPrivate}
+                      onChange={(val) => setCouponForm({ ...couponForm, isPrivate: val })}
+                      color="#3b82f6"
+                    />
+                </div>
               </div>
               <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 12, marginTop: 16 }}>
                 <button type="button" onClick={() => setShowCouponModal(false)} className="secondary-button">Cancel</button>

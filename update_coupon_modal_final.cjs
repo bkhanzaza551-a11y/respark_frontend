@@ -1,0 +1,72 @@
+const fs = require('fs');
+let content = fs.readFileSync('src/pages/owner/CouponsPage.jsx', 'utf8');
+
+const startTarget = '{showCouponModal && (';
+const endTarget = '{showGiftCardModal && (';
+
+const startIdx = content.indexOf(startTarget);
+const endIdx = content.indexOf(endTarget);
+
+if (startIdx !== -1 && endIdx !== -1) {
+  const before = content.slice(0, startIdx);
+  const after = content.slice(endIdx);
+  
+  const replacementModal = `{showCouponModal && (
+        <div className="premium-modal-overlay" onClick={() => setShowCouponModal(false)} style={{ zIndex: 9999, background: 'rgba(0,0,0,0.6)' }}>
+          <div className="premium-modal-content" onClick={e => e.stopPropagation()} style={{ maxWidth: 800, padding: 32, borderRadius: 16, background: '#ffffff', maxHeight: '90vh', overflowY: 'auto' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 }}>
+              <h2 style={{ margin: 0, fontSize: '1.5rem', fontWeight: 800, color: '#0f172a' }}>{editingCoupon ? "Update Coupon" : "Create Coupon"}</h2>
+              <button onClick={() => setShowCouponModal(false)} style={{ background: '#f1f5f9', border: 'none', color: '#475569', cursor: 'pointer', padding: 8, borderRadius: '50%', display: 'flex' }}><X size={18} /></button>
+            </div>
+            
+            <form onSubmit={saveCoupon} style={{ display: "flex", flexDirection: "column", gap: 20 }}>
+              <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: -10 }}>
+                <ToggleSwitch
+                  checked={couponForm.isActive}
+                  onChange={(val) => setCouponForm({ ...couponForm, isActive: val })}
+                  label={couponForm.isActive ? "Active" : "Inactive"}
+                  color="#16a34a"
+                />
+              </div>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
+                <label><span style={{ display: 'block', fontSize: '0.85rem', fontWeight: 700, color: '#475569', marginBottom: 6 }}>Name</span><input placeholder="e.g. Summer Special" required value={couponForm.title} onChange={(e) => setCouponForm({ ...couponForm, title: e.target.value })} style={{ width: '100%', padding: '10px 14px', borderRadius: 8, border: '1px solid #cbd5e1', boxSizing: 'border-box' }}/></label>
+                <label><span style={{ display: 'block', fontSize: '0.85rem', fontWeight: 700, color: '#475569', marginBottom: 6 }}>Code</span><input placeholder="e.g. SUMMER20" required value={couponForm.code} onChange={(e) => setCouponForm({ ...couponForm, code: e.target.value.toUpperCase() })} style={{ width: '100%', padding: '10px 14px', borderRadius: 8, border: '1px solid #cbd5e1', boxSizing: 'border-box', textTransform: 'uppercase', fontWeight: 700, letterSpacing: 1 }}/></label>
+              </div>
+              <label><span style={{ display: 'block', fontSize: '0.85rem', fontWeight: 700, color: '#475569', marginBottom: 6 }}>Description (Optional)</span><input placeholder="e.g. Valid only for first-time customers..." value={couponForm.description} onChange={(e) => setCouponForm({ ...couponForm, description: e.target.value })} style={{ width: '100%', padding: '10px 14px', borderRadius: 8, border: '1px solid #cbd5e1', boxSizing: 'border-box' }}/></label>
+              <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr 1fr', gap: 16 }}>
+                <div><span style={{ display: 'block', fontSize: '0.85rem', fontWeight: 700, color: '#475569', marginBottom: 6 }}>Benefit Type</span><div style={{ display: 'flex', background: '#f8fafc', padding: 4, borderRadius: 8, border: '1px solid #e2e8f0' }}><div onClick={() => setCouponForm({ ...couponForm, discountType: "FIXED" })} style={{ flex: 1, textAlign: 'center', padding: '6px 4px', borderRadius: 6, fontSize: '0.8rem', fontWeight: 600, cursor: 'pointer', background: couponForm.discountType === "FIXED" ? 'white' : 'transparent', boxShadow: couponForm.discountType === "FIXED" ? '0 1px 3px rgba(0,0,0,0.1)' : 'none', color: couponForm.discountType === "FIXED" ? '#0f172a' : '#64748b' }}>₹ Fixed</div><div onClick={() => setCouponForm({ ...couponForm, discountType: "PERCENT" })} style={{ flex: 1, textAlign: 'center', padding: '6px 4px', borderRadius: 6, fontSize: '0.8rem', fontWeight: 600, cursor: 'pointer', background: couponForm.discountType === "PERCENT" ? 'white' : 'transparent', boxShadow: couponForm.discountType === "PERCENT" ? '0 1px 3px rgba(0,0,0,0.1)' : 'none', color: couponForm.discountType === "PERCENT" ? '#0f172a' : '#64748b' }}>% Pct</div><div onClick={() => setCouponForm({ ...couponForm, discountType: "CAMPAIGN" })} style={{ flex: 1, textAlign: 'center', padding: '6px 4px', borderRadius: 6, fontSize: '0.8rem', fontWeight: 600, cursor: 'pointer', background: couponForm.discountType === "CAMPAIGN" ? 'white' : 'transparent', boxShadow: couponForm.discountType === "CAMPAIGN" ? '0 1px 3px rgba(0,0,0,0.1)' : 'none', color: couponForm.discountType === "CAMPAIGN" ? '#0f172a' : '#64748b' }}>📣 Camp</div></div></div>
+                <label><span style={{ display: 'block', fontSize: '0.85rem', fontWeight: 700, color: '#475569', marginBottom: 6 }}>Value {couponForm.discountType === "FIXED" ? "(₹)" : "(%)"}</span><input type="number" min="0" placeholder="50" required value={couponForm.discountValue} onChange={(e) => setCouponForm({ ...couponForm, discountValue: e.target.value })} style={{ width: '100%', padding: '10px 14px', borderRadius: 8, border: '1px solid #cbd5e1', boxSizing: 'border-box' }}/></label>
+                <label><span style={{ display: 'block', fontSize: '0.85rem', fontWeight: 700, color: '#475569', marginBottom: 6 }}>Activated Date</span><input type="date" required value={couponForm.startsAt} onChange={(e) => setCouponForm({ ...couponForm, startsAt: e.target.value })} min={new Date().toISOString().slice(0, 10)} style={{ width: '100%', padding: '10px 14px', borderRadius: 8, border: '1px solid #cbd5e1', boxSizing: 'border-box' }}/></label>
+              </div>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 16 }}>
+                <label><span style={{ display: 'block', fontSize: '0.85rem', fontWeight: 700, color: '#475569', marginBottom: 6 }}>Min. Bill (₹)</span><input type="number" min="0" placeholder="0 for none" value={couponForm.minBillAmount} onChange={(e) => setCouponForm({ ...couponForm, minBillAmount: e.target.value })} style={{ width: '100%', padding: '10px 14px', borderRadius: 8, border: '1px solid #cbd5e1', boxSizing: 'border-box' }}/></label>
+                <label><span style={{ display: 'block', fontSize: '0.85rem', fontWeight: 700, color: '#475569', marginBottom: 6 }}>Usage Limit</span><input type="number" min="0" placeholder="Unlimited" value={couponForm.usageLimit} onChange={(e) => setCouponForm({ ...couponForm, usageLimit: e.target.value })} style={{ width: '100%', padding: '10px 14px', borderRadius: 8, border: '1px solid #cbd5e1', boxSizing: 'border-box' }}/></label>
+                <label><span style={{ display: 'block', fontSize: '0.85rem', fontWeight: 700, color: '#475569', marginBottom: 6 }}>Validity (Days)</span><input type="number" min="1" placeholder="90" required value={couponForm.validityDays} onChange={(e) => setCouponForm({ ...couponForm, validityDays: e.target.value })} style={{ width: '100%', padding: '10px 14px', borderRadius: 8, border: '1px solid #cbd5e1', boxSizing: 'border-box' }}/></label>
+              </div>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px 16px', border: '1px solid #e2e8f0', borderRadius: 10, background: '#f8fafc' }}>
+                <div><div style={{ fontWeight: 600, color: '#1e293b', fontSize: '0.9rem' }}>Private Coupon</div><div style={{ fontSize: '0.8rem', color: '#64748b' }}>Will not be visible on the public online catalog.</div></div>
+                <div style={{ display: "flex", alignItems: "center" }}>
+                    <ToggleSwitch
+                      checked={couponForm.isPrivate}
+                      onChange={(val) => setCouponForm({ ...couponForm, isPrivate: val })}
+                      color="#3b82f6"
+                    />
+                </div>
+              </div>
+              <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 12, marginTop: 16 }}>
+                <button type="button" onClick={() => setShowCouponModal(false)} className="secondary-button">Cancel</button>
+                <button type="submit" className="primary-button">{editingCoupon ? "Save Changes" : "Create Coupon"}</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      `;
+      
+  const finalContent = before + replacementModal + after;
+  fs.writeFileSync('src/pages/owner/CouponsPage.jsx', finalContent);
+  console.log('Successfully replaced coupon modal via index slice.');
+} else {
+  console.log('Could not find start or end index.');
+}
