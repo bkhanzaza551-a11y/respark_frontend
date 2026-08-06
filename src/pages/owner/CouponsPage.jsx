@@ -495,7 +495,10 @@ export default function CouponsPage() {
               </div>
             </form>
           </div>
-            {showGiftCardModal && (
+        </div>
+      )}
+
+      {showGiftCardModal && (
         <div className="premium-modal-overlay" onClick={() => setShowGiftCardModal(false)} style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 9999, background: 'rgba(0,0,0,0.6)' }}>
           <div className="premium-modal-content" onClick={e => e.stopPropagation()} style={{ maxWidth: 500, padding: 32, borderRadius: 16, background: '#ffffff', width: '100%', maxHeight: '90vh', overflowY: 'auto' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 }}>
@@ -526,7 +529,6 @@ export default function CouponsPage() {
             </form>
           </div>
         </div>
-      )}     </div>
       )}
     </div>
   );
