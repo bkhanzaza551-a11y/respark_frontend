@@ -41,7 +41,9 @@ const defaultProductForm = {
   width: "",
   height: "",
   unit: "",
-  unitConversion: ""
+  unitConversion: "",
+  discountType: "NONE",
+  discountValue: 0
 };
 
 export default function ProductCategoriesPage() {
@@ -167,7 +169,9 @@ export default function ProductCategoriesPage() {
       height: p.height ?? "",
       unit: p.unit ?? "",
       unitConversion: p.unitConversion ?? "",
-      favourite: Boolean(p.favourite)
+      favourite: Boolean(p.favourite),
+      discountType: p.discountType || "NONE",
+      discountValue: p.discountValue ? Number(p.discountValue) : 0
     });
     setShowProductModal(true);
   };
@@ -202,7 +206,9 @@ export default function ProductCategoriesPage() {
         height: productForm.height !== "" ? Number(productForm.height) : null,
         unit: productForm.unit || null,
         unitConversion: productForm.unitConversion !== "" ? Number(productForm.unitConversion) : null,
-        favourite: Boolean(productForm.favourite)
+        favourite: Boolean(productForm.favourite),
+        discountType: productForm.discountType || "NONE",
+        discountValue: productForm.discountValue ? Number(productForm.discountValue) : 0
       };
       if (editingProduct) {
         await api.patch(`/owner/inventory/products/${editingProduct.id}`, payload);
@@ -616,6 +622,37 @@ export default function ProductCategoriesPage() {
                     <ToggleSwitch label="No Discount" checked={productForm.nonDiscountable} onChange={e => setProductForm({...productForm, nonDiscountable: e.target.checked})} color="#ef4444" />
                   </div>
                 </div>
+
+                {/* Auto-Applied Discount Details */}
+                {!productForm.nonDiscountable && (
+                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20, marginBottom: 24 }}>
+                    <div className="hub-form-group">
+                      <label style={{ fontSize: 13, fontWeight: 600, color: "#475569", marginBottom: 6, display: "block" }}>Auto Discount Type (for POS)</label>
+                      <CustomDropdown className="hub-input" value={productForm.discountType} onChange={e => setProductForm({...productForm, discountType: e.target.value})} style={{ width: "100%", padding: "10px 14px", border: "1px solid #cbd5e1", borderRadius: 8, fontSize: "0.95rem" }}>
+                        <option value="NONE">No Discount</option>
+                        <option value="PERCENTAGE">Percentage (%)</option>
+                        <option value="FLAT">Flat Amount</option>
+                      </CustomDropdown>
+                    </div>
+                    {productForm.discountType !== "NONE" && (
+                      <div className="hub-form-group">
+                        <label style={{ fontSize: 13, fontWeight: 600, color: "#475569", marginBottom: 6, display: "block" }}>
+                          Discount Value {productForm.discountType === "PERCENTAGE" ? "(%)" : `(${currencySymbol})`}
+                        </label>
+                        <input 
+                          type="number" 
+                          min="0" 
+                          className="hub-input" 
+                          value={productForm.discountValue} 
+                          onChange={e => setProductForm({...productForm, discountValue: e.target.value})} 
+                          placeholder="Enter discount value" 
+                          style={{ width: "100%", padding: "10px 14px", border: "1px solid #cbd5e1", borderRadius: 8, fontSize: "0.95rem" }}
+                        />
+                      </div>
+                    )}
+                  </div>
+                )}
+
 
                 {/* Store SKU + Retail */}
                 <div style={{ display: "grid", gridTemplateColumns: "2fr 1fr", gap: 20, marginBottom: 24, alignItems: "end" }}>
