@@ -3837,3 +3837,53 @@ pre {
     color: #0f172a !important;
 }
 
+
+
+/* RPT Table Styles */
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.rpt-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  min-width: 800px;
+}
+
+.rpt-table th {
+  padding: 16px;
+  border-bottom: 2px solid #f1f5f9;
+  color: #64748b;
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.rpt-table td {
+  padding: 16px;
+  border-bottom: 1px solid #f1f5f9;
+  vertical-align: middle;
+}
+
+.rpt-table tr {
+  transition: background 0.2s;
+}
+
+.rpt-table tr:hover {
+  background: #f8fafc;
+}
+
+.rpt-topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+  gap: 16px;
+  padding: 16px 20px;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
