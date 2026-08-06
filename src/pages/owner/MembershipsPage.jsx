@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import CustomDropdown from '../../components/common/CustomDropdown';
 import ToggleSwitch from '../../components/common/ToggleSwitch';
 import { Link, useLocation, useParams } from "react-router-dom";
-import { Trash2, Edit2, Plus, PackageOpen, Package, X, UserPlus } from 'lucide-react';
+import { Trash2, Edit2, Plus, PackageOpen, Package, X, UserPlus, Search } from 'lucide-react';
 import { api } from "../../api/client";
 import { useSalonSettings } from "../../context/SalonSettingsContext";
 import { useBranch } from "../../context/BranchContext";
