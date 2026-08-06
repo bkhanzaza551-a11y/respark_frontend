@@ -791,7 +791,7 @@ export default function PosPage() {
   }, [context.products]);
 
   const productTileGroups = useMemo(() => {
-    let list = context.products || [];
+    let list = (context.products || []).filter(p => p.productType !== "CONSUMABLE");
     if (posGender) {
       list = list.filter(p => genderMatches(p, posGender));
     }
@@ -3269,7 +3269,7 @@ export default function PosPage() {
                 {consumableSearch && (
                   <div style={{ position: 'absolute', top: '70px', left: 24, right: 24, background: '#fff', border: '1px solid #e2e8f0', borderRadius: 8, boxShadow: '0 4px 12px rgba(0,0,0,0.1)', maxHeight: 200, overflowY: 'auto', zIndex: 1010 }}>
                     {(context.products || [])
-                      .filter(p => (p.name || "").toLowerCase().includes(consumableSearch.toLowerCase()))
+                      .filter(p => p.productType === "CONSUMABLE" && (p.name || "").toLowerCase().includes(consumableSearch.toLowerCase()))
                       .slice(0, 10)
                       .map(p => (
                         <div
@@ -3280,10 +3280,10 @@ export default function PosPage() {
                           onMouseLeave={(e) => e.currentTarget.style.background = '#fff'}
                         >
                           <span>{p.name}</span>
-                          <span style={{ fontSize: 11, color: '#64748b' }}>{p.productType || "PRODUCT"}</span>
+                          <span style={{ fontSize: 11, color: '#64748b' }}>{p.unit || "pcs"}</span>
                         </div>
                       ))}
-                    {(context.products || []).filter(p => (p.name || "").toLowerCase().includes(consumableSearch.toLowerCase())).length === 0 && (
+                    {(context.products || []).filter(p => p.productType === "CONSUMABLE" && (p.name || "").toLowerCase().includes(consumableSearch.toLowerCase())).length === 0 && (
                       <div style={{ padding: '12px 14px', color: '#94a3b8', fontSize: 13, textAlign: 'center' }}>No products found</div>
                     )}
                   </div>

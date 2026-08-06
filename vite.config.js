@@ -18,9 +18,20 @@ export default defineConfig({
           if (id.includes("node_modules/axios")) {
             return "http"
           }
+          if (id.includes("node_modules/recharts")) {
+            return "charts"
+          }
+          if (id.includes("node_modules/maplibre-gl")) {
+            return "maps"
+          }
+          if (id.includes("node_modules/lucide-react")) {
+            return "icons"
+          }
           return undefined
         }
       }
-    }
+    },
+    chunkFileNames: "assets/[name]-[hash].js",
+    assetFileNames: "assets/[name]-[hash].[ext]"
   }
 })

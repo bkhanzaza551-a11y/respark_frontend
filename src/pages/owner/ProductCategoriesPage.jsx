@@ -68,6 +68,7 @@ export default function ProductCategoriesPage() {
   const [stockSaving, setStockSaving] = useState(false);
   const [stockError, setStockError] = useState("");
   const [stockFieldErrors, setStockFieldErrors] = useState({});
+  const [originalProductType, setOriginalProductType] = useState("RETAIL");
 
   const loadData = useCallback(async () => {
     try {
@@ -239,6 +240,7 @@ export default function ProductCategoriesPage() {
     });
     setStockError("");
     setStockFieldErrors({});
+    setOriginalProductType(p.productType || "RETAIL");
   };
 
   const handleSaveStock = async (e) => {
@@ -834,6 +836,12 @@ export default function ProductCategoriesPage() {
                 <ToggleSwitch label="Retail" checked={stockForm.productType === "RETAIL"} onChange={e => setStockForm({...stockForm, productType: e.target.checked ? "RETAIL" : "CONSUMABLE"})} color="#3b82f6" />
                 <ToggleSwitch label="Consumable" checked={stockForm.productType === "CONSUMABLE"} onChange={e => setStockForm({...stockForm, productType: e.target.checked ? "CONSUMABLE" : "RETAIL"})} color="#3b82f6" />
               </div>
+              {originalProductType === "CONSUMABLE" && stockForm.productType === "RETAIL" && (
+                <div style={{ background: "#fffbeb", color: "#92400e", padding: "10px 14px", borderRadius: 8, fontSize: 13, marginBottom: 16, fontWeight: 500, display: "flex", alignItems: "center", gap: 8, border: "1px solid #fde68a" }}>
+                  <AlertCircle size={16} />
+                  Warning: Switching from Consumable to Retail may affect services that use this product as a consumable.
+                </div>
+              )}
 
               <div style={{ display: "flex", justifyContent: "flex-end", gap: 12, borderTop: "1px solid #f1f5f9", paddingTop: 20 }}>
                 <button type="button" onClick={() => { setStockModal({ open: false, product: null }); }} style={{ padding: "10px 24px", background: "#fff", border: "1px solid #cbd5e1", borderRadius: 8, fontWeight: 600, color: "#475569", cursor: "pointer", transition: "background 0.2s" }} onMouseEnter={e=>e.currentTarget.style.background="#f1f5f9"} onMouseLeave={e=>e.currentTarget.style.background="#fff"}>Close</button>

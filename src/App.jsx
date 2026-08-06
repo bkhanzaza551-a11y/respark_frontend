@@ -16,8 +16,9 @@ const lazyWithRetry = (componentImport) =>
       if (!pageHasAlreadyBeenForceRefreshed) {
         window.sessionStorage.setItem("page-has-been-force-refreshed", "true");
         window.location.reload();
-        return new Promise(() => {}); // Return a pending promise to avoid showing error before reload
+        return new Promise(() => {});
       }
+      window.sessionStorage.removeItem("page-has-been-force-refreshed");
       throw error;
     }
   });
