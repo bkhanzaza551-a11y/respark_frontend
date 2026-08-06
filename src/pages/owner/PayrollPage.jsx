@@ -8,8 +8,7 @@ import ModuleTabs from "../../components/ModuleTabs";
 import { formatApiError } from "../../utils/apiError";
 import { normalizeImageUrl } from "../../utils/imageUrl";
 import PageLoader from "../../components/PageLoader";
-import { CalendarDays, CheckCircle2, ChevronLeft, ChevronRight, Clock, Download, Edit3, Eye, FileText, History, LogIn, LogOut, MapPin, PlusCircle, Printer, RotateCcw, Save, Timer, User, UserPlus, Users, XCircle, Activity, List } from "lucide-react";
-
+import { CalendarDays, CheckCircle2, ChevronLeft, ChevronRight, Clock, Download, Edit3, Eye, FileText, History, LogIn, LogOut, MapPin, PlusCircle, Printer, RotateCcw, Save, Timer, User, UserPlus, Users, XCircle, Activity, List, LayoutDashboard } from "lucide-react";
 
 const emptyAttendanceSettings = {
   officeStartTime: "09:00",
@@ -22,6 +21,7 @@ const emptyAttendanceSettings = {
   checkoutSelfieRequired: false,
   allowManualAttendanceEdits: true
 };
+
 const emptyAttendanceReport = {
   period: "daily",
   label: "Daily",
@@ -86,14 +86,14 @@ const toMonthInput = (value) => {
 };
 
 const statusTheme = {
-  PRESENT: { label: "P", bg: "#dcfce7", color: "#166534" },
-  LATE: { label: "L", bg: "#fef3c7", color: "#92400e" },
-  HALF_DAY: { label: "H", bg: "#fde68a", color: "#854d0e" },
-  ABSENT: { label: "A", bg: "#fee2e2", color: "#b91c1c" },
-  LEAVE: { label: "LV", bg: "#dbeafe", color: "#1d4ed8" },
-  WORKING: { label: "W", bg: "#cffafe", color: "#0f766e" },
-  COMPLETED_SHIFT: { label: "C", bg: "#e9d5ff", color: "#6d28d9" },
-  OFF: { label: "OFF", bg: "#e2e8f0", color: "#475569" }
+  PRESENT: { label: "P", bg: "#dcfce7", color: "#166534", gradient: "linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%)" },
+  LATE: { label: "L", bg: "#fef3c7", color: "#92400e", gradient: "linear-gradient(135deg, #fef3c7 0%, #fde68a 100%)" },
+  HALF_DAY: { label: "H", bg: "#fef9c3", color: "#854d0e", gradient: "linear-gradient(135deg, #fef9c3 0%, #fef08a 100%)" },
+  ABSENT: { label: "A", bg: "#fee2e2", color: "#b91c1c", gradient: "linear-gradient(135deg, #fee2e2 0%, #fecaca 100%)" },
+  LEAVE: { label: "LV", bg: "#dbeafe", color: "#1d4ed8", gradient: "linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%)" },
+  WORKING: { label: "W", bg: "#cffafe", color: "#0f766e", gradient: "linear-gradient(135deg, #cffafe 0%, #a5f3fc 100%)" },
+  COMPLETED_SHIFT: { label: "C", bg: "#f3e8ff", color: "#6b21a8", gradient: "linear-gradient(135deg, #f3e8ff 0%, #e9d5ff 100%)" },
+  OFF: { label: "OFF", bg: "#f1f5f9", color: "#475569", gradient: "linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%)" }
 };
 
 const attendanceMetricKeys = ["present", "late", "halfDay", "absent", "leave", "working", "completedShift"];
@@ -453,21 +453,103 @@ export default function PayrollPage() {
     window.open(`/api/v1/owner/attendance/reports/export.${format}?${searchParams.toString()}`, "_blank", "noopener,noreferrer");
   };
 
+  const statCards = [
+    { label: "Total Staff", value: attendanceSummary.totalStaff || 0, icon: Users, color: "#3b82f6", bg: "linear-gradient(135deg, #eff6ff, #dbeafe)" },
+    { label: "Present Today", value: attendanceSummary.presentToday || 0, icon: CheckCircle2, color: "#16a34a", bg: "linear-gradient(135deg, #f0fdf4, #dcfce7)" },
+    { label: "Absent Today", value: attendanceSummary.absentToday || 0, icon: XCircle, color: "#ef4444", bg: "linear-gradient(135deg, #fef2f2, #fee2e2)" },
+    { label: "Late Staff", value: attendanceSummary.lateStaff || 0, icon: Clock, color: "#f59e0b", bg: "linear-gradient(135deg, #fffbeb, #fef3c7)" },
+    { label: "Currently Working", value: attendanceSummary.currentlyWorking || 0, icon: Activity, color: "#0ea5e9", bg: "linear-gradient(135deg, #f0f9ff, #e0f2fe)" },
+    { label: "Completed Shift", value: attendanceSummary.completedShift || 0, icon: Timer, color: "#8b5cf6", bg: "linear-gradient(135deg, #f5f3ff, #ede9fe)" }
+  ];
+
   return (
-    <div className="page-shell">
+    <div className="page-shell" style={{ background: "#f1f5f9", minHeight: "100vh", paddingBottom: 60 }}>
+      <style>{`
+        .att-premium-tab {
+          padding: 12px 24px;
+          border-radius: 99px;
+          border: none;
+          font-weight: 600;
+          font-size: 14px;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          background: transparent;
+          color: #64748b;
+          position: relative;
+          overflow: hidden;
+        }
+        .att-premium-tab:hover {
+          color: #0f172a;
+          background: rgba(255,255,255,0.6);
+        }
+        .att-premium-tab.active {
+          background: #ffffff;
+          color: #2563eb;
+          box-shadow: 0 4px 15px rgba(37, 99, 235, 0.1);
+        }
+        .att-stat-card {
+          background: #ffffff;
+          border-radius: 20px;
+          padding: 24px;
+          display: flex;
+          flex-direction: column;
+          gap: 12px;
+          position: relative;
+          overflow: hidden;
+          box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+          transition: transform 0.3s ease, box-shadow 0.3s ease;
+          border: 1px solid rgba(226, 232, 240, 0.8);
+        }
+        .att-stat-card:hover {
+          transform: translateY(-4px);
+          box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+        }
+        .att-cal-cell { transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); border-radius: 10px; }
+        .att-cal-cell:hover { transform: scale(1.15) translateY(-2px); z-index: 2; box-shadow: 0 8px 16px rgba(0,0,0,0.12); }
+        .att-glass-panel {
+          background: rgba(255, 255, 255, 0.95);
+          backdrop-filter: blur(10px);
+          border-radius: 24px;
+          border: 1px solid rgba(255,255,255,0.8);
+          box-shadow: 0 20px 40px rgba(0,0,0,0.04);
+        }
+        .att-btn-primary {
+          background: linear-gradient(135deg, #2563eb, #1d4ed8);
+          color: white;
+          border: none;
+          padding: 12px 24px;
+          border-radius: 12px;
+          font-weight: 600;
+          cursor: pointer;
+          transition: all 0.2s;
+          box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+        }
+        .att-btn-primary:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 6px 16px rgba(37, 99, 235, 0.3);
+        }
+        .modern-table-container {
+          border-radius: 16px;
+          overflow: hidden;
+          border: 1px solid #e2e8f0;
+          box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+        }
+      `}</style>
+
       <ModuleTabs
         title="Staff Attendance"
         description="GPS-based attendance tracking, check-in/out, manual attendance editing, and attendance reports."
-        items={[
-          { label: "Attendance", to: "/admin/attendance" }
-        ]}
+        items={[{ label: "Attendance", to: "/admin/attendance" }]}
       />
-      {status.error && <div className="panel-card"><p className="error-text">{status.error}</p></div>}
-      {status.success && <div className="panel-card"><p className="success-text">{status.success}</p></div>}
+      {status.error && <div className="panel-card" style={{margin: "0 24px 16px", background: "#fef2f2", borderColor: "#fecaca", color: "#991b1b"}}><p style={{margin: 0, padding: 16}}>{status.error}</p></div>}
+      {status.success && <div className="panel-card" style={{margin: "0 24px 16px", background: "#f0fdf4", borderColor: "#bbf7d0", color: "#166534"}}><p style={{margin: 0, padding: 16}}>{status.success}</p></div>}
 
-      <div style={{ display: "flex", gap: 8, padding: "0 24px", marginBottom: 18, overflowX: "auto" }}>
+      <div style={{ display: "flex", gap: 12, padding: "0 24px", marginBottom: 24, overflowX: "auto" }}>
         {[
-          { id: "dashboard", label: "Dashboard", icon: Activity },
+          { id: "dashboard", label: "Dashboard", icon: LayoutDashboard },
           { id: "calendar", label: "Calendar", icon: CalendarDays },
           { id: "records", label: "Records", icon: List },
           { id: "reports", label: "Reports", icon: FileText }
@@ -475,144 +557,144 @@ export default function PayrollPage() {
           <button
             key={t.id}
             onClick={() => setActiveTab(t.id)}
-            style={{ 
-              padding: "10px 18px", 
-              borderRadius: 8, 
-              border: "none",
-              background: activeTab === t.id ? "#2563eb" : "#f1f5f9",
-              color: activeTab === t.id ? "white" : "#475569",
-              fontWeight: 600,
-              cursor: "pointer",
-              display: "flex",
-              alignItems: "center",
-              gap: 8,
-              fontSize: 14
-            }}
+            className={`att-premium-tab ${activeTab === t.id ? "active" : ""}`}
           >
-            <t.icon size={16} /> {t.label}
+            <t.icon size={18} /> {t.label}
           </button>
         ))}
       </div>
 
-      <div style={{ display: "grid", gap: 18, minWidth: 0, maxWidth: "100%", padding: "0 24px" }}>
+      <div style={{ display: "grid", gap: 24, minWidth: 0, maxWidth: "100%", padding: "0 24px" }}>
         {activeTab === "dashboard" && (
-        <div className="panel-card" style={{ padding: "20px 24px" }}>
-          <h3>Attendance Dashboard</h3>
-          <div className="stats-grid" style={{ marginBottom: 16 }}>
-            <div className="stat-card"><div className="stat-label"><Users size={14} /> Total Staff</div><div className="stat-value">{attendanceSummary.totalStaff || 0}</div></div>
-            <div className="stat-card"><div className="stat-label"><CheckCircle2 size={14} /> Present Today</div><div className="stat-value">{attendanceSummary.presentToday || 0}</div></div>
-            <div className="stat-card"><div className="stat-label"><XCircle size={14} /> Absent Today</div><div className="stat-value">{attendanceSummary.absentToday || 0}</div></div>
-            <div className="stat-card"><div className="stat-label"><Clock size={14} /> Late Staff</div><div className="stat-value">{attendanceSummary.lateStaff || 0}</div></div>
-            <div className="stat-card"><div className="stat-label"><Timer size={14} /> Currently Working</div><div className="stat-value">{attendanceSummary.currentlyWorking || 0}</div></div>
-            <div className="stat-card"><div className="stat-label"><CheckCircle2 size={14} /> Completed Shift</div><div className="stat-value">{attendanceSummary.completedShift || 0}</div></div>
-            <div className="stat-card"><div className="stat-label">On Leave</div><div className="stat-value">{attendanceSummary.onLeave || 0}</div></div>
-          </div>
-          <form className="form-grid" onSubmit={saveAttendanceSettings}>
-            <label>
-              <span className="muted">Office Start</span>
-              <input type="time" value={attendanceSettings.officeStartTime} onChange={(e) => setAttendanceSettings((current) => ({ ...current, officeStartTime: e.target.value }))} />
-            </label>
-            <label>
-              <span className="muted">Office End</span>
-              <input type="time" value={attendanceSettings.officeEndTime} onChange={(e) => setAttendanceSettings((current) => ({ ...current, officeEndTime: e.target.value }))} />
-            </label>
-            <label>
-              <span className="muted">Late After</span>
-              <input type="time" value={attendanceSettings.lateAfterTime} onChange={(e) => setAttendanceSettings((current) => ({ ...current, lateAfterTime: e.target.value }))} />
-            </label>
-            <label>
-              <span className="muted">Half Day Minutes</span>
-              <input type="number" min="30" max="1440" value={attendanceSettings.halfDayMinutes} onChange={(e) => setAttendanceSettings((current) => ({ ...current, halfDayMinutes: e.target.value }))} />
-            </label>
-            <label>
-              <span className="muted">Minimum Working Minutes</span>
-              <input type="number" min="30" max="1440" value={attendanceSettings.minimumWorkingMinutes} onChange={(e) => setAttendanceSettings((current) => ({ ...current, minimumWorkingMinutes: e.target.value }))} />
-            </label>
-            <label style={{ display: "flex", alignItems: "center", gap: 8, marginTop: 22 }}>
-              <input type="checkbox" checked={attendanceSettings.overtimeEnabled} onChange={(e) => setAttendanceSettings((current) => ({ ...current, overtimeEnabled: e.target.checked }))} />
-              <span>Enable overtime calculation</span>
-            </label>
-            {attendanceSettings.overtimeEnabled && (
-              <label>
-                <span className="muted">Overtime Threshold (minutes)</span>
-                <input type="number" min="60" max="720" value={attendanceSettings.overtimeThresholdMinutes} onChange={(e) => setAttendanceSettings((current) => ({ ...current, overtimeThresholdMinutes: e.target.value }))} />
-              </label>
-            )}
-            <label style={{ display: "flex", alignItems: "center", gap: 8, marginTop: 22 }}>
-              <input type="checkbox" checked={attendanceSettings.checkoutSelfieRequired} onChange={(e) => setAttendanceSettings((current) => ({ ...current, checkoutSelfieRequired: e.target.checked }))} />
-              <span>Require selfie on check-out</span>
-            </label>
-            <label style={{ display: "flex", alignItems: "center", gap: 8, marginTop: 22 }}>
-              <input type="checkbox" checked={attendanceSettings.allowManualAttendanceEdits} onChange={(e) => setAttendanceSettings((current) => ({ ...current, allowManualAttendanceEdits: e.target.checked }))} />
-              <span>Allow manual attendance edits</span>
-            </label>
-            <div style={{ alignSelf: "end" }}>
-              <button type="submit" disabled={settingsSaving}>{settingsSaving ? "Saving..." : <><Save size={12} /> Save Attendance Rules</>}</button>
+        <div className="att-glass-panel" style={{ padding: 32 }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 24 }}>
+            <div>
+              <h3 style={{ margin: 0, fontSize: 24, color: "#0f172a", fontWeight: 700 }}>Overview</h3>
+              <p style={{ margin: "4px 0 0", color: "#64748b" }}>Today's attendance snapshot and global settings.</p>
             </div>
-          </form>
+          </div>
+          
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: 20, marginBottom: 40 }}>
+            {statCards.map((stat, idx) => (
+              <div key={idx} className="att-stat-card">
+                <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                  <div style={{ width: 44, height: 44, borderRadius: 14, background: stat.bg, display: "grid", placeItems: "center", color: stat.color }}>
+                    <stat.icon size={22} />
+                  </div>
+                  <div style={{ fontWeight: 600, color: "#64748b", fontSize: 14 }}>{stat.label}</div>
+                </div>
+                <div style={{ fontSize: 36, fontWeight: 800, color: "#0f172a", marginTop: 8 }}>{stat.value}</div>
+              </div>
+            ))}
+          </div>
+
+          <div style={{ borderTop: "1px solid #e2e8f0", paddingTop: 32 }}>
+            <h3 style={{ margin: 0, fontSize: 20, color: "#0f172a", marginBottom: 20 }}>Attendance Settings</h3>
+            <form onSubmit={saveAttendanceSettings} style={{ background: "#f8fafc", padding: 24, borderRadius: 16, border: "1px solid #e2e8f0" }}>
+              <div className="form-grid" style={{ gap: 24 }}>
+                <label>
+                  <span style={{ display: "block", marginBottom: 8, fontWeight: 600, color: "#475569", fontSize: 13 }}>Office Start</span>
+                  <input type="time" style={{ width: "100%", padding: "12px 16px", borderRadius: 12, border: "1px solid #cbd5e1" }} value={attendanceSettings.officeStartTime} onChange={(e) => setAttendanceSettings((current) => ({ ...current, officeStartTime: e.target.value }))} />
+                </label>
+                <label>
+                  <span style={{ display: "block", marginBottom: 8, fontWeight: 600, color: "#475569", fontSize: 13 }}>Office End</span>
+                  <input type="time" style={{ width: "100%", padding: "12px 16px", borderRadius: 12, border: "1px solid #cbd5e1" }} value={attendanceSettings.officeEndTime} onChange={(e) => setAttendanceSettings((current) => ({ ...current, officeEndTime: e.target.value }))} />
+                </label>
+                <label>
+                  <span style={{ display: "block", marginBottom: 8, fontWeight: 600, color: "#475569", fontSize: 13 }}>Late After</span>
+                  <input type="time" style={{ width: "100%", padding: "12px 16px", borderRadius: 12, border: "1px solid #cbd5e1" }} value={attendanceSettings.lateAfterTime} onChange={(e) => setAttendanceSettings((current) => ({ ...current, lateAfterTime: e.target.value }))} />
+                </label>
+                <label>
+                  <span style={{ display: "block", marginBottom: 8, fontWeight: 600, color: "#475569", fontSize: 13 }}>Half Day Minutes</span>
+                  <input type="number" min="30" max="1440" style={{ width: "100%", padding: "12px 16px", borderRadius: 12, border: "1px solid #cbd5e1" }} value={attendanceSettings.halfDayMinutes} onChange={(e) => setAttendanceSettings((current) => ({ ...current, halfDayMinutes: e.target.value }))} />
+                </label>
+                <label>
+                  <span style={{ display: "block", marginBottom: 8, fontWeight: 600, color: "#475569", fontSize: 13 }}>Minimum Working Minutes</span>
+                  <input type="number" min="30" max="1440" style={{ width: "100%", padding: "12px 16px", borderRadius: 12, border: "1px solid #cbd5e1" }} value={attendanceSettings.minimumWorkingMinutes} onChange={(e) => setAttendanceSettings((current) => ({ ...current, minimumWorkingMinutes: e.target.value }))} />
+                </label>
+              </div>
+
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginTop: 24, background: "white", padding: 20, borderRadius: 12, border: "1px solid #e2e8f0" }}>
+                <label style={{ display: "flex", alignItems: "center", gap: 12, cursor: "pointer" }}>
+                  <input type="checkbox" style={{ width: 18, height: 18 }} checked={attendanceSettings.overtimeEnabled} onChange={(e) => setAttendanceSettings((current) => ({ ...current, overtimeEnabled: e.target.checked }))} />
+                  <span style={{ fontWeight: 500 }}>Enable overtime calculation</span>
+                </label>
+                {attendanceSettings.overtimeEnabled && (
+                  <label style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                    <span style={{ fontWeight: 500, color: "#475569" }}>Threshold (mins)</span>
+                    <input type="number" min="60" max="720" style={{ padding: "8px 12px", borderRadius: 8, border: "1px solid #cbd5e1", width: 100 }} value={attendanceSettings.overtimeThresholdMinutes} onChange={(e) => setAttendanceSettings((current) => ({ ...current, overtimeThresholdMinutes: e.target.value }))} />
+                  </label>
+                )}
+                <label style={{ display: "flex", alignItems: "center", gap: 12, cursor: "pointer" }}>
+                  <input type="checkbox" style={{ width: 18, height: 18 }} checked={attendanceSettings.checkoutSelfieRequired} onChange={(e) => setAttendanceSettings((current) => ({ ...current, checkoutSelfieRequired: e.target.checked }))} />
+                  <span style={{ fontWeight: 500 }}>Require selfie on check-out</span>
+                </label>
+                <label style={{ display: "flex", alignItems: "center", gap: 12, cursor: "pointer" }}>
+                  <input type="checkbox" style={{ width: 18, height: 18 }} checked={attendanceSettings.allowManualAttendanceEdits} onChange={(e) => setAttendanceSettings((current) => ({ ...current, allowManualAttendanceEdits: e.target.checked }))} />
+                  <span style={{ fontWeight: 500 }}>Allow manual attendance edits</span>
+                </label>
+              </div>
+
+              <div style={{ display: "flex", justifyContent: "flex-end", marginTop: 24 }}>
+                <button type="submit" className="att-btn-primary" disabled={settingsSaving}>{settingsSaving ? "Saving..." : <span style={{ display: "flex", alignItems: "center", gap: 8 }}><Save size={18} /> Save Settings</span>}</button>
+              </div>
+            </form>
+          </div>
         </div>
         )}
 
         {activeTab === "calendar" && (
-        <div className="panel-card" style={{ overflow: "hidden", padding: "20px 24px", maxWidth: "100%" }}>
-          <style>{`
-            .att-cal-cell { transition: all 0.15s ease; }
-            .att-cal-cell:hover { transform: scale(1.15); z-index: 2; box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
-            .att-cal-staff:hover { background: #f8fafc; }
-            .att-cal-day-hdr { transition: background 0.15s; }
-            .att-cal-day-hdr.today { background: #6366f1 !important; color: white !important; border-radius: 10px; }
-            .att-cal-today-col { box-shadow: inset 0 0 0 2px #6366f1; border-radius: 12px; }
-          `}</style>
+        <div className="att-glass-panel" style={{ overflow: "hidden", padding: 32, maxWidth: "100%" }}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: 16 }}>
             <div>
-              <h3 style={{ marginTop: 0, marginBottom: 4, fontSize: 20, display: "flex", alignItems: "center", gap: 8 }}>
-                <span style={{ fontSize: 24 }}>📅</span> Attendance Calendar
+              <h3 style={{ marginTop: 0, marginBottom: 8, fontSize: 24, display: "flex", alignItems: "center", gap: 10, color: "#0f172a" }}>
+                Attendance Calendar
               </h3>
-              <p style={{ margin: 0, color: "#64748b", fontSize: 13 }}>Monthly staff attendance overview. Click any cell for details. Today is highlighted in indigo.</p>
+              <p style={{ margin: 0, color: "#64748b", fontSize: 14 }}>Monthly overview. Click any cell for details. Today is highlighted in blue.</p>
             </div>
-            <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
-              <button type="button" onClick={() => { const [y, m] = attendanceCalendarMonth.split("-").map(Number); const prev = m === 1 ? `${y - 1}-12` : `${y}-${String(m - 1).padStart(2, "0")}`; setAttendanceCalendarMonth(prev); }} style={{ width: 32, height: 32, borderRadius: 8, border: "1px solid #e2e8f0", background: "white", cursor: "pointer", display: "grid", placeItems: "center", fontSize: 14 }}><ChevronLeft size={14} /></button>
-              <input type="month" value={attendanceCalendarMonth} onChange={(e) => setAttendanceCalendarMonth(e.target.value)} style={{ padding: "6px 10px", borderRadius: 8, border: "1px solid #e2e8f0", fontSize: 14, fontWeight: 600 }} />
-              <button type="button" onClick={() => { const [y, m] = attendanceCalendarMonth.split("-").map(Number); const next = m === 12 ? `${y + 1}-01` : `${y}-${String(m + 1).padStart(2, "0")}`; setAttendanceCalendarMonth(next); }} style={{ width: 32, height: 32, borderRadius: 8, border: "1px solid #e2e8f0", background: "white", cursor: "pointer", display: "grid", placeItems: "center", fontSize: 14 }}><ChevronRight size={14} /></button>
-              <div style={{ width: 1, height: 24, background: "#e2e8f0", margin: "0 4px" }} />
-              <button type="button" onClick={() => setAttendanceCalendarMonth(toMonthInput())} style={{ padding: "6px 12px", borderRadius: 8, border: "1px solid #6366f1", background: "#6366f1", color: "white", cursor: "pointer", fontSize: 12, fontWeight: 700 }}><CalendarDays size={12} /> Today</button>
-              <button type="button" className="secondary-button" onClick={() => downloadCalendarExport("xlsx")} style={{ fontSize: 12 }}><Download size={12} /> Excel</button>
-              <button type="button" className="secondary-button" onClick={() => downloadCalendarExport("pdf")} style={{ fontSize: 12 }}><Download size={12} /> PDF</button>
+            <div style={{ display: "flex", gap: 10, alignItems: "center", background: "#f8fafc", padding: "6px 8px", borderRadius: 16, border: "1px solid #e2e8f0" }}>
+              <button type="button" onClick={() => { const [y, m] = attendanceCalendarMonth.split("-").map(Number); const prev = m === 1 ? `${y - 1}-12` : `${y}-${String(m - 1).padStart(2, "0")}`; setAttendanceCalendarMonth(prev); }} style={{ width: 36, height: 36, borderRadius: 10, border: "none", background: "white", cursor: "pointer", display: "grid", placeItems: "center", boxShadow: "0 2px 4px rgba(0,0,0,0.05)" }}><ChevronLeft size={16} /></button>
+              <input type="month" value={attendanceCalendarMonth} onChange={(e) => setAttendanceCalendarMonth(e.target.value)} style={{ padding: "8px 12px", borderRadius: 10, border: "none", background: "transparent", fontSize: 15, fontWeight: 700, color: "#0f172a", outline: "none" }} />
+              <button type="button" onClick={() => { const [y, m] = attendanceCalendarMonth.split("-").map(Number); const next = m === 12 ? `${y + 1}-01` : `${y}-${String(m + 1).padStart(2, "0")}`; setAttendanceCalendarMonth(next); }} style={{ width: 36, height: 36, borderRadius: 10, border: "none", background: "white", cursor: "pointer", display: "grid", placeItems: "center", boxShadow: "0 2px 4px rgba(0,0,0,0.05)" }}><ChevronRight size={16} /></button>
+              <div style={{ width: 1, height: 24, background: "#cbd5e1", margin: "0 8px" }} />
+              <button type="button" onClick={() => setAttendanceCalendarMonth(toMonthInput())} style={{ padding: "8px 16px", borderRadius: 10, border: "none", background: "#2563eb", color: "white", cursor: "pointer", fontSize: 13, fontWeight: 600, display: "flex", gap: 6, alignItems: "center", boxShadow: "0 2px 8px rgba(37,99,235,0.2)" }}><CalendarDays size={14} /> Today</button>
+              <button type="button" onClick={() => downloadCalendarExport("xlsx")} style={{ padding: "8px 12px", borderRadius: 10, border: "1px solid #e2e8f0", background: "white", cursor: "pointer", fontSize: 13, fontWeight: 600, display: "flex", gap: 6, alignItems: "center" }}><Download size={14} /> Excel</button>
             </div>
           </div>
-          <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginTop: 14 }}>
+          <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginTop: 24 }}>
             {Object.entries(statusTheme).filter(([key]) => key !== "OFF").map(([key, theme]) => (
-              <span key={key} style={{ display: "inline-flex", alignItems: "center", gap: 4, padding: "3px 10px", borderRadius: 20, background: theme.bg, color: theme.color, fontSize: 11, fontWeight: 700, border: "1px solid rgba(0,0,0,0.06)" }}>
-                <span style={{ width: 8, height: 8, borderRadius: "50%", background: theme.color, opacity: 0.7 }} />
+              <div key={key} style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "6px 14px", borderRadius: 20, background: theme.bg, color: theme.color, fontSize: 12, fontWeight: 600 }}>
+                <span style={{ width: 8, height: 8, borderRadius: "50%", background: theme.color }} />
                 {theme.label} = {key.replaceAll("_", " ")}
-              </span>
+              </div>
             ))}
           </div>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 120px), 1fr))", gap: 10, marginTop: 16 }}>
-            {[{ label: "Total", value: attendanceCalendar.summary?.totalRows || 0, bg: "#f1f5f9", color: "#334155" },
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(130px, 1fr))", gap: 16, marginTop: 24 }}>
+            {[{ label: "Total Rows", value: attendanceCalendar.summary?.totalRows || 0, bg: "#f1f5f9", color: "#334155" },
               { label: "Present", value: attendanceCalendar.summary?.present || 0, bg: "#dcfce7", color: "#166534" },
               { label: "Late", value: attendanceCalendar.summary?.late || 0, bg: "#fef3c7", color: "#92400e" },
               { label: "Half Day", value: attendanceCalendar.summary?.halfDay || 0, bg: "#fef9c3", color: "#854d0e" },
               { label: "Absent", value: attendanceCalendar.summary?.absent || 0, bg: "#fee2e2", color: "#b91c1c" },
               { label: "Leave", value: attendanceCalendar.summary?.leave || 0, bg: "#dbeafe", color: "#1d4ed8" }
             ].map((s) => (
-              <div key={s.label} style={{ background: s.bg, borderRadius: 12, padding: "12px 16px", textAlign: "center" }}>
-                <div style={{ fontSize: 11, fontWeight: 700, color: s.color, textTransform: "uppercase", letterSpacing: 0.5 }}>{s.label}</div>
-                <div style={{ fontSize: 22, fontWeight: 800, color: s.color, fontFamily: "monospace" }}>{s.value}</div>
+              <div key={s.label} style={{ background: s.bg, borderRadius: 16, padding: "16px", textAlign: "center", border: "1px solid rgba(0,0,0,0.03)" }}>
+                <div style={{ fontSize: 12, fontWeight: 700, color: s.color, textTransform: "uppercase", letterSpacing: 0.5, marginBottom: 4 }}>{s.label}</div>
+                <div style={{ fontSize: 28, fontWeight: 800, color: s.color }}>{s.value}</div>
               </div>
             ))}
           </div>
-          <div style={{ overflow: "auto", maxHeight: "65vh", marginTop: 16, borderRadius: 12, border: "1px solid #e2e8f0", maxWidth: "100%" }}>
+          
+          <div className="modern-table-container" style={{ overflow: "auto", maxHeight: "60vh", marginTop: 24 }}>
             {(() => {
               const today = new Date();
               const todayDay = today.getMonth() + 1 === parseInt(attendanceCalendarMonth.split("-")[1]) && today.getFullYear() === parseInt(attendanceCalendarMonth.split("-")[0]) ? today.getDate() : null;
               return (
-                <table style={{ borderCollapse: "collapse", minWidth: Math.max(900, 280 + attendanceCalendarDays.length * 40) }}>
+                <table style={{ borderCollapse: "collapse", width: "100%", minWidth: Math.max(900, 300 + attendanceCalendarDays.length * 44) }}>
                   <thead>
                     <tr>
-                      <th style={{ position: "sticky", top: 0, zIndex: 5, background: "#f8fafc", padding: "10px 14px", fontWeight: 800, fontSize: 12, color: "#475569", textTransform: "uppercase", letterSpacing: 0.5, textAlign: "left", borderBottom: "2px solid #e2e8f0", borderRight: "1px solid #e2e8f0", whiteSpace: "nowrap" }}>Staff Member</th>
+                      <th style={{ position: "sticky", top: 0, left: 0, zIndex: 10, background: "#ffffff", padding: "16px 20px", fontWeight: 700, fontSize: 13, color: "#475569", textTransform: "uppercase", letterSpacing: 0.5, textAlign: "left", borderBottom: "1px solid #e2e8f0", borderRight: "1px solid #f1f5f9", boxShadow: "2px 0 5px -2px rgba(0,0,0,0.05)" }}>Staff Member</th>
                       {attendanceCalendarDays.map((day) => (
-                        <th key={day} className={`att-cal-day-hdr${todayDay === day ? " today" : ""}`} style={{ position: "sticky", top: 0, zIndex: 4, background: todayDay === day ? undefined : attendanceCalendarWeekendMap[day] ? "#e2e8f0" : "#f8fafc", textAlign: "center", padding: "8px 0", fontSize: 11, fontWeight: 700, color: todayDay === day ? "white" : attendanceCalendarWeekendMap[day] ? "#475569" : "#475569", borderBottom: "2px solid #e2e8f0", minWidth: 40, whiteSpace: "nowrap" }}>
+                        <th key={day} style={{ position: "sticky", top: 0, zIndex: 4, background: todayDay === day ? "#2563eb" : attendanceCalendarWeekendMap[day] ? "#f8fafc" : "#ffffff", textAlign: "center", padding: "12px 0", fontSize: 12, fontWeight: 700, color: todayDay === day ? "white" : attendanceCalendarWeekendMap[day] ? "#94a3b8" : "#475569", borderBottom: "1px solid #e2e8f0", minWidth: 44 }}>
                           {day}
                         </th>
                       ))}
@@ -620,17 +702,10 @@ export default function PayrollPage() {
                   </thead>
                   <tbody>
                     {attendanceCalendarRows.map((row, rowIdx) => (
-                      <tr key={row.staffCode} style={{ background: rowIdx % 2 === 0 ? "white" : "#fafbfc" }}>
-                        <td style={{ padding: "10px 14px", borderRight: "1px solid #e2e8f0", borderBottom: "1px solid #f1f5f9", verticalAlign: "middle", background: "inherit" }}>
-                          <div style={{ fontWeight: 700, fontSize: 13, color: "#0f172a" }}>{row.staffName}</div>
-                          <div style={{ fontSize: 11, color: "#94a3b8" }}>{row.branchName || "Unassigned"}</div>
-                          <div style={{ display: "flex", gap: 4, flexWrap: "wrap", marginTop: 4 }}>
-                            {attendanceMetricKeys.filter((k) => row.totals[k] > 0).map((metricKey) => (
-                              <span key={metricKey} style={{ fontSize: 10, fontWeight: 700, padding: "1px 6px", borderRadius: 6, background: statusTheme[metricKey.toUpperCase()]?.bg || "#f1f5f9", color: statusTheme[metricKey.toUpperCase()]?.color || "#475569" }}>
-                                {attendanceMetricLabel[metricKey]}: {row.totals[metricKey]}
-                              </span>
-                            ))}
-                          </div>
+                      <tr key={row.staffCode} style={{ background: "white", transition: "background 0.2s" }} onMouseEnter={(e) => e.currentTarget.style.background = "#f8fafc"} onMouseLeave={(e) => e.currentTarget.style.background = "white"}>
+                        <td style={{ position: "sticky", left: 0, zIndex: 5, padding: "14px 20px", borderRight: "1px solid #f1f5f9", borderBottom: "1px solid #f1f5f9", background: "inherit", boxShadow: "2px 0 5px -2px rgba(0,0,0,0.02)" }}>
+                          <div style={{ fontWeight: 600, fontSize: 14, color: "#0f172a" }}>{row.staffName}</div>
+                          <div style={{ fontSize: 12, color: "#64748b", marginTop: 2 }}>{row.branchName || "Unassigned"}</div>
                         </td>
                         {attendanceCalendarDays.map((day) => {
                           const cell = row.cells[day] || null;
@@ -639,34 +714,32 @@ export default function PayrollPage() {
                           const isFuture = todayDay !== null && day > todayDay;
                           let theme;
                           if (isFuture) {
-                            theme = { label: "", bg: "#f8fafc", color: "#d1d5db" };
+                            theme = { label: "", bg: "transparent", color: "#d1d5db" };
                           } else if (isWeekend) {
                             theme = statusTheme.OFF;
                           } else {
-                            theme = statusTheme[cell?.status] || { label: "-", bg: "#f1f5f9", color: "#94a3b8" };
+                            theme = statusTheme[cell?.status] || { label: "-", bg: "#f8fafc", color: "#94a3b8" };
                           }
                           return (
-                            <td key={`${row.staffCode}-${day}`} style={{ textAlign: "center", padding: "4px 0", borderBottom: "1px solid #f1f5f9", borderLeft: "1px solid #f8fafc", background: "inherit" }}>
+                            <td key={`${row.staffCode}-${day}`} style={{ textAlign: "center", padding: "6px", borderBottom: "1px solid #f1f5f9", borderLeft: "1px solid #f8fafc", background: isToday ? "#eff6ff" : "inherit" }}>
                               <button
                                 type="button"
                                 title={cell ? `${row.staffName} | ${cell.status} | ${new Date(cell.date).toLocaleDateString()}` : isFuture ? `${row.staffName} | Future` : isWeekend ? `${row.staffName} | Off` : `${row.staffName} | No mark`}
                                 onClick={() => setSelectedCalendarCell({ staffName: row.staffName, branchName: row.branchName, staffCode: row.staffCode, record: cell, day, isWeekend })}
                                 className="att-cal-cell"
                                 style={{
-                                  minWidth: 32,
-                                  height: 32,
-                                  padding: "0 6px",
+                                  width: "100%",
+                                  height: 36,
                                   borderRadius: 8,
                                   display: "inline-flex",
                                   alignItems: "center",
                                   justifyContent: "center",
-                                  background: theme.bg,
+                                  background: theme.gradient || theme.bg,
                                   color: theme.color,
-                                  border: isToday ? "2px solid #6366f1" : "1px solid rgba(0,0,0,0.04)",
-                                  fontSize: 11,
-                                  fontWeight: 800,
+                                  border: isToday ? "2px solid #3b82f6" : "1px solid transparent",
+                                  fontSize: 12,
+                                  fontWeight: 700,
                                   cursor: "pointer",
-                                  lineHeight: 1,
                                   boxSizing: "border-box"
                                 }}
                               >
@@ -686,392 +759,271 @@ export default function PayrollPage() {
         )}
 
         {selectedCalendarCell ? (
-          <div style={{ position: "fixed", inset: 0, background: "rgba(15, 23, 42, 0.68)", display: "grid", placeItems: "center", zIndex: 1199, padding: 16, backdropFilter: "blur(4px)" }} onClick={() => setSelectedCalendarCell(null)}>
-            <div className="panel-card" style={{ width: "min(100%, 500px)", maxHeight: "90vh", overflowY: "auto", display: "grid", gap: 14, animation: "fadeIn 0.2s ease-out" }} onClick={(e) => e.stopPropagation()}>
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
+          <div style={{ position: "fixed", inset: 0, background: "rgba(15, 23, 42, 0.4)", display: "grid", placeItems: "center", zIndex: 1199, padding: 24, backdropFilter: "blur(8px)" }} onClick={() => setSelectedCalendarCell(null)}>
+            <div className="att-glass-panel" style={{ width: "min(100%, 550px)", padding: 32, maxHeight: "90vh", overflowY: "auto", animation: "fadeIn 0.3s cubic-bezier(0.4, 0, 0.2, 1)" }} onClick={(e) => e.stopPropagation()}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 24 }}>
                 <div>
-                  <h3 style={{ margin: 0, fontSize: 18 }}>Attendance Detail</h3>
-                  <div style={{ fontSize: 13, color: "#64748b", marginTop: 2 }}>{selectedCalendarCell.staffName} — Day {selectedCalendarCell.day}, {attendanceCalendarMonth}</div>
+                  <h3 style={{ margin: 0, fontSize: 22, color: "#0f172a" }}>Attendance Details</h3>
+                  <div style={{ fontSize: 14, color: "#64748b", marginTop: 4 }}>{selectedCalendarCell.staffName} • {attendanceCalendarMonth}-{String(selectedCalendarCell.day).padStart(2, "0")}</div>
                 </div>
-                <button type="button" onClick={() => setSelectedCalendarCell(null)} style={{ width: 28, height: 28, borderRadius: 8, border: "1px solid #e2e8f0", background: "white", cursor: "pointer", display: "grid", placeItems: "center", fontSize: 14 }}>✕</button>
+                <button type="button" onClick={() => setSelectedCalendarCell(null)} style={{ width: 36, height: 36, borderRadius: 18, border: "none", background: "#f1f5f9", color: "#475569", cursor: "pointer", display: "grid", placeItems: "center", transition: "background 0.2s" }} onMouseEnter={e => e.currentTarget.style.background="#e2e8f0"} onMouseLeave={e => e.currentTarget.style.background="#f1f5f9"}><XCircle size={20} /></button>
               </div>
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px 20px" }}>
+              
+              <div style={{ background: "#f8fafc", borderRadius: 16, padding: 20, display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px 24px", border: "1px solid #e2e8f0" }}>
                 {[
-                  ["Branch", selectedCalendarCell.branchName || "Unassigned"],
                   ["Status", selectedCalendarCell.record?.status || "No mark"],
-                  ["Date", selectedCalendarCell.record?.date ? new Date(selectedCalendarCell.record.date).toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" }) : `${attendanceCalendarMonth}-${String(selectedCalendarCell.day).padStart(2, "0")}`],
                   ["Worked Hours", selectedCalendarCell.record?.workedHours || "-"],
                   ["Check-In", selectedCalendarCell.record?.checkInAt ? new Date(selectedCalendarCell.record.checkInAt).toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" }) : "—"],
                   ["Check-Out", selectedCalendarCell.record?.checkOutAt ? new Date(selectedCalendarCell.record.checkOutAt).toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" }) : "—"],
-                  ["Geo Status", selectedCalendarCell.record?.geoStatus || "-"],
+                  ["Branch", selectedCalendarCell.branchName || "Unassigned"],
                   ["Verification", selectedCalendarCell.record?.verificationMethod || "-"],
-                  ["GPS", selectedCalendarCell.record?.gpsLocation || "-"],
-                  ["Note", selectedCalendarCell.record?.note || "None"]
                 ].map(([label, value]) => (
                   <div key={label}>
-                    <div style={{ fontSize: 10, fontWeight: 700, color: "#94a3b8", textTransform: "uppercase", letterSpacing: 0.5 }}>{label}</div>
-                    <div style={{ fontSize: 13, color: "#0f172a", fontWeight: 500, marginTop: 2 }}>{value}</div>
+                    <div style={{ fontSize: 11, fontWeight: 600, color: "#64748b", textTransform: "uppercase", letterSpacing: 0.5 }}>{label}</div>
+                    <div style={{ fontSize: 15, color: "#0f172a", fontWeight: 600, marginTop: 4 }}>{value}</div>
                   </div>
                 ))}
               </div>
-              {selectedCalendarCell.record?.adminRemark && (
-                <div style={{ padding: "8px 12px", background: "#fff7ed", borderRadius: 8, border: "1px solid #fed7aa", fontSize: 12, color: "#9a3412" }}>
-                  <strong>Admin Remark:</strong> {selectedCalendarCell.record.adminRemark}
+
+              {selectedCalendarCell.record?.note && (
+                <div style={{ marginTop: 20 }}>
+                  <div style={{ fontSize: 11, fontWeight: 600, color: "#64748b", textTransform: "uppercase" }}>Note</div>
+                  <div style={{ fontSize: 14, color: "#334155", marginTop: 4, padding: 12, background: "#f1f5f9", borderRadius: 8 }}>{selectedCalendarCell.record.note}</div>
                 </div>
               )}
-              {selectedCalendarCell.record?.selfie ? <img src={normalizeImageUrl(selectedCalendarCell.record.selfie)} alt="Attendance selfie" style={{ width: "100%", borderRadius: 12, border: "1px solid #e2e8f0" }} /> : null}
-              <div style={{ display: "flex", gap: 8, justifyContent: "flex-end", borderTop: "1px solid #e2e8f0", paddingTop: 12 }}>
-                <button type="button" className="secondary-button" onClick={() => setSelectedCalendarCell(null)}>Close</button>
-                <button type="button" onClick={() => void openManualCorrectionFromCell()}>
-                  {selectedCalendarCell.record?.attendanceId ? <><Edit3 size={12} /> Edit</> : <><PlusCircle size={12} /> Create Entry</>}
+
+              {selectedCalendarCell.record?.selfie ? (
+                <div style={{ marginTop: 24 }}>
+                  <div style={{ fontSize: 11, fontWeight: 600, color: "#64748b", textTransform: "uppercase", marginBottom: 8 }}>Verification Selfie</div>
+                  <img src={normalizeImageUrl(selectedCalendarCell.record.selfie)} alt="Attendance selfie" style={{ width: "100%", borderRadius: 16, border: "1px solid #e2e8f0", objectFit: "cover", maxHeight: 300 }} />
+                </div>
+              ) : null}
+
+              <div style={{ display: "flex", gap: 12, justifyContent: "flex-end", marginTop: 32 }}>
+                <button type="button" style={{ padding: "10px 20px", borderRadius: 10, border: "1px solid #cbd5e1", background: "white", fontWeight: 600, color: "#475569", cursor: "pointer" }} onClick={() => setSelectedCalendarCell(null)}>Close</button>
+                <button type="button" className="att-btn-primary" onClick={() => void openManualCorrectionFromCell()}>
+                  {selectedCalendarCell.record?.attendanceId ? <span style={{display: "flex", alignItems: "center", gap: 6}}><Edit3 size={16} /> Edit Record</span> : <span style={{display: "flex", alignItems: "center", gap: 6}}><PlusCircle size={16} /> Create Entry</span>}
                 </button>
               </div>
             </div>
           </div>
         ) : null}
 
-        {activeTab === "reports" && (
-        <div className="panel-card">
-          <div className="item-head" style={{ alignItems: "flex-end", padding: "20px 24px 0" }}>
-            <div>
-              <h3 style={{ marginTop: 0, marginBottom: 6 }}>Attendance Reports</h3>
-              <div className="item-meta">Generate daily, weekly, or monthly attendance reports and export them in Excel or PDF.</div>
+        {activeTab === "records" && (
+        <div style={{ display: "grid", gridTemplateColumns: "minmax(300px, 1fr) minmax(400px, 1.5fr)", gap: 24, alignItems: "start" }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
+            <div className="att-glass-panel" ref={manualCreateRef} style={{ padding: 24 }}>
+              <h3 style={{ margin: "0 0 16px", fontSize: 20, color: "#0f172a" }}>Manual Entry</h3>
+              <form onSubmit={saveManualCreate} style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+                <label>
+                  <span style={{ display: "block", marginBottom: 6, fontSize: 13, fontWeight: 600, color: "#475569" }}>Staff Member</span>
+                  <CustomDropdown required value={manualCreate.userSalonId} onChange={(e) => {
+                    const val = e.target.value;
+                    setManualCreate((current) => ({ ...current, userSalonId: val }));
+                    fetchExistingAttendance(val, manualCreate.attendanceDate);
+                  }}>
+                    <option value="">Select staff</option>
+                    {staffUsers.map((row) => (
+                      <option key={row.id} value={row.id}>{row.user?.name || row.name || row.id}</option>
+                    ))}
+                  </CustomDropdown>
+                </label>
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+                  <label>
+                    <span style={{ display: "block", marginBottom: 6, fontSize: 13, fontWeight: 600, color: "#475569" }}>Date</span>
+                    <input type="date" required value={manualCreate.attendanceDate} onChange={(e) => {
+                      const val = e.target.value;
+                      setManualCreate((current) => ({ ...current, attendanceDate: val }));
+                      fetchExistingAttendance(manualCreate.userSalonId, val);
+                    }} style={{ width: "100%", padding: "10px", borderRadius: 10, border: "1px solid #cbd5e1" }} />
+                  </label>
+                  <label>
+                    <span style={{ display: "block", marginBottom: 6, fontSize: 13, fontWeight: 600, color: "#475569" }}>Status</span>
+                    <CustomDropdown value={manualCreate.status} onChange={(e) => setManualCreate((current) => ({ ...current, status: e.target.value }))}>
+                      <option value="">Auto-calculate</option>
+                      <option value="PRESENT">Present</option>
+                      <option value="LATE">Late</option>
+                      <option value="HALF_DAY">Half Day</option>
+                      <option value="LEAVE">Leave</option>
+                      <option value="ABSENT">Absent</option>
+                      <option value="WORKING">Working</option>
+                      <option value="COMPLETED_SHIFT">Completed Shift</option>
+                    </CustomDropdown>
+                  </label>
+                </div>
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+                  <label>
+                    <span style={{ display: "block", marginBottom: 6, fontSize: 13, fontWeight: 600, color: "#475569" }}>Check-in Time</span>
+                    <input type="datetime-local" value={manualCreate.checkInAt} onChange={(e) => setManualCreate((current) => ({ ...current, checkInAt: e.target.value }))} style={{ width: "100%", padding: "10px", borderRadius: 10, border: "1px solid #cbd5e1" }} />
+                  </label>
+                  <label>
+                    <span style={{ display: "block", marginBottom: 6, fontSize: 13, fontWeight: 600, color: "#475569" }}>Check-out Time</span>
+                    <input type="datetime-local" value={manualCreate.checkOutAt} onChange={(e) => setManualCreate((current) => ({ ...current, checkOutAt: e.target.value }))} style={{ width: "100%", padding: "10px", borderRadius: 10, border: "1px solid #cbd5e1" }} />
+                  </label>
+                </div>
+                <label>
+                  <span style={{ display: "block", marginBottom: 6, fontSize: 13, fontWeight: 600, color: "#475569" }}>Admin Remark</span>
+                  <textarea rows={2} value={manualCreate.adminRemark} onChange={(e) => setManualCreate((current) => ({ ...current, adminRemark: e.target.value }))} placeholder="Reason for manual entry" style={{ width: "100%", padding: "10px", borderRadius: 10, border: "1px solid #cbd5e1", resize: "vertical" }} />
+                </label>
+                <button type="submit" className="att-btn-primary" disabled={manualCreateSaving} style={{ width: "100%", padding: 14 }}>
+                  {manualCreateSaving ? "Saving..." : <span style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 8 }}><UserPlus size={18} /> Create Record</span>}
+                </button>
+              </form>
             </div>
-            <div className="badge-row">
-              <button type="button" className="secondary-button" onClick={() => downloadAttendanceReport("xlsx")}><Download size={12} /> Export Excel</button>
-              <button type="button" className="secondary-button" onClick={() => downloadAttendanceReport("pdf")}><Download size={12} /> Export PDF</button>
-            </div>
-          </div>
-          <div className="form-grid" style={{ marginTop: 16 }}>
-            <label>
-              <span className="muted">Report Period</span>
-              <CustomDropdown value={attendanceReportPeriod} onChange={(e) => setAttendanceReportPeriod(e.target.value)}>
-                <option value="daily">Daily</option>
-                <option value="weekly">Weekly</option>
-                <option value="monthly">Monthly</option>
-              </CustomDropdown>
-            </label>
-            <div className="stats-grid" style={{ gridColumn: "1 / -1" }}>
-              <div className="stat-card"><div className="stat-label">Rows</div><div className="stat-value">{attendanceReport.summary?.totalRows || 0}</div></div>
-              <div className="stat-card"><div className="stat-label">Present</div><div className="stat-value">{attendanceReport.summary?.present || 0}</div></div>
-              <div className="stat-card"><div className="stat-label">Absent</div><div className="stat-value">{attendanceReport.summary?.absent || 0}</div></div>
-              <div className="stat-card"><div className="stat-label">Leave</div><div className="stat-value">{attendanceReport.summary?.leave || 0}</div></div>
-              <div className="stat-card"><div className="stat-label">Late</div><div className="stat-value">{attendanceReport.summary?.late || 0}</div></div>
-              <div className="stat-card"><div className="stat-label">Half Day</div><div className="stat-value">{attendanceReport.summary?.halfDay || 0}</div></div>
-            </div>
-          </div>
-          <div className="list-stack" style={{ gap: 12, marginTop: 16, overflowY: "auto", maxHeight: "55vh" }}>
-            {(attendanceReport.rows || []).slice(0, 12).map((row, index) => {
-              const statusColors = { PRESENT: { bg: "#dcfce7", color: "#166534" }, COMPLETED_SHIFT: { bg: "#f3e8ff", color: "#6b21a8" }, LATE: { bg: "#fef9c3", color: "#854d0e" }, HALF_DAY: { bg: "#ffedd5", color: "#9a3412" }, ABSENT: { bg: "#fee2e2", color: "#991b1b" }, LEAVE: { bg: "#ede9fe", color: "#5b21b6" }, WORKING: { bg: "#e0f2fe", color: "#0369a1" } };
-              const sc = statusColors[row.status] || { bg: "#f1f5f9", color: "#475569" };
-              return (
-                <div key={`${row.staffCode}-${row.date}-${index}`} className="list-item" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "16px 20px" }}>
-                  <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
-                    <div style={{ width: 44, height: 44, borderRadius: "50%", background: sc.bg, color: sc.color, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18, fontWeight: 600, flexShrink: 0 }}>
-                      {row.staffName?.charAt(0)?.toUpperCase()}
-                    </div>
+            
+            <div className="att-glass-panel" ref={detailPanelRef} style={{ padding: 24, maxHeight: "50vh", overflowY: "auto" }}>
+              <h3 style={{ margin: "0 0 16px", fontSize: 20, color: "#0f172a" }}>Record Details</h3>
+              {detailLoading ? <PageLoader compact /> : null}
+              {!detailLoading && !selectedAttendance && (
+                <EmptyState title="Select a record" message="Click on a record from the list to view its details." />
+              )}
+              {selectedAttendance ? (
+                <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: 16, background: "#f8fafc", padding: 16, borderRadius: 12 }}>
+                    {selectedAttendance.checkInSelfieUrl ? (
+                      <img src={normalizeImageUrl(selectedAttendance.checkInSelfieUrl)} alt="" style={{ width: 60, height: 60, borderRadius: "50%", objectFit: "cover", border: "2px solid white", boxShadow: "0 4px 6px rgba(0,0,0,0.1)" }} />
+                    ) : (
+                      <div style={{ width: 60, height: 60, borderRadius: "50%", background: "#e2e8f0", display: "grid", placeItems: "center", fontSize: 24, fontWeight: 700, color: "#64748b" }}>
+                        {(selectedAttendance.userSalon?.user?.name || "U")[0].toUpperCase()}
+                      </div>
+                    )}
                     <div>
-                      <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                        <strong style={{ fontSize: 15, color: "#0f172a" }}>{row.staffName}</strong>
-                        <span style={{ fontSize: 11, padding: "2px 8px", borderRadius: 12, background: sc.bg, color: sc.color, fontWeight: 600 }}>{row.status}</span>
-                      </div>
-                      <div style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 13, color: "#64748b", marginTop: 4 }}>
-                        <CalendarDays size={14} /> {new Date(row.date).toLocaleDateString()}
-                        <span style={{ color: "#cbd5e1" }}>|</span>
-                        <MapPin size={14} /> {row.branchName || "Unassigned"}
-                      </div>
-                      <div style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 13, color: "#475569", marginTop: 4 }}>
-                        <Clock size={14} /> 
-                        {row.checkInAt ? new Date(row.checkInAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : "No check-in"}
-                        {row.checkOutAt ? ` → ${new Date(row.checkOutAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}` : ""}
-                        <span style={{ color: "#cbd5e1" }}>|</span>
-                        <strong>{row.workedHours}</strong>
-                      </div>
+                      <div style={{ fontSize: 18, fontWeight: 700, color: "#0f172a" }}>{selectedAttendance.userSalon?.user?.name || "Unknown"}</div>
+                      <div style={{ fontSize: 13, color: "#64748b", marginTop: 2 }}>{selectedAttendance.branch?.name || "No branch"}</div>
                     </div>
                   </div>
-                </div>
-              );
-            })}
-            {!attendanceReport.rows?.length && <EmptyState title="No attendance report rows" message="Pick a date and report period to generate attendance rows for export." />}
-          </div>
-        </div>
-        )}
+                  
+                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+                     <div>
+                      <div style={{ fontSize: 11, fontWeight: 600, color: "#64748b", textTransform: "uppercase" }}>Date</div>
+                      <div style={{ fontSize: 14, fontWeight: 500, color: "#0f172a", marginTop: 4 }}>{new Date(selectedAttendance.attendanceDate || selectedAttendance.checkInAt).toLocaleDateString()}</div>
+                     </div>
+                     <div>
+                      <div style={{ fontSize: 11, fontWeight: 600, color: "#64748b", textTransform: "uppercase" }}>Status</div>
+                      <div style={{ marginTop: 4, display: "inline-block", padding: "4px 10px", borderRadius: 8, fontSize: 12, fontWeight: 700, background: statusTheme[selectedAttendance.status]?.bg || "#f1f5f9", color: statusTheme[selectedAttendance.status]?.color || "#475569" }}>
+                        {selectedAttendance.status}
+                      </div>
+                     </div>
+                  </div>
 
-        {activeTab === "records" && (
-        <div className="panel-card" ref={manualCreateRef} style={{ padding: "20px 24px" }}>
-          <div style={{ marginBottom: 20 }}>
-            <h3 style={{ margin: 0, fontSize: 18 }}>Manual Attendance Entry</h3>
-            <p style={{ margin: "4px 0 0", fontSize: 13, color: "#64748b" }}>Create a new attendance record manually if staff missed check-in/out.</p>
+                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, background: "#f8fafc", padding: 16, borderRadius: 12 }}>
+                    <div>
+                      <div style={{ fontSize: 11, fontWeight: 600, color: "#64748b", textTransform: "uppercase", display: "flex", alignItems: "center", gap: 4 }}><LogIn size={12}/> Check-In</div>
+                      <div style={{ fontSize: 14, fontWeight: 600, color: "#0f172a", marginTop: 4 }}>{selectedAttendance.checkInAt ? new Date(selectedAttendance.checkInAt).toLocaleTimeString() : "-"}</div>
+                    </div>
+                    <div>
+                      <div style={{ fontSize: 11, fontWeight: 600, color: "#64748b", textTransform: "uppercase", display: "flex", alignItems: "center", gap: 4 }}><LogOut size={12}/> Check-Out</div>
+                      <div style={{ fontSize: 14, fontWeight: 600, color: "#0f172a", marginTop: 4 }}>{selectedAttendance.checkOutAt ? new Date(selectedAttendance.checkOutAt).toLocaleTimeString() : "-"}</div>
+                    </div>
+                  </div>
+
+                  {attendanceSettings.allowManualAttendanceEdits && (
+                    <div style={{ marginTop: 16 }}>
+                      <button onClick={() => {
+                        const target = document.getElementById("manual-edit-form");
+                        if(target) {
+                          target.style.display = target.style.display === "none" ? "block" : "none";
+                        }
+                      }} style={{ background: "none", border: "none", color: "#2563eb", fontWeight: 600, fontSize: 14, cursor: "pointer", padding: 0, display: "flex", alignItems: "center", gap: 6 }}>
+                        <Edit3 size={16} /> Edit Record Details
+                      </button>
+                      <form id="manual-edit-form" onSubmit={saveManualEdit} style={{ display: "none", marginTop: 16, background: "#eff6ff", padding: 16, borderRadius: 12, border: "1px dashed #bfdbfe" }}>
+                         <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+                           <input type="datetime-local" value={manualEdit.checkInAt} onChange={(e) => setManualEdit((current) => ({ ...current, checkInAt: e.target.value }))} style={{ width: "100%", padding: "8px", borderRadius: 8, border: "1px solid #bfdbfe" }} />
+                           <input type="datetime-local" value={manualEdit.checkOutAt} onChange={(e) => setManualEdit((current) => ({ ...current, checkOutAt: e.target.value }))} style={{ width: "100%", padding: "8px", borderRadius: 8, border: "1px solid #bfdbfe" }} />
+                           <CustomDropdown value={manualEdit.status} onChange={(e) => setManualEdit((current) => ({ ...current, status: e.target.value }))}>
+                             <option value="">Auto-calculate</option>
+                             <option value="PRESENT">Present</option>
+                             <option value="LATE">Late</option>
+                             <option value="ABSENT">Absent</option>
+                           </CustomDropdown>
+                           <input value={manualEdit.reason} required placeholder="Reason for edit" onChange={(e) => setManualEdit((current) => ({ ...current, reason: e.target.value }))} style={{ width: "100%", padding: "8px", borderRadius: 8, border: "1px solid #bfdbfe" }} />
+                           <button type="submit" className="att-btn-primary" style={{ padding: "8px", fontSize: 13 }}>Save Update</button>
+                         </div>
+                      </form>
+                    </div>
+                  )}
+                </div>
+              ) : null}
+            </div>
           </div>
-          <form className="form-grid" onSubmit={saveManualCreate} style={{ background: "#f8fafc", padding: 20, borderRadius: 12, border: "1px solid #e2e8f0" }}>
-            <label>
-              <span className="muted">Staff member</span>
-              <CustomDropdown required value={manualCreate.userSalonId} onChange={(e) => {
-                const val = e.target.value;
-                setManualCreate((current) => ({ ...current, userSalonId: val }));
-                fetchExistingAttendance(val, manualCreate.attendanceDate);
-              }}>
-                <option value="">Select staff</option>
-                {staffUsers.map((row) => (
-                  <option key={row.id} value={row.id}>{row.user?.name || row.name || row.id}</option>
-                ))}
-              </CustomDropdown>
-            </label>
-            <label>
-              <span className="muted">Attendance date</span>
-              <input type="date" required value={manualCreate.attendanceDate} onChange={(e) => {
-                const val = e.target.value;
-                setManualCreate((current) => ({ ...current, attendanceDate: val }));
-                fetchExistingAttendance(manualCreate.userSalonId, val);
-              }} />
-            </label>
-            <label>
-              <span className="muted">Check-in</span>
-              <input type="datetime-local" value={manualCreate.checkInAt} onChange={(e) => setManualCreate((current) => ({ ...current, checkInAt: e.target.value }))} />
-            </label>
-            <label>
-              <span className="muted">Check-out</span>
-              <input type="datetime-local" value={manualCreate.checkOutAt} onChange={(e) => setManualCreate((current) => ({ ...current, checkOutAt: e.target.value }))} />
-            </label>
-            <label>
-              <span className="muted">Status override</span>
-              <CustomDropdown value={manualCreate.status} onChange={(e) => setManualCreate((current) => ({ ...current, status: e.target.value }))}>
-                <option value="">Auto-calculate</option>
+
+          <div className="att-glass-panel" style={{ padding: 24, display: "flex", flexDirection: "column", height: "calc(100vh - 200px)" }}>
+            <h3 style={{ margin: "0 0 16px", fontSize: 20, color: "#0f172a" }}>History Logs</h3>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr auto", gap: 12, marginBottom: 20 }}>
+              <input value={filters.attendanceQ} placeholder="Search name..." onChange={(e) => setFilters((current) => ({ ...current, attendanceQ: e.target.value }))} style={{ padding: "10px", borderRadius: 10, border: "1px solid #cbd5e1" }} />
+              <CustomDropdown value={filters.attendanceStatus} onChange={(e) => setFilters((current) => ({ ...current, attendanceStatus: e.target.value }))}>
+                <option value="">All statuses</option>
                 <option value="PRESENT">Present</option>
                 <option value="LATE">Late</option>
-                <option value="HALF_DAY">Half Day</option>
-                <option value="LEAVE">Leave</option>
                 <option value="ABSENT">Absent</option>
-                <option value="WORKING">Working</option>
-                <option value="COMPLETED_SHIFT">Completed Shift</option>
               </CustomDropdown>
-            </label>
-            <label>
-              <span className="muted">Note</span>
-              <input value={manualCreate.note} onChange={(e) => setManualCreate((current) => ({ ...current, note: e.target.value }))} placeholder="Optional note" />
-            </label>
-            <label style={{ gridColumn: "1 / -1" }}>
-              <span className="muted">Admin remark</span>
-              <textarea rows={2} value={manualCreate.adminRemark} onChange={(e) => setManualCreate((current) => ({ ...current, adminRemark: e.target.value }))} placeholder="Reason or context for the manual entry" />
-            </label>
-            <div>
-              <button type="submit" disabled={manualCreateSaving}>{manualCreateSaving ? "Saving..." : <><UserPlus size={12} /> Create Manual Entry</>}</button>
+              <input type="date" value={filters.attendanceDate} onChange={(e) => setFilters((current) => ({ ...current, attendanceDate: e.target.value }))} style={{ padding: "10px", borderRadius: 10, border: "1px solid #cbd5e1" }} />
+              <button onClick={() => setFilters({ attendanceQ: "", attendanceStatus: "", attendanceDate: "" })} style={{ padding: "10px", borderRadius: 10, background: "#f1f5f9", border: "none", cursor: "pointer", color: "#475569" }}><RotateCcw size={18} /></button>
             </div>
-          </form>
-        </div>
-        )}
-
-        {activeTab === "records" && (
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 380px), 1fr))", gap: 18, alignItems: "start", minWidth: 0 }}>
-          <div className="panel-card" style={{ padding: "20px 24px", minWidth: 0 }}>
-            <h3 style={{ marginTop: 0, marginBottom: 16, fontSize: 18 }}>Attendance Records</h3>
-            <div className="form-grid" style={{ marginBottom: 16 }}>
-              <label>
-                <span className="muted">Search staff name</span>
-                <input value={filters.attendanceQ} placeholder="Search staff name" onChange={(e) => setFilters((current) => ({ ...current, attendanceQ: e.target.value }))} />
-              </label>
-              <label>
-                <span className="muted">Status</span>
-                <CustomDropdown value={filters.attendanceStatus} onChange={(e) => setFilters((current) => ({ ...current, attendanceStatus: e.target.value }))}>
-                  <option value="">All statuses</option>
-                  <option value="PRESENT">Present</option>
-                  <option value="LATE">Late</option>
-                  <option value="HALF_DAY">Half Day</option>
-                  <option value="ABSENT">Absent</option>
-                  <option value="LEAVE">Leave</option>
-                  <option value="WORKING">Working</option>
-                  <option value="COMPLETED_SHIFT">Completed Shift</option>
-                </CustomDropdown>
-              </label>
-              <label>
-                <span className="muted">Attendance date</span>
-                <input type="date" value={filters.attendanceDate} onChange={(e) => setFilters((current) => ({ ...current, attendanceDate: e.target.value }))} />
-              </label>
-              <div style={{ alignSelf: "end", display: "flex", gap: 8 }}>
-                <button type="button" className="secondary-button" onClick={() => setFilters((current) => ({ ...current, attendanceQ: "", attendanceStatus: "", attendanceDate: "" }))}><RotateCcw size={12} /> Reset</button>
-              </div>
-            </div>
-            <div className="list-stack" style={{ gap: 12, maxHeight: "55vh", overflowY: "auto" }}>
+            
+            <div style={{ flex: 1, overflowY: "auto", display: "flex", flexDirection: "column", gap: 12, paddingRight: 4 }}>
               {attendance.map((row) => {
-                const statusColors = { PRESENT: { bg: "#dcfce7", color: "#166534" }, COMPLETED_SHIFT: { bg: "#f3e8ff", color: "#6b21a8" }, LATE: { bg: "#fef9c3", color: "#854d0e" }, HALF_DAY: { bg: "#ffedd5", color: "#9a3412" }, ABSENT: { bg: "#fee2e2", color: "#991b1b" }, LEAVE: { bg: "#ede9fe", color: "#5b21b6" }, WORKING: { bg: "#e0f2fe", color: "#0369a1" } };
-                const sc = statusColors[row.status] || { bg: "#f1f5f9", color: "#475569" };
+                const sc = statusTheme[row.status] || { bg: "#f1f5f9", color: "#475569" };
                 const name = row.userSalon?.user?.name || row.userSalonId;
+                const isSelected = selectedAttendanceId === row.id;
+                
                 return (
                   <button
                     key={row.id}
-                    type="button"
-                    className="list-item"
                     onClick={() => loadAttendanceDetail(row.id)}
-                    style={{ textAlign: "left", width: "100%", background: selectedAttendanceId === row.id ? "#eff6ff" : "white", border: selectedAttendanceId === row.id ? "1px solid #bfdbfe" : "1px solid #e2e8f0", borderRadius: 12, padding: "16px 20px", display: "flex", gap: 16, alignItems: "center", color: "#0f172a", cursor: "pointer", transition: "all 0.2s" }}
+                    style={{ 
+                      display: "flex", alignItems: "center", gap: 16, padding: "16px", width: "100%",
+                      background: isSelected ? "#eff6ff" : "white", border: isSelected ? "1px solid #bfdbfe" : "1px solid #e2e8f0",
+                      borderRadius: 16, cursor: "pointer", textAlign: "left", transition: "all 0.2s",
+                      boxShadow: isSelected ? "0 4px 12px rgba(37,99,235,0.08)" : "0 2px 4px rgba(0,0,0,0.02)"
+                    }}
                   >
-                    {row.checkInSelfieUrl ? <img src={normalizeImageUrl(row.checkInSelfieUrl)} alt="" style={{ width: 44, height: 44, borderRadius: "50%", objectFit: "cover", border: "2px solid #e2e8f0", flexShrink: 0 }} onError={(e) => { e.target.style.display = "none"; }} /> : <div style={{ width: 44, height: 44, borderRadius: "50%", background: sc.bg, color: sc.color, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18, fontWeight: 600, flexShrink: 0 }}>{name?.charAt(0)?.toUpperCase()}</div>}
-                    <div style={{ flex: 1, minWidth: 0 }}>
-                      <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                        <strong style={{ fontSize: 15, color: "#0f172a" }}>{name}</strong>
-                        <span style={{ fontSize: 11, padding: "2px 8px", borderRadius: 12, background: sc.bg, color: sc.color, fontWeight: 600 }}>{row.status}</span>
+                    {row.checkInSelfieUrl ? 
+                      <img src={normalizeImageUrl(row.checkInSelfieUrl)} alt="" style={{ width: 48, height: 48, borderRadius: "50%", objectFit: "cover" }} /> : 
+                      <div style={{ width: 48, height: 48, borderRadius: "50%", background: sc.gradient || sc.bg, color: sc.color, display: "grid", placeItems: "center", fontSize: 18, fontWeight: 700 }}>{name?.charAt(0)?.toUpperCase()}</div>
+                    }
+                    <div style={{ flex: 1 }}>
+                      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                        <span style={{ fontSize: 15, fontWeight: 700, color: "#0f172a" }}>{name}</span>
+                        <span style={{ padding: "4px 10px", borderRadius: 12, fontSize: 11, fontWeight: 700, background: sc.bg, color: sc.color }}>{row.status}</span>
                       </div>
-                      <div style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 13, color: "#475569", marginTop: 6 }}>
+                      <div style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 13, color: "#64748b", marginTop: 6 }}>
                         <Clock size={14} /> 
-                        {row.checkInAt ? new Date(row.checkInAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : "No check-in"}
+                        {row.checkInAt ? new Date(row.checkInAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : "--:--"}
                         {row.checkOutAt ? ` → ${new Date(row.checkOutAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}` : ""}
                       </div>
-                      <div style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 13, color: "#64748b", marginTop: 4 }}>
-                        <MapPin size={14} /> {row.branch?.name || "Unassigned"}
-                        <span style={{ color: "#cbd5e1" }}>|</span>
-                        {row.workedMinutes != null ? <strong>{`${Math.floor(row.workedMinutes / 60)}h ${row.workedMinutes % 60}m`}</strong> : "Open shift"}
-                      </div>
                     </div>
-                    <div style={{ width: 32, height: 32, borderRadius: "50%", background: selectedAttendanceId === row.id ? "#bfdbfe" : "#f1f5f9", display: "grid", placeItems: "center", color: selectedAttendanceId === row.id ? "#1d4ed8" : "#64748b", flexShrink: 0 }}><ChevronRight size={16} /></div>
                   </button>
                 );
               })}
-              {!loading && !attendance.length && <EmptyState title="No attendance records yet" message="Attendance check-ins and check-outs will appear here once recorded." />}
-              {attendanceMeta.totalPages > 1 && (
-                <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 12, padding: "12px 0", borderTop: "1px solid #e2e8f0", marginTop: 8 }}>
-                  <button type="button" className="secondary-button" disabled={attendanceMeta.page <= 1} onClick={() => setAttendancePage((p) => p - 1)}><ChevronLeft size={12} /> Previous</button>
-                  <span style={{ fontSize: 13, color: "#64748b" }}>Page {attendanceMeta.page} of {attendanceMeta.totalPages} ({attendanceMeta.total} records)</span>
-                  <button type="button" className="secondary-button" disabled={attendanceMeta.page >= attendanceMeta.totalPages} onClick={() => setAttendancePage((p) => p + 1)}>Next <ChevronRight size={12} /></button>
-                </div>
-              )}
             </div>
-          </div>
-
-          <div className="panel-card" ref={detailPanelRef} style={{ maxHeight: "80vh", overflowY: "auto", padding: "20px 24px" }}>
-            <h3 style={{ marginTop: 0, marginBottom: 16, fontSize: 18 }}>Attendance Detail</h3>
-            {detailLoading ? <PageLoader compact title="Loading attendance detail" message="Fetching record, GPS evidence, and audit history." /> : null}
-            {!detailLoading && !selectedAttendance && (
-              <EmptyState title="No record selected" message="Select an attendance row to inspect selfie, GPS, remarks, and manual correction options." />
-            )}
-            {selectedAttendance ? (
-              <div style={{ display: "grid", gap: 16 }}>
-                <div className="item-meta"><strong><User size={12} /> Staff:</strong> {selectedAttendance.userSalon?.user?.name || "-"}</div>
-                <div className="item-meta"><strong>Branch:</strong> {selectedAttendance.branch?.name || "-"}</div>
-                <div className="item-meta"><strong><CalendarDays size={12} /> Date:</strong> {new Date(selectedAttendance.attendanceDate || selectedAttendance.checkInAt).toLocaleDateString()}</div>
-                <div className="item-meta"><strong><CheckCircle2 size={12} /> Status:</strong> <span style={{ padding: "2px 8px", borderRadius: 8, fontSize: 12, fontWeight: 700, background: selectedAttendance.status === "PRESENT" || selectedAttendance.status === "COMPLETED_SHIFT" ? "#dcfce7" : selectedAttendance.status === "LATE" ? "#fef9c3" : selectedAttendance.status === "HALF_DAY" ? "#ffedd5" : selectedAttendance.status === "LEAVE" ? "#ede9fe" : selectedAttendance.status === "WORKING" ? "#e0f2fe" : "#fee2e2", color: selectedAttendance.status === "PRESENT" || selectedAttendance.status === "COMPLETED_SHIFT" ? "#166534" : selectedAttendance.status === "LATE" ? "#854d0e" : selectedAttendance.status === "HALF_DAY" ? "#9a3412" : selectedAttendance.status === "LEAVE" ? "#5b21b6" : selectedAttendance.status === "WORKING" ? "#0369a1" : "#991b1b" }}>{selectedAttendance.status}</span></div>
-                <div className="item-meta"><strong><LogIn size={12} /> Check-In:</strong> {selectedAttendance.checkInAt ? new Date(selectedAttendance.checkInAt).toLocaleString() : "-"}</div>
-                <div className="item-meta"><strong><LogOut size={12} /> Check-Out:</strong> {selectedAttendance.checkOutAt ? new Date(selectedAttendance.checkOutAt).toLocaleString() : "-"}</div>
-                <div className="item-meta"><strong><Clock size={12} /> Worked Hours:</strong> {selectedAttendance.workedMinutes != null ? `${Math.floor(selectedAttendance.workedMinutes / 60)}h ${selectedAttendance.workedMinutes % 60}m` : "-"}</div>
-                {selectedAttendance.overtimeMinutes > 0 && <div className="item-meta" style={{ color: "#ea580c", fontWeight: 600 }}><strong><Timer size={12} /> Overtime:</strong> {Math.floor(selectedAttendance.overtimeMinutes / 60)}h {selectedAttendance.overtimeMinutes % 60}m</div>}
-                <div className="item-meta"><strong><MapPin size={12} /> Check-In GPS:</strong> {selectedAttendance.checkInLatitude ? `${Number(selectedAttendance.checkInLatitude).toFixed(4)}, ${Number(selectedAttendance.checkInLongitude).toFixed(4)}` : "Not captured"} {selectedAttendance.checkInAccuracyMeters ? `(${Math.round(selectedAttendance.checkInAccuracyMeters)}m accuracy)` : ""}</div>
-                <div className="item-meta"><strong><MapPin size={12} /> Check-Out GPS:</strong> {selectedAttendance.checkOutLatitude ? `${Number(selectedAttendance.checkOutLatitude).toFixed(4)}, ${Number(selectedAttendance.checkOutLongitude).toFixed(4)}` : "Not captured"} {selectedAttendance.checkOutAccuracyMeters ? `(${Math.round(selectedAttendance.checkOutAccuracyMeters)}m accuracy)` : ""}</div>
-                <div className="item-meta"><strong>Geo Status:</strong> {selectedAttendance.geoStatus || "-"}</div>
-                <div className="item-meta"><strong>Verification:</strong> {selectedAttendance.verificationMethod || "-"}</div>
-                <div className="item-meta"><strong><FileText size={12} /> Admin Remark:</strong> {selectedAttendance.adminRemark || "None"}</div>
-                <div className="item-meta"><strong><FileText size={12} /> Note:</strong> {selectedAttendance.note || "None"}</div>
-                {selectedAttendance.checkInSelfieUrl ? <div><strong style={{ fontSize: 12, color: "#64748b" }}>Check-In Selfie</strong><img src={normalizeImageUrl(selectedAttendance.checkInSelfieUrl)} alt="Check-in selfie" style={{ width: "100%", borderRadius: 12, border: "1px solid #e2e8f0", marginTop: 4 }} /></div> : null}
-                {selectedAttendance.checkOutSelfieUrl ? <div><strong style={{ fontSize: 12, color: "#64748b" }}>Check-Out Selfie</strong><img src={normalizeImageUrl(selectedAttendance.checkOutSelfieUrl)} alt="Check-out selfie" style={{ width: "100%", borderRadius: 12, border: "1px solid #e2e8f0", marginTop: 4 }} /></div> : null}
-
-                {!attendanceSettings.allowManualAttendanceEdits ? (
-                  <div style={{ padding: "10px 16px", background: "#fef3c7", border: "1px solid #fcd34d", borderRadius: 10, fontSize: 13, color: "#92400e" }}>
-                    Manual attendance edits are currently disabled in Attendance Settings. Enable them to make corrections.
-                  </div>
-                ) : (
-                <form onSubmit={saveManualEdit} style={{ display: "grid", gap: 10, borderTop: "1px solid #e2e8f0", paddingTop: 16 }}>
-                  <h4 style={{ margin: 0 }}>Manual Correction</h4>
-                  <input type="date" value={manualEdit.attendanceDate} onChange={(e) => setManualEdit((current) => ({ ...current, attendanceDate: e.target.value }))} />
-                  <input type="datetime-local" value={manualEdit.checkInAt} onChange={(e) => setManualEdit((current) => ({ ...current, checkInAt: e.target.value }))} />
-                  <input type="datetime-local" value={manualEdit.checkOutAt} onChange={(e) => setManualEdit((current) => ({ ...current, checkOutAt: e.target.value }))} />
-                  <CustomDropdown value={manualEdit.status} onChange={(e) => setManualEdit((current) => ({ ...current, status: e.target.value }))}>
-                    <option value="">Auto-calculate status</option>
-                    <option value="PRESENT">Present</option>
-                    <option value="LATE">Late</option>
-                    <option value="HALF_DAY">Half Day</option>
-                    <option value="ABSENT">Absent</option>
-                    <option value="LEAVE">Leave</option>
-                    <option value="WORKING">Working</option>
-                    <option value="COMPLETED_SHIFT">Completed Shift</option>
-                  </CustomDropdown>
-                  <input value={manualEdit.note} placeholder="Attendance note" onChange={(e) => setManualEdit((current) => ({ ...current, note: e.target.value }))} />
-                  <textarea rows={2} value={manualEdit.adminRemark} placeholder="Admin remark" onChange={(e) => setManualEdit((current) => ({ ...current, adminRemark: e.target.value }))} />
-                  <textarea rows={2} required value={manualEdit.reason} placeholder="Reason for manual correction (minimum 3 characters)" onChange={(e) => setManualEdit((current) => ({ ...current, reason: e.target.value }))} />
-                  <button type="submit" disabled={manualSaving}>{manualSaving ? "Saving..." : <><Save size={12} /> Save Manual Update</>}</button>
-                </form>
-                )}
-
-                <div style={{ borderTop: "1px solid #e2e8f0", paddingTop: 16 }}>
-                  <h4 style={{ marginTop: 0 }}><History size={14} /> Audit Log</h4>
-                  <div className="list-stack">
-                    {(selectedAttendance.auditLogs || []).map((log) => (
-                      <div key={log.id} className="list-item" style={{ borderLeft: "3px solid #6366f1", paddingLeft: 12 }}>
-                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                          <strong style={{ fontSize: 13 }}>{log.action?.replace(/_/g, " ")}</strong>
-                          <span className="muted" style={{ fontSize: 11 }}>{new Date(log.createdAt).toLocaleString()}</span>
-                        </div>
-                        <div className="item-meta" style={{ fontSize: 12 }}>{log.actorMembership?.user?.name || "Admin"}</div>
-                        {log.metadata?.reason && <div className="item-meta" style={{ fontSize: 12, fontStyle: "italic" }}>"{log.metadata.reason}"</div>}
-                        {log.metadata?.previousValue && log.metadata?.updatedValue ? (
-                          <div style={{ marginTop: 6, fontSize: 11, background: "#f8fafc", borderRadius: 8, padding: 8, border: "1px solid #e2e8f0" }}>
-                            {Object.keys(log.metadata.updatedValue).filter((key) => {
-                              const oldVal = log.metadata.previousValue[key];
-                              const newVal = log.metadata.updatedValue[key];
-                              return JSON.stringify(oldVal) !== JSON.stringify(newVal);
-                            }).map((key) => (
-                              <div key={key} style={{ marginBottom: 3 }}>
-                                <span style={{ fontWeight: 700, color: "#475569", textTransform: "uppercase" }}>{key}:</span>{" "}
-                                <span style={{ color: "#991b1b", textDecoration: "line-through" }}>{typeof log.metadata.previousValue[key] === "object" ? JSON.stringify(log.metadata.previousValue[key]) : String(log.metadata.previousValue[key] ?? "-")}</span>
-                                {" → "}
-                                <span style={{ color: "#166534", fontWeight: 600 }}>{typeof log.metadata.updatedValue[key] === "object" ? JSON.stringify(log.metadata.updatedValue[key]) : String(log.metadata.updatedValue[key] ?? "-")}</span>
-                              </div>
-                            ))}
-                          </div>
-                        ) : log.summary ? <div className="item-meta" style={{ fontSize: 12 }}>{log.summary}</div> : null}
-                      </div>
-                    ))}
-                    {!selectedAttendance.auditLogs?.length && <span className="muted">No manual edits yet.</span>}
-                  </div>
-                </div>
-              </div>
-            ) : null}
           </div>
         </div>
         )}
 
         {activeTab === "reports" && (
-        <div className="panel-card" style={{ padding: "20px 24px" }}>
-          <div className="item-head" style={{ alignItems: "flex-end" }}>
-            <div>
-              <h3 style={{ marginTop: 0, marginBottom: 6 }}>Daily Attendance Sheet</h3>
-              <div className="item-meta">Printable branch-wise daily sheet for the selected date and branch filter.</div>
+        <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
+          <div className="att-glass-panel" style={{ padding: 32 }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
+              <div>
+                <h3 style={{ margin: 0, fontSize: 24, color: "#0f172a", fontWeight: 700 }}>Attendance Exports</h3>
+                <p style={{ margin: "4px 0 0", color: "#64748b" }}>Generate comprehensive attendance data for payroll.</p>
+              </div>
             </div>
-            <div className="badge-row">
-              <label style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                <span className="muted" style={{ fontSize: 12 }}>Date:</span>
-                <input type="date" value={daySheetDate} onChange={(e) => setDaySheetDate(e.target.value)} style={{ padding: "4px 8px", borderRadius: 6, border: "1px solid #e2e8f0", fontSize: 12 }} />
-              </label>
-              <button type="button" className="secondary-button" onClick={printAttendanceDaySheet}><Printer size={12} /> Print Sheet</button>
-              <button type="button" className="secondary-button" onClick={() => downloadDaySheetExport("xlsx")}><Download size={12} /> Daily Excel</button>
-              <button type="button" className="secondary-button" onClick={() => downloadDaySheetExport("pdf")}><Download size={12} /> Daily PDF</button>
+            
+            <div style={{ display: "flex", alignItems: "flex-end", gap: 16, marginTop: 24 }}>
+               <label style={{ flex: 1 }}>
+                 <span style={{ display: "block", marginBottom: 8, fontWeight: 600, color: "#475569", fontSize: 13 }}>Period</span>
+                 <CustomDropdown value={attendanceReportPeriod} onChange={(e) => setAttendanceReportPeriod(e.target.value)}>
+                   <option value="daily">Daily Report</option>
+                   <option value="weekly">Weekly Report</option>
+                   <option value="monthly">Monthly Report</option>
+                 </CustomDropdown>
+               </label>
+               <button onClick={() => downloadAttendanceReport("xlsx")} style={{ height: 44, padding: "0 24px", borderRadius: 12, border: "1px solid #10b981", background: "#ecfdf5", color: "#047857", fontWeight: 600, display: "flex", alignItems: "center", gap: 8, cursor: "pointer" }}><Download size={16} /> Excel</button>
+               <button onClick={() => downloadAttendanceReport("pdf")} style={{ height: 44, padding: "0 24px", borderRadius: 12, border: "1px solid #ef4444", background: "#fef2f2", color: "#b91c1c", fontWeight: 600, display: "flex", alignItems: "center", gap: 8, cursor: "pointer" }}><Download size={16} /> PDF</button>
             </div>
-          </div>
-          <div className="list-stack" style={{ gap: 12 }}>
-            {attendanceDaySheet.map((row) => {
-              const statusColors = { PRESENT: { bg: "#dcfce7", color: "#166534" }, COMPLETED_SHIFT: { bg: "#f3e8ff", color: "#6b21a8" }, LATE: { bg: "#fef9c3", color: "#854d0e" }, HALF_DAY: { bg: "#ffedd5", color: "#9a3412" }, ABSENT: { bg: "#fee2e2", color: "#991b1b" }, LEAVE: { bg: "#ede9fe", color: "#5b21b6" }, WORKING: { bg: "#e0f2fe", color: "#0369a1" } };
-              const sc = statusColors[row.status] || { bg: "#f1f5f9", color: "#475569" };
-              return (
-                <button key={`${row.userSalonId}-${row.status}`} type="button" className="list-item" onClick={() => { if (row.attendanceId) loadAttendanceDetail(row.attendanceId); }} style={{ display: "flex", gap: 16, alignItems: "center", textAlign: "left", width: "100%", background: row.attendanceId && selectedAttendanceId === row.attendanceId ? "#eff6ff" : "white", border: row.attendanceId && selectedAttendanceId === row.attendanceId ? "1px solid #bfdbfe" : "1px solid #e2e8f0", borderRadius: 12, padding: "16px 20px", cursor: row.attendanceId ? "pointer" : "default", transition: "all 0.2s" }}>
-                  <div style={{ width: 44, height: 44, borderRadius: "50%", background: sc.bg, color: sc.color, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18, fontWeight: 600, flexShrink: 0 }}>
-                    {row.staffName?.charAt(0)?.toUpperCase()}
-                  </div>
-                  <div style={{ flex: 1, minWidth: 0 }}>
-                    <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                      <strong style={{ fontSize: 15, color: "#0f172a" }}>{row.staffName}</strong>
-                      <span style={{ fontSize: 11, padding: "2px 8px", borderRadius: 12, background: sc.bg, color: sc.color, fontWeight: 600 }}>{row.status}</span>
-                    </div>
-                    <div style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 13, color: "#64748b", marginTop: 6 }}>
-                      <MapPin size={14} /> {row.branchName || "Unassigned"}
-                    </div>
-                    <div style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 13, color: "#475569", marginTop: 4 }}>
-                      <Clock size={14} /> 
-                      {row.checkInAt ? new Date(row.checkInAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : "No check-in"}
-                      {row.checkOutAt ? ` → ${new Date(row.checkOutAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}` : ""}
-                      {row.workedMinutes != null ? <><span style={{ color: "#cbd5e1" }}>|</span><strong>{`${Math.floor(row.workedMinutes / 60)}h ${row.workedMinutes % 60}m`}</strong></> : null}
-                    </div>
-                  </div>
-                  {row.attendanceId && <div style={{ width: 32, height: 32, borderRadius: "50%", background: "#f1f5f9", display: "grid", placeItems: "center", color: "#64748b", flexShrink: 0 }}><Eye size={16} /></div>}
-                </button>
-              );
-            })}
-            {!attendanceDaySheet.length && <EmptyState title="No day sheet rows" message="Staff day sheet will show present, leave, and absent projection for the selected date." />}
           </div>
         </div>
         )}
