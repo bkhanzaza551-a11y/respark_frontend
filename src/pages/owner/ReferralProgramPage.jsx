@@ -351,74 +351,103 @@ export default function ReferralProgramPage() {
               )}
             </>
           ) : (
-            <form onSubmit={handleCouponSubmit} className="cpn-card anim-fade" style={{ padding: "30px" }}>
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 24, borderBottom: "1px solid #e2e8f0", paddingBottom: 16 }}>
-                <h3 style={{ margin: 0, fontSize: 18, fontWeight: 700 }}>{editingCoupon ? "Edit Referral Coupon" : "Create New Referral Coupon"}</h3>
-                <button type="button" onClick={() => { setShowCouponForm(false); setEditingCoupon(null); setPartnerSearchInput(""); }} className="cpn-btn cpn-btn-ghost" style={{ fontSize: 13 }}>← Back to list</button>
+          ) : (
+            <form onSubmit={handleCouponSubmit} className="cpn-card anim-fade" style={{ padding: "32px", maxWidth: 900, margin: "0 auto", background: "#ffffff", borderRadius: 16, boxShadow: "0 10px 25px -5px rgba(0,0,0,0.05), 0 8px 10px -6px rgba(0,0,0,0.01)", border: "1px solid #e2e8f0" }}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 32, borderBottom: "1px solid #f1f5f9", paddingBottom: 20 }}>
+                <h2 style={{ margin: 0, fontSize: '1.5rem', fontWeight: 800, color: '#0f172a' }}>{editingCoupon ? "Edit Referral Coupon" : "Create New Referral Coupon"}</h2>
+                <button type="button" onClick={() => { setShowCouponForm(false); setEditingCoupon(null); setPartnerSearchInput(""); }} style={{ background: '#f1f5f9', border: 'none', color: '#475569', cursor: 'pointer', padding: '8px 16px', borderRadius: 8, fontSize: '0.9rem', fontWeight: 600, transition: 'all 0.2s' }} onMouseEnter={(e) => e.currentTarget.style.background = '#e2e8f0'} onMouseLeave={(e) => e.currentTarget.style.background = '#f1f5f9'}>← Back to list</button>
               </div>
-              <div className="form-grid" style={{ gap: 20 }}>
+              <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
                 {!editingCoupon && (
-                  <div style={{ gridColumn: "1 / -1" }}>
-                    <label className="cpn-label">Coupon Code</label>
-                    <div style={{ display: "flex", alignItems: "center", gap: 12, marginTop: 4 }}>
+                  <div>
+                    <span style={{ display: 'block', fontSize: '0.85rem', fontWeight: 700, color: '#475569', marginBottom: 6 }}>Coupon Code</span>
+                    <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
                       <input
                         type="text"
-                        className="cpn-input"
                         value={couponForm.code}
                         onChange={(e) => setCouponForm(prev => ({ ...prev, code: e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, "") }))}
                         placeholder="e.g. SUMMER2024"
                         maxLength={20}
-                        style={{ flex: 1, fontFamily: "monospace", fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", fontSize: 16 }}
+                        style={{ flex: 1, padding: '12px 16px', borderRadius: 10, border: '1px solid #cbd5e1', fontSize: '1rem', outline: 'none', fontFamily: "monospace", fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", transition: "all 0.2s" }}
+                        onFocus={(e) => { e.target.style.borderColor = "#3b82f6"; e.target.style.boxShadow = "0 0 0 3px rgba(59, 130, 246, 0.1)"; }}
+                        onBlur={(e) => { e.target.style.borderColor = "#cbd5e1"; e.target.style.boxShadow = "none"; }}
                       />
-                      <button type="button" onClick={handleGenerateCode} disabled={generatingCode} className="cpn-btn cpn-btn-secondary" style={{ whiteSpace: "nowrap" }}>{generatingCode ? "Generating..." : "Auto Generate"}</button>
+                      <button type="button" onClick={handleGenerateCode} disabled={generatingCode} style={{ background: '#f8fafc', border: '1px solid #cbd5e1', color: '#475569', padding: '12px 20px', borderRadius: 10, fontWeight: 600, cursor: 'pointer', transition: 'all 0.2s', whiteSpace: "nowrap" }} onMouseEnter={(e) => e.currentTarget.style.background = '#f1f5f9'} onMouseLeave={(e) => e.currentTarget.style.background = '#f8fafc'}>{generatingCode ? "Generating..." : "Auto Generate"}</button>
                     </div>
                   </div>
                 )}
-                {editingCoupon && <div><label className="cpn-label">Coupon Code</label><div style={{ padding: "12px 16px", borderRadius: 10, border: "1px solid #e2e8f0", background: "#f8fafc", fontFamily: "monospace", fontSize: 16, fontWeight: 700, color: "#475569", marginTop: 4, display: "inline-block" }}>{editingCoupon.code}</div></div>}
+                {editingCoupon && <div><span style={{ display: 'block', fontSize: '0.85rem', fontWeight: 700, color: '#475569', marginBottom: 6 }}>Coupon Code</span><div style={{ padding: "12px 16px", borderRadius: 10, border: "1px solid #e2e8f0", background: "#f8fafc", fontFamily: "monospace", fontSize: 16, fontWeight: 700, color: "#475569", display: "inline-block" }}>{editingCoupon.code}</div></div>}
                 
-                <div style={{ gridColumn: "1 / -1", height: 0 }}></div>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: 24 }}>
+                  <label><span style={{ display: 'block', fontSize: '0.85rem', fontWeight: 700, color: '#475569', marginBottom: 6 }}>Title <span style={{ color: "#ef4444" }}>*</span></span><input required value={couponForm.title} onChange={(e) => setCouponForm(prev => ({ ...prev, title: e.target.value }))} placeholder="e.g. Summer Special" style={{ width: '100%', padding: '12px 16px', borderRadius: 10, border: '1px solid #cbd5e1', fontSize: '0.95rem', outline: 'none', transition: "all 0.2s", boxSizing: "border-box" }} onFocus={(e) => { e.target.style.borderColor = "#3b82f6"; e.target.style.boxShadow = "0 0 0 3px rgba(59, 130, 246, 0.1)"; }} onBlur={(e) => { e.target.style.borderColor = "#cbd5e1"; e.target.style.boxShadow = "none"; }} /></label>
+                  <label><span style={{ display: 'block', fontSize: '0.85rem', fontWeight: 700, color: '#475569', marginBottom: 6 }}>Description</span><input value={couponForm.description} onChange={(e) => setCouponForm(prev => ({ ...prev, description: e.target.value }))} placeholder="Brief description of the coupon..." style={{ width: '100%', padding: '12px 16px', borderRadius: 10, border: '1px solid #cbd5e1', fontSize: '0.95rem', outline: 'none', transition: "all 0.2s", boxSizing: "border-box" }} onFocus={(e) => { e.target.style.borderColor = "#3b82f6"; e.target.style.boxShadow = "0 0 0 3px rgba(59, 130, 246, 0.1)"; }} onBlur={(e) => { e.target.style.borderColor = "#cbd5e1"; e.target.style.boxShadow = "none"; }} /></label>
+                </div>
                 
-                <div><label className="cpn-label">Title <span style={{ color: "#ef4444" }}>*</span></label><input required className="cpn-input" value={couponForm.title} onChange={(e) => setCouponForm(prev => ({ ...prev, title: e.target.value }))} placeholder="e.g. Summer Special" style={{ marginTop: 4 }} /></div>
-                <div style={{ gridColumn: "1 / -1" }}><label className="cpn-label">Description</label><input className="cpn-input" value={couponForm.description} onChange={(e) => setCouponForm(prev => ({ ...prev, description: e.target.value }))} placeholder="Brief description of the coupon..." style={{ marginTop: 4 }} /></div>
+                <div style={{ height: 1, background: "#f1f5f9", margin: "8px 0" }}></div>
+                <h4 style={{ margin: 0, fontSize: 16, color: "#0f172a", fontWeight: 800 }}>Customer Discount</h4>
                 
-                <div style={{ gridColumn: "1 / -1", height: 1, background: "#f1f5f9", margin: "10px 0" }}></div>
-                <div style={{ gridColumn: "1 / -1" }}><h4 style={{ margin: 0, fontSize: 15, color: "#0f172a", fontWeight: 700 }}>Customer Discount</h4></div>
+                <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr 1fr', gap: 20 }}>
+                  <div>
+                    <span style={{ display: 'block', fontSize: '0.85rem', fontWeight: 700, color: '#475569', marginBottom: 6 }}>Discount Type</span>
+                    <div style={{ display: 'flex', background: '#f8fafc', padding: 4, borderRadius: 10, border: '1px solid #e2e8f0' }}>
+                      <div onClick={() => setCouponForm(prev => ({ ...prev, discountType: "PERCENT" }))} style={{ flex: 1, textAlign: 'center', padding: '10px 4px', borderRadius: 8, fontSize: '0.85rem', fontWeight: 600, cursor: 'pointer', transition: 'all 0.2s', background: couponForm.discountType === "PERCENT" ? 'white' : 'transparent', boxShadow: couponForm.discountType === "PERCENT" ? '0 2px 5px rgba(0,0,0,0.05)' : 'none', color: couponForm.discountType === "PERCENT" ? '#0f172a' : '#64748b' }}>% Pct</div>
+                      <div onClick={() => setCouponForm(prev => ({ ...prev, discountType: "FIXED" }))} style={{ flex: 1, textAlign: 'center', padding: '10px 4px', borderRadius: 8, fontSize: '0.85rem', fontWeight: 600, cursor: 'pointer', transition: 'all 0.2s', background: couponForm.discountType === "FIXED" ? 'white' : 'transparent', boxShadow: couponForm.discountType === "FIXED" ? '0 2px 5px rgba(0,0,0,0.05)' : 'none', color: couponForm.discountType === "FIXED" ? '#0f172a' : '#64748b' }}>₹ Fixed</div>
+                    </div>
+                  </div>
+                  <label><span style={{ display: 'block', fontSize: '0.85rem', fontWeight: 700, color: '#475569', marginBottom: 6 }}>Value <span style={{ color: "#ef4444" }}>*</span></span><input type="number" required min="0" step="0.01" value={couponForm.discountValue} onChange={(e) => setCouponForm(prev => ({ ...prev, discountValue: e.target.value }))} style={{ width: '100%', padding: '12px 16px', borderRadius: 10, border: '1px solid #cbd5e1', fontSize: '0.95rem', outline: 'none', transition: "all 0.2s", boxSizing: "border-box" }} onFocus={(e) => { e.target.style.borderColor = "#3b82f6"; e.target.style.boxShadow = "0 0 0 3px rgba(59, 130, 246, 0.1)"; }} onBlur={(e) => { e.target.style.borderColor = "#cbd5e1"; e.target.style.boxShadow = "none"; }} /></label>
+                  <label><span style={{ display: 'block', fontSize: '0.85rem', fontWeight: 700, color: '#475569', marginBottom: 6 }}>Min Bill Amount (₹)</span><input type="number" min="0" value={couponForm.minBillAmount} onChange={(e) => setCouponForm(prev => ({ ...prev, minBillAmount: e.target.value }))} placeholder="Optional" style={{ width: '100%', padding: '12px 16px', borderRadius: 10, border: '1px solid #cbd5e1', fontSize: '0.95rem', outline: 'none', transition: "all 0.2s", boxSizing: "border-box" }} onFocus={(e) => { e.target.style.borderColor = "#3b82f6"; e.target.style.boxShadow = "0 0 0 3px rgba(59, 130, 246, 0.1)"; }} onBlur={(e) => { e.target.style.borderColor = "#cbd5e1"; e.target.style.boxShadow = "none"; }} /></label>
+                </div>
                 
-                <div>
-                  <label className="cpn-label">Discount Type</label>
-                  <div className="cpn-radio-group" style={{ marginTop: 4 }}>
-                    <div className={`cpn-radio-option ${couponForm.discountType === "PERCENT" ? "active" : ""}`} onClick={() => setCouponForm(prev => ({ ...prev, discountType: "PERCENT" }))}>Percentage (%)</div>
-                    <div className={`cpn-radio-option ${couponForm.discountType === "FIXED" ? "active" : ""}`} onClick={() => setCouponForm(prev => ({ ...prev, discountType: "FIXED" }))}>Fixed Amount (₹)</div>
+                <div style={{ height: 1, background: "#f1f5f9", margin: "8px 0" }}></div>
+                <h4 style={{ margin: 0, fontSize: 16, color: "#0f172a", fontWeight: 800 }}>Partner Credits</h4>
+
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1.5fr', gap: 20 }}>
+                  <div>
+                    <span style={{ display: 'block', fontSize: '0.85rem', fontWeight: 700, color: '#475569', marginBottom: 6 }}>Credit Type</span>
+                    <div style={{ display: 'flex', background: '#f8fafc', padding: 4, borderRadius: 10, border: '1px solid #e2e8f0' }}>
+                      <div onClick={() => setCouponForm(prev => ({ ...prev, partnerCreditType: "PERCENT" }))} style={{ flex: 1, textAlign: 'center', padding: '10px 4px', borderRadius: 8, fontSize: '0.85rem', fontWeight: 600, cursor: 'pointer', transition: 'all 0.2s', background: couponForm.partnerCreditType === "PERCENT" ? 'white' : 'transparent', boxShadow: couponForm.partnerCreditType === "PERCENT" ? '0 2px 5px rgba(0,0,0,0.05)' : 'none', color: couponForm.partnerCreditType === "PERCENT" ? '#0f172a' : '#64748b' }}>% Pct</div>
+                      <div onClick={() => setCouponForm(prev => ({ ...prev, partnerCreditType: "FIXED" }))} style={{ flex: 1, textAlign: 'center', padding: '10px 4px', borderRadius: 8, fontSize: '0.85rem', fontWeight: 600, cursor: 'pointer', transition: 'all 0.2s', background: couponForm.partnerCreditType === "FIXED" ? 'white' : 'transparent', boxShadow: couponForm.partnerCreditType === "FIXED" ? '0 2px 5px rgba(0,0,0,0.05)' : 'none', color: couponForm.partnerCreditType === "FIXED" ? '#0f172a' : '#64748b' }}>₹ Fixed</div>
+                    </div>
+                  </div>
+                  <label><span style={{ display: 'block', fontSize: '0.85rem', fontWeight: 700, color: '#475569', marginBottom: 6 }}>Credit Value</span><input type="number" min="0" step="0.01" value={couponForm.partnerCreditValue} onChange={(e) => setCouponForm(prev => ({ ...prev, partnerCreditValue: e.target.value }))} style={{ width: '100%', padding: '12px 16px', borderRadius: 10, border: '1px solid #cbd5e1', fontSize: '0.95rem', outline: 'none', transition: "all 0.2s", boxSizing: "border-box" }} onFocus={(e) => { e.target.style.borderColor = "#3b82f6"; e.target.style.boxShadow = "0 0 0 3px rgba(59, 130, 246, 0.1)"; }} onBlur={(e) => { e.target.style.borderColor = "#cbd5e1"; e.target.style.boxShadow = "none"; }} /></label>
+                  <div>
+                    <span style={{ display: 'block', fontSize: '0.85rem', fontWeight: 700, color: '#475569', marginBottom: 6 }}>Assign to Partner</span>
+                    <div style={{ position: "relative" }}>
+                      <input type="text" placeholder="Search by name or phone..." value={partnerSearchInput} onChange={(e) => { setPartnerSearchInput(e.target.value); setShowPartnerDropdown(true); const match = customers.find(c => c.name === e.target.value); if (match) { setCouponForm(prev => ({ ...prev, partnerCustomerId: match.id })); } else { setCouponForm(prev => ({ ...prev, partnerCustomerId: "" })); } }} onFocus={(e) => { setShowPartnerDropdown(true); e.target.style.borderColor = "#3b82f6"; e.target.style.boxShadow = "0 0 0 3px rgba(59, 130, 246, 0.1)"; }} onBlur={(e) => { setTimeout(() => setShowPartnerDropdown(false), 200); e.target.style.borderColor = "#cbd5e1"; e.target.style.boxShadow = "none"; }} style={{ width: '100%', padding: '12px 36px 12px 16px', borderRadius: 10, border: '1px solid #cbd5e1', fontSize: '0.95rem', outline: 'none', transition: "all 0.2s", boxSizing: "border-box" }} />
+                      <svg style={{ position: "absolute", right: 12, top: 12, width: 18, height: 18, color: "#94a3b8", pointerEvents: "none" }} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
+                      {showPartnerDropdown && partnerSearchInput && (
+                        <div style={{ position: "absolute", top: "100%", left: 0, right: 0, background: "white", border: "1px solid #e2e8f0", borderRadius: 10, marginTop: 6, maxHeight: 240, overflowY: "auto", zIndex: 50, boxShadow: "0 10px 15px -3px rgba(0,0,0,0.1)" }}>
+                          <div style={{ padding: "12px 16px", borderBottom: "1px solid #f1f5f9", cursor: "pointer", fontWeight: couponForm.partnerCustomerId === "" ? 700 : 400, color: couponForm.partnerCustomerId === "" ? "#0f172a" : "#64748b" }} onClick={() => { setPartnerSearchInput(""); setCouponForm(prev => ({ ...prev, partnerCustomerId: "" })); setShowPartnerDropdown(false); }}>None (Generic Coupon)</div>
+                          {customers.filter(c => c.name?.toLowerCase().includes(partnerSearchInput.toLowerCase()) || c.phone?.includes(partnerSearchInput)).map(c => (
+                            <div key={c.id} style={{ padding: "12px 16px", borderBottom: "1px solid #f1f5f9", cursor: "pointer", transition: "background 0.2s", fontWeight: couponForm.partnerCustomerId === c.id ? 700 : 400 }} onClick={() => { setPartnerSearchInput(c.name); setCouponForm(prev => ({ ...prev, partnerCustomerId: c.id })); setShowPartnerDropdown(false); }} onMouseEnter={(e) => e.currentTarget.style.backgroundColor = "#f8fafc"} onMouseLeave={(e) => e.currentTarget.style.backgroundColor = "transparent"}>
+                              <div style={{ fontWeight: 600, fontSize: 14, color: "#0f172a" }}>{c.name}</div>
+                              <div style={{ fontSize: 12, color: "#64748b" }}>{c.phone}</div>
+                            </div>
+                          ))}
+                          {customers.filter(c => c.name?.toLowerCase().includes(partnerSearchInput.toLowerCase()) || c.phone?.includes(partnerSearchInput)).length === 0 && (
+                            <div style={{ padding: "12px 16px", color: "#64748b", fontSize: 14, textAlign: "center" }}>No matches found</div>
+                          )}
+                        </div>
+                      )}
+                    </div>
                   </div>
                 </div>
-                <div><label className="cpn-label">Discount Value <span style={{ color: "#ef4444" }}>*</span></label><input type="number" required min="0" step="0.01" className="cpn-input" value={couponForm.discountValue} onChange={(e) => setCouponForm(prev => ({ ...prev, discountValue: e.target.value }))} style={{ marginTop: 4 }} /></div>
-                <div><label className="cpn-label">Min Bill Amount (₹)</label><input type="number" min="0" className="cpn-input" value={couponForm.minBillAmount} onChange={(e) => setCouponForm(prev => ({ ...prev, minBillAmount: e.target.value }))} style={{ marginTop: 4 }} placeholder="Optional" /></div>
-                
-                <div style={{ gridColumn: "1 / -1", height: 1, background: "#f1f5f9", margin: "10px 0" }}></div>
-                <div style={{ gridColumn: "1 / -1" }}><h4 style={{ margin: 0, fontSize: 15, color: "#0f172a", fontWeight: 700 }}>Partner Credits</h4></div>
 
-                <div>
-                  <label className="cpn-label">Credit Type</label>
-                  <div className="cpn-radio-group" style={{ marginTop: 4 }}>
-                    <div className={`cpn-radio-option ${couponForm.partnerCreditType === "FIXED" ? "active" : ""}`} onClick={() => setCouponForm(prev => ({ ...prev, partnerCreditType: "FIXED" }))}>Fixed Amount (₹)</div>
-                    <div className={`cpn-radio-option ${couponForm.partnerCreditType === "PERCENT" ? "active" : ""}`} onClick={() => setCouponForm(prev => ({ ...prev, partnerCreditType: "PERCENT" }))}>Percentage (%)</div>
-                  </div>
+                <div style={{ height: 1, background: "#f1f5f9", margin: "8px 0" }}></div>
+                <h4 style={{ margin: 0, fontSize: 16, color: "#0f172a", fontWeight: 800 }}>Limits & Validity</h4>
+
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 1fr', gap: 20 }}>
+                  <label><span style={{ display: 'block', fontSize: '0.85rem', fontWeight: 700, color: '#475569', marginBottom: 6 }}>Total Usage Limit</span><input type="number" min="0" value={couponForm.usageLimit} onChange={(e) => setCouponForm(prev => ({ ...prev, usageLimit: e.target.value }))} placeholder="Unlimited" style={{ width: '100%', padding: '12px 16px', borderRadius: 10, border: '1px solid #cbd5e1', fontSize: '0.95rem', outline: 'none', transition: "all 0.2s", boxSizing: "border-box" }} onFocus={(e) => { e.target.style.borderColor = "#3b82f6"; e.target.style.boxShadow = "0 0 0 3px rgba(59, 130, 246, 0.1)"; }} onBlur={(e) => { e.target.style.borderColor = "#cbd5e1"; e.target.style.boxShadow = "none"; }} /></label>
+                  <label><span style={{ display: 'block', fontSize: '0.85rem', fontWeight: 700, color: '#475569', marginBottom: 6 }}>Per Customer Limit</span><input type="number" min="0" value={couponForm.customerUsageLimit} onChange={(e) => setCouponForm(prev => ({ ...prev, customerUsageLimit: e.target.value }))} placeholder="Unlimited" style={{ width: '100%', padding: '12px 16px', borderRadius: 10, border: '1px solid #cbd5e1', fontSize: '0.95rem', outline: 'none', transition: "all 0.2s", boxSizing: "border-box" }} onFocus={(e) => { e.target.style.borderColor = "#3b82f6"; e.target.style.boxShadow = "0 0 0 3px rgba(59, 130, 246, 0.1)"; }} onBlur={(e) => { e.target.style.borderColor = "#cbd5e1"; e.target.style.boxShadow = "none"; }} /></label>
+                  <label><span style={{ display: 'block', fontSize: '0.85rem', fontWeight: 700, color: '#475569', marginBottom: 6 }}>Start Date</span><input type="date" value={couponForm.startsAt} onChange={(e) => setCouponForm(prev => ({ ...prev, startsAt: e.target.value }))} style={{ width: '100%', padding: '12px 16px', borderRadius: 10, border: '1px solid #cbd5e1', fontSize: '0.95rem', outline: 'none', transition: "all 0.2s", boxSizing: "border-box" }} onFocus={(e) => { e.target.style.borderColor = "#3b82f6"; e.target.style.boxShadow = "0 0 0 3px rgba(59, 130, 246, 0.1)"; }} onBlur={(e) => { e.target.style.borderColor = "#cbd5e1"; e.target.style.boxShadow = "none"; }} /></label>
+                  <label><span style={{ display: 'block', fontSize: '0.85rem', fontWeight: 700, color: '#475569', marginBottom: 6 }}>End Date</span><input type="date" value={couponForm.endsAt} onChange={(e) => setCouponForm(prev => ({ ...prev, endsAt: e.target.value }))} style={{ width: '100%', padding: '12px 16px', borderRadius: 10, border: '1px solid #cbd5e1', fontSize: '0.95rem', outline: 'none', transition: "all 0.2s", boxSizing: "border-box" }} onFocus={(e) => { e.target.style.borderColor = "#3b82f6"; e.target.style.boxShadow = "0 0 0 3px rgba(59, 130, 246, 0.1)"; }} onBlur={(e) => { e.target.style.borderColor = "#cbd5e1"; e.target.style.boxShadow = "none"; }} /></label>
                 </div>
-                <div><label className="cpn-label">Credit Value</label><input type="number" min="0" step="0.01" className="cpn-input" value={couponForm.partnerCreditValue} onChange={(e) => setCouponForm(prev => ({ ...prev, partnerCreditValue: e.target.value }))} style={{ marginTop: 4 }} /></div>
-                <div><label className="cpn-label">Assign to Partner</label><div style={{ position: "relative", marginTop: 4 }}><input type="text" className="cpn-input" placeholder="Search by name or phone..." value={partnerSearchInput} onChange={(e) => { setPartnerSearchInput(e.target.value); setShowPartnerDropdown(true); const match = customers.find(c => c.name === e.target.value); if (match) { setCouponForm(prev => ({ ...prev, partnerCustomerId: match.id })); } else { setCouponForm(prev => ({ ...prev, partnerCustomerId: "" })); } }} onFocus={() => setShowPartnerDropdown(true)} onBlur={() => setTimeout(() => setShowPartnerDropdown(false), 200)} /><svg style={{ position: "absolute", right: 12, top: 12, width: 18, height: 18, color: "#94a3b8", pointerEvents: "none" }} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>{showPartnerDropdown && partnerSearchInput && (<div style={{ position: "absolute", top: "100%", left: 0, right: 0, background: "white", border: "1px solid #e2e8f0", borderRadius: 10, marginTop: 6, maxHeight: 240, overflowY: "auto", zIndex: 50, boxShadow: "0 10px 15px -3px rgba(0,0,0,0.1)" }}><div style={{ padding: "12px 16px", borderBottom: "1px solid #f1f5f9", cursor: "pointer", fontWeight: couponForm.partnerCustomerId === "" ? 700 : 400, color: couponForm.partnerCustomerId === "" ? "#0f172a" : "#64748b" }} onClick={() => { setPartnerSearchInput(""); setCouponForm(prev => ({ ...prev, partnerCustomerId: "" })); setShowPartnerDropdown(false); }}>None (Generic Coupon)</div>{customers.filter(c => c.name?.toLowerCase().includes(partnerSearchInput.toLowerCase()) || c.phone?.includes(partnerSearchInput)).map(c => (<div key={c.id} style={{ padding: "12px 16px", borderBottom: "1px solid #f1f5f9", cursor: "pointer", fontWeight: couponForm.partnerCustomerId === c.id ? 700 : 400 }} onClick={() => { setPartnerSearchInput(c.name); setCouponForm(prev => ({ ...prev, partnerCustomerId: c.id })); setShowPartnerDropdown(false); }} onMouseEnter={(e) => e.currentTarget.style.backgroundColor = "#f8fafc"} onMouseLeave={(e) => e.currentTarget.style.backgroundColor = "transparent"}><div style={{ fontWeight: 600, fontSize: 14, color: "#0f172a" }}>{c.name}</div><div style={{ fontSize: 12, color: "#64748b" }}>{c.phone}</div></div>))}{customers.filter(c => c.name?.toLowerCase().includes(partnerSearchInput.toLowerCase()) || c.phone?.includes(partnerSearchInput)).length === 0 && (<div style={{ padding: "12px 16px", color: "#64748b", fontSize: 14, textAlign: "center" }}>No matches found</div>)}</div>)}</div></div>
-                <div style={{ gridColumn: "1 / -1", height: 1, background: "#f1f5f9", margin: "10px 0" }}></div>
-                <div style={{ gridColumn: "1 / -1" }}><h4 style={{ margin: 0, fontSize: 15, color: "#0f172a", fontWeight: 700 }}>Limits & Validity</h4></div>
 
-                <div><label className="cpn-label">Total Usage Limit</label><input type="number" min="0" className="cpn-input" value={couponForm.usageLimit} onChange={(e) => setCouponForm(prev => ({ ...prev, usageLimit: e.target.value }))} style={{ marginTop: 4 }} placeholder="Unlimited if empty" /></div>
-                <div><label className="cpn-label">Per Customer Limit</label><input type="number" min="0" className="cpn-input" value={couponForm.customerUsageLimit} onChange={(e) => setCouponForm(prev => ({ ...prev, customerUsageLimit: e.target.value }))} style={{ marginTop: 4 }} placeholder="Unlimited if empty" /></div>
-                <div><label className="cpn-label">Start Date</label><input type="date" className="cpn-input" value={couponForm.startsAt} onChange={(e) => setCouponForm(prev => ({ ...prev, startsAt: e.target.value }))} style={{ marginTop: 4 }} /></div>
-                <div><label className="cpn-label">End Date</label><input type="date" className="cpn-input" value={couponForm.endsAt} onChange={(e) => setCouponForm(prev => ({ ...prev, endsAt: e.target.value }))} style={{ marginTop: 4 }} /></div>
-
-                <div style={{ gridColumn: "1 / -1", height: 1, background: "#f1f5f9", margin: "10px 0" }}></div>
-                <div style={{ gridColumn: "1 / -1" }}><h4 style={{ margin: 0, fontSize: 15, color: "#0f172a", fontWeight: 700 }}>Eligibility (Leave empty for all items)</h4></div>
+                <div style={{ height: 1, background: "#f1f5f9", margin: "8px 0" }}></div>
+                <h4 style={{ margin: 0, fontSize: 16, color: "#0f172a", fontWeight: 800 }}>Eligibility <span style={{ fontSize: 13, color: "#64748b", fontWeight: 400 }}>(Leave empty for all items)</span></h4>
                 
-                <div style={{ gridColumn: "1 / -1" }}>
-                  <label className="cpn-label" style={{ marginBottom: 12 }}>Categories</label>
+                <div>
+                  <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 700, color: '#475569', marginBottom: 12 }}>Categories</label>
                   <div style={{ display: "flex", flexWrap: "wrap", gap: 10 }}>
                     {categories.map((cat) => (
                       <label key={cat.id} style={{ display: "flex", alignItems: "center", gap: 8, padding: "8px 16px", borderRadius: 24, border: couponForm.categoryIds.includes(cat.id) ? "1px solid #3b82f6" : "1px solid #cbd5e1", background: couponForm.categoryIds.includes(cat.id) ? "#eff6ff" : "#fff", color: couponForm.categoryIds.includes(cat.id) ? "#1d4ed8" : "#475569", fontSize: 13, cursor: "pointer", transition: "all 0.2s", fontWeight: 600 }}>
@@ -427,8 +456,8 @@ export default function ReferralProgramPage() {
                     ))}
                   </div>
                 </div>
-                <div style={{ gridColumn: "1 / -1" }}>
-                  <label className="cpn-label" style={{ marginBottom: 12 }}>Services</label>
+                <div>
+                  <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 700, color: '#475569', marginBottom: 12 }}>Services</label>
                   <div style={{ display: "flex", flexWrap: "wrap", gap: 10, maxHeight: 200, overflowY: "auto", padding: 4 }}>
                     {services.map((svc) => (
                       <label key={svc.id} style={{ display: "flex", alignItems: "center", gap: 8, padding: "8px 16px", borderRadius: 24, border: couponForm.serviceIds.includes(svc.id) ? "1px solid #3b82f6" : "1px solid #cbd5e1", background: couponForm.serviceIds.includes(svc.id) ? "#eff6ff" : "#fff", color: couponForm.serviceIds.includes(svc.id) ? "#1d4ed8" : "#475569", fontSize: 13, cursor: "pointer", transition: "all 0.2s", fontWeight: 600 }}>
@@ -438,11 +467,11 @@ export default function ReferralProgramPage() {
                   </div>
                 </div>
 
-                <div style={{ gridColumn: "1 / -1" }}><label className="cpn-label">Internal Notes</label><input className="cpn-input" value={couponForm.notes} onChange={(e) => setCouponForm(prev => ({ ...prev, notes: e.target.value }))} placeholder="Optional notes for staff..." style={{ marginTop: 4 }} /></div>
+                <label><span style={{ display: 'block', fontSize: '0.85rem', fontWeight: 700, color: '#475569', marginBottom: 6 }}>Internal Notes</span><input value={couponForm.notes} onChange={(e) => setCouponForm(prev => ({ ...prev, notes: e.target.value }))} placeholder="Optional notes for staff..." style={{ width: '100%', padding: '12px 16px', borderRadius: 10, border: '1px solid #cbd5e1', fontSize: '0.95rem', outline: 'none', transition: "all 0.2s", boxSizing: "border-box" }} onFocus={(e) => { e.target.style.borderColor = "#3b82f6"; e.target.style.boxShadow = "0 0 0 3px rgba(59, 130, 246, 0.1)"; }} onBlur={(e) => { e.target.style.borderColor = "#cbd5e1"; e.target.style.boxShadow = "none"; }} /></label>
               </div>
-              <div style={{ display: "flex", justifyContent: "flex-end", gap: 12, marginTop: 30, paddingTop: 20, borderTop: "1px solid #e2e8f0" }}>
-                <button type="button" onClick={() => { setShowCouponForm(false); setEditingCoupon(null); setPartnerSearchInput(""); }} className="cpn-btn cpn-btn-secondary" style={{ minWidth: 100 }}>Cancel</button>
-                <button type="submit" className="cpn-btn cpn-btn-primary" style={{ minWidth: 160 }}>{editingCoupon ? "Save Changes" : "Create Coupon"}</button>
+              <div style={{ display: "flex", justifyContent: "flex-end", gap: 12, marginTop: 40, paddingTop: 20, borderTop: "1px solid #f1f5f9" }}>
+                <button type="button" onClick={() => { setShowCouponForm(false); setEditingCoupon(null); setPartnerSearchInput(""); }} style={{ background: '#f8fafc', border: '1px solid #cbd5e1', color: '#475569', padding: '12px 24px', borderRadius: 10, fontWeight: 600, cursor: 'pointer', transition: 'all 0.2s' }} onMouseEnter={(e) => e.currentTarget.style.background = '#f1f5f9'} onMouseLeave={(e) => e.currentTarget.style.background = '#f8fafc'}>Cancel</button>
+                <button type="submit" style={{ background: 'linear-gradient(135deg, #2563eb, #1d4ed8)', border: 'none', color: '#fff', padding: '12px 32px', borderRadius: 10, fontWeight: 600, cursor: 'pointer', transition: 'all 0.2s', boxShadow: '0 4px 12px rgba(37, 99, 235, 0.2)' }} onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(-1px)'; e.currentTarget.style.boxShadow = '0 6px 16px rgba(37, 99, 235, 0.3)'; }} onMouseLeave={(e) => { e.currentTarget.style.transform = 'none'; e.currentTarget.style.boxShadow = '0 4px 12px rgba(37, 99, 235, 0.2)'; }}>{editingCoupon ? "Save Changes" : "Create Coupon"}</button>
               </div>
             </form>
           )}
