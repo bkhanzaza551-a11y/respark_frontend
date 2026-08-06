@@ -162,7 +162,7 @@ export default function InvoicesPage() {
       </div>
 
       <div style={{ display: 'flex', gap: '16px', marginBottom: '24px', flexWrap: 'wrap', padding: '0 4px' }}>
-        <div style={{ flex: '1 1 300px' }}>
+        <div style={{ flex: '1 1 300px', maxWidth: '450px' }}>
           <div style={{ fontSize: '0.85rem', fontWeight: '600', color: '#475569', marginBottom: '8px' }}>Search</div>
           <input 
             value={filters.q} 
