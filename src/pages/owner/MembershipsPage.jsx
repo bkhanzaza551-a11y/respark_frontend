@@ -50,7 +50,7 @@ const emptyMembership = {
 };
 const emptyPackage = { name: "", price: 0, totalSessions: 5, validityDays: 60, services: [], products: [], includeProducts: false, selectedCategoryId: "" };
 const emptyPackageRedeem = { customerPackageId: "", serviceId: "", sessionsUsed: 1, note: "" };
-const normalizeRows = (value) => Array.isArray(value) ? value : value?.items || value?.rows || [];
+const normalizeRows = (value) => Array.isArray(value) ? value : value?.items || value?.rows || value?.data || [];
 const normalizeBenefits = (value) => {
   const rows = Array.isArray(value) ? value : [];
   return rows.length ? rows.map((item) => ({ label: item.label || "", value: item.value || "" })) : [{ label: "", value: "" }];
@@ -975,30 +975,37 @@ export default function MembershipsPage() {
               
               {loading ? <PageLoader compact title="Loading..." /> : null}
               
-              <table className="crm-table" style={{ width: "100%", textAlign: "left", borderCollapse: "collapse" }}>
+              <div className="table-responsive">
+              <table className="rpt-table">
                 <thead>
-                  <tr style={{ borderBottom: "2px solid #f1f5f9" }}>
-                    <th style={{ padding: "12px 16px", color: "#64748b", fontSize: "0.75rem", fontWeight: 700, textTransform: "uppercase" }}>PLAN NAME</th>
-                    <th style={{ padding: "12px 16px", color: "#64748b", fontSize: "0.75rem", fontWeight: 700, textTransform: "uppercase" }}>TYPE</th>
-                    <th style={{ padding: "12px 16px", color: "#64748b", fontSize: "0.75rem", fontWeight: 700, textTransform: "uppercase" }}>PRICE</th>
-                    <th style={{ padding: "12px 16px", color: "#64748b", fontSize: "0.75rem", fontWeight: 700, textTransform: "uppercase" }}>VALIDITY</th>
-                    <th style={{ padding: "12px 16px", color: "#64748b", fontSize: "0.75rem", fontWeight: 700, textTransform: "uppercase" }}>BENEFIT</th>
-                    <th style={{ padding: "12px 16px", color: "#64748b", fontSize: "0.75rem", fontWeight: 700, textTransform: "uppercase", width: 140 }}>ACTIONS</th>
+                  <tr>
+                    <th>Plan Name</th>
+                    <th>Type</th>
+                    <th>Price</th>
+                    <th>Validity</th>
+                    <th>Benefit</th>
+                    <th style={{ textAlign: "right" }}>Actions</th>
                   </tr>
                 </thead>
                 <tbody>
                   {(customerMembershipMode ? (selectedCustomerHistory?.memberships || []) : filteredMemberships).map((item) => (
-                    <tr key={item.id} style={{ borderBottom: "1px solid #f1f5f9", transition: "background 0.2s" }} className="crm-table-row">
-                      <td style={{ padding: "16px", fontWeight: 600, color: "#0f172a" }}>{customerMembershipMode ? item.membershipPlan?.name : item.name}</td>
-                      <td style={{ padding: "16px" }}><span className="badge" style={{ background: "#f1f5f9", color: "#475569", padding: "4px 8px", borderRadius: 4, fontSize: "0.8rem", fontWeight: 600 }}>{customerMembershipMode ? item.status : (item.benefitType === "WALLET_VALUE" ? "Fixed Wallet" : "Percentage")}</span></td>
-                      <td style={{ padding: "16px", fontWeight: 600, color: "#0f172a" }}>{formatMoney(Number(item.price || 0))}</td>
-                      <td style={{ padding: "16px", color: "#475569", fontSize: "0.9rem" }}>{customerMembershipMode ? `Ends ${String(item.endsAt).slice(0, 10)}` : `${item.validityDays} days`}</td>
-                      <td style={{ padding: "16px", color: "#475569", fontWeight: 600 }}>{customerMembershipMode ? formatMoney(Number(item.remainingWalletValue || 0)) : (item.benefitType === "WALLET_VALUE" ? formatMoney(Number(item.walletValue || 0)) : `${item.discountValue}%`)}</td>
-                      <td style={{ padding: "16px" }}>
+                    <tr key={item.id}>
+                      <td style={{ fontWeight: 600, color: "#1e293b" }}>{customerMembershipMode ? item.membershipPlan?.name : item.name}</td>
+                      <td>
+                        <span className="badge" style={{ background: "#f1f5f9", color: "#475569", padding: "4px 8px", borderRadius: 6, fontSize: "0.8rem", fontWeight: 700 }}>
+                          {customerMembershipMode ? item.status : (item.benefitType === "WALLET_VALUE" ? "Fixed Wallet" : "Percentage")}
+                        </span>
+                      </td>
+                      <td style={{ fontWeight: 700, color: "#0f172a" }}>{formatMoney(Number(item.price || 0))}</td>
+                      <td style={{ color: "#475569", fontSize: "0.9rem" }}>{customerMembershipMode ? `Ends ${String(item.endsAt).slice(0, 10)}` : `${item.validityDays} days`}</td>
+                      <td style={{ color: "#3b82f6", fontWeight: 700 }}>{customerMembershipMode ? formatMoney(Number(item.remainingWalletValue || 0)) : (item.benefitType === "WALLET_VALUE" ? formatMoney(Number(item.walletValue || 0)) : `${item.discountValue}%`)}</td>
+                      <td style={{ textAlign: "right" }}>
                         {!customerMembershipMode && (
-                          <div style={{ display: "flex", gap: 8 }}>
-                            <Link to={`/admin/memberships/${item.id}/edit`} className="secondary-button" style={{ padding: "6px 12px", background: "#f8fafc", border: "1px solid #e2e8f0", borderRadius: 6, color: "#475569", fontSize: "0.85rem", textDecoration: "none" }}>Edit</Link>
-                            <button type="button" style={{ background: "#fef2f2", color: "#dc2626", border: "1px solid #fecaca", padding: "6px 12px", borderRadius: 6, cursor: "pointer" }} disabled={deletingId === item.id} onClick={async () => {
+                          <div style={{ display: "flex", gap: 8, justifyContent: "flex-end" }}>
+                            <Link to={`/admin/memberships/${item.id}/edit`} style={{ display: "flex", background: "transparent", border: "none", color: "#64748b", cursor: "pointer", padding: 6, borderRadius: "50%" }} onMouseEnter={(e) => e.currentTarget.style.background = "#f1f5f9"} onMouseLeave={(e) => e.currentTarget.style.background = "transparent"} title="Edit">
+                              <Edit2 size={16} />
+                            </Link>
+                            <button type="button" onClick={async () => {
                               if (!window.confirm(`Delete membership plan "${item.name}"?`)) return;
                               try {
                                 setDeletingId(item.id);
@@ -1011,24 +1018,23 @@ export default function MembershipsPage() {
                               } finally {
                                 setDeletingId(null);
                               }
-                            }}>{deletingId === item.id ? "..." : <Trash2 size={14} />}</button>
+                            }} disabled={deletingId === item.id} style={{ display: "flex", background: "transparent", border: "none", color: "#ef4444", cursor: "pointer", padding: 6, borderRadius: "50%" }} onMouseEnter={(e) => e.currentTarget.style.background = "#fee2e2"} onMouseLeave={(e) => e.currentTarget.style.background = "transparent"} title="Delete">
+                              {deletingId === item.id ? "..." : <Trash2 size={16} />}
+                            </button>
                           </div>
                         )}
                         {customerMembershipMode && (
-                          <button type="button" className="secondary-button" onClick={() => setMembershipLifecycleForm((current) => ({ ...current, customerMembershipId: item.id }))}>Lifecycle</button>
+                          <button type="button" className="secondary-button" style={{ padding: "4px 12px", fontSize: "0.8rem" }} onClick={() => setMembershipLifecycleForm((current) => ({ ...current, customerMembershipId: item.id }))}>Lifecycle</button>
                         )}
                       </td>
                     </tr>
                   ))}
-                  {((customerMembershipMode ? (selectedCustomerHistory?.memberships || []) : filteredMemberships).length === 0 && !loading) && (
-                    <tr>
-                      <td colSpan="6" style={{ padding: 40, textAlign: "center" }}>
-                        <EmptyState title="No memberships found" message="Create a membership plan to see it here." />
-                      </td>
-                    </tr>
-                  )}
                 </tbody>
               </table>
+              {((customerMembershipMode ? (selectedCustomerHistory?.memberships || []) : filteredMemberships).length === 0 && !loading) && (
+                <EmptyState title="No memberships found" message="Create a membership plan to see it here." />
+              )}
+              </div>
             </div>
           )}
 
@@ -1059,32 +1065,41 @@ export default function MembershipsPage() {
               
               {loading ? <PageLoader compact title="Loading..." /> : null}
               
-              <table className="crm-table" style={{ width: "100%", textAlign: "left", borderCollapse: "collapse" }}>
+              <div className="table-responsive">
+              <table className="rpt-table">
                 <thead>
-                  <tr style={{ borderBottom: "2px solid #f1f5f9" }}>
-                    <th style={{ padding: "12px 16px", color: "#64748b", fontSize: "0.75rem", fontWeight: 700, textTransform: "uppercase" }}>PACKAGE NAME</th>
-                    <th style={{ padding: "12px 16px", color: "#64748b", fontSize: "0.75rem", fontWeight: 700, textTransform: "uppercase" }}>PRICE</th>
-                    <th style={{ padding: "12px 16px", color: "#64748b", fontSize: "0.75rem", fontWeight: 700, textTransform: "uppercase" }}>SESSIONS</th>
-                    <th style={{ padding: "12px 16px", color: "#64748b", fontSize: "0.75rem", fontWeight: 700, textTransform: "uppercase" }}>VALIDITY</th>
-                    <th style={{ padding: "12px 16px", color: "#64748b", fontSize: "0.75rem", fontWeight: 700, textTransform: "uppercase", width: 140 }}>ACTIONS</th>
+                  <tr>
+                    <th>Package Name</th>
+                    <th>Price</th>
+                    <th>Sessions</th>
+                    <th>Validity</th>
+                    <th style={{ textAlign: "right" }}>Actions</th>
                   </tr>
                 </thead>
                 <tbody>
                   {(customerPackageMode ? (selectedCustomerHistory?.packages || []) : filteredPackages).map((item) => (
-                    <tr key={item.id} style={{ borderBottom: "1px solid #f1f5f9", transition: "background 0.2s" }} className="crm-table-row">
-                      <td style={{ padding: "16px", fontWeight: 600, color: "#0f172a" }}>{customerPackageMode ? item.package?.name : item.name}</td>
-                      <td style={{ padding: "16px", fontWeight: 600, color: "#0f172a" }}>{formatMoney(Number(item.price || 0))}</td>
-                      <td style={{ padding: "16px" }}>{customerPackageMode ? <span className="badge" style={{ background: "#f1f5f9", color: "#475569", padding: "4px 8px", borderRadius: 4, fontSize: "0.8rem", fontWeight: 600 }}>{item.remainingSessions} remaining</span> : <span style={{ color: "#475569", fontSize: "0.9rem" }}>{item.totalSessions} sessions</span>}</td>
-                      <td style={{ padding: "16px", color: "#475569", fontSize: "0.9rem" }}>{customerPackageMode ? `Ends ${String(item.endsAt).slice(0, 10)}` : `${item.validityDays} days`}</td>
-                      <td style={{ padding: "16px" }}>
+                    <tr key={item.id}>
+                      <td style={{ fontWeight: 600, color: "#1e293b" }}>{customerPackageMode ? item.package?.name : item.name}</td>
+                      <td style={{ fontWeight: 700, color: "#0f172a" }}>{formatMoney(Number(item.price || 0))}</td>
+                      <td>
+                        {customerPackageMode ? 
+                          <span className="badge" style={{ background: "#f3e8ff", color: "#6d28d9", padding: "4px 8px", borderRadius: 6, fontSize: "0.8rem", fontWeight: 700 }}>{item.remainingSessions} remaining</span> 
+                          : 
+                          <span style={{ color: "#475569", fontSize: "0.9rem", fontWeight: 600 }}>{item.totalSessions} sessions</span>
+                        }
+                      </td>
+                      <td style={{ color: "#475569", fontSize: "0.9rem" }}>{customerPackageMode ? `Ends ${String(item.endsAt).slice(0, 10)}` : `${item.validityDays} days`}</td>
+                      <td style={{ textAlign: "right" }}>
                         {!customerPackageMode && (
-                          <div style={{ display: "flex", gap: 8 }}>
-                            <Link to={`/admin/packages/${item.id}/edit`} className="secondary-button" style={{ padding: "6px 12px", background: "#f8fafc", border: "1px solid #e2e8f0", borderRadius: 6, color: "#475569", fontSize: "0.85rem", textDecoration: "none" }}>Edit</Link>
-                            <button type="button" style={{ background: "#fef2f2", color: "#dc2626", border: "1px solid #fecaca", padding: "6px 12px", borderRadius: 6, cursor: "pointer" }} disabled={deletingId === item.id} onClick={async () => {
+                          <div style={{ display: "flex", gap: 8, justifyContent: "flex-end" }}>
+                            <Link to={`/admin/packages/${item.id}/edit`} style={{ display: "flex", background: "transparent", border: "none", color: "#64748b", cursor: "pointer", padding: 6, borderRadius: "50%" }} onMouseEnter={(e) => e.currentTarget.style.background = "#f1f5f9"} onMouseLeave={(e) => e.currentTarget.style.background = "transparent"} title="Edit">
+                              <Edit2 size={16} />
+                            </Link>
+                            <button type="button" onClick={async () => {
                               if (!window.confirm(`Delete package "${item.name}"?`)) return;
                               try {
                                 setDeletingId(item.id);
-                                await api.delete(`/admin/packages/${item.id}`);
+                                await api.delete(`/owner/packages/${item.id}`);
                                 setStatus({ error: "", success: "Package deleted." });
                                 setTimeout(() => setStatus({ error: "", success: "" }), 3000);
                                 await loadAll(customerId);
@@ -1093,24 +1108,23 @@ export default function MembershipsPage() {
                               } finally {
                                 setDeletingId(null);
                               }
-                            }}>{deletingId === item.id ? "..." : <Trash2 size={14} />}</button>
+                            }} disabled={deletingId === item.id} style={{ display: "flex", background: "transparent", border: "none", color: "#ef4444", cursor: "pointer", padding: 6, borderRadius: "50%" }} onMouseEnter={(e) => e.currentTarget.style.background = "#fee2e2"} onMouseLeave={(e) => e.currentTarget.style.background = "transparent"} title="Delete">
+                              {deletingId === item.id ? "..." : <Trash2 size={16} />}
+                            </button>
                           </div>
                         )}
                         {customerPackageMode && (
-                          <button type="button" className="secondary-button" onClick={() => setPackageLifecycleForm((current) => ({ ...current, customerPackageId: item.id }))}>Lifecycle</button>
+                          <button type="button" className="secondary-button" style={{ padding: "4px 12px", fontSize: "0.8rem" }} onClick={() => setPackageLifecycleForm((current) => ({ ...current, customerPackageId: item.id }))}>Lifecycle</button>
                         )}
                       </td>
                     </tr>
                   ))}
-                  {((customerPackageMode ? (selectedCustomerHistory?.packages || []) : filteredPackages).length === 0 && !loading) && (
-                    <tr>
-                      <td colSpan="5" style={{ padding: 40, textAlign: "center" }}>
-                        <EmptyState title="No packages found" message="Create a package to see it here." />
-                      </td>
-                    </tr>
-                  )}
                 </tbody>
               </table>
+              {((customerPackageMode ? (selectedCustomerHistory?.packages || []) : filteredPackages).length === 0 && !loading) && (
+                <EmptyState title="No packages found" message="Create a package to see it here." />
+              )}
+              </div>
             </div>
           )}
         </div>
