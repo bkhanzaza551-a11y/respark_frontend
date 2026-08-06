@@ -643,13 +643,15 @@ export default function MembershipsPage() {
               {/* Name & Active */}
               <div style={{ display: "flex", gap: "24px", alignItems: "flex-end", flexWrap: "wrap" }}>
                 <div style={{ flex: 1, minWidth: "250px" }}>
-                  <label style={{ display: "block", fontSize: "0.85rem", color: "#475569", fontWeight: 600, marginBottom: "6px" }}>Package name</label>
+                  <label style={{ display: "block", fontSize: "0.85rem", color: "#475569", fontWeight: 600, marginBottom: "8px" }}>Package name</label>
                   <input 
                     type="text" 
                     placeholder="e.g. Bridal Package" 
                     value={packageForm.name} 
                     onChange={(e) => setPackageForm({ ...packageForm, name: e.target.value })} 
-                   
+                    style={{ width: "100%", padding: "10px 14px", borderRadius: "8px", border: "1px solid #cbd5e1", fontSize: "0.95rem", color: "#0f172a", outline: "none", boxSizing: "border-box", transition: "all 0.2s", boxShadow: "0 1px 2px rgba(0,0,0,0.02)" }}
+                    onFocus={(e) => { e.target.style.borderColor = "#3b82f6"; e.target.style.boxShadow = "0 0 0 3px rgba(59, 130, 246, 0.1)"; }}
+                    onBlur={(e) => { e.target.style.borderColor = "#cbd5e1"; e.target.style.boxShadow = "0 1px 2px rgba(0,0,0,0.02)"; }}
                   />
                 </div>
                 <ToggleSwitch label="Active" checked={true} onChange={() => {}} />
@@ -658,36 +660,42 @@ export default function MembershipsPage() {
               {/* Price, Total Sessions, Validity */}
               <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: "16px" }}>
                 <div>
-                  <label style={{ display: "block", fontSize: "0.85rem", color: "#475569", fontWeight: 600, marginBottom: "6px" }}>Price</label>
+                  <label style={{ display: "block", fontSize: "0.85rem", color: "#475569", fontWeight: 600, marginBottom: "8px" }}>Price</label>
                   <input 
                     type="number" 
                     min="0"
                     placeholder="0" 
                     value={packageForm.price} 
                     onChange={(e) => setPackageForm({ ...packageForm, price: e.target.value })} 
-                   
+                    style={{ width: "100%", padding: "10px 14px", borderRadius: "8px", border: "1px solid #cbd5e1", fontSize: "0.95rem", color: "#0f172a", outline: "none", boxSizing: "border-box", transition: "all 0.2s", boxShadow: "0 1px 2px rgba(0,0,0,0.02)" }}
+                    onFocus={(e) => { e.target.style.borderColor = "#3b82f6"; e.target.style.boxShadow = "0 0 0 3px rgba(59, 130, 246, 0.1)"; }}
+                    onBlur={(e) => { e.target.style.borderColor = "#cbd5e1"; e.target.style.boxShadow = "0 1px 2px rgba(0,0,0,0.02)"; }}
                   />
                 </div>
                 <div>
-                  <label style={{ display: "block", fontSize: "0.85rem", color: "#475569", fontWeight: 600, marginBottom: "6px" }}>Total sessions</label>
+                  <label style={{ display: "block", fontSize: "0.85rem", color: "#475569", fontWeight: 600, marginBottom: "8px" }}>Total sessions</label>
                   <input 
                     type="number" 
                     min="1"
                     placeholder="5" 
                     value={packageForm.totalSessions} 
                     onChange={(e) => setPackageForm({ ...packageForm, totalSessions: e.target.value })} 
-                   
+                    style={{ width: "100%", padding: "10px 14px", borderRadius: "8px", border: "1px solid #cbd5e1", fontSize: "0.95rem", color: "#0f172a", outline: "none", boxSizing: "border-box", transition: "all 0.2s", boxShadow: "0 1px 2px rgba(0,0,0,0.02)" }}
+                    onFocus={(e) => { e.target.style.borderColor = "#3b82f6"; e.target.style.boxShadow = "0 0 0 3px rgba(59, 130, 246, 0.1)"; }}
+                    onBlur={(e) => { e.target.style.borderColor = "#cbd5e1"; e.target.style.boxShadow = "0 1px 2px rgba(0,0,0,0.02)"; }}
                   />
                 </div>
                 <div>
-                  <label style={{ display: "block", fontSize: "0.85rem", color: "#475569", fontWeight: 600, marginBottom: "6px" }}>Validity (Days)</label>
+                  <label style={{ display: "block", fontSize: "0.85rem", color: "#475569", fontWeight: 600, marginBottom: "8px" }}>Validity (Days)</label>
                   <input 
                     type="number" 
                     min="1"
                     placeholder="60" 
                     value={packageForm.validityDays} 
                     onChange={(e) => setPackageForm({ ...packageForm, validityDays: e.target.value })} 
-                   
+                    style={{ width: "100%", padding: "10px 14px", borderRadius: "8px", border: "1px solid #cbd5e1", fontSize: "0.95rem", color: "#0f172a", outline: "none", boxSizing: "border-box", transition: "all 0.2s", boxShadow: "0 1px 2px rgba(0,0,0,0.02)" }}
+                    onFocus={(e) => { e.target.style.borderColor = "#3b82f6"; e.target.style.boxShadow = "0 0 0 3px rgba(59, 130, 246, 0.1)"; }}
+                    onBlur={(e) => { e.target.style.borderColor = "#cbd5e1"; e.target.style.boxShadow = "0 1px 2px rgba(0,0,0,0.02)"; }}
                   />
                 </div>
               </div>
@@ -745,7 +753,9 @@ export default function MembershipsPage() {
                   placeholder="Search services..."
                   value={serviceSearch}
                   onChange={(e) => setServiceSearch(e.target.value)}
-                 
+                  style={{ width: "100%", padding: "10px 14px", borderRadius: "8px", border: "1px solid #cbd5e1", fontSize: "0.95rem", color: "#0f172a", outline: "none", boxSizing: "border-box", marginBottom: "12px", transition: "all 0.2s", boxShadow: "0 1px 2px rgba(0,0,0,0.02)" }}
+                  onFocus={(e) => { e.target.style.borderColor = "#3b82f6"; e.target.style.boxShadow = "0 0 0 3px rgba(59, 130, 246, 0.1)"; }}
+                  onBlur={(e) => { e.target.style.borderColor = "#cbd5e1"; e.target.style.boxShadow = "0 1px 2px rgba(0,0,0,0.02)"; }}
                 />
                 <div style={{ display: "flex", flexWrap: "wrap", gap: "8px", maxHeight: "150px", overflowY: "auto" }}>
                   {services.filter(s => s.name.toLowerCase().includes(serviceSearch.toLowerCase())).map((service) => {
@@ -779,7 +789,9 @@ export default function MembershipsPage() {
                     placeholder="Search products..." 
                     value={productSearch} 
                     onChange={(e) => setProductSearch(e.target.value)} 
-                   
+                    style={{ width: "100%", padding: "10px 14px", borderRadius: "8px", border: "1px solid #cbd5e1", fontSize: "0.95rem", color: "#0f172a", outline: "none", boxSizing: "border-box", marginBottom: "12px", transition: "all 0.2s", boxShadow: "0 1px 2px rgba(0,0,0,0.02)" }}
+                    onFocus={(e) => { e.target.style.borderColor = "#f97316"; e.target.style.boxShadow = "0 0 0 3px rgba(249, 115, 22, 0.1)"; }}
+                    onBlur={(e) => { e.target.style.borderColor = "#cbd5e1"; e.target.style.boxShadow = "0 1px 2px rgba(0,0,0,0.02)"; }}
                   />
                   <div style={{ display: "flex", flexWrap: "wrap", gap: "8px", maxHeight: "150px", overflowY: "auto" }}>
                     {products.filter(p => p.name.toLowerCase().includes(productSearch.toLowerCase())).map((product) => {
@@ -816,8 +828,8 @@ export default function MembershipsPage() {
 
               {/* Actions */}
               <div style={{ display: "flex", justifyContent: "flex-end", gap: "12px", marginTop: "10px" }}>
-                <button type="button" onClick={() => { setPackageForm(emptyPackage); setServiceSearch(""); setProductSearch(""); setShowPackageModal(false); }} style={{ padding: "8px 24px", borderRadius: "6px", border: "1px solid #cbd5e1", background: "#f1f5f9", color: "#475569", fontWeight: 600, cursor: "pointer" }}>Cancel</button>
-                <button type="submit" style={{ padding: "8px 32px", borderRadius: "6px", border: "none", background: "var(--button-bg-solid, #3b82f6)", color: "white", fontWeight: 600, cursor: "pointer", transition: "opacity 0.2s" }}>Save</button>
+                <button type="button" onClick={() => { setPackageForm(emptyPackage); setServiceSearch(""); setProductSearch(""); setShowPackageModal(false); }} style={{ padding: "10px 24px", borderRadius: "8px", border: "1px solid #cbd5e1", background: "white", color: "#475569", fontWeight: 600, cursor: "pointer", transition: "all 0.2s" }} onMouseEnter={(e) => e.target.style.background = "#f8fafc"} onMouseLeave={(e) => e.target.style.background = "white"}>Cancel</button>
+                <button type="submit" style={{ padding: "10px 32px", borderRadius: "8px", border: "none", background: "#0f172a", color: "white", fontWeight: 700, cursor: "pointer", transition: "all 0.2s", boxShadow: "0 2px 4px rgba(0,0,0,0.1)" }} onMouseEnter={(e) => { e.target.style.transform = "translateY(-1px)"; e.target.style.boxShadow = "0 4px 6px rgba(0,0,0,0.15)"; }} onMouseLeave={(e) => { e.target.style.transform = "translateY(0)"; e.target.style.boxShadow = "0 2px 4px rgba(0,0,0,0.1)"; }}>Save Package</button>
               </div>
 
             </form>
@@ -975,34 +987,42 @@ export default function MembershipsPage() {
               
               {loading ? <PageLoader compact title="Loading..." /> : null}
               
-              <div className="table-responsive" style={{ background: "#fff" }}>
-              <table style={{ width: "100%", borderCollapse: "collapse", textAlign: "left" }}>
+              <div style={{ overflowX: "auto" }}>
+              <table style={{ width: "100%", borderCollapse: "collapse", textAlign: "left", minWidth: 800 }}>
                 <thead>
-                  <tr style={{ borderBottom: "1px solid #e2e8f0" }}>
-                    <th style={{ padding: "16px 24px", color: "#64748b", fontWeight: 600, fontSize: "0.75rem", textTransform: "uppercase", letterSpacing: "0.05em" }}>Plan Name</th>
-                    <th style={{ padding: "16px 24px", color: "#64748b", fontWeight: 600, fontSize: "0.75rem", textTransform: "uppercase", letterSpacing: "0.05em" }}>Type</th>
-                    <th style={{ padding: "16px 24px", color: "#64748b", fontWeight: 600, fontSize: "0.75rem", textTransform: "uppercase", letterSpacing: "0.05em" }}>Price</th>
-                    <th style={{ padding: "16px 24px", color: "#64748b", fontWeight: 600, fontSize: "0.75rem", textTransform: "uppercase", letterSpacing: "0.05em" }}>Validity</th>
-                    <th style={{ padding: "16px 24px", color: "#64748b", fontWeight: 600, fontSize: "0.75rem", textTransform: "uppercase", letterSpacing: "0.05em" }}>Benefit</th>
-                    <th style={{ padding: "16px 24px", textAlign: "right", color: "#64748b", fontWeight: 600, fontSize: "0.75rem", textTransform: "uppercase", letterSpacing: "0.05em" }}>Actions</th>
+                  <tr style={{ backgroundColor: "#f8fafc", borderBottom: "1px solid #e2e8f0" }}>
+                    <th style={{ padding: "12px 16px", fontWeight: 600, color: "#475569", fontSize: 13 }}>Plan Name</th>
+                    <th style={{ padding: "12px 16px", fontWeight: 600, color: "#475569", fontSize: 13 }}>Type</th>
+                    <th style={{ padding: "12px 16px", fontWeight: 600, color: "#475569", fontSize: 13 }}>Price</th>
+                    <th style={{ padding: "12px 16px", fontWeight: 600, color: "#475569", fontSize: 13 }}>Validity</th>
+                    <th style={{ padding: "12px 16px", fontWeight: 600, color: "#475569", fontSize: 13 }}>Benefit</th>
+                    <th style={{ padding: "12px 16px", fontWeight: 600, color: "#475569", fontSize: 13, textAlign: "right" }}>Actions</th>
                   </tr>
                 </thead>
                 <tbody>
                   {(customerMembershipMode ? (selectedCustomerHistory?.memberships || []) : filteredMemberships).map((item) => (
-                    <tr key={item.id} style={{ borderBottom: "1px solid #f1f5f9", transition: "background 0.2s" }} onMouseEnter={(e) => e.currentTarget.style.background = "#f8fafc"} onMouseLeave={(e) => e.currentTarget.style.background = "transparent"}>
-                      <td style={{ padding: "16px 24px", fontWeight: 600, color: "#0f172a", fontSize: "0.95rem" }}>{customerMembershipMode ? item.membershipPlan?.name : item.name}</td>
-                      <td style={{ padding: "16px 24px" }}>
-                        <span className="badge" style={{ background: "#f1f5f9", color: "#475569", padding: "6px 12px", borderRadius: 20, fontSize: "0.75rem", fontWeight: 600 }}>
-                          {customerMembershipMode ? item.status : (item.benefitType === "WALLET_VALUE" ? "Fixed Wallet" : "Percentage")}
-                        </span>
+                    <tr key={item.id} style={{ borderBottom: "1px solid #f1f5f9" }} className="table-row-hover">
+                      <td style={{ padding: "12px 16px" }}>
+                        <div style={{ fontWeight: 600, color: "#0f172a", fontSize: 14 }}>{customerMembershipMode ? item.membershipPlan?.name : item.name}</div>
                       </td>
-                      <td style={{ padding: "16px 24px", fontWeight: 700, color: "#10b981", fontSize: "0.95rem" }}>{formatMoney(Number(item.price || 0))}</td>
-                      <td style={{ padding: "16px 24px", color: "#64748b", fontSize: "0.9rem" }}>{customerMembershipMode ? `Ends ${String(item.endsAt).slice(0, 10)}` : `${item.validityDays} days`}</td>
-                      <td style={{ padding: "16px 24px", color: "#3b82f6", fontWeight: 700, fontSize: "0.95rem" }}>{customerMembershipMode ? formatMoney(Number(item.remainingWalletValue || 0)) : (item.benefitType === "WALLET_VALUE" ? formatMoney(Number(item.walletValue || 0)) : `${item.discountValue}%`)}</td>
-                      <td style={{ padding: "16px 24px", textAlign: "right" }}>
+                      <td style={{ padding: "12px 16px" }}>
+                        <div style={{ padding: "2px 6px", display: "inline-block", backgroundColor: "#f1f5f9", borderRadius: 4, fontSize: 11, color: "#475569" }}>
+                          {customerMembershipMode ? item.status : (item.benefitType === "WALLET_VALUE" ? "Fixed Wallet" : "Percentage")}
+                        </div>
+                      </td>
+                      <td style={{ padding: "12px 16px" }}>
+                        <div style={{ fontWeight: 600, color: "#10b981", fontSize: 14 }}>{formatMoney(Number(item.price || 0))}</div>
+                      </td>
+                      <td style={{ padding: "12px 16px" }}>
+                        <div style={{ fontSize: 13, color: "#334155" }}>{customerMembershipMode ? `Ends ${String(item.endsAt).slice(0, 10)}` : `${item.validityDays} days`}</div>
+                      </td>
+                      <td style={{ padding: "12px 16px" }}>
+                        <div style={{ fontSize: 13, color: "#3b82f6", fontWeight: 600 }}>{customerMembershipMode ? formatMoney(Number(item.remainingWalletValue || 0)) : (item.benefitType === "WALLET_VALUE" ? formatMoney(Number(item.walletValue || 0)) : `${item.discountValue}%`)}</div>
+                      </td>
+                      <td style={{ padding: "12px 16px", textAlign: "right" }}>
                         {!customerMembershipMode && (
-                          <div style={{ display: "flex", gap: 8, justifyContent: "flex-end" }}>
-                            <Link to={`/admin/memberships/${item.id}/edit`} style={{ display: "flex", background: "transparent", border: "none", color: "#64748b", cursor: "pointer", padding: 6, borderRadius: "50%" }} onMouseEnter={(e) => e.currentTarget.style.background = "#f1f5f9"} onMouseLeave={(e) => e.currentTarget.style.background = "transparent"} title="Edit">
+                          <div style={{ display: "flex", alignItems: "center", justifyContent: "flex-end", gap: 8 }}>
+                            <Link to={`/admin/memberships/${item.id}/edit`} className="icon-btn" style={{ padding: 6, color: "#64748b", background: "none", border: "none", cursor: "pointer", display: "flex" }} title="Edit">
                               <Edit2 size={16} />
                             </Link>
                             <button type="button" onClick={async () => {
@@ -1018,7 +1038,7 @@ export default function MembershipsPage() {
                               } finally {
                                 setDeletingId(null);
                               }
-                            }} disabled={deletingId === item.id} style={{ display: "flex", background: "transparent", border: "none", color: "#ef4444", cursor: "pointer", padding: 6, borderRadius: "50%" }} onMouseEnter={(e) => e.currentTarget.style.background = "#fee2e2"} onMouseLeave={(e) => e.currentTarget.style.background = "transparent"} title="Delete">
+                            }} disabled={deletingId === item.id} className="icon-btn" style={{ padding: 6, color: "#ef4444", background: "none", border: "none", cursor: "pointer", display: "flex" }} title="Delete">
                               {deletingId === item.id ? "..." : <Trash2 size={16} />}
                             </button>
                           </div>
@@ -1065,34 +1085,40 @@ export default function MembershipsPage() {
               
               {loading ? <PageLoader compact title="Loading..." /> : null}
               
-              <div className="table-responsive" style={{ background: "#fff" }}>
-              <table style={{ width: "100%", borderCollapse: "collapse", textAlign: "left" }}>
+              <div style={{ overflowX: "auto" }}>
+              <table style={{ width: "100%", borderCollapse: "collapse", textAlign: "left", minWidth: 800 }}>
                 <thead>
-                  <tr style={{ borderBottom: "1px solid #e2e8f0" }}>
-                    <th style={{ padding: "16px 24px", color: "#64748b", fontWeight: 600, fontSize: "0.75rem", textTransform: "uppercase", letterSpacing: "0.05em" }}>Package Name</th>
-                    <th style={{ padding: "16px 24px", color: "#64748b", fontWeight: 600, fontSize: "0.75rem", textTransform: "uppercase", letterSpacing: "0.05em" }}>Price</th>
-                    <th style={{ padding: "16px 24px", color: "#64748b", fontWeight: 600, fontSize: "0.75rem", textTransform: "uppercase", letterSpacing: "0.05em" }}>Sessions</th>
-                    <th style={{ padding: "16px 24px", color: "#64748b", fontWeight: 600, fontSize: "0.75rem", textTransform: "uppercase", letterSpacing: "0.05em" }}>Validity</th>
-                    <th style={{ padding: "16px 24px", textAlign: "right", color: "#64748b", fontWeight: 600, fontSize: "0.75rem", textTransform: "uppercase", letterSpacing: "0.05em" }}>Actions</th>
+                  <tr style={{ backgroundColor: "#f8fafc", borderBottom: "1px solid #e2e8f0" }}>
+                    <th style={{ padding: "12px 16px", fontWeight: 600, color: "#475569", fontSize: 13 }}>Package Name</th>
+                    <th style={{ padding: "12px 16px", fontWeight: 600, color: "#475569", fontSize: 13 }}>Price</th>
+                    <th style={{ padding: "12px 16px", fontWeight: 600, color: "#475569", fontSize: 13 }}>Sessions</th>
+                    <th style={{ padding: "12px 16px", fontWeight: 600, color: "#475569", fontSize: 13 }}>Validity</th>
+                    <th style={{ padding: "12px 16px", fontWeight: 600, color: "#475569", fontSize: 13, textAlign: "right" }}>Actions</th>
                   </tr>
                 </thead>
                 <tbody>
                   {(customerPackageMode ? (selectedCustomerHistory?.packages || []) : filteredPackages).map((item) => (
-                    <tr key={item.id} style={{ borderBottom: "1px solid #f1f5f9", transition: "background 0.2s" }} onMouseEnter={(e) => e.currentTarget.style.background = "#f8fafc"} onMouseLeave={(e) => e.currentTarget.style.background = "transparent"}>
-                      <td style={{ padding: "16px 24px", fontWeight: 600, color: "#0f172a", fontSize: "0.95rem" }}>{customerPackageMode ? item.package?.name : item.name}</td>
-                      <td style={{ padding: "16px 24px", fontWeight: 700, color: "#10b981", fontSize: "0.95rem" }}>{formatMoney(Number(item.price || 0))}</td>
-                      <td style={{ padding: "16px 24px" }}>
+                    <tr key={item.id} style={{ borderBottom: "1px solid #f1f5f9" }} className="table-row-hover">
+                      <td style={{ padding: "12px 16px" }}>
+                        <div style={{ fontWeight: 600, color: "#0f172a", fontSize: 14 }}>{customerPackageMode ? item.package?.name : item.name}</div>
+                      </td>
+                      <td style={{ padding: "12px 16px" }}>
+                        <div style={{ fontWeight: 600, color: "#10b981", fontSize: 14 }}>{formatMoney(Number(item.price || 0))}</div>
+                      </td>
+                      <td style={{ padding: "12px 16px" }}>
                         {customerPackageMode ? 
-                          <span className="badge" style={{ background: "#f3e8ff", color: "#6d28d9", padding: "6px 12px", borderRadius: 20, fontSize: "0.75rem", fontWeight: 700 }}>{item.remainingSessions} remaining</span> 
+                          <div style={{ display: "inline-block", background: "#f3e8ff", color: "#6d28d9", padding: "2px 6px", borderRadius: 4, fontSize: 11, fontWeight: 600 }}>{item.remainingSessions} remaining</div> 
                           : 
-                          <span style={{ color: "#475569", fontSize: "0.9rem", fontWeight: 600 }}>{item.totalSessions} sessions</span>
+                          <div style={{ fontSize: 13, color: "#334155" }}>{item.totalSessions} sessions</div>
                         }
                       </td>
-                      <td style={{ padding: "16px 24px", color: "#64748b", fontSize: "0.9rem" }}>{customerPackageMode ? `Ends ${String(item.endsAt).slice(0, 10)}` : `${item.validityDays} days`}</td>
-                      <td style={{ padding: "16px 24px", textAlign: "right" }}>
+                      <td style={{ padding: "12px 16px" }}>
+                        <div style={{ fontSize: 13, color: "#334155" }}>{customerPackageMode ? `Ends ${String(item.endsAt).slice(0, 10)}` : `${item.validityDays} days`}</div>
+                      </td>
+                      <td style={{ padding: "12px 16px", textAlign: "right" }}>
                         {!customerPackageMode && (
-                          <div style={{ display: "flex", gap: 8, justifyContent: "flex-end" }}>
-                            <Link to={`/admin/packages/${item.id}/edit`} style={{ display: "flex", background: "transparent", border: "none", color: "#64748b", cursor: "pointer", padding: 6, borderRadius: "50%" }} onMouseEnter={(e) => e.currentTarget.style.background = "#f1f5f9"} onMouseLeave={(e) => e.currentTarget.style.background = "transparent"} title="Edit">
+                          <div style={{ display: "flex", alignItems: "center", justifyContent: "flex-end", gap: 8 }}>
+                            <Link to={`/admin/packages/${item.id}/edit`} className="icon-btn" style={{ padding: 6, color: "#64748b", background: "none", border: "none", cursor: "pointer", display: "flex" }} title="Edit">
                               <Edit2 size={16} />
                             </Link>
                             <button type="button" onClick={async () => {
@@ -1108,7 +1134,7 @@ export default function MembershipsPage() {
                               } finally {
                                 setDeletingId(null);
                               }
-                            }} disabled={deletingId === item.id} style={{ display: "flex", background: "transparent", border: "none", color: "#ef4444", cursor: "pointer", padding: 6, borderRadius: "50%" }} onMouseEnter={(e) => e.currentTarget.style.background = "#fee2e2"} onMouseLeave={(e) => e.currentTarget.style.background = "transparent"} title="Delete">
+                            }} disabled={deletingId === item.id} className="icon-btn" style={{ padding: 6, color: "#ef4444", background: "none", border: "none", cursor: "pointer", display: "flex" }} title="Delete">
                               {deletingId === item.id ? "..." : <Trash2 size={16} />}
                             </button>
                           </div>
