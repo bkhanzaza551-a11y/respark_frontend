@@ -2,7 +2,7 @@ import { useEffect, useState, useCallback, useRef } from "react";
 import CustomDropdown from '../../components/common/CustomDropdown';
 import ToggleSwitch from "../../components/common/ToggleSwitch";
 import PremiumToast from "../../components/common/PremiumToast";
-import { Search, Plus, Package, X, Check, Edit2, Trash2, Camera, Download, Upload, AlertCircle, Eye, EyeOff } from "lucide-react";
+import { Search, Plus, Package, X, Check, Edit2, Trash2, Camera, Download, Upload, AlertCircle, Eye, EyeOff, ClipboardList } from "lucide-react";
 import { api } from "../../api/client";
 import { formatApiError } from "../../utils/apiError";
 import { useSalonSettings } from "../../context/SalonSettingsContext";
