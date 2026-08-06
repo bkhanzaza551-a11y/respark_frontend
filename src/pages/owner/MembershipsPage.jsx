@@ -946,20 +946,28 @@ export default function MembershipsPage() {
           />
         )}
         
-        <div className="crm-table-container">
+        <div className="page-shell">
           {activeSection === "memberships" && (
-            <div style={{ background: "white", borderRadius: 16, padding: 24, boxShadow: "0 1px 3px rgba(0,0,0,0.05)" }}>
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 24 }}>
-                <h3 style={{ margin: 0, fontSize: 20, fontWeight: 700, color: "#0f172a" }}>{customerMembershipMode ? "Assigned Memberships" : "Membership Plans"}</h3>
+            <div className="panel-card" style={{ padding: 0, overflow: "hidden", marginTop: 24 }}>
+              <div style={{ padding: 16, borderBottom: "1px solid #e2e8f0", display: "flex", justifyContent: "space-between", alignItems: "center", backgroundColor: "#fff", flexWrap: "wrap", gap: 16 }}>
+                <div style={{ flex: 1, maxWidth: 320, position: "relative" }}>
+                  <Search size={16} style={{ position: "absolute", left: 12, top: 10, color: "#64748b" }} />
+                  <input 
+                    placeholder="Search memberships..." 
+                    value={searchQuery || ""} 
+                    onChange={(e) => setSearchQuery(e.target.value)} 
+                    style={{ width: "100%", padding: "8px 12px 8px 36px", border: "1px solid #e2e8f0", borderRadius: 6, fontSize: 14 }}
+                  />
+                </div>
                 <div style={{ display: "flex", gap: 12 }}>
                   {!customerMembershipMode && (
-                    <button onClick={() => setShowAssignMembershipModal(true)} className="secondary-button" style={{ display: "flex", alignItems: "center", gap: 8 }}><UserPlus size={16}/> Assign</button>
+                    <button onClick={() => setShowAssignMembershipModal(true)} style={{ display: "flex", alignItems: "center", gap: 8, background: "white", border: "1px solid #e2e8f0", padding: "8px 16px", borderRadius: 6, fontSize: 14, fontWeight: 500, color: "#475569", cursor: "pointer" }}><UserPlus size={16}/> Assign</button>
                   )}
                   {!customerMembershipMode && (
-                    <button onClick={() => setShowMembershipModal(true)} className="cta-button" style={{ display: "flex", alignItems: "center", gap: 8, background: "#0f172a", color: "white", padding: "8px 16px", borderRadius: 8, fontWeight: 600, border: "none", cursor: "pointer" }}><Plus size={16}/> Create Plan</button>
+                    <button onClick={() => setShowMembershipModal(true)} style={{ display: "flex", alignItems: "center", gap: 8, background: "#10b981", color: "white", padding: "8px 16px", borderRadius: 6, fontSize: 14, fontWeight: 500, border: "none", cursor: "pointer" }}><Plus size={16}/> Create Plan</button>
                   )}
                   {customerMembershipMode && (
-                    <button onClick={() => setShowAssignMembershipModal(true)} className="cta-button" style={{ display: "flex", alignItems: "center", gap: 8, background: "#0f172a", color: "white", padding: "8px 16px", borderRadius: 8, fontWeight: 600, border: "none", cursor: "pointer" }}><Plus size={16}/> Assign Membership</button>
+                    <button onClick={() => setShowAssignMembershipModal(true)} style={{ display: "flex", alignItems: "center", gap: 8, background: "#10b981", color: "white", padding: "8px 16px", borderRadius: 6, fontSize: 14, fontWeight: 500, border: "none", cursor: "pointer" }}><Plus size={16}/> Assign Membership</button>
                   )}
                 </div>
               </div>
@@ -1024,18 +1032,26 @@ export default function MembershipsPage() {
           )}
 
           {activeSection === "packages" && (
-            <div style={{ background: "white", borderRadius: 16, padding: 24, boxShadow: "0 1px 3px rgba(0,0,0,0.05)" }}>
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 24 }}>
-                <h3 style={{ margin: 0, fontSize: 20, fontWeight: 700, color: "#0f172a" }}>{customerPackageMode ? "Assigned Packages" : "Packages"}</h3>
+            <div className="panel-card" style={{ padding: 0, overflow: "hidden", marginTop: 24 }}>
+              <div style={{ padding: 16, borderBottom: "1px solid #e2e8f0", display: "flex", justifyContent: "space-between", alignItems: "center", backgroundColor: "#fff", flexWrap: "wrap", gap: 16 }}>
+                <div style={{ flex: 1, maxWidth: 320, position: "relative" }}>
+                  <Search size={16} style={{ position: "absolute", left: 12, top: 10, color: "#64748b" }} />
+                  <input 
+                    placeholder="Search packages..." 
+                    value={searchQuery || ""} 
+                    onChange={(e) => setSearchQuery(e.target.value)} 
+                    style={{ width: "100%", padding: "8px 12px 8px 36px", border: "1px solid #e2e8f0", borderRadius: 6, fontSize: 14 }}
+                  />
+                </div>
                 <div style={{ display: "flex", gap: 12 }}>
                   {!customerPackageMode && (
-                    <button onClick={() => setShowAssignPackageModal(true)} className="secondary-button" style={{ display: "flex", alignItems: "center", gap: 8 }}><UserPlus size={16}/> Assign</button>
+                    <button onClick={() => setShowAssignPackageModal(true)} style={{ display: "flex", alignItems: "center", gap: 8, background: "white", border: "1px solid #e2e8f0", padding: "8px 16px", borderRadius: 6, fontSize: 14, fontWeight: 500, color: "#475569", cursor: "pointer" }}><UserPlus size={16}/> Assign</button>
                   )}
                   {!customerPackageMode && (
-                    <button onClick={() => setShowPackageModal(true)} className="cta-button" style={{ display: "flex", alignItems: "center", gap: 8, background: "#0f172a", color: "white", padding: "8px 16px", borderRadius: 8, fontWeight: 600, border: "none", cursor: "pointer" }}><Plus size={16}/> Create Package</button>
+                    <button onClick={() => setShowPackageModal(true)} style={{ display: "flex", alignItems: "center", gap: 8, background: "#10b981", color: "white", padding: "8px 16px", borderRadius: 6, fontSize: 14, fontWeight: 500, border: "none", cursor: "pointer" }}><Plus size={16}/> Create Package</button>
                   )}
                   {customerPackageMode && (
-                    <button onClick={() => setShowAssignPackageModal(true)} className="cta-button" style={{ display: "flex", alignItems: "center", gap: 8, background: "#0f172a", color: "white", padding: "8px 16px", borderRadius: 8, fontWeight: 600, border: "none", cursor: "pointer" }}><Plus size={16}/> Assign Package</button>
+                    <button onClick={() => setShowAssignPackageModal(true)} style={{ display: "flex", alignItems: "center", gap: 8, background: "#10b981", color: "white", padding: "8px 16px", borderRadius: 6, fontSize: 14, fontWeight: 500, border: "none", cursor: "pointer" }}><Plus size={16}/> Assign Package</button>
                   )}
                 </div>
               </div>
