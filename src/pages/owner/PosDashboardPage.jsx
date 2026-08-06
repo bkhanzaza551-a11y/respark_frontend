@@ -1203,14 +1203,16 @@ export default function PosDashboardPage() {
                               </div>
                             ) : null}
                             {item.itemType === 'SERVICE' && (
-                              <div style={{ display: "flex", flexDirection: "column", gap: 3, marginTop: 4 }}>
-                                {(posContext.services?.find(s => s.id === item.serviceId)?.consumables || [])?.map((c, ci) => {
+                              <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginTop: 6, alignItems: "center" }}>
+                                {(posContext.services?.find(s => s.id === item.serviceId)?.consumables || [])
+                                  .filter((c, i, self) => i === self.findIndex((t) => t.productId === c.productId))
+                                  .map((c, ci) => {
                                   const overrideKey = `${item.serviceId}:${c.productId}`;
                                   const currentVal = consumableOverrides[overrideKey] !== undefined ? consumableOverrides[overrideKey] : c.reqdQty;
                                   const unit = c.product?.unit || 'pcs';
                                   return (
-                                    <div key={ci} style={{ fontSize: 11, color: "#334155", display: "flex", alignItems: "center", gap: 4, background: "#f1f5f9", padding: "2px 6px", borderRadius: 4, width: "fit-content" }}>
-                                      <span style={{ color: "#64748b", fontWeight: 600 }}>🧪 {c.product?.name || "Consumable"}:</span>
+                                    <div key={ci} style={{ fontSize: 11, color: "#334155", display: "flex", alignItems: "center", gap: 4, background: "#f1f5f9", padding: "2px 8px", borderRadius: 6, border: "1px solid #e2e8f0" }}>
+                                      <span style={{ color: "#2563eb", fontWeight: 600 }}>🧪 {c.product?.name || "Consumable"}:</span>
                                       <input
                                         type="number"
                                         min="0"
@@ -1221,20 +1223,23 @@ export default function PosDashboardPage() {
                                           setConsumableOverrides(prev => ({ ...prev, [overrideKey]: val }));
                                         }}
                                         onClick={(e) => e.stopPropagation()}
-                                        style={{ width: 44, padding: "1px 3px", border: "1px solid #cbd5e1", borderRadius: 4, fontSize: 11, textAlign: "center", fontWeight: 700, background: "#fff" }}
+                                        style={{ width: 44, padding: "2px 4px", border: "1px solid #cbd5e1", borderRadius: 4, fontSize: 11, textAlign: "center", fontWeight: 700, background: "#fff", outline: "none" }}
                                         title="Edit quantity of consumable used for this client"
+                                        onFocus={(e) => e.target.style.borderColor = "#3b82f6"}
+                                        onBlur={(e) => e.target.style.borderColor = "#cbd5e1"}
                                       />
                                       <span style={{ fontWeight: 600, color: "#64748b" }}>{unit}</span>
                                     </div>
                                   );
                                 })}
+                                {item.consumables?.length ? item.consumables.map((entry, cidx) => (
+                                  <div key={`extra-${cidx}`} style={{ fontSize: 11, color: "#16a34a", display: "flex", alignItems: "center", gap: 4, background: "#f0fdf4", padding: "2px 8px", borderRadius: 6, border: "1px solid #bbf7d0" }}>
+                                    <span style={{ fontWeight: 600 }}>➕ {entry.name}:</span>
+                                    <span style={{ fontWeight: 700 }}>{entry.qty} {entry.unit || 'pcs'}</span>
+                                  </div>
+                                )) : null}
                               </div>
                             )}
-                            {item.consumables?.length ? (
-                              <div style={{ fontSize: 11, color: "#64748b", marginTop: 4 }}>
-                                Consumables: {item.consumables.map((entry) => `${entry.name} x${entry.qty}`).join(", ")}
-                              </div>
-                            ) : null}
                           </div>
                           <div>
                             <CustomDropdown value={item.staffUserSalonId || ""} onChange={(event) => updateItem(index, { staffUserSalonId: event.target.value })} style={{ width: "100%", padding: 4, borderRadius: 4, border: "1px solid #cbd5e1" }} disabled={!isEditing}>
