@@ -949,8 +949,8 @@ export default function MembershipsPage() {
         
         <div className="page-shell">
           {activeSection === "memberships" && (
-            <div className="panel-card" style={{ padding: 0, overflow: "hidden", marginTop: 24 }}>
-              <div style={{ padding: 16, borderBottom: "1px solid #e2e8f0", display: "flex", justifyContent: "space-between", alignItems: "center", backgroundColor: "#fff", flexWrap: "wrap", gap: 16 }}>
+            <div className="panel-card" style={{ padding: 0, overflow: "hidden", marginTop: 24, borderRadius: 16, border: "1px solid #e2e8f0", boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03)" }}>
+              <div style={{ padding: "20px 24px", borderBottom: "1px solid #e2e8f0", display: "flex", justifyContent: "space-between", alignItems: "center", backgroundColor: "#f8fafc", flexWrap: "wrap", gap: 16 }}>
                 <div style={{ flex: 1, maxWidth: 320, position: "relative" }}>
                   <Search size={16} style={{ position: "absolute", left: 12, top: 10, color: "#64748b" }} />
                   <input 
@@ -975,31 +975,31 @@ export default function MembershipsPage() {
               
               {loading ? <PageLoader compact title="Loading..." /> : null}
               
-              <div className="table-responsive">
-              <table className="rpt-table">
+              <div className="table-responsive" style={{ background: "#fff" }}>
+              <table style={{ width: "100%", borderCollapse: "collapse", textAlign: "left" }}>
                 <thead>
-                  <tr>
-                    <th>Plan Name</th>
-                    <th>Type</th>
-                    <th>Price</th>
-                    <th>Validity</th>
-                    <th>Benefit</th>
-                    <th style={{ textAlign: "right" }}>Actions</th>
+                  <tr style={{ borderBottom: "1px solid #e2e8f0" }}>
+                    <th style={{ padding: "16px 24px", color: "#64748b", fontWeight: 600, fontSize: "0.75rem", textTransform: "uppercase", letterSpacing: "0.05em" }}>Plan Name</th>
+                    <th style={{ padding: "16px 24px", color: "#64748b", fontWeight: 600, fontSize: "0.75rem", textTransform: "uppercase", letterSpacing: "0.05em" }}>Type</th>
+                    <th style={{ padding: "16px 24px", color: "#64748b", fontWeight: 600, fontSize: "0.75rem", textTransform: "uppercase", letterSpacing: "0.05em" }}>Price</th>
+                    <th style={{ padding: "16px 24px", color: "#64748b", fontWeight: 600, fontSize: "0.75rem", textTransform: "uppercase", letterSpacing: "0.05em" }}>Validity</th>
+                    <th style={{ padding: "16px 24px", color: "#64748b", fontWeight: 600, fontSize: "0.75rem", textTransform: "uppercase", letterSpacing: "0.05em" }}>Benefit</th>
+                    <th style={{ padding: "16px 24px", textAlign: "right", color: "#64748b", fontWeight: 600, fontSize: "0.75rem", textTransform: "uppercase", letterSpacing: "0.05em" }}>Actions</th>
                   </tr>
                 </thead>
                 <tbody>
                   {(customerMembershipMode ? (selectedCustomerHistory?.memberships || []) : filteredMemberships).map((item) => (
-                    <tr key={item.id}>
-                      <td style={{ fontWeight: 600, color: "#1e293b" }}>{customerMembershipMode ? item.membershipPlan?.name : item.name}</td>
-                      <td>
-                        <span className="badge" style={{ background: "#f1f5f9", color: "#475569", padding: "4px 8px", borderRadius: 6, fontSize: "0.8rem", fontWeight: 700 }}>
+                    <tr key={item.id} style={{ borderBottom: "1px solid #f1f5f9", transition: "background 0.2s" }} onMouseEnter={(e) => e.currentTarget.style.background = "#f8fafc"} onMouseLeave={(e) => e.currentTarget.style.background = "transparent"}>
+                      <td style={{ padding: "16px 24px", fontWeight: 600, color: "#0f172a", fontSize: "0.95rem" }}>{customerMembershipMode ? item.membershipPlan?.name : item.name}</td>
+                      <td style={{ padding: "16px 24px" }}>
+                        <span className="badge" style={{ background: "#f1f5f9", color: "#475569", padding: "6px 12px", borderRadius: 20, fontSize: "0.75rem", fontWeight: 600 }}>
                           {customerMembershipMode ? item.status : (item.benefitType === "WALLET_VALUE" ? "Fixed Wallet" : "Percentage")}
                         </span>
                       </td>
-                      <td style={{ fontWeight: 700, color: "#0f172a" }}>{formatMoney(Number(item.price || 0))}</td>
-                      <td style={{ color: "#475569", fontSize: "0.9rem" }}>{customerMembershipMode ? `Ends ${String(item.endsAt).slice(0, 10)}` : `${item.validityDays} days`}</td>
-                      <td style={{ color: "#3b82f6", fontWeight: 700 }}>{customerMembershipMode ? formatMoney(Number(item.remainingWalletValue || 0)) : (item.benefitType === "WALLET_VALUE" ? formatMoney(Number(item.walletValue || 0)) : `${item.discountValue}%`)}</td>
-                      <td style={{ textAlign: "right" }}>
+                      <td style={{ padding: "16px 24px", fontWeight: 700, color: "#10b981", fontSize: "0.95rem" }}>{formatMoney(Number(item.price || 0))}</td>
+                      <td style={{ padding: "16px 24px", color: "#64748b", fontSize: "0.9rem" }}>{customerMembershipMode ? `Ends ${String(item.endsAt).slice(0, 10)}` : `${item.validityDays} days`}</td>
+                      <td style={{ padding: "16px 24px", color: "#3b82f6", fontWeight: 700, fontSize: "0.95rem" }}>{customerMembershipMode ? formatMoney(Number(item.remainingWalletValue || 0)) : (item.benefitType === "WALLET_VALUE" ? formatMoney(Number(item.walletValue || 0)) : `${item.discountValue}%`)}</td>
+                      <td style={{ padding: "16px 24px", textAlign: "right" }}>
                         {!customerMembershipMode && (
                           <div style={{ display: "flex", gap: 8, justifyContent: "flex-end" }}>
                             <Link to={`/admin/memberships/${item.id}/edit`} style={{ display: "flex", background: "transparent", border: "none", color: "#64748b", cursor: "pointer", padding: 6, borderRadius: "50%" }} onMouseEnter={(e) => e.currentTarget.style.background = "#f1f5f9"} onMouseLeave={(e) => e.currentTarget.style.background = "transparent"} title="Edit">
@@ -1039,8 +1039,8 @@ export default function MembershipsPage() {
           )}
 
           {activeSection === "packages" && (
-            <div className="panel-card" style={{ padding: 0, overflow: "hidden", marginTop: 24 }}>
-              <div style={{ padding: 16, borderBottom: "1px solid #e2e8f0", display: "flex", justifyContent: "space-between", alignItems: "center", backgroundColor: "#fff", flexWrap: "wrap", gap: 16 }}>
+            <div className="panel-card" style={{ padding: 0, overflow: "hidden", marginTop: 24, borderRadius: 16, border: "1px solid #e2e8f0", boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03)" }}>
+              <div style={{ padding: "20px 24px", borderBottom: "1px solid #e2e8f0", display: "flex", justifyContent: "space-between", alignItems: "center", backgroundColor: "#f8fafc", flexWrap: "wrap", gap: 16 }}>
                 <div style={{ flex: 1, maxWidth: 320, position: "relative" }}>
                   <Search size={16} style={{ position: "absolute", left: 12, top: 10, color: "#64748b" }} />
                   <input 
@@ -1065,31 +1065,31 @@ export default function MembershipsPage() {
               
               {loading ? <PageLoader compact title="Loading..." /> : null}
               
-              <div className="table-responsive">
-              <table className="rpt-table">
+              <div className="table-responsive" style={{ background: "#fff" }}>
+              <table style={{ width: "100%", borderCollapse: "collapse", textAlign: "left" }}>
                 <thead>
-                  <tr>
-                    <th>Package Name</th>
-                    <th>Price</th>
-                    <th>Sessions</th>
-                    <th>Validity</th>
-                    <th style={{ textAlign: "right" }}>Actions</th>
+                  <tr style={{ borderBottom: "1px solid #e2e8f0" }}>
+                    <th style={{ padding: "16px 24px", color: "#64748b", fontWeight: 600, fontSize: "0.75rem", textTransform: "uppercase", letterSpacing: "0.05em" }}>Package Name</th>
+                    <th style={{ padding: "16px 24px", color: "#64748b", fontWeight: 600, fontSize: "0.75rem", textTransform: "uppercase", letterSpacing: "0.05em" }}>Price</th>
+                    <th style={{ padding: "16px 24px", color: "#64748b", fontWeight: 600, fontSize: "0.75rem", textTransform: "uppercase", letterSpacing: "0.05em" }}>Sessions</th>
+                    <th style={{ padding: "16px 24px", color: "#64748b", fontWeight: 600, fontSize: "0.75rem", textTransform: "uppercase", letterSpacing: "0.05em" }}>Validity</th>
+                    <th style={{ padding: "16px 24px", textAlign: "right", color: "#64748b", fontWeight: 600, fontSize: "0.75rem", textTransform: "uppercase", letterSpacing: "0.05em" }}>Actions</th>
                   </tr>
                 </thead>
                 <tbody>
                   {(customerPackageMode ? (selectedCustomerHistory?.packages || []) : filteredPackages).map((item) => (
-                    <tr key={item.id}>
-                      <td style={{ fontWeight: 600, color: "#1e293b" }}>{customerPackageMode ? item.package?.name : item.name}</td>
-                      <td style={{ fontWeight: 700, color: "#0f172a" }}>{formatMoney(Number(item.price || 0))}</td>
-                      <td>
+                    <tr key={item.id} style={{ borderBottom: "1px solid #f1f5f9", transition: "background 0.2s" }} onMouseEnter={(e) => e.currentTarget.style.background = "#f8fafc"} onMouseLeave={(e) => e.currentTarget.style.background = "transparent"}>
+                      <td style={{ padding: "16px 24px", fontWeight: 600, color: "#0f172a", fontSize: "0.95rem" }}>{customerPackageMode ? item.package?.name : item.name}</td>
+                      <td style={{ padding: "16px 24px", fontWeight: 700, color: "#10b981", fontSize: "0.95rem" }}>{formatMoney(Number(item.price || 0))}</td>
+                      <td style={{ padding: "16px 24px" }}>
                         {customerPackageMode ? 
-                          <span className="badge" style={{ background: "#f3e8ff", color: "#6d28d9", padding: "4px 8px", borderRadius: 6, fontSize: "0.8rem", fontWeight: 700 }}>{item.remainingSessions} remaining</span> 
+                          <span className="badge" style={{ background: "#f3e8ff", color: "#6d28d9", padding: "6px 12px", borderRadius: 20, fontSize: "0.75rem", fontWeight: 700 }}>{item.remainingSessions} remaining</span> 
                           : 
                           <span style={{ color: "#475569", fontSize: "0.9rem", fontWeight: 600 }}>{item.totalSessions} sessions</span>
                         }
                       </td>
-                      <td style={{ color: "#475569", fontSize: "0.9rem" }}>{customerPackageMode ? `Ends ${String(item.endsAt).slice(0, 10)}` : `${item.validityDays} days`}</td>
-                      <td style={{ textAlign: "right" }}>
+                      <td style={{ padding: "16px 24px", color: "#64748b", fontSize: "0.9rem" }}>{customerPackageMode ? `Ends ${String(item.endsAt).slice(0, 10)}` : `${item.validityDays} days`}</td>
+                      <td style={{ padding: "16px 24px", textAlign: "right" }}>
                         {!customerPackageMode && (
                           <div style={{ display: "flex", gap: 8, justifyContent: "flex-end" }}>
                             <Link to={`/admin/packages/${item.id}/edit`} style={{ display: "flex", background: "transparent", border: "none", color: "#64748b", cursor: "pointer", padding: 6, borderRadius: "50%" }} onMouseEnter={(e) => e.currentTarget.style.background = "#f1f5f9"} onMouseLeave={(e) => e.currentTarget.style.background = "transparent"} title="Edit">

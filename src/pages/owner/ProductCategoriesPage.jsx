@@ -67,6 +67,7 @@ export default function ProductCategoriesPage() {
   const [stockForm, setStockForm] = useState({ currentStock: 0, minStock: 0, onFloor: 0, netWeight: "", unit: "", secondaryUnit: "", productType: "RETAIL" });
   const [stockSaving, setStockSaving] = useState(false);
   const [stockError, setStockError] = useState("");
+  const [stockFieldErrors, setStockFieldErrors] = useState({});
 
   const loadData = useCallback(async () => {
     try {
@@ -237,6 +238,7 @@ export default function ProductCategoriesPage() {
       productType: p.productType || "RETAIL"
     });
     setStockError("");
+    setStockFieldErrors({});
   };
 
   const handleSaveStock = async (e) => {
@@ -260,18 +262,13 @@ export default function ProductCategoriesPage() {
         return;
       }
       if (stockForm.productType === "CONSUMABLE") {
-        if (!stockForm.unit) {
-          setStockError("Primary unit is required for consumable products");
-          setStockSaving(false);
-          return;
-        }
-        if (!stockForm.secondaryUnit) {
-          setStockError("Secondary unit is required for consumable products");
-          setStockSaving(false);
-          return;
-        }
-        if (!stockForm.netWeight || Number(stockForm.netWeight) <= 0) {
-          setStockError("Net weight is required and must be greater than 0 for consumable products");
+        const fieldErrs = {};
+        if (!stockForm.unit) fieldErrs.unit = "Please select a primary unit";
+        if (!stockForm.secondaryUnit) fieldErrs.secondaryUnit = "Please select a secondary unit";
+        if (!stockForm.netWeight || Number(stockForm.netWeight) <= 0) fieldErrs.netWeight = "Net weight must be greater than 0";
+        if (Object.keys(fieldErrs).length > 0) {
+          setStockFieldErrors(fieldErrs);
+          setStockError("Please fix the highlighted fields");
           setStockSaving(false);
           return;
         }
@@ -808,24 +805,27 @@ export default function ProductCategoriesPage() {
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginBottom: 20 }}>
                 <div>
                   <label style={{ fontSize: 13, fontWeight: 600, color: "#475569", marginBottom: 6, display: "block" }}>Net Weight {stockForm.productType === "CONSUMABLE" && <span style={{ color: "#dc2626" }}>*</span>}</label>
-                  <input type="number" min="0" step="any" value={stockForm.netWeight} onChange={e => setStockForm({...stockForm, netWeight: e.target.value === "" ? "" : parseFloat(e.target.value) || ""})} placeholder="0" required={stockForm.productType === "CONSUMABLE"} style={{ width: "100%", padding: "10px 14px", borderRadius: 8, border: stockForm.productType === "CONSUMABLE" && (!stockForm.netWeight || Number(stockForm.netWeight) <= 0) ? "1px solid #fca5a5" : "1px solid #cbd5e1", fontSize: 14, background: stockForm.productType === "CONSUMABLE" ? "#fffbeb" : "#fff" }} />
+                  <input type="number" min="0" step="any" value={stockForm.netWeight} onChange={e => { const val = e.target.value === "" ? "" : parseFloat(e.target.value) || ""; setStockForm({...stockForm, netWeight: val}); if (stockFieldErrors.netWeight) setStockFieldErrors(prev => { const n = {...prev}; delete n.netWeight; return n; }); }} placeholder="0" required={stockForm.productType === "CONSUMABLE"} style={{ width: "100%", padding: "10px 14px", borderRadius: 8, border: stockFieldErrors.netWeight ? "1.5px solid #dc2626" : stockForm.productType === "CONSUMABLE" && (!stockForm.netWeight || Number(stockForm.netWeight) <= 0) ? "1px solid #fca5a5" : "1px solid #cbd5e1", fontSize: 14, background: stockForm.productType === "CONSUMABLE" ? "#fffbeb" : "#fff" }} />
+                  {stockFieldErrors.netWeight && <div style={{ color: "#dc2626", fontSize: 12, marginTop: 4, fontWeight: 500, display: "flex", alignItems: "center", gap: 4 }}><AlertCircle size={12} /> {stockFieldErrors.netWeight}</div>}
                 </div>
                 <div>
                   <label style={{ fontSize: 13, fontWeight: 600, color: "#475569", marginBottom: 6, display: "block" }}>Primary Unit {stockForm.productType === "CONSUMABLE" && <span style={{ color: "#dc2626" }}>*</span>}</label>
-                  <CustomDropdown value={stockForm.unit} onChange={e => setStockForm({...stockForm, unit: e.target.value})} required={stockForm.productType === "CONSUMABLE"} style={{ width: "100%", padding: "10px 14px", borderRadius: 8, border: stockForm.productType === "CONSUMABLE" && !stockForm.unit ? "1px solid #fca5a5" : "1px solid #cbd5e1", fontSize: 14, background: stockForm.productType === "CONSUMABLE" ? "#fffbeb" : "#fff", appearance: "none", backgroundImage: "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M3 4.5L6 7.5L9 4.5' stroke='%2364748b' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E\")", backgroundRepeat: "no-repeat", backgroundPosition: "right 12px center" }}>
+                  <CustomDropdown value={stockForm.unit} onChange={e => { setStockForm({...stockForm, unit: e.target.value}); if (stockFieldErrors.unit) setStockFieldErrors(prev => { const n = {...prev}; delete n.unit; return n; }); }} required={stockForm.productType === "CONSUMABLE"} style={{ width: "100%", padding: "10px 14px", borderRadius: 8, border: stockFieldErrors.unit ? "1.5px solid #dc2626" : stockForm.productType === "CONSUMABLE" && !stockForm.unit ? "1px solid #fca5a5" : "1px solid #cbd5e1", fontSize: 14, background: stockForm.productType === "CONSUMABLE" ? "#fffbeb" : "#fff", appearance: "none", backgroundImage: "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M3 4.5L6 7.5L9 4.5' stroke='%2364748b' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E\")", backgroundRepeat: "no-repeat", backgroundPosition: "right 12px center" }}>
                     <option value="">Select Unit</option>
                     {["mg", "gm", "kg", "oz", "ltr", "ml", "sachet", "ox", "can", "pcs", "carton", "roll", "pkt", "box", "unit", "btl", "jar", "cane"].map(u => <option key={u} value={u}>{u}</option>)}
                   </CustomDropdown>
+                  {stockFieldErrors.unit && <div style={{ color: "#dc2626", fontSize: 12, marginTop: 4, fontWeight: 500, display: "flex", alignItems: "center", gap: 4 }}><AlertCircle size={12} /> {stockFieldErrors.unit}</div>}
                 </div>
               </div>
 
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginBottom: 20 }}>
                 <div>
                   <label style={{ fontSize: 13, fontWeight: 600, color: "#475569", marginBottom: 6, display: "block" }}>Secondary Unit {stockForm.productType === "CONSUMABLE" && <span style={{ color: "#dc2626" }}>*</span>} <span style={{ fontSize: 11, color: "#94a3b8", fontWeight: 400 }}>(used in service consumables)</span></label>
-                  <CustomDropdown value={stockForm.secondaryUnit} onChange={e => setStockForm({...stockForm, secondaryUnit: e.target.value})} required={stockForm.productType === "CONSUMABLE"} style={{ width: "100%", padding: "10px 14px", borderRadius: 8, border: stockForm.productType === "CONSUMABLE" && !stockForm.secondaryUnit ? "1px solid #fca5a5" : "1px solid #cbd5e1", fontSize: 14, background: stockForm.productType === "CONSUMABLE" ? "#fffbeb" : "#fff", appearance: "none", backgroundImage: "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M3 4.5L6 7.5L9 4.5' stroke='%2364748b' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E\")", backgroundRepeat: "no-repeat", backgroundPosition: "right 12px center" }}>
+                  <CustomDropdown value={stockForm.secondaryUnit} onChange={e => { setStockForm({...stockForm, secondaryUnit: e.target.value}); if (stockFieldErrors.secondaryUnit) setStockFieldErrors(prev => { const n = {...prev}; delete n.secondaryUnit; return n; }); }} required={stockForm.productType === "CONSUMABLE"} style={{ width: "100%", padding: "10px 14px", borderRadius: 8, border: stockFieldErrors.secondaryUnit ? "1.5px solid #dc2626" : stockForm.productType === "CONSUMABLE" && !stockForm.secondaryUnit ? "1px solid #fca5a5" : "1px solid #cbd5e1", fontSize: 14, background: stockForm.productType === "CONSUMABLE" ? "#fffbeb" : "#fff", appearance: "none", backgroundImage: "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M3 4.5L6 7.5L9 4.5' stroke='%2364748b' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E\")", backgroundRepeat: "no-repeat", backgroundPosition: "right 12px center" }}>
                     <option value="">Select Unit</option>
                     {["mg", "gm", "kg", "oz", "ltr", "ml", "sachet", "ox", "can", "pcs", "carton", "roll", "pkt", "box", "unit", "btl", "jar", "cane"].map(u => <option key={u} value={u}>{u}</option>)}
                   </CustomDropdown>
+                  {stockFieldErrors.secondaryUnit && <div style={{ color: "#dc2626", fontSize: 12, marginTop: 4, fontWeight: 500, display: "flex", alignItems: "center", gap: 4 }}><AlertCircle size={12} /> {stockFieldErrors.secondaryUnit}</div>}
                 </div>
                 <div></div>
               </div>

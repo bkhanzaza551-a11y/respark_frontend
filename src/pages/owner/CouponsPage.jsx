@@ -7,6 +7,7 @@ import EmptyState from "../../components/EmptyState";
 import PageLoader from "../../components/PageLoader";
 import { formatApiError } from "../../utils/apiError";
 import { useBranch } from "../../context/BranchContext";
+import ToggleSwitch from "../../components/common/ToggleSwitch";
 
 const defaultCouponForm = {
   code: "",
