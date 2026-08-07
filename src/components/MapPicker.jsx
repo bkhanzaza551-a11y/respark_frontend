@@ -13,6 +13,11 @@ const GEOCODER_CACHE_KEY = "respark-geocoder-cache-v3";
 const CACHE_TTL_MS = 24 * 60 * 60 * 1000;
 const MAX_CACHE_ENTRIES = 100;
 
+const INDIA_BOUNDS = { minLat: 6.5, maxLat: 37.5, minLng: 68.0, maxLng: 97.5 };
+const isInsideIndia = (lat, lng) =>
+  lat >= INDIA_BOUNDS.minLat && lat <= INDIA_BOUNDS.maxLat &&
+  lng >= INDIA_BOUNDS.minLng && lng <= INDIA_BOUNDS.maxLng;
+
 let nominatimCache;
 let nominatimRequestQueue = Promise.resolve();
 let lastNominatimRequestAt = 0;
@@ -253,6 +258,10 @@ export default function MapPicker({ latitude, longitude, onChange, address, onAd
   const [selectedCoordinates, setSelectedCoordinates] = useState(initialCoordinates);
   const [selectedAddress, setSelectedAddress] = useState(initialCoordinates ? address?.trim() || "" : "");
   const [confirmed, setConfirmed] = useState(Boolean(initialCoordinates));
+  const [countryWarning, setCountryWarning] = useState(() => {
+    if (!initialCoordinates) return "";
+    return isInsideIndia(initialCoordinates.lat, initialCoordinates.lng) ? "" : "This location appears to be outside India. Please verify the coordinates are correct.";
+  });
 
   const cancelAutocomplete = useCallback(() => {
     autocompleteRequestIdRef.current += 1;
@@ -300,6 +309,12 @@ export default function MapPicker({ latitude, longitude, onChange, address, onAd
     setSearchResults([]);
     cancelAutocomplete();
     placeMarker(nextCoordinates.lat, nextCoordinates.lng);
+
+    if (isInsideIndia(nextCoordinates.lat, nextCoordinates.lng)) {
+      setCountryWarning("");
+    } else {
+      setCountryWarning("This location appears to be outside India. Please verify the coordinates are correct. Incorrect coordinates will cause attendance distance errors.");
+    }
 
     if (moveMap && mapRef.current) {
       mapRef.current.easeTo({
@@ -513,6 +528,12 @@ export default function MapPicker({ latitude, longitude, onChange, address, onAd
   const confirmLocation = () => {
     if (!selectedCoordinates || reverseGeocoding) return;
 
+    if (!isInsideIndia(selectedCoordinates.lat, selectedCoordinates.lng)) {
+      if (!window.confirm("This location appears to be outside India. Saving incorrect coordinates will cause staff attendance to show wrong distances. Are you sure you want to confirm?")) {
+        return;
+      }
+    }
+
     onChange?.({
       latitude: selectedCoordinates.lat.toFixed(6),
       longitude: selectedCoordinates.lng.toFixed(6)
@@ -603,6 +624,12 @@ export default function MapPicker({ latitude, longitude, onChange, address, onAd
 
       <p className="map-picker__hint">Click anywhere on the map or drag the blue marker to fine-tune the branch location.</p>
 
+      {countryWarning && (
+        <div style={{ marginTop: 8, padding: "10px 14px", backgroundColor: "#fef3c7", color: "#92400e", borderRadius: 6, fontSize: 13, border: "1px solid #fcd34d", fontWeight: 500 }} role="alert">
+          {countryWarning}
+        </div>
+      )}
+
       <div className="map-picker__preview" aria-live="polite">
         <div className="map-picker__preview-icon">
           <MapPin size={19} aria-hidden="true" />
@@ -623,9 +650,10 @@ export default function MapPicker({ latitude, longitude, onChange, address, onAd
           type="button"
           onClick={confirmLocation}
           disabled={!selectedCoordinates || reverseGeocoding}
+          style={countryWarning && !confirmed ? { backgroundColor: "#f59e0b", borderColor: "#d97706" } : undefined}
         >
           <CheckCircle2 size={17} aria-hidden="true" />
-          {confirmed ? "Location Confirmed" : "Confirm Location"}
+          {confirmed ? "Location Confirmed" : countryWarning ? "Confirm (Outside India)" : "Confirm Location"}
         </button>
       </div>
 
