@@ -203,9 +203,7 @@ export default function UsersPage() {
   };
 
   useEffect(() => {
-    let active = true;
     load();
-    return () => { active = false; };
   }, [selectedBranchId]);
 
   useEffect(() => {
@@ -454,17 +452,6 @@ export default function UsersPage() {
     }
   };
 
-  const archiveUser = async (row) => {
-    try {
-      await api.patch(`/owner/users/${row.id}/archive`);
-      if (editingId === row.id) {
-        resetForm();
-      }
-      await load(selectedBranchId);
-    } catch (err) {
-      alert("Failed to archive user.");
-    }
-  };
 
   const handleDirectorySelect = (rowId) => {
     startTransition(() => {
@@ -634,15 +621,7 @@ export default function UsersPage() {
                     >
                       {selectedRow.user?.isActive ? "Deactivate Login" : "Activate Login"}
                     </button>
-                    <button 
-                      type="button" 
-                      onClick={() => archiveUser(selectedRow)}
-                      style={{ padding: '8px 16px', borderRadius: 8, fontSize: 13, fontWeight: 600, cursor: 'pointer', border: '1px solid #e2e8f0', background: 'white', color: '#64748b', transition: 'all 0.2s' }}
-                      onMouseEnter={e => e.currentTarget.style.background = '#f8fafc'}
-                      onMouseLeave={e => e.currentTarget.style.background = 'white'}
-                    >
-                      Archive Profile
-                    </button>
+
                   </div>
                 </div>
               </div>
