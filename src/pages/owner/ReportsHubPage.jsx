@@ -84,7 +84,7 @@ const COLUMNS = {
   material_received: ["Date", "Transaction Id", "Vendor Invoice Id", "Product", "Vendor", "Qty", "Unit Cost", "Total Cost", "PO #"],
   minimum_stock: ["SR. NO.", "CATEGORY NAME", "ITEM NAME", "VARIATION NAME", "STORE SKU", "CURRENT STOCK", "MINIMUM QUANTITY"],
   reconcile_stock: ["Product", "System Stock", "Physical Count", "Variance", "Date", "Staff"],
-  consumable_tracking: ["Product", "Service", "Qty Used Per Service", "Total Used", "Cost"],
+  consumable_tracking: ["Product", "Service", "Unit", "Qty Used Per Service", "Total Used", "Remaining Stock", "Cost"],
   total_consumed: ["Product", "Category", "Unit", "Total Quantity Consumed", "Value"],
   purchase_order: ["PO #", "Date", "Vendor", "Products", "Amount", "Status", "Received On"],
   inventory_transaction: ["Date", "Product", "Type", "Qty", "Reference", "Branch", "Staff"],
