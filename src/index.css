@@ -3887,3 +3887,74 @@ pre {
   border-radius: 12px;
   box-shadow: 0 1px 3px rgba(0,0,0,0.05);
 }
+/* ── Slide-over Panel Styling ── */
+.panel-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: rgba(15, 23, 42, 0.4);
+  backdrop-filter: blur(4px);
+  display: flex;
+  justify-content: flex-end;
+  animation: fadeIn 200ms ease;
+}
+
+.panel-content {
+  width: 100%;
+  max-width: 500px;
+  height: 100vh;
+  background: #fff;
+  box-shadow: -10px 0 40px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  animation: slideInRight 300ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.panel-header {
+  padding: 20px 24px;
+  border-bottom: 1px solid #f1f5f9;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.panel-header h2 {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.panel-close {
+  background: none;
+  border: none;
+  padding: 8px;
+  cursor: pointer;
+  color: #64748b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  transition: all 150ms ease;
+}
+
+.panel-close:hover {
+  background: #f1f5f9;
+  color: #0f172a;
+  transform: none;
+}
+
+.panel-body {
+  padding: 24px;
+  flex: 1;
+  overflow-y: auto;
+}
+
+@keyframes slideInRight {
+  from { transform: translateX(100%); }
+  to { transform: translateX(0); }
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
