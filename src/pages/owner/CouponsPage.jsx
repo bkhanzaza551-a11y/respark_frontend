@@ -349,10 +349,10 @@ export default function CouponsPage() {
                     </td>
                     <td style={{ padding: "12px 16px", textAlign: "right" }}>
                       <div style={{ display: "flex", alignItems: "center", justifyContent: "flex-end", gap: 8 }}>
-                        <button onClick={() => { handleEditCoupon(row); setShowCouponModal(true); }} className="icon-btn" style={{ background: "transparent", border: "none", color: "#64748b", cursor: "pointer", padding: 6, display: "flex" }} title="Edit">
+                        <button onClick={() => { handleEditCoupon(row); setShowCouponModal(true); }} style={{ background: "#f1f5f9", border: "1px solid #cbd5e1", color: "#475569", cursor: "pointer", padding: 6, display: "flex", borderRadius: 6, transition: "all 0.2s" }} title="Edit" onMouseEnter={e => e.currentTarget.style.background = "#e2e8f0"} onMouseLeave={e => e.currentTarget.style.background = "#f1f5f9"}>
                           <Edit2 size={16} />
                         </button>
-                        <button onClick={() => deleteCoupon(row.id)} className="icon-btn" style={{ background: "transparent", border: "none", color: "#ef4444", cursor: "pointer", padding: 6, display: "flex" }} title="Delete">
+                        <button onClick={() => deleteCoupon(row.id)} style={{ background: "#fef2f2", border: "1px solid #fecaca", color: "#ef4444", cursor: "pointer", padding: 6, display: "flex", borderRadius: 6, transition: "all 0.2s" }} title="Delete" onMouseEnter={e => e.currentTarget.style.background = "#fee2e2"} onMouseLeave={e => e.currentTarget.style.background = "#fef2f2"}>
                           <Trash2 size={16} />
                         </button>
                       </div>
@@ -429,13 +429,13 @@ export default function CouponsPage() {
                     </td>
                     <td style={{ padding: "12px 16px", textAlign: "right" }}>
                       <div style={{ display: "flex", alignItems: "center", justifyContent: "flex-end", gap: 8 }}>
-                        <button onClick={() => toggleGiftCardActive(gc)} className="icon-btn" style={{ background: "transparent", border: "none", color: gc.isActive ? "#f59e0b" : "#10b981", cursor: "pointer", padding: 6, display: "flex" }} title={gc.isActive ? "Deactivate" : "Activate"}>
-                          {gc.isActive ? <PowerOff size={16} /> : <Power size={16} />}
+                        <button onClick={() => toggleGiftCardActive(gc)} style={{ background: gc.isActive ? "#fffbeb" : "#ecfdf5", border: "1px solid", borderColor: gc.isActive ? "#fde68a" : "#a7f3d0", color: gc.isActive ? "#d97706" : "#059669", cursor: "pointer", padding: "6px 12px", display: "flex", alignItems: "center", gap: 6, borderRadius: 6, fontWeight: 600, fontSize: 12, transition: "all 0.2s" }} title={gc.isActive ? "Deactivate" : "Activate"}>
+                          {gc.isActive ? <PowerOff size={14} /> : <Power size={14} />} {gc.isActive ? "Deactivate" : "Activate"}
                         </button>
-                        <button onClick={() => { setEditingGc(gc); setGiftCardForm({ code: gc.code, title: gc.title, originalAmount: gc.originalAmount, note: gc.note || "", isActive: gc.isActive ?? true, validityDays: gc.expiresAt ? Math.max(1, Math.round((new Date(gc.expiresAt) - new Date()) / (1000 * 60 * 60 * 24))) : 365 }); setShowGiftCardModal(true); }} className="icon-btn" style={{ background: "transparent", border: "none", color: "#64748b", cursor: "pointer", padding: 6, display: "flex" }} title="Edit">
+                        <button onClick={() => { setEditingGc(gc); setGiftCardForm({ code: gc.code, title: gc.title, originalAmount: gc.originalAmount, note: gc.note || "", isActive: gc.isActive ?? true, validityDays: gc.expiresAt ? Math.max(1, Math.round((new Date(gc.expiresAt) - new Date()) / (1000 * 60 * 60 * 24))) : 365 }); setShowGiftCardModal(true); }} style={{ background: "#f1f5f9", border: "1px solid #cbd5e1", color: "#475569", cursor: "pointer", padding: 6, display: "flex", borderRadius: 6, transition: "all 0.2s" }} title="Edit" onMouseEnter={e => e.currentTarget.style.background = "#e2e8f0"} onMouseLeave={e => e.currentTarget.style.background = "#f1f5f9"}>
                           <Edit2 size={16} />
                         </button>
-                        <button onClick={() => deleteGiftCard(gc.id)} className="icon-btn" style={{ background: "transparent", border: "none", color: "#ef4444", cursor: "pointer", padding: 6, display: "flex" }} title="Delete">
+                        <button onClick={() => deleteGiftCard(gc.id)} style={{ background: "#fef2f2", border: "1px solid #fecaca", color: "#ef4444", cursor: "pointer", padding: 6, display: "flex", borderRadius: 6, transition: "all 0.2s" }} title="Delete" onMouseEnter={e => e.currentTarget.style.background = "#fee2e2"} onMouseLeave={e => e.currentTarget.style.background = "#fef2f2"}>
                           <Trash2 size={16} />
                         </button>
                       </div>
