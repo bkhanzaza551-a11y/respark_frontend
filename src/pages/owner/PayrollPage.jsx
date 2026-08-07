@@ -846,8 +846,8 @@ export default function PayrollPage() {
           <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
             <div className="att-glass-panel" ref={manualCreateRef} style={{ padding: 28 }}>
               <div style={{ borderBottom: "1px solid #f1f5f9", paddingBottom: 16, marginBottom: 20 }}>
-                <h3 style={{ margin: "0 0 4px", fontSize: 18, fontWeight: 800, color: "#1e293b", display: "flex", alignItems: "center", gap: 8 }}>
-                  <span>✍️</span> Manual Entry
+                <h3 style={{ margin: "0 0 4px", fontSize: 18, fontWeight: 800, color: "#1e293b", display: "flex", alignItems: "center", gap: 10 }}>
+                  <div style={{ padding: 8, background: "linear-gradient(135deg, #eff6ff, #dbeafe)", color: "#3b82f6", borderRadius: 10, display: "flex", boxShadow: "0 2px 4px rgba(59,130,246,0.1)" }}><Edit3 size={18} /></div> Manual Entry
                 </h3>
                 <p style={{ margin: 0, color: "#64748b", fontSize: 13 }}>Add or edit attendance records manually.</p>
               </div>
@@ -914,8 +914,8 @@ export default function PayrollPage() {
             
             <div className="att-glass-panel" ref={detailPanelRef} style={{ padding: 28, maxHeight: "55vh", overflowY: "auto" }}>
               <div style={{ borderBottom: "1px solid #f1f5f9", paddingBottom: 16, marginBottom: 20 }}>
-                <h3 style={{ margin: "0 0 4px", fontSize: 18, fontWeight: 800, color: "#1e293b", display: "flex", alignItems: "center", gap: 8 }}>
-                  <span>🔍</span> Record Details
+                <h3 style={{ margin: "0 0 4px", fontSize: 18, fontWeight: 800, color: "#1e293b", display: "flex", alignItems: "center", gap: 10 }}>
+                  <div style={{ padding: 8, background: "linear-gradient(135deg, #f0fdf4, #dcfce7)", color: "#16a34a", borderRadius: 10, display: "flex", boxShadow: "0 2px 4px rgba(22,163,74,0.1)" }}><Eye size={18} /></div> Record Details
                 </h3>
               </div>
               
@@ -1010,8 +1010,8 @@ export default function PayrollPage() {
 
           <div className="att-glass-panel" style={{ padding: 28, display: "flex", flexDirection: "column", height: "calc(100vh - 200px)" }}>
             <div style={{ borderBottom: "1px solid #f1f5f9", paddingBottom: 16, marginBottom: 20 }}>
-              <h3 style={{ margin: "0 0 4px", fontSize: 18, fontWeight: 800, color: "#1e293b", display: "flex", alignItems: "center", gap: 8 }}>
-                <span>📜</span> History Logs
+              <h3 style={{ margin: "0 0 4px", fontSize: 18, fontWeight: 800, color: "#1e293b", display: "flex", alignItems: "center", gap: 10 }}>
+                <div style={{ padding: 8, background: "linear-gradient(135deg, #f5f3ff, #ede9fe)", color: "#8b5cf6", borderRadius: 10, display: "flex", boxShadow: "0 2px 4px rgba(139,92,246,0.1)" }}><History size={18} /></div> History Logs
               </h3>
               <p style={{ margin: 0, color: "#64748b", fontSize: 13 }}>Browse and filter staff attendance records.</p>
             </div>
