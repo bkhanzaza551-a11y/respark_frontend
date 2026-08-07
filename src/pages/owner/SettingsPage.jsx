@@ -1118,13 +1118,13 @@ export default function SettingsPage() {
               <div>
                 <span className="muted" style={{ display: "block", marginBottom: 12, fontWeight: 600, fontSize: 13, color: "#1e293b" }}>Applicable For</span>
                 <div style={{ display: "flex", gap: 16, alignItems: "center", height: 42 }}>
-                  <label style={{ display: "flex", alignItems: "center", gap: 8, cursor: "pointer", fontSize: 14 }}>
-                    <input type="radio" name="applicableFor" value="female" checked={generic.applicableFor === "female"} onChange={() => updateGeneric("applicableFor", "female")} style={{ width: 16, height: 16, accentColor: "#3b82f6" }} /> Female
+                  <label style={{ display: "flex", flexDirection: "row", alignItems: "center", gap: 8, cursor: "pointer", fontSize: 14 }}>
+                    <input type="radio" name="applicableFor" value="male" checked={generic.applicableFor === "male"} onChange={() => updateGeneric("applicableFor", "male")} style={{ width: 16, height: 16, accentColor: "#3b82f6" }} /> Men
                   </label>
-                  <label style={{ display: "flex", alignItems: "center", gap: 8, cursor: "pointer", fontSize: 14 }}>
-                    <input type="radio" name="applicableFor" value="male" checked={generic.applicableFor === "male"} onChange={() => updateGeneric("applicableFor", "male")} style={{ width: 16, height: 16, accentColor: "#3b82f6" }} /> Male
+                  <label style={{ display: "flex", flexDirection: "row", alignItems: "center", gap: 8, cursor: "pointer", fontSize: 14 }}>
+                    <input type="radio" name="applicableFor" value="female" checked={generic.applicableFor === "female"} onChange={() => updateGeneric("applicableFor", "female")} style={{ width: 16, height: 16, accentColor: "#3b82f6" }} /> Women
                   </label>
-                  <label style={{ display: "flex", alignItems: "center", gap: 8, cursor: "pointer", fontSize: 14 }}>
+                  <label style={{ display: "flex", flexDirection: "row", alignItems: "center", gap: 8, cursor: "pointer", fontSize: 14 }}>
                     <input type="radio" name="applicableFor" value="both" checked={generic.applicableFor === "both"} onChange={() => updateGeneric("applicableFor", "both")} style={{ width: 16, height: 16, accentColor: "#3b82f6" }} /> Both
                   </label>
                 </div>
@@ -1134,11 +1134,11 @@ export default function SettingsPage() {
             <div style={{ marginTop: 8 }}>
               <span className="muted" style={{ display: "block", marginBottom: 12, fontWeight: 600, fontSize: 13, color: "#1e293b" }}>Set Weekly Off</span>
               <div style={{ display: "flex", flexWrap: "wrap", gap: 20 }}>
-                <label style={{ display: "flex", alignItems: "center", gap: 8, cursor: "pointer", fontSize: 14 }}>
+                <label style={{ display: "flex", flexDirection: "row", alignItems: "center", gap: 8, cursor: "pointer", fontSize: 14 }}>
                   <input type="checkbox" checked={allChecked} onChange={(e) => toggleAllWeeklyOff(e.target.checked)} style={{ width: 16, height: 16, accentColor: "#3b82f6" }} /> All
                 </label>
                 {WEEK_DAYS.map((day) => (
-                  <label key={day.key} style={{ display: "flex", alignItems: "center", gap: 8, cursor: "pointer", fontSize: 14 }}>
+                  <label key={day.key} style={{ display: "flex", flexDirection: "row", alignItems: "center", gap: 8, cursor: "pointer", fontSize: 14 }}>
                     <input type="checkbox" checked={generic.weeklyOff.includes(day.key)} onChange={() => toggleWeeklyOff(day.key)} style={{ width: 16, height: 16, accentColor: "#3b82f6" }} /> {day.label}
                   </label>
                 ))}
