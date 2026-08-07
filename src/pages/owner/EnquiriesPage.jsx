@@ -455,16 +455,24 @@ export default function EnquiriesPage() {
 
       {/* ── REPORTS MODE ── */}
       {mode === "reports" && report && (
-        <div className="anim-fade delay-1" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 24 }}>
-          <div className="eq-card" style={{ background: "linear-gradient(135deg, #1e293b, #0f172a)", color: "white", border: "none" }}>
-            <BarChart3 size={32} color="#818cf8" style={{ marginBottom: 16 }} />
-            <div style={{ fontSize: 14, textTransform: "uppercase", fontWeight: 700, color: "#94a3b8", marginBottom: 8 }}>Total Leads Captured</div>
-            <div style={{ fontSize: 40, fontWeight: 800, fontFamily: "monospace" }}>{report.total || 0}</div>
+        <div className="anim-fade delay-1" style={{ display: "flex", flexWrap: "wrap", gap: 24 }}>
+          <div className="eq-card" style={{ width: "320px", background: "linear-gradient(135deg, #1e293b, #0f172a)", color: "white", border: "none", padding: "28px 32px", display: "flex", alignItems: "center", justifyContent: "space-between", borderRadius: 16, boxShadow: "0 10px 25px -5px rgba(0,0,0,0.15)" }}>
+            <div>
+              <div style={{ fontSize: 12, textTransform: "uppercase", fontWeight: 700, color: "#94a3b8", letterSpacing: 1, marginBottom: 12 }}>Total Leads Captured</div>
+              <div style={{ fontSize: 42, fontWeight: 800, lineHeight: 1 }}>{report.total || 0}</div>
+            </div>
+            <div style={{ background: "rgba(129, 140, 248, 0.15)", padding: 16, borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center" }}>
+              <BarChart3 size={32} color="#818cf8" />
+            </div>
           </div>
-          <div className="eq-card" style={{ background: "linear-gradient(135deg, #16a34a, #14532d)", color: "white", border: "none" }}>
-            <CheckCircle2 size={32} color="#86efac" style={{ marginBottom: 16 }} />
-            <div style={{ fontSize: 14, textTransform: "uppercase", fontWeight: 700, color: "#bbf7d0", marginBottom: 8 }}>Successfully Converted</div>
-            <div style={{ fontSize: 40, fontWeight: 800, fontFamily: "monospace" }}>{report.converted || 0}</div>
+          <div className="eq-card" style={{ width: "320px", background: "linear-gradient(135deg, #16a34a, #14532d)", color: "white", border: "none", padding: "28px 32px", display: "flex", alignItems: "center", justifyContent: "space-between", borderRadius: 16, boxShadow: "0 10px 25px -5px rgba(22, 163, 74, 0.3)" }}>
+            <div>
+              <div style={{ fontSize: 12, textTransform: "uppercase", fontWeight: 700, color: "#bbf7d0", letterSpacing: 1, marginBottom: 12 }}>Successfully Converted</div>
+              <div style={{ fontSize: 42, fontWeight: 800, lineHeight: 1 }}>{report.converted || 0}</div>
+            </div>
+            <div style={{ background: "rgba(134, 239, 172, 0.2)", padding: 16, borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center" }}>
+              <CheckCircle2 size={32} color="#86efac" />
+            </div>
           </div>
         </div>
       )}
