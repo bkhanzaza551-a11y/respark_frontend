@@ -46,6 +46,10 @@ const validateFaceQuality = (detection, imageWidth, imageHeight) => {
   const box = detection.detection.box;
   const score = detection.detection.score;
 
+  if (!box || box.left == null || box.top == null || box.right == null || box.bottom == null) {
+    throw new Error("Could not detect face position. Ensure your face is clearly visible, centered in the frame, and well-lit.");
+  }
+
   if (score < MIN_DETECTION_SCORE) {
     throw new Error(`Face detection confidence too low (${(score * 100).toFixed(0)}%). Ensure your face is clearly visible and well-lit.`);
   }
@@ -125,13 +129,20 @@ const detectSingleFaceDescriptor = async (source) => {
   if (!detections.length) {
     throw new Error("No face detected. Ensure your face is well-lit and centered in the frame.");
   }
-  if (detections.length > 1) {
+
+  const validDetections = detections.filter(
+    (d) => d.detection?.box && d.detection.box.left != null && d.detection.box.width > 0 && d.detection.box.height > 0
+  );
+  if (!validDetections.length) {
+    throw new Error("Could not detect a valid face. Ensure your face is clearly visible, centered, and well-lit.");
+  }
+  if (validDetections.length > 1) {
     throw new Error("Only one face should be visible during attendance verification.");
   }
 
-  validateFaceQuality(detections[0], image.naturalWidth || image.width, image.naturalHeight || image.height);
+  validateFaceQuality(validDetections[0], image.naturalWidth || image.width, image.naturalHeight || image.height);
 
-  return detections[0].descriptor;
+  return validDetections[0].descriptor;
 };
 
 export const ensureSingleFaceInImage = async (source) => {
