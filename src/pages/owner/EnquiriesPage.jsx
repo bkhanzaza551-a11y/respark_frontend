@@ -187,7 +187,7 @@ export default function EnquiriesPage() {
   const handleConvertToCustomer = async (enquiry) => {
     if (!window.confirm(`Convert ${enquiry.name} to a salon customer?`)) return;
     try {
-      await api.post(`/owner/enquiries/${enquiry.id}/convert-to-customer`);
+      await api.post(`/owner/enquiries/${enquiry.id}/convert-to-customer`, { branchId: selectedBranchId || null });
       setStatus({ error: "", success: `${enquiry.name} has been converted to a Customer successfully!` });
       setTimeout(() => setStatus({ error: "", success: "" }), 3000);
       await load();
