@@ -3,7 +3,7 @@ import { createContext, useContext, useState } from "react";
 import { api, setAuthSessionHandlers, setToken, unblockSession } from "../api/client";
 
 const AuthCtx = createContext(null);
-const STORAGE_KEY = "respark_auth";
+const STORAGE_KEY = "skillify_auth";
 
 export const AuthProvider = ({ children }) => {
   const [auth, setAuth] = useState(() => {

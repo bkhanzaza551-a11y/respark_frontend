@@ -910,7 +910,7 @@ export default function PosDashboardPage() {
   };
 
   return (
-    <div className="respark-pos-dashboard page-shell">
+    <div className="skillify-pos-dashboard page-shell">
       <div className="hero-card" style={{ padding: 24, marginBottom: 20 }}>
         <div className="item-head">
           <div>

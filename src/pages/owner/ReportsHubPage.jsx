@@ -1061,12 +1061,12 @@ function SalesSummaryDashboard({ data, loading, onViewReport }) {
   return (
     <div className="dash-container" style={{ padding: "8px 0px 24px", overflowY: "auto", height: "100%", boxSizing: "border-box" }}>
       <style>{`
-        .respark-tooltip-container {
+        .skillify-tooltip-container {
           position: relative;
           display: inline-flex;
           align-items: center;
         }
-        .respark-tooltip-content {
+        .skillify-tooltip-content {
           visibility: hidden;
           width: 210px;
           background-color: #1e293b;
@@ -1087,11 +1087,11 @@ function SalesSummaryDashboard({ data, loading, onViewReport }) {
           box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
           pointer-events: none;
         }
-        .respark-tooltip-container:hover .respark-tooltip-content {
+        .skillify-tooltip-container:hover .skillify-tooltip-content {
           visibility: visible;
           opacity: 1;
         }
-        .respark-tooltip-content::after {
+        .skillify-tooltip-content::after {
           content: "";
           position: absolute;
           bottom: 100%;
@@ -1101,24 +1101,24 @@ function SalesSummaryDashboard({ data, loading, onViewReport }) {
           border-style: solid;
           border-color: transparent transparent #1e293b transparent;
         }
-        .respark-card-details-item {
+        .skillify-card-details-item {
           background: #f8fafc;
           border: 1px solid #f1f5f9;
           border-radius: 6px;
           padding: 8px;
           margin-bottom: 6px;
         }
-        .respark-card-details-item:last-child {
+        .skillify-card-details-item:last-child {
           margin-bottom: 0;
         }
-        .respark-card-details-label {
+        .skillify-card-details-label {
           font-size: 0.68rem;
           color: #64748b;
           font-weight: 500;
           margin-bottom: 2px;
           display: block;
         }
-        .respark-card-details-value {
+        .skillify-card-details-value {
           font-size: 0.85rem;
           color: #0f172a;
           font-weight: 700;
@@ -1142,7 +1142,7 @@ function SalesSummaryDashboard({ data, loading, onViewReport }) {
             <div>
               <div style={{ display: "flex", alignItems: "center", gap: "6px", marginBottom: "6px" }}>
                 <span style={{ fontSize: "0.74rem", color: "#64748b", fontWeight: 600 }}>{card.label} ({card.count})</span>
-                <div className="respark-tooltip-container">
+                <div className="skillify-tooltip-container">
                   <div style={{
                     width: "12px",
                     height: "12px",
@@ -1163,7 +1163,7 @@ function SalesSummaryDashboard({ data, loading, onViewReport }) {
                   }}>i</div>
 
                   {card.tooltip && (
-                    <div className="respark-tooltip-content">
+                    <div className="skillify-tooltip-content">
                       {card.tooltip}
                     </div>
                   )}
@@ -1205,9 +1205,9 @@ function SalesSummaryDashboard({ data, loading, onViewReport }) {
                 onClick={(e) => e.stopPropagation()}
               >
                 {card.details.map((detail, idx) => (
-                  <div key={idx} className="respark-card-details-item">
-                    <span className="respark-card-details-label">{detail.label}</span>
-                    <div className="respark-card-details-value">₹ {formatVal(detail.value)}</div>
+                  <div key={idx} className="skillify-card-details-item">
+                    <span className="skillify-card-details-label">{detail.label}</span>
+                    <div className="skillify-card-details-value">₹ {formatVal(detail.value)}</div>
                   </div>
                 ))}
               </div>

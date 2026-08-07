@@ -17,7 +17,7 @@ const navLinks = [
   { label: "Request Demo", to: "/book-demo" }
 ];
 
-const brandLogo = "/logo-respark.svg";
+const brandLogo = "/logo-skillify.svg";
 
 const featureGroups = [
   {

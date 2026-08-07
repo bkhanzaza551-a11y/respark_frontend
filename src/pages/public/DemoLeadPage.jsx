@@ -69,7 +69,7 @@ export default function PublicDemoLeadPage() {
       <main className="public-main">
         <div className="demo-topbar">
           <Link to="/" className="brand-mark demo-brand-link">
-            <img src="/logo-respark.svg" alt="Skillify" className="brand-logo" />
+            <img src="/logo-skillify.svg" alt="Skillify" className="brand-logo" />
             <span className="brand-lockup">
               <strong>Skillify</strong>
               <small>Salon ERP Platform</small>
@@ -77,7 +77,7 @@ export default function PublicDemoLeadPage() {
           </Link>
           <div className="demo-topbar-menu">
             <PublicMobileMenu
-              brand={{ label: "Skillify", sublabel: "Salon ERP Platform", logo: "/logo-respark.svg", to: "/" }}
+              brand={{ label: "Skillify", sublabel: "Salon ERP Platform", logo: "/logo-skillify.svg", to: "/" }}
               items={navItems}
               cta={{ label: "Request Demo", to: "/book-demo" }}
             />

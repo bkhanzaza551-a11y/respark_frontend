@@ -48,10 +48,10 @@ export default function Topbar({ auth, sidebarExpanded, onToggleSidebar, onLogou
 
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (!event.target.closest?.(".respark-search-wrap")) setSearchOpen(false);
-      if (!event.target.closest?.(".respark-notif-wrap")) setIsNotifOpen(false);
-      if (!event.target.closest?.(".respark-profile-wrap")) setIsProfileOpen(false);
-      if (!event.target.closest?.(".respark-branch-wrap")) setIsBranchOpen(false);
+      if (!event.target.closest?.(".skillify-search-wrap")) setSearchOpen(false);
+      if (!event.target.closest?.(".skillify-notif-wrap")) setIsNotifOpen(false);
+      if (!event.target.closest?.(".skillify-profile-wrap")) setIsProfileOpen(false);
+      if (!event.target.closest?.(".skillify-branch-wrap")) setIsBranchOpen(false);
     };
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
@@ -130,16 +130,16 @@ export default function Topbar({ auth, sidebarExpanded, onToggleSidebar, onLogou
   ].filter((tab) => can(tab.moduleKey) && (!tab.featureKey || enabled(tab.featureKey)));
 
   return (
-    <div className="respark-header-container">
+    <div className="skillify-header-container">
       <style>{`
-        .respark-header-container {
+        .skillify-header-container {
           display: flex;
           flex-direction: column;
           width: 100%;
           z-index: 1050;
           position: relative;
         }
-        .respark-top-row {
+        .skillify-top-row {
           background: var(--navbar-bg, white);
           height: 60px;
           display: flex;
@@ -149,20 +149,20 @@ export default function Topbar({ auth, sidebarExpanded, onToggleSidebar, onLogou
           border-bottom: 1px solid #e2e8f0;
           position: relative;
         }
-        .respark-logo-area {
+        .skillify-logo-area {
           display: flex;
           align-items: center;
           gap: 16px;
           flex: 1;
         }
-        .respark-brand-image {
+        .skillify-brand-image {
           height: 42px;
           max-width: 160px;
           width: auto;
           object-fit: contain;
           display: block;
         }
-        .respark-salon-name {
+        .skillify-salon-name {
           color: #475569;
           font-size: 0.95rem;
           font-weight: 600;
@@ -170,7 +170,7 @@ export default function Topbar({ auth, sidebarExpanded, onToggleSidebar, onLogou
           padding-left: 16px;
         }
         
-        .respark-search-bar {
+        .skillify-search-bar {
           display: flex;
           align-items: center;
           background: #f1f5f9;
@@ -181,12 +181,12 @@ export default function Topbar({ auth, sidebarExpanded, onToggleSidebar, onLogou
           transition: all 0.2s;
           position: relative;
         }
-        .respark-search-bar:focus-within {
+        .skillify-search-bar:focus-within {
           background: white;
           border: 1px solid #cbd5e1;
           box-shadow: none;
         }
-        .respark-search-bar input {
+        .skillify-search-bar input {
           border: none;
           background: transparent;
           outline: none;
@@ -198,16 +198,16 @@ export default function Topbar({ auth, sidebarExpanded, onToggleSidebar, onLogou
           padding: 0;
           border-radius: 0;
         }
-        .respark-search-bar input::placeholder {
+        .skillify-search-bar input::placeholder {
           color: #94a3b8;
         }
-        .respark-search-wrap {
+        .skillify-search-wrap {
           position: relative;
         }
-        .respark-branch-wrap {
+        .skillify-branch-wrap {
           position: relative;
         }
-        .respark-branch-btn {
+        .skillify-branch-btn {
           display: flex;
           align-items: center;
           gap: 6px;
@@ -222,11 +222,11 @@ export default function Topbar({ auth, sidebarExpanded, onToggleSidebar, onLogou
           white-space: nowrap;
           transition: all 0.15s;
         }
-        .respark-branch-btn:hover {
+        .skillify-branch-btn:hover {
           background: #e2e8f0;
           border-color: #cbd5e1;
         }
-        .respark-branch-dropdown {
+        .skillify-branch-dropdown {
           position: absolute;
           top: calc(100% + 8px);
           left: 0;
@@ -240,7 +240,7 @@ export default function Topbar({ auth, sidebarExpanded, onToggleSidebar, onLogou
           z-index: 120;
           padding: 6px;
         }
-        .respark-branch-option {
+        .skillify-branch-option {
           display: flex;
           align-items: center;
           gap: 8px;
@@ -255,20 +255,20 @@ export default function Topbar({ auth, sidebarExpanded, onToggleSidebar, onLogou
           color: #334155;
           transition: background 0.12s;
         }
-        .respark-branch-option:hover {
+        .skillify-branch-option:hover {
           background: #eff6ff;
         }
-        .respark-branch-option.active {
+        .skillify-branch-option.active {
           background: #dbeafe;
           color: #1d4ed8;
           font-weight: 600;
         }
-        .respark-branch-option-check {
+        .skillify-branch-option-check {
           width: 16px;
           height: 16px;
           flex-shrink: 0;
         }
-        .respark-search-dropdown {
+        .skillify-search-dropdown {
           position: absolute;
           top: calc(100% + 10px);
           left: 50%;
@@ -283,7 +283,7 @@ export default function Topbar({ auth, sidebarExpanded, onToggleSidebar, onLogou
           z-index: 120;
           padding: 8px;
         }
-        .respark-search-section-title {
+        .skillify-search-section-title {
           padding: 8px 12px 4px;
           font-size: 0.68rem;
           font-weight: 800;
@@ -291,7 +291,7 @@ export default function Topbar({ auth, sidebarExpanded, onToggleSidebar, onLogou
           text-transform: uppercase;
           letter-spacing: 0.12em;
         }
-        .respark-search-result {
+        .skillify-search-result {
           width: 100%;
           border: 0;
           background: transparent;
@@ -304,10 +304,10 @@ export default function Topbar({ auth, sidebarExpanded, onToggleSidebar, onLogou
           gap: 12px;
           transition: background 0.15s;
         }
-        .respark-search-result:hover {
+        .skillify-search-result:hover {
           background: #eff6ff;
         }
-        .respark-search-module-badge {
+        .skillify-search-module-badge {
           font-size: 0.6rem;
           font-weight: 700;
           color: white;
@@ -318,20 +318,20 @@ export default function Topbar({ auth, sidebarExpanded, onToggleSidebar, onLogou
           min-width: 70px;
           flex-shrink: 0;
         }
-        .respark-search-module-badge.crm { background: #3b82f6; }
-        .respark-search-module-badge.services { background: #8b5cf6; }
-        .respark-search-module-badge.inventory { background: #f59e0b; }
-        .respark-search-module-badge.staff { background: #10b981; }
-        .respark-search-module-badge.appointments { background: #06b6d4; }
-        .respark-search-module-badge.invoices { background: #6366f1; }
-        .respark-search-module-badge.memberships { background: #ec4899; }
-        .respark-search-module-badge.packages { background: #f97316; }
-        .respark-search-module-badge.pos { background: #14b8a6; }
-        .respark-search-result-text {
+        .skillify-search-module-badge.crm { background: #3b82f6; }
+        .skillify-search-module-badge.services { background: #8b5cf6; }
+        .skillify-search-module-badge.inventory { background: #f59e0b; }
+        .skillify-search-module-badge.staff { background: #10b981; }
+        .skillify-search-module-badge.appointments { background: #06b6d4; }
+        .skillify-search-module-badge.invoices { background: #6366f1; }
+        .skillify-search-module-badge.memberships { background: #ec4899; }
+        .skillify-search-module-badge.packages { background: #f97316; }
+        .skillify-search-module-badge.pos { background: #14b8a6; }
+        .skillify-search-result-text {
           flex: 1;
           min-width: 0;
         }
-        .respark-search-result-text strong {
+        .skillify-search-result-text strong {
           display: block;
           color: #0f172a;
           font-size: 0.88rem;
@@ -339,7 +339,7 @@ export default function Topbar({ auth, sidebarExpanded, onToggleSidebar, onLogou
           overflow: hidden;
           text-overflow: ellipsis;
         }
-        .respark-search-result-text small {
+        .skillify-search-result-text small {
           display: block;
           color: #64748b;
           font-size: 0.73rem;
@@ -348,26 +348,26 @@ export default function Topbar({ auth, sidebarExpanded, onToggleSidebar, onLogou
           overflow: hidden;
           text-overflow: ellipsis;
         }
-        .respark-search-result-nav {
+        .skillify-search-result-nav {
           font-size: 0.68rem;
           color: #94a3b8;
           flex-shrink: 0;
         }
-        .respark-search-empty {
+        .skillify-search-empty {
           padding: 24px 18px;
           text-align: center;
           color: #94a3b8;
           font-size: 0.85rem;
         }
 
-        .respark-top-right {
+        .skillify-top-right {
           display: flex;
           align-items: center;
           gap: 16px;
           flex: 1;
           justify-content: flex-end;
         }
-        .respark-date {
+        .skillify-date {
           font-size: 0.85rem;
           color: #475569;
           font-weight: 600;
@@ -376,7 +376,7 @@ export default function Topbar({ auth, sidebarExpanded, onToggleSidebar, onLogou
           border-radius: 16px;
           border: 1px solid #e2e8f0;
         }
-        .respark-icon-btn {
+        .skillify-icon-btn {
           width: 40px;
           height: 40px;
           display: flex;
@@ -388,7 +388,7 @@ export default function Topbar({ auth, sidebarExpanded, onToggleSidebar, onLogou
           transition: all 0.2s;
           position: relative;
         }
-        .respark-icon-btn:hover {
+        .skillify-icon-btn:hover {
           background: #f1f5f9;
           color: #0f172a;
         }
@@ -486,14 +486,14 @@ export default function Topbar({ auth, sidebarExpanded, onToggleSidebar, onLogou
           margin: 0;
         }
         
-        .respark-nav-row {
+        .skillify-nav-row {
           background: var(--sidebar-bg, #334155); /* Slightly darker and richer than #475569 */
           height: 48px;
           display: flex;
           align-items: center;
           padding: 0;
         }
-        .respark-menu-btn {
+        .skillify-menu-btn {
           background: transparent;
           border: none;
           color: white;
@@ -505,14 +505,14 @@ export default function Topbar({ auth, sidebarExpanded, onToggleSidebar, onLogou
           justify-content: center;
           border-right: 1px solid rgba(255,255,255,0.1);
         }
-        .respark-menu-btn:hover { background: rgba(255,255,255,0.1); }
+        .skillify-menu-btn:hover { background: rgba(255,255,255,0.1); }
         
-        .respark-tabs {
+        .skillify-tabs {
           display: flex;
           height: 100%;
           flex-grow: 1;
         }
-        .respark-tab {
+        .skillify-tab {
           color: #f8fafc;
           text-decoration: none;
           display: flex;
@@ -525,10 +525,10 @@ export default function Topbar({ auth, sidebarExpanded, onToggleSidebar, onLogou
           border-bottom: 3px solid transparent;
           transition: all 0.2s;
         }
-        .respark-tab:hover {
+        .skillify-tab:hover {
           background: rgba(255,255,255,0.05);
         }
-        .respark-tab.active {
+        .skillify-tab.active {
           background: #0f172a;
           border-bottom: 3px solid var(--accent, #ef4444);
           color: white;
@@ -536,16 +536,16 @@ export default function Topbar({ auth, sidebarExpanded, onToggleSidebar, onLogou
       `}</style>
 
       {/* Top White Row */}
-      <div className="respark-top-row">
-        <div className="respark-logo-area">
-          <img src="/skillify-logo.png" alt="Skillify" className="respark-brand-image" />
-          <div className="respark-salon-name">{salonName}</div>
+      <div className="skillify-top-row">
+        <div className="skillify-logo-area">
+          <img src="/skillify-logo.png" alt="Skillify" className="skillify-brand-image" />
+          <div className="skillify-salon-name">{salonName}</div>
         </div>
 
         {/* Centered Search Bar */}
         {canGlobalSearch ? (
-          <div className="respark-search-wrap" style={{ position: "absolute", left: "50%", transform: "translateX(-50%)" }}>
-            <div className="respark-search-bar">
+          <div className="skillify-search-wrap" style={{ position: "absolute", left: "50%", transform: "translateX(-50%)" }}>
+            <div className="skillify-search-bar">
               <Search size={16} color="#64748b" />
               <input
                 type="text"
@@ -571,26 +571,26 @@ export default function Topbar({ auth, sidebarExpanded, onToggleSidebar, onLogou
               />
             </div>
             {searchOpen && quickSearch.trim().length >= 2 ? (
-              <div className="respark-search-dropdown" onMouseDown={(event) => event.preventDefault()}>
-                {searchLoading ? <div className="respark-search-empty">Searching workspace...</div> : null}
-                {!searchLoading && !searchResults.length ? <div className="respark-search-empty">No results found for "{quickSearch.trim()}"</div> : null}
+              <div className="skillify-search-dropdown" onMouseDown={(event) => event.preventDefault()}>
+                {searchLoading ? <div className="skillify-search-empty">Searching workspace...</div> : null}
+                {!searchLoading && !searchResults.length ? <div className="skillify-search-empty">No results found for "{quickSearch.trim()}"</div> : null}
                 {!searchLoading && searchResults.map((item) => (
                   <button
                     type="button"
                     key={`${item.module}-${item.id}`}
-                    className="respark-search-result"
+                    className="skillify-search-result"
                     onClick={() => {
                       navigate(item.to);
                       setSearchOpen(false);
                       setQuickSearch("");
                     }}
                   >
-                    <span className={`respark-search-module-badge ${(item.module || "").toLowerCase()}`}>{item.module}</span>
-                    <span className="respark-search-result-text">
+                    <span className={`skillify-search-module-badge ${(item.module || "").toLowerCase()}`}>{item.module}</span>
+                    <span className="skillify-search-result-text">
                       <strong>{item.title}</strong>
                       <small>{item.subtitle || "Open record"}</small>
                     </span>
-                    <span className="respark-search-result-nav">â†’</span>
+                    <span className="skillify-search-result-nav">â†’</span>
                   </button>
                 ))}
               </div>
@@ -598,24 +598,24 @@ export default function Topbar({ auth, sidebarExpanded, onToggleSidebar, onLogou
           </div>
         ) : null}
 
-        <div className="respark-top-right">
+        <div className="skillify-top-right">
           {/* Branch Selector â€” Owner only */}
           {isOwner ? (
-          <div className="respark-branch-wrap">
-            <button className="respark-branch-btn" onClick={() => setIsBranchOpen(!isBranchOpen)}>
+          <div className="skillify-branch-wrap">
+            <button className="skillify-branch-btn" onClick={() => setIsBranchOpen(!isBranchOpen)}>
               <Building2 size={14} color="#64748b" style={{ flexShrink: 0 }} />
               <span style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", maxWidth: 130 }}>{selectedBranchName}</span>
               <ChevronDown size={14} color="#64748b" style={{ flexShrink: 0 }} />
             </button>
             {isBranchOpen && (
-              <div className="respark-branch-dropdown" onClick={e => e.stopPropagation()}>
-                <button className={`respark-branch-option ${!selectedBranchId ? "active" : ""}`} onClick={() => { setSelectedBranchId(""); setIsBranchOpen(false); }}>
-                  <svg className="respark-branch-option-check" viewBox="0 0 16 16" fill="none">{!selectedBranchId ? <path d="M2 8.5l4 4 8-8" stroke="#2563eb" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/> : null}</svg>
+              <div className="skillify-branch-dropdown" onClick={e => e.stopPropagation()}>
+                <button className={`skillify-branch-option ${!selectedBranchId ? "active" : ""}`} onClick={() => { setSelectedBranchId(""); setIsBranchOpen(false); }}>
+                  <svg className="skillify-branch-option-check" viewBox="0 0 16 16" fill="none">{!selectedBranchId ? <path d="M2 8.5l4 4 8-8" stroke="#2563eb" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/> : null}</svg>
                   All Branches
                 </button>
                 {branches.filter(b => b.isActive).map(branch => (
-                  <button key={branch.id} className={`respark-branch-option ${selectedBranchId === branch.id ? "active" : ""}`} onClick={() => { setSelectedBranchId(branch.id); setIsBranchOpen(false); }}>
-                    <svg className="respark-branch-option-check" viewBox="0 0 16 16" fill="none">{selectedBranchId === branch.id ? <path d="M2 8.5l4 4 8-8" stroke="#2563eb" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/> : null}</svg>
+                  <button key={branch.id} className={`skillify-branch-option ${selectedBranchId === branch.id ? "active" : ""}`} onClick={() => { setSelectedBranchId(branch.id); setIsBranchOpen(false); }}>
+                    <svg className="skillify-branch-option-check" viewBox="0 0 16 16" fill="none">{selectedBranchId === branch.id ? <path d="M2 8.5l4 4 8-8" stroke="#2563eb" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/> : null}</svg>
                     {branch.name}
                   </button>
                 ))}
@@ -623,18 +623,18 @@ export default function Topbar({ auth, sidebarExpanded, onToggleSidebar, onLogou
             )}
           </div>
           ) : (
-            <div className="respark-branch-wrap">
-              <span className="respark-branch-btn" style={{ cursor: "default" }}>
+            <div className="skillify-branch-wrap">
+              <span className="skillify-branch-btn" style={{ cursor: "default" }}>
                 <Building2 size={14} color="#64748b" style={{ flexShrink: 0 }} />
                 <span style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", maxWidth: 130 }}>{selectedBranchName}</span>
               </span>
             </div>
           )}
 
-          <div className="respark-date">{dateStr}</div>
+          <div className="skillify-date">{dateStr}</div>
           
           {/* Notifications */}
-          {canNotifications ? <div className="respark-icon-btn respark-notif-wrap" onClick={() => setIsNotifOpen(!isNotifOpen)}>
+          {canNotifications ? <div className="skillify-icon-btn skillify-notif-wrap" onClick={() => setIsNotifOpen(!isNotifOpen)}>
             <Bell size={20} />
             {unreadCount > 0 && (
               <span style={{
@@ -679,13 +679,13 @@ export default function Topbar({ auth, sidebarExpanded, onToggleSidebar, onLogou
           </div> : null}
           
           {/* Settings */}
-          {canSettings ? <div className="respark-icon-btn" onClick={() => navigate('/admin/settings')}>
+          {canSettings ? <div className="skillify-icon-btn" onClick={() => navigate('/admin/settings')}>
              <Settings size={20} /> 
           </div> : null}
           
           {/* Profile Logo */}
           {canProfile ? <div 
-            className="respark-profile-wrap"
+            className="skillify-profile-wrap"
             onClick={() => setIsProfileOpen(!isProfileOpen)}
             style={{ 
               width: 36, height: 36, borderRadius: '50%', background: "var(--button-bg-solid, #3b82f6)", color: 'white', 
@@ -726,15 +726,15 @@ export default function Topbar({ auth, sidebarExpanded, onToggleSidebar, onLogou
       </div>
 
       {/* Dark Tabs Row */}
-      <div className="respark-nav-row">
-        <button className="respark-menu-btn" onClick={onToggleSidebar}>
+      <div className="skillify-nav-row">
+        <button className="skillify-menu-btn" onClick={onToggleSidebar}>
           <Menu size={20} />
         </button>
-        <div className="respark-tabs">
+        <div className="skillify-tabs">
           {tabs.map(tab => {
              const isActive = location.pathname.startsWith(tab.path);
              return (
-               <Link key={tab.path} to={tab.path} className={`respark-tab ${isActive ? 'active' : ''}`}>
+               <Link key={tab.path} to={tab.path} className={`skillify-tab ${isActive ? 'active' : ''}`}>
                  {tab.icon} {tab.label}
                </Link>
              )

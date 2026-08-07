@@ -3624,7 +3624,7 @@ pre {
    MOBILE LAYOUT RESPONSIVENESS
 ════════════════════════════════════════════ */
 @media (max-width: 1024px) {
-  .app-shell .respark-header-container {
+  .app-shell .skillify-header-container {
     display: none !important;
   }
   .app-shell .app-content-wrapper {

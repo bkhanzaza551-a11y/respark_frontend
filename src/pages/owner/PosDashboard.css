@@ -1,4 +1,4 @@
-.respark-pos-dashboard {
+.skillify-pos-dashboard {
   padding: 28px;
   min-height: 100%;
 }
@@ -398,7 +398,7 @@
 }
 
 @media (max-width: 860px) {
-  .respark-pos-dashboard {
+  .skillify-pos-dashboard {
     padding: 16px;
   }
 
