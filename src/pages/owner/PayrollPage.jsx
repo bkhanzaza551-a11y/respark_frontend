@@ -436,22 +436,44 @@ export default function PayrollPage() {
     printWindow.print();
   };
 
-  const downloadCalendarExport = (format) => {
-    const searchParams = new URLSearchParams({
-      period: "monthly",
-      date: `${attendanceCalendarMonth}-01`,
-      ...(selectedBranchId ? { branchId: selectedBranchId } : {})
-    });
-    window.open(`/api/v1/owner/attendance/reports/export.${format}?${searchParams.toString()}`, "_blank", "noopener,noreferrer");
+  const downloadCalendarExport = async (format) => {
+    try {
+      const searchParams = new URLSearchParams({
+        period: "monthly",
+        date: `${attendanceCalendarMonth}-01`,
+        ...(selectedBranchId ? { branchId: selectedBranchId } : {})
+      });
+      const response = await api.get(`/owner/attendance/reports/export.${format}?${searchParams.toString()}`, { responseType: 'blob' });
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', `Attendance_Report_Monthly_${attendanceCalendarMonth}.${format}`);
+      document.body.appendChild(link);
+      link.click();
+      link.parentNode.removeChild(link);
+    } catch (err) {
+      alert("Failed to download report");
+    }
   };
 
-  const downloadDaySheetExport = (format) => {
-    const searchParams = new URLSearchParams({
-      period: "daily",
-      date: daySheetDate,
-      ...(selectedBranchId ? { branchId: selectedBranchId } : {})
-    });
-    window.open(`/api/v1/owner/attendance/reports/export.${format}?${searchParams.toString()}`, "_blank", "noopener,noreferrer");
+  const downloadDaySheetExport = async (format) => {
+    try {
+      const searchParams = new URLSearchParams({
+        period: "daily",
+        date: daySheetDate,
+        ...(selectedBranchId ? { branchId: selectedBranchId } : {})
+      });
+      const response = await api.get(`/owner/attendance/reports/export.${format}?${searchParams.toString()}`, { responseType: 'blob' });
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', `Attendance_Report_Daily_${daySheetDate}.${format}`);
+      document.body.appendChild(link);
+      link.click();
+      link.parentNode.removeChild(link);
+    } catch (err) {
+      alert("Failed to download report");
+    }
   };
 
   const statCards = [
@@ -663,12 +685,12 @@ export default function PayrollPage() {
               <p style={{ margin: 0, color: "#64748b", fontSize: 14 }}>Monthly overview. Click any cell for details. Today is highlighted in blue.</p>
             </div>
             <div style={{ display: "flex", gap: 10, alignItems: "center", background: "#f8fafc", padding: "6px 8px", borderRadius: 16, border: "1px solid #e2e8f0" }}>
-              <button type="button" onClick={() => { const [y, m] = attendanceCalendarMonth.split("-").map(Number); const prev = m === 1 ? `${y - 1}-12` : `${y}-${String(m - 1).padStart(2, "0")}`; setAttendanceCalendarMonth(prev); }} style={{ width: 36, height: 36, borderRadius: 10, border: "none", background: "white", cursor: "pointer", display: "grid", placeItems: "center", boxShadow: "0 2px 4px rgba(0,0,0,0.05)" }}><ChevronLeft size={16} /></button>
+              <button type="button" onClick={() => { const [y, m] = attendanceCalendarMonth.split("-").map(Number); const prev = m === 1 ? `${y - 1}-12` : `${y}-${String(m - 1).padStart(2, "0")}`; setAttendanceCalendarMonth(prev); }} style={{ width: 36, height: 36, borderRadius: 10, border: "none", background: "white", color: "#475569", cursor: "pointer", display: "grid", placeItems: "center", boxShadow: "0 2px 4px rgba(0,0,0,0.05)" }}><ChevronLeft size={16} /></button>
               <input type="month" value={attendanceCalendarMonth} onChange={(e) => setAttendanceCalendarMonth(e.target.value)} style={{ padding: "8px 12px", borderRadius: 10, border: "none", background: "transparent", fontSize: 15, fontWeight: 700, color: "#0f172a", outline: "none" }} />
-              <button type="button" onClick={() => { const [y, m] = attendanceCalendarMonth.split("-").map(Number); const next = m === 12 ? `${y + 1}-01` : `${y}-${String(m + 1).padStart(2, "0")}`; setAttendanceCalendarMonth(next); }} style={{ width: 36, height: 36, borderRadius: 10, border: "none", background: "white", cursor: "pointer", display: "grid", placeItems: "center", boxShadow: "0 2px 4px rgba(0,0,0,0.05)" }}><ChevronRight size={16} /></button>
+              <button type="button" onClick={() => { const [y, m] = attendanceCalendarMonth.split("-").map(Number); const next = m === 12 ? `${y + 1}-01` : `${y}-${String(m + 1).padStart(2, "0")}`; setAttendanceCalendarMonth(next); }} style={{ width: 36, height: 36, borderRadius: 10, border: "none", background: "white", color: "#475569", cursor: "pointer", display: "grid", placeItems: "center", boxShadow: "0 2px 4px rgba(0,0,0,0.05)" }}><ChevronRight size={16} /></button>
               <div style={{ width: 1, height: 24, background: "#cbd5e1", margin: "0 8px" }} />
               <button type="button" onClick={() => setAttendanceCalendarMonth(toMonthInput())} style={{ padding: "8px 16px", borderRadius: 10, border: "none", background: "#2563eb", color: "white", cursor: "pointer", fontSize: 13, fontWeight: 600, display: "flex", gap: 6, alignItems: "center", boxShadow: "0 2px 8px rgba(37,99,235,0.2)" }}><CalendarDays size={14} /> Today</button>
-              <button type="button" onClick={() => downloadCalendarExport("xlsx")} style={{ padding: "8px 12px", borderRadius: 10, border: "1px solid #e2e8f0", background: "white", cursor: "pointer", fontSize: 13, fontWeight: 600, display: "flex", gap: 6, alignItems: "center" }}><Download size={14} /> Excel</button>
+              <button type="button" onClick={() => downloadCalendarExport("xlsx")} style={{ padding: "8px 12px", borderRadius: 10, border: "1px solid #e2e8f0", background: "white", color: "#0f172a", cursor: "pointer", fontSize: 13, fontWeight: 600, display: "flex", gap: 6, alignItems: "center" }}><Download size={14} /> Excel</button>
             </div>
           </div>
           <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginTop: 24 }}>
