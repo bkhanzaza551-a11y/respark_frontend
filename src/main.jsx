@@ -6,7 +6,16 @@ import ErrorBoundary from "./components/ErrorBoundary";
 import { AuthProvider } from "./context/AuthContext";
 import { SalonSettingsProvider } from "./context/SalonSettingsContext";
 import { BranchProvider } from "./context/BranchContext";
+import { initVersionChecker } from "./lib/versionChecker";
 import "./index.css";
+
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("/sw.js").catch(() => {});
+  });
+}
+
+initVersionChecker();
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>

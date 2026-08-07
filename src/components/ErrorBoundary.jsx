@@ -27,20 +27,12 @@ export default class ErrorBoundary extends Component {
 
   componentDidCatch(error, errorInfo) {
     console.error("ErrorBoundary caught:", error, errorInfo);
-
     if (isChunkLoadError(error)) {
-      const retryCount = parseInt(sessionStorage.getItem("chunk_retry_count") || "0");
-      if (retryCount < 3) {
-        sessionStorage.setItem("chunk_retry_count", String(retryCount + 1));
-        setTimeout(hardReload, 500);
-      }
+      setTimeout(hardReload, 800);
     }
   }
 
-  handleRetry = () => {
-    sessionStorage.removeItem("chunk_retry_count");
-    hardReload();
-  };
+  handleRetry = () => hardReload();
 
   handleGoHome = () => {
     sessionStorage.clear();

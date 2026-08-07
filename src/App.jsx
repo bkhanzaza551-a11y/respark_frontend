@@ -20,22 +20,25 @@ const hardReload = () => {
   window.location.replace(url.toString());
 };
 
+const wait = (ms) => new Promise((r) => setTimeout(r, ms));
+
 const lazyWithRetry = (componentImport) =>
   lazy(async () => {
-    const retryCount = parseInt(
-      window.sessionStorage.getItem("chunk_retry_count") || "0"
-    );
-    try {
-      return await componentImport();
-    } catch (error) {
-      if (isChunkLoadError(error) && retryCount < 3) {
-        window.sessionStorage.setItem("chunk_retry_count", String(retryCount + 1));
-        hardReload();
-        return new Promise(() => {});
+    let lastError;
+    for (let attempt = 0; attempt < 3; attempt++) {
+      try {
+        return await componentImport();
+      } catch (error) {
+        lastError = error;
+        if (isChunkLoadError(error) && attempt < 2) {
+          await wait(500 * Math.pow(2, attempt));
+          continue;
+        }
+        break;
       }
-      window.sessionStorage.removeItem("chunk_retry_count");
-      throw error;
     }
+    hardReload();
+    return new Promise(() => {});
   });
 
 const LoginPage = lazyWithRetry(() => import("./pages/LoginPage.jsx"));
