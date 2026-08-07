@@ -595,8 +595,8 @@ export default function ProductCategoriesPage() {
                   </div>
                 </div>
 
-                {/* Cost Price, Price, Sale Price, Non Discountable */}
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr 1fr", gap: 20, marginBottom: 24, alignItems: "end" }}>
+                {/* Cost Price, Price, Non Discountable */}
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 20, marginBottom: 24, alignItems: "end" }}>
                   <div className="hub-form-group">
                     <label style={{ fontSize: 13, fontWeight: 600, color: "#475569", marginBottom: 6, display: "block" }}>Cost Price</label>
                     <div style={{ display: "flex", alignItems: "center", border: "1px solid #cbd5e1", borderRadius: 12, overflow: "hidden", background: "#fff", transition: "border 0.2s" }}>
@@ -609,13 +609,6 @@ export default function ProductCategoriesPage() {
                     <div style={{ display: "flex", alignItems: "center", border: "1px solid #cbd5e1", borderRadius: 12, overflow: "hidden", background: "#fff", transition: "border 0.2s" }}>
                       <span style={{ padding: "10px 12px", background: "#f8fafc", borderRight: "1px solid #e2e8f0", fontSize: 14, fontWeight: 600, color: "#64748b" }}>{currencySymbol}</span>
                       <input type="number" required className="hub-input" value={productForm.sellingPrice} onChange={e => { const val = e.target.value; setProductForm(prev => ({...prev, sellingPrice: val === "" ? "" : (parseFloat(val) || 0)})); }} onFocus={() => handlePriceFocus("sellingPrice")} onBlur={() => handlePriceBlur("sellingPrice")} style={{ border: "none", flex: 1, padding: "10px", fontSize: 14, fontWeight: 600 }} />
-                    </div>
-                  </div>
-                  <div className="hub-form-group">
-                    <label style={{ fontSize: 13, fontWeight: 600, color: "#475569", marginBottom: 6, display: "block" }}>Sale Price</label>
-                    <div style={{ display: "flex", alignItems: "center", border: "1px solid #cbd5e1", borderRadius: 12, overflow: "hidden", background: "#fff", transition: "border 0.2s" }}>
-                      <span style={{ padding: "10px 12px", background: "#f8fafc", borderRight: "1px solid #e2e8f0", fontSize: 14, fontWeight: 600, color: "#64748b" }}>{currencySymbol}</span>
-                      <input type="number" className="hub-input" value={productForm.salePrice} onChange={e => { const val = e.target.value; setProductForm(prev => ({...prev, salePrice: val === "" ? "" : (parseFloat(val) || 0)})); }} onFocus={() => handlePriceFocus("salePrice")} onBlur={() => handlePriceBlur("salePrice")} style={{ border: "none", flex: 1, padding: "10px", fontSize: 14 }} />
                     </div>
                   </div>
                   <div className="hub-form-group" style={{ display: "flex", alignItems: "center", paddingBottom: 10 }}>
