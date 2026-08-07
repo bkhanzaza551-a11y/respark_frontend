@@ -1208,40 +1208,6 @@ export default function SettingsPage() {
           </div>
         </div>
 
-        <div className="settings-panel-card">
-          <div className="settings-panel-header-with-toggle" style={{ borderBottom: "1px solid #e2e8f0", paddingBottom: 12, marginBottom: 20 }}>
-            <h3>Storefront Content</h3>
-          </div>
-          <div className="settings-form-grid">
-            <label className="settings-input-group" style={{ gridColumn: "1 / -1" }}>
-              <span className="muted">Delivery Disclaimer</span>
-              <textarea rows="2" value={generic.deliveryDisclaimer} onChange={(event) => updateGeneric("deliveryDisclaimer", event.target.value)} placeholder="Enter Delivery Disclaimer text..." />
-            </label>
-            <label className="settings-input-group" style={{ gridColumn: "1 / -1" }}>
-              <span className="muted">Pickup Disclaimer</span>
-              <textarea rows="2" value={generic.pickupDisclaimer} onChange={(event) => updateGeneric("pickupDisclaimer", event.target.value)} placeholder="Enter Pickup Disclaimer text..." />
-            </label>
-            <label className="settings-input-group">
-              <span className="muted">Service List Heading</span>
-              <input type="text" value={generic.serviceListHeading} onChange={(event) => updateGeneric("serviceListHeading", event.target.value)} placeholder="Our Services" />
-            </label>
-            <label className="settings-input-group">
-              <span className="muted">Product List Heading</span>
-              <input type="text" value={generic.productListHeading} onChange={(event) => updateGeneric("productListHeading", event.target.value)} placeholder="Products For Sale" />
-            </label>
-            <label className="settings-input-group">
-              <span className="muted">Use Currency</span>
-              <CustomDropdown value={normalizeCurrencyCode(generic.currency || "INR")} onChange={(event) => updateGeneric("currency", event.target.value)}>
-                <option value="INR">Indian Rupee (INR)</option>
-                <option value="USD">US Dollar (USD)</option>
-                <option value="EUR">Euro (EUR)</option>
-                <option value="GBP">British Pound (GBP)</option>
-                <option value="AED">UAE Dirham (AED)</option>
-                <option value="SAR">Saudi Riyal (SAR)</option>
-              </CustomDropdown>
-            </label>
-          </div>
-        </div>
 
         <div className="settings-panel-card">
           <div className="settings-panel-header-with-toggle" style={{ borderBottom: "1px solid #e2e8f0", paddingBottom: 12, marginBottom: 20 }}>
