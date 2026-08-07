@@ -2269,74 +2269,7 @@ export default function SettingsPage() {
           </div>
         </div>
 
-        <div className="shift-layout-grid" style={{ opacity: feedback.enabled ? 1 : 0.4, pointerEvents: feedback.enabled ? 'auto' : 'none', transition: 'all 0.3s' }}>
-          <div style={{ width: "100%", flexShrink: 0 }}>
-            <div className="settings-panel-card" style={{ padding: 0 }}>
-              <div style={{ padding: "16px 16px 12px", borderBottom: "1px solid #f1f5f9" }}>
-                <button type="button" onClick={startCreate} style={{ width: "100%", padding: "10px", background: "var(--button-bg-solid, #3b82f6)", color: "white", border: "none", borderRadius: 8, fontWeight: 700, fontSize: 14, cursor: "pointer" }}>Create New</button>
-              </div>
-              <div style={{ maxHeight: 420, overflowY: "auto" }}>
-                {feedbackTypesList.map((row) => (
-                  <div
-                    key={row.id}
-                    style={{
-                      padding: "14px 16px",
-                      borderBottom: "1px solid #f1f5f9",
-                      cursor: "pointer",
-                      background: selectedFeedbackTypeId === row.id ? "#eff6ff" : "white",
-                      borderLeft: selectedFeedbackTypeId === row.id ? "3px solid #3b82f6" : "3px solid transparent",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "space-between"
-                    }}
-                  >
-                    <div style={{ flex: 1 }} onClick={() => { setSelectedFeedbackTypeId(row.id); setDraftFeedbackType(null); }}>
-                      <div style={{ fontWeight: 600, fontSize: 13, color: "#0f172a" }}>{row.name}</div>
-                      <div style={{ fontSize: 11, color: "#64748b", marginTop: 4, display: "flex", alignItems: "center", gap: 4 }}>
-                        <span style={{ width: 6, height: 6, borderRadius: "50%", background: row.active ? "#22c55e" : "#94a3b8" }} />
-                        <span>{row.active ? "Active" : "Inactive"}</span>
-                      </div>
-                    </div>
-                    <div style={{ display: "flex", gap: 4, flexShrink: 0 }}>
-                      <button type="button" onClick={(event) => { event.stopPropagation(); startEdit(row); }} title="Edit type" style={{ width: 28, height: 28, display: "flex", alignItems: "center", justifyContent: "center", background: "#f1f5f9", border: "1px solid #e2e8f0", borderRadius: 6, cursor: "pointer", color: "#475569", padding: 0 }}><Edit2 size={13} /></button>
-                      <button type="button" onClick={(event) => { event.stopPropagation(); deleteRow(row.id); }} style={{ width: 28, height: 28, display: "flex", alignItems: "center", justifyContent: "center", background: "#fef2f2", border: "1px solid #fecaca", borderRadius: 6, cursor: "pointer", color: "#dc2626", padding: 0 }}><Trash2 size={13} /></button>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
 
-          <div style={{ flex: 1, minWidth: 0 }}>
-            {editing ? (
-              <div className="settings-panel-card">
-                <h3 style={{ color: "var(--accent, #3b82f6)" }}>{draftFeedbackType?._isNew ? "Create Feedback Type" : "Edit Feedback Type"}</h3>
-                <div className="settings-form-grid" style={{ marginBottom: 16 }}>
-                  <label className="settings-input-group">
-                    <span className="muted">Feedback Name</span>
-                    <input type="text" value={draftFeedbackType?.name ?? editing.name} onChange={(event) => draftFeedbackType && setDraftFeedbackType({ ...draftFeedbackType, name: event.target.value })} placeholder="Enter Feedback Name" />
-                  </label>
-                </div>
-                <div style={{ marginBottom: 20 }}>
-                  <ToggleSwitch 
-                    checked={draftFeedbackType?.active ?? editing.active} 
-                    onChange={(event) => draftFeedbackType && setDraftFeedbackType({ ...draftFeedbackType, active: event.target.checked })} 
-                    label="Active" 
-                    color="#3b82f6" 
-                  />
-                </div>
-                <div style={{ display: "flex", gap: 8, justifyContent: "flex-end", marginTop: 20, paddingTop: 16, borderTop: "1px solid #f1f5f9" }}>
-                  <button type="button" onClick={cancelDraft} style={{ padding: "10px 24px", background: "#f1f5f9", border: "1px solid #cbd5e1", borderRadius: 8, fontWeight: 600, cursor: "pointer", color: "#475569", fontSize: 13 }}>Cancel</button>
-                  <button type="button" onClick={saveDraft} style={{ padding: "10px 24px", background: "var(--button-bg-solid, #14b8a6)", color: "white", border: "none", borderRadius: 8, fontWeight: 700, cursor: "pointer", fontSize: 13 }}>Save</button>
-                </div>
-              </div>
-            ) : (
-              <div className="settings-panel-card" style={{ display: "flex", alignItems: "center", justifyContent: "center", minHeight: 300, color: "#94a3b8", fontSize: 14 }}>
-                Select a tax from the left panel or click "Create New"
-              </div>
-            )}
-          </div>
-        </div>
       </>
     );
   };
