@@ -1148,50 +1148,6 @@ export default function SettingsPage() {
           </div>
         </div>
 
-        <div className="settings-panel-card">
-          <div className="settings-panel-header-with-toggle" style={{ borderBottom: "1px solid #e2e8f0", paddingBottom: 12, marginBottom: 20 }}>
-            <h3>Online Payment & Orders</h3>
-          </div>
-          
-          <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
-            <ToggleSwitch
-              checked={generic.onlinePaymentEnabled}
-              onChange={(e) => updateGeneric("onlinePaymentEnabled", e.target.checked)}
-              label="Enable Online Payment for Orders & Appointments"
-            />
-            <ToggleSwitch
-              checked={generic.productOrderingEnabled}
-              onChange={(e) => updateGeneric("productOrderingEnabled", e.target.checked)}
-              label="Enable Product Ordering"
-            />
-            
-            <div style={{ display: "flex", gap: 40, marginTop: 10, marginLeft: 10, paddingLeft: 20, borderLeft: "2px solid #e2e8f0" }}>
-              <ToggleSwitch
-                checked={generic.homeDeliveryEnabled}
-                onChange={(e) => updateGeneric("homeDeliveryEnabled", e.target.checked)}
-                label="Home Delivery"
-              />
-              <ToggleSwitch
-                checked={generic.pickupOrderingEnabled}
-                onChange={(e) => updateGeneric("pickupOrderingEnabled", e.target.checked)}
-                label="Pickup Orders"
-              />
-            </div>
-          </div>
-        </div>
-
-
-
-        <div className="settings-panel-card">
-          <div className="settings-panel-header-with-toggle" style={{ borderBottom: "1px solid #e2e8f0", paddingBottom: 12, marginBottom: 20 }}>
-            <h3>Payment Modes</h3>
-          </div>
-          <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-            {Object.entries(paymentModes).map(([key, value]) => (
-              <ToggleSwitch key={key} checked={value} onChange={() => togglePaymentMode(key)} label={key === "bankTransfer" ? "Bank Transfer" : key.charAt(0).toUpperCase() + key.slice(1)} />
-            ))}
-          </div>
-        </div>
 
         <div className="settings-panel-card">
           <div className="settings-panel-header-with-toggle" style={{ borderBottom: "1px solid #e2e8f0", paddingBottom: 12, marginBottom: 20 }}>
