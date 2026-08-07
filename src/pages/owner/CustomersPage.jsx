@@ -1442,56 +1442,68 @@ export default function CustomersPage() {
       )}
 
       {showAddGuest && (
-        <div className="modal-overlay" onClick={() => setShowAddGuest(false)}>
-          <div className="modal-content" onClick={(event) => event.stopPropagation()}>
-            <div className="modal-header">
-              <h3>Add Guest</h3>
-              <button className="modal-close" onClick={() => setShowAddGuest(false)}><X size={20} /></button>
+        <div className="panel-overlay" onClick={() => setShowAddGuest(false)}>
+          <div className="panel-content" onClick={(event) => event.stopPropagation()} style={{ width: 450 }}>
+            <div className="panel-header">
+              <h2>Add New Guest</h2>
+              <button className="panel-close" onClick={() => setShowAddGuest(false)}><X size={20} /></button>
             </div>
-            <form onSubmit={handleAddGuest}>
-              <div className="modal-body">
-                <div className="form-group">
-                  <label>Mobile Number *</label>
+            <div className="panel-body" style={{ padding: '24px' }}>
+              <form id="add-guest-form" onSubmit={handleAddGuest} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                  <label style={{ fontSize: '0.85rem', fontWeight: 600, color: '#334155' }}>Mobile Number <span style={{ color: '#ef4444' }}>*</span></label>
                   <IndianPhoneInput required value={formData.phone} onChange={(phone) => setFormData((current) => ({ ...current, phone }))} />
                 </div>
-                <div className="form-group">
-                  <label>Name *</label>
-                  <input required type="text" value={formData.name} placeholder="Guest Name" onChange={(event) => setFormData((current) => ({ ...current, name: event.target.value }))} />
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                  <label style={{ fontSize: '0.85rem', fontWeight: 600, color: '#334155' }}>Guest Name <span style={{ color: '#ef4444' }}>*</span></label>
+                  <input required type="text" value={formData.name} placeholder="Enter full name" onChange={(event) => setFormData((current) => ({ ...current, name: event.target.value }))} style={{ padding: '10px 14px', borderRadius: '8px', border: '1px solid #e2e8f0', fontSize: '0.95rem', outline: 'none', transition: 'border-color 0.2s', width: '100%', boxSizing: 'border-box' }} onFocus={(e) => e.target.style.borderColor = 'var(--accent, #3b82f6)'} onBlur={(e) => e.target.style.borderColor = '#e2e8f0'} />
                 </div>
-                <div className="form-group">
-                  <label>Gender</label>
-                  <div className="radio-group">
-                    <label><input type="radio" name="gender" checked={formData.gender === "FEMALE"} onChange={() => setFormData((current) => ({ ...current, gender: "FEMALE" }))} /> Female</label>
-                    <label><input type="radio" name="gender" checked={formData.gender === "MALE"} onChange={() => setFormData((current) => ({ ...current, gender: "MALE" }))} /> Male</label>
-                    <label><input type="radio" name="gender" checked={formData.gender === "OTHER"} onChange={() => setFormData((current) => ({ ...current, gender: "OTHER" }))} /> Other</label>
+                
+                {/* Gender Segment Control */}
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                  <label style={{ fontSize: '0.85rem', fontWeight: 600, color: '#334155' }}>Gender</label>
+                  <div style={{ display: 'flex', gap: '8px', background: '#f8fafc', padding: '4px', borderRadius: '8px', border: '1px solid #e2e8f0' }}>
+                    {['FEMALE', 'MALE', 'OTHER'].map(g => (
+                      <div key={g} 
+                           onClick={() => setFormData(c => ({ ...c, gender: g }))} 
+                           style={{ flex: 1, textAlign: 'center', padding: '8px', borderRadius: '6px', fontSize: '0.9rem', fontWeight: 500, cursor: 'pointer', transition: 'all 0.2s', background: formData.gender === g ? '#fff' : 'transparent', color: formData.gender === g ? 'var(--accent, #3b82f6)' : '#64748b', boxShadow: formData.gender === g ? '0 1px 3px rgba(0,0,0,0.1)' : 'none' }}>
+                        {g.charAt(0) + g.slice(1).toLowerCase()}
+                      </div>
+                    ))}
                   </div>
                 </div>
-                <div className="form-group">
-                  <label>Alternate Mobile Number</label>
+
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                  <label style={{ fontSize: '0.85rem', fontWeight: 600, color: '#334155' }}>Alternate Mobile Number</label>
                   <IndianPhoneInput value={formData.alternatePhone} onChange={(alternatePhone) => setFormData((current) => ({ ...current, alternatePhone }))} />
                 </div>
-                <div className="form-group">
-                  <label>Email</label>
-                  <input type="email" value={formData.email} onChange={(event) => setFormData((current) => ({ ...current, email: event.target.value }))} />
+
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                  <label style={{ fontSize: '0.85rem', fontWeight: 600, color: '#334155' }}>Email Address</label>
+                  <input type="email" value={formData.email} placeholder="name@example.com" onChange={(event) => setFormData((current) => ({ ...current, email: event.target.value }))} style={{ padding: '10px 14px', borderRadius: '8px', border: '1px solid #e2e8f0', fontSize: '0.95rem', outline: 'none', transition: 'border-color 0.2s', width: '100%', boxSizing: 'border-box' }} onFocus={(e) => e.target.style.borderColor = 'var(--accent, #3b82f6)'} onBlur={(e) => e.target.style.borderColor = '#e2e8f0'} />
                 </div>
-                <div className="form-group">
-                  <label>DOB</label>
-                  <input type="date" max={new Date().toISOString().slice(0, 10)} value={formData.dateOfBirth} onChange={(event) => setFormData((current) => ({ ...current, dateOfBirth: event.target.value }))} />
+
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                    <label style={{ fontSize: '0.85rem', fontWeight: 600, color: '#334155' }}>Date of Birth</label>
+                    <input type="date" max={new Date().toISOString().slice(0, 10)} value={formData.dateOfBirth} onChange={(event) => setFormData((current) => ({ ...current, dateOfBirth: event.target.value }))} style={{ padding: '10px 14px', borderRadius: '8px', border: '1px solid #e2e8f0', fontSize: '0.95rem', outline: 'none', transition: 'border-color 0.2s', width: '100%', boxSizing: 'border-box' }} onFocus={(e) => e.target.style.borderColor = 'var(--accent, #3b82f6)'} onBlur={(e) => e.target.style.borderColor = '#e2e8f0'} />
+                  </div>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                    <label style={{ fontSize: '0.85rem', fontWeight: 600, color: '#334155' }}>Anniversary</label>
+                    <input type="date" max={new Date().toISOString().slice(0, 10)} value={formData.anniversary} onChange={(event) => setFormData((current) => ({ ...current, anniversary: event.target.value }))} style={{ padding: '10px 14px', borderRadius: '8px', border: '1px solid #e2e8f0', fontSize: '0.95rem', outline: 'none', transition: 'border-color 0.2s', width: '100%', boxSizing: 'border-box' }} onFocus={(e) => e.target.style.borderColor = 'var(--accent, #3b82f6)'} onBlur={(e) => e.target.style.borderColor = '#e2e8f0'} />
+                  </div>
                 </div>
-                <div className="form-group">
-                  <label>Anniversary Date</label>
-                  <input type="date" max={new Date().toISOString().slice(0, 10)} value={formData.anniversary} onChange={(event) => setFormData((current) => ({ ...current, anniversary: event.target.value }))} />
+
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                  <label style={{ fontSize: '0.85rem', fontWeight: 600, color: '#334155' }}>GST Number <span style={{color: '#94a3b8', fontWeight: 400}}>(Optional)</span></label>
+                  <input type="text" value={formData.gst} placeholder="Enter GSTIN" onChange={(event) => setFormData((current) => ({ ...current, gst: event.target.value }))} style={{ padding: '10px 14px', borderRadius: '8px', border: '1px solid #e2e8f0', fontSize: '0.95rem', outline: 'none', transition: 'border-color 0.2s', width: '100%', boxSizing: 'border-box' }} onFocus={(e) => e.target.style.borderColor = 'var(--accent, #3b82f6)'} onBlur={(e) => e.target.style.borderColor = '#e2e8f0'} />
                 </div>
-                <div className="form-group">
-                  <label>GST Number</label>
-                  <input type="text" value={formData.gst} onChange={(event) => setFormData((current) => ({ ...current, gst: event.target.value }))} />
-                </div>
-              </div>
-              <div className="modal-footer">
-                <button type="button" className="crm-btn" onClick={() => setShowAddGuest(false)}>Cancel</button>
-                <button type="submit" className="crm-btn">Add</button>
-              </div>
-            </form>
+              </form>
+            </div>
+            <div className="panel-footer" style={{ display: 'flex', gap: '12px', justifyContent: 'flex-end', background: '#f8fafc', padding: '16px 24px', borderTop: '1px solid #e2e8f0' }}>
+              <button type="button" onClick={() => setShowAddGuest(false)} style={{ padding: '10px 16px', borderRadius: '8px', border: '1px solid #cbd5e1', background: '#fff', color: '#475569', fontWeight: 600, cursor: 'pointer', transition: 'all 0.2s' }} onMouseEnter={e => e.target.style.background = '#f1f5f9'} onMouseLeave={e => e.target.style.background = '#fff'}>Cancel</button>
+              <button type="submit" form="add-guest-form" style={{ padding: '10px 24px', borderRadius: '8px', border: 'none', background: 'var(--accent, #3b82f6)', color: '#fff', fontWeight: 600, cursor: 'pointer', transition: 'all 0.2s' }} onMouseEnter={e => e.target.style.opacity = 0.9} onMouseLeave={e => e.target.style.opacity = 1}>Save Guest</button>
+            </div>
           </div>
         </div>
       )}
