@@ -1179,34 +1179,6 @@ export default function SettingsPage() {
           </div>
         </div>
 
-        <div className="settings-panel-card">
-          <div className="settings-panel-header-with-toggle" style={{ borderBottom: "1px solid #e2e8f0", paddingBottom: 12, marginBottom: 20 }}>
-            <h3>Storefront Permissions</h3>
-          </div>
-          <div className="settings-form-grid" style={{ marginBottom: 24, paddingBottom: 24, borderBottom: "1px solid #e2e8f0" }}>
-            <label className="settings-input-group">
-              <span className="muted">Minimum Order Value</span>
-              <input
-                type="number"
-                value={generic.minOrderValue}
-                onChange={(event) => updateGeneric("minOrderValue", Number(event.target.value))}
-              />
-            </label>
-            <label className="settings-input-group">
-              <span className="muted">Delivery Fee</span>
-              <input
-                type="number"
-                value={generic.deliveryFee}
-                onChange={(event) => updateGeneric("deliveryFee", Number(event.target.value))}
-              />
-            </label>
-          </div>
-          <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
-            <ToggleSwitch checked={generic.allowCustomerCancel} onChange={(e) => updateGeneric("allowCustomerCancel", e.target.checked)} label="Customers can cancel appointments" />
-            <ToggleSwitch checked={generic.allowCustomerReschedule} onChange={(e) => updateGeneric("allowCustomerReschedule", e.target.checked)} label="Customers can reschedule appointments" />
-            <ToggleSwitch checked={generic.showCancelledInHistory} onChange={(e) => updateGeneric("showCancelledInHistory", e.target.checked)} label="Show cancelled appointments in customer history" />
-          </div>
-        </div>
 
 
         <div className="settings-panel-card">
