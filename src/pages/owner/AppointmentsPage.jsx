@@ -2102,15 +2102,15 @@ export default function AppointmentsPage() {
                 {editMode ? (
                   <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
                     <div style={{ display: "flex", gap: 12 }}>
-                      <button type="submit" className="sp-btn-primary" style={{ flex: 1 }}>Update</button>
+                      <button type="submit" className="sp-btn-primary" style={{ flex: 1, background: "#3b82f6", boxShadow: "0 4px 12px rgba(59, 130, 246, 0.25)", border: "1px solid #3b82f6" }}>Update</button>
                       {form.status !== "CANCELLED" && (
-                        <button type="button" className="sp-btn-primary" style={{ flex: 1, background: "#f1f5f9", color: "#ef4444", border: "1px solid #ef4444" }} onClick={handleCancelAppointment}>Cancel Appointment</button>
+                        <button type="button" className="sp-btn-primary" style={{ flex: 1, background: "#fff1f2", color: "#e11d48", border: "1px solid #fda4af", boxShadow: "0 4px 12px rgba(225, 29, 72, 0.1)" }} onClick={handleCancelAppointment}>Cancel Appointment</button>
                       )}
                     </div>
                     {form.status !== "IN_PROGRESS" && form.status !== "COMPLETED" && (
-                      <button type="button" className="sp-btn-primary" style={{ background: "#f97316", borderColor: "#f97316" }} onClick={handleCheckIn}>Start Service</button>
+                      <button type="button" className="sp-btn-primary" style={{ background: "#f97316", border: "1px solid #f97316", boxShadow: "0 4px 12px rgba(249, 115, 22, 0.25)" }} onClick={handleCheckIn}>Start Service</button>
                     )}
-                    <button type="button" className="sp-btn-primary" style={{ background: "#10b981", borderColor: "#10b981" }} onClick={handleGenerateBill}>
+                    <button type="button" className="sp-btn-primary" style={{ background: "#10b981", border: "1px solid #10b981", boxShadow: "0 4px 12px rgba(16, 185, 129, 0.25)" }} onClick={handleGenerateBill}>
                       {form.convertedInvoiceId ? "View Invoice" : "Complete & Bill"}
                     </button>
                   </div>
