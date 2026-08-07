@@ -41,61 +41,83 @@ export default function LoginPage() {
   };
 
   return (
-    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh', background: '#f1f5f9', padding: '20px' }}>
-      <div style={{ width: '100%', maxWidth: '440px', background: 'white', padding: '40px', borderRadius: '16px', border: '1px solid #e2e8f0', boxShadow: '0 10px 40px rgba(0,0,0,0.06)' }}>
-        <div style={{ textAlign: 'center', marginBottom: '32px' }}>
-          <h1 style={{ fontSize: '1.2rem', color: 'var(--accent)', marginBottom: '8px', letterSpacing: '0.05em', textTransform: 'uppercase' }}>Skillify ERP</h1>
-          <h2 style={{ fontSize: '2.2rem', margin: 0, color: '#0f172a', letterSpacing: '-0.02em' }}>Welcome back</h2>
-          <p className="muted" style={{ marginTop: '8px' }}>Sign in to your salon workspace</p>
+    <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", background: "linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%)", fontFamily: "'Poppins', sans-serif" }}>
+      <div style={{ background: "#ffffff", padding: "48px 40px", borderRadius: 24, boxShadow: "0 20px 40px rgba(0,0,0,0.08), 0 1px 3px rgba(0,0,0,0.05)", width: "100%", maxWidth: 440, textAlign: "center", position: "relative", overflow: "hidden" }}>
+        
+        {/* Decorative Top Accent */}
+        <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 6, background: "linear-gradient(90deg, #3b82f6, #0ea5e9)" }}></div>
+
+        <div style={{ marginBottom: 28 }}>
+          <img src="/skillify-logo.png" alt="Skillify ERP" style={{ height: 42, objectFit: "contain" }} />
         </div>
+        
+        <h1 style={{ margin: "0 0 8px 0", fontSize: 26, fontWeight: 700, color: "#0f172a", letterSpacing: "-0.02em" }}>Welcome back</h1>
+        <p style={{ margin: "0 0 32px 0", fontSize: 14, color: "#64748b" }}>Sign in to your salon workspace</p>
 
         {isSubmitting ? (
           <PageLoader title="Authenticating" message="Verifying your credentials and preparing your dashboard..." />
         ) : (
           <>
             {access ? (
-              <div className="auth-inline-note auth-inline-success" style={{ marginBottom: '20px' }}>Secure login verified for this email invite.</div>
+              <div style={{ background: "#f0fdf4", color: "#15803d", padding: "12px", borderRadius: 12, marginBottom: 20, fontSize: 13, fontWeight: 500 }}>
+                Secure login verified for this email invite.
+              </div>
             ) : null}
 
             {!access && searchParams.get("email") ? (
-              <div className="auth-inline-note" style={{ marginBottom: '20px' }}>
+              <div style={{ background: "#eff6ff", color: "#1d4ed8", padding: "12px", borderRadius: 12, marginBottom: 20, fontSize: 13, fontWeight: 500 }}>
                 Your email was prefilled from a secure link. Enter your password to continue.
               </div>
             ) : null}
 
-            <form onSubmit={onSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-              <label style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                <span style={{ fontSize: '0.9rem', fontWeight: 600, color: '#334155' }}>Email Address</span>
+            {err && (
+              <div style={{ background: "#fef2f2", color: "#b91c1c", padding: "12px", borderRadius: 12, marginBottom: 20, fontSize: 13, fontWeight: 500, textAlign: "left" }}>
+                {err}
+              </div>
+            )}
+
+            <form onSubmit={onSubmit} style={{ textAlign: "left" }}>
+              <div style={{ marginBottom: 20 }}>
+                <label style={{ display: "block", fontSize: 13, fontWeight: 600, color: "#334155", marginBottom: 8 }}>Email Address</label>
                 <input
                   type="email"
                   required
                   placeholder="name@company.com"
                   value={form.email}
                   onChange={(event) => setForm({ ...form, email: event.target.value })}
-                  style={{ padding: '12px 16px', borderRadius: '8px', border: '1px solid #cbd5e1', fontSize: '1rem', width: '100%' }}
+                  style={{ width: "100%", padding: "14px 16px", fontSize: 14, color: "#0f172a", border: "1px solid #cbd5e1", borderRadius: 12, outline: "none", transition: "all 0.2s", background: "#f8fafc", boxSizing: "border-box" }}
+                  onFocus={(e) => { e.target.style.borderColor = "#3b82f6"; e.target.style.background = "#fff"; e.target.style.boxShadow = "0 0 0 4px rgba(59, 130, 246, 0.1)"; }}
+                  onBlur={(e) => { e.target.style.borderColor = "#cbd5e1"; e.target.style.background = "#f8fafc"; e.target.style.boxShadow = "none"; }}
                 />
-              </label>
-              <label style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                <span style={{ fontSize: '0.9rem', fontWeight: 600, color: '#334155' }}>Password</span>
+              </div>
+
+              <div style={{ marginBottom: 24 }}>
+                <label style={{ display: "block", fontSize: 13, fontWeight: 600, color: "#334155", marginBottom: 8 }}>Password</label>
                 <input
                   type="password"
                   required
                   placeholder="Enter your password"
                   value={form.password}
                   onChange={(event) => setForm({ ...form, password: event.target.value })}
-                  style={{ padding: '12px 16px', borderRadius: '8px', border: '1px solid #cbd5e1', fontSize: '1rem', width: '100%' }}
+                  style={{ width: "100%", padding: "14px 16px", fontSize: 14, color: "#0f172a", border: "1px solid #cbd5e1", borderRadius: 12, outline: "none", transition: "all 0.2s", background: "#f8fafc", boxSizing: "border-box" }}
+                  onFocus={(e) => { e.target.style.borderColor = "#3b82f6"; e.target.style.background = "#fff"; e.target.style.boxShadow = "0 0 0 4px rgba(59, 130, 246, 0.1)"; }}
+                  onBlur={(e) => { e.target.style.borderColor = "#cbd5e1"; e.target.style.background = "#f8fafc"; e.target.style.boxShadow = "none"; }}
                 />
-              </label>
+              </div>
 
-              {err && <div className="error-text" style={{ padding: '10px', background: '#fee2e2', color: '#b91c1c', borderRadius: '6px', fontSize: '0.9rem' }}>{err}</div>}
-
-              <button type="submit" disabled={isSubmitting} style={{ background: 'var(--accent)', color: 'white', padding: '14px', borderRadius: '8px', fontSize: '1rem', fontWeight: 600, border: 'none', cursor: 'pointer', marginTop: '8px', width: '100%' }}>
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                style={{ width: "100%", padding: "14px", background: isSubmitting ? "#94a3b8" : "#0f172a", color: "#fff", fontSize: 15, fontWeight: 600, border: "none", borderRadius: 12, cursor: isSubmitting ? "not-allowed" : "pointer", transition: "background 0.2s", display: "flex", alignItems: "center", justifyContent: "center", gap: 8 }}
+              >
                 {isSubmitting ? "Signing in..." : "Access Workspace"}
               </button>
             </form>
 
-            <div style={{ textAlign: 'center', marginTop: '24px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
-              <Link className="interactive-link" to="/forgot-password" style={{ fontSize: '0.95rem' }}>Forgot your password?</Link>
+            <div style={{ marginTop: 28 }}>
+              <Link to="/forgot-password" style={{ display: "inline-block", fontSize: 13, fontWeight: 600, color: "#64748b", textDecoration: "none", transition: "color 0.2s" }} onMouseEnter={(e) => e.target.style.color = "#0ea5e9"} onMouseLeave={(e) => e.target.style.color = "#64748b"}>
+                Forgot your password?
+              </Link>
             </div>
           </>
         )}
