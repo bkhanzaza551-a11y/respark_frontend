@@ -405,28 +405,30 @@ export default function ReportsPage() {
           )}
 
           {(reportView === "overview" || reportView === "inventory") && (
-            <div className="two-col" style={{ marginTop: 18 }}>
-              <ReportList
-                title="Stock Movements"
-                rows={data.stock.slice(0, 8)}
-                emptyText="No stock movement history yet."
-                renderMeta={(item) => `${item.product?.name || "Product"} | ${item.movementType} | ${cardCurrency(item.quantity)}`}
-              />
-              <ReportList
-                title="Low Stock Watchlist"
-                rows={(data.lowStock || []).slice(0, 8)}
-                emptyText="Inventory health looks good."
-                renderMeta={(item) => `${item.branch?.name || "Shared"} | Current ${cardCurrency(item.currentStock)} | Min ${cardCurrency(item.minStock)}`}
-              />
-            </div>
-            <div className="two-col" style={{ marginTop: 18 }}>
-              <ReportList
-                title="Consumable Tracking"
-                rows={(data.consumableTracking || []).slice(0, 8)}
-                emptyText="No consumables used in this period."
-                renderMeta={(item) => `${item.productName || "Product"} | Used ${item.totalUsed} ${item.unit || ""} | Remaining: ${item.currentStock || 0} ${item.unit || ""}`}
-              />
-            </div>
+            <>
+              <div className="two-col" style={{ marginTop: 18 }}>
+                <ReportList
+                  title="Stock Movements"
+                  rows={data.stock.slice(0, 8)}
+                  emptyText="No stock movement history yet."
+                  renderMeta={(item) => `${item.product?.name || "Product"} | ${item.movementType} | ${cardCurrency(item.quantity)}`}
+                />
+                <ReportList
+                  title="Low Stock Watchlist"
+                  rows={(data.lowStock || []).slice(0, 8)}
+                  emptyText="Inventory health looks good."
+                  renderMeta={(item) => `${item.branch?.name || "Shared"} | Current ${cardCurrency(item.currentStock)} | Min ${cardCurrency(item.minStock)}`}
+                />
+              </div>
+              <div className="two-col" style={{ marginTop: 18 }}>
+                <ReportList
+                  title="Consumable Tracking"
+                  rows={(data.consumableTracking || []).slice(0, 8)}
+                  emptyText="No consumables used in this period."
+                  renderMeta={(item) => `${item.productName || "Product"} | Used ${item.totalUsed} ${item.unit || ""} | Remaining: ${item.currentStock || 0} ${item.unit || ""}`}
+                />
+              </div>
+            </>
           )}
 
           {reportView === "finance" && (
