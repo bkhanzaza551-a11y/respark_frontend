@@ -1495,7 +1495,7 @@ export default function CustomersPage() {
                 </div>
 
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                  <label style={{ fontSize: '0.85rem', fontWeight: 600, color: '#334155' }}>GST Number <span style={{color: '#94a3b8', fontWeight: 400}}>(Optional)</span></label>
+                  <label style={{ fontSize: '0.85rem', fontWeight: 600, color: '#334155' }}>GST Number</label>
                   <input type="text" value={formData.gst} placeholder="Enter GSTIN" onChange={(event) => setFormData((current) => ({ ...current, gst: event.target.value }))} style={{ padding: '10px 14px', borderRadius: '8px', border: '1px solid #e2e8f0', fontSize: '0.95rem', outline: 'none', transition: 'border-color 0.2s', width: '100%', boxSizing: 'border-box' }} onFocus={(e) => e.target.style.borderColor = 'var(--accent, #3b82f6)'} onBlur={(e) => e.target.style.borderColor = '#e2e8f0'} />
                 </div>
               </form>
