@@ -1451,11 +1451,11 @@ export default function CustomersPage() {
             <div className="panel-body" style={{ padding: '24px' }}>
               <form id="add-guest-form" onSubmit={handleAddGuest} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                  <label style={{ fontSize: '0.85rem', fontWeight: 600, color: '#334155' }}>Mobile Number <span style={{ color: '#ef4444' }}>*</span></label>
+                  <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 600, color: '#334155' }}>Mobile Number <span style={{ color: '#ef4444' }}>*</span></label>
                   <IndianPhoneInput required value={formData.phone} onChange={(phone) => setFormData((current) => ({ ...current, phone }))} />
                 </div>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                  <label style={{ fontSize: '0.85rem', fontWeight: 600, color: '#334155' }}>Guest Name <span style={{ color: '#ef4444' }}>*</span></label>
+                  <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 600, color: '#334155' }}>Guest Name <span style={{ color: '#ef4444' }}>*</span></label>
                   <input required type="text" value={formData.name} placeholder="Enter full name" onChange={(event) => setFormData((current) => ({ ...current, name: event.target.value }))} style={{ padding: '10px 14px', borderRadius: '8px', border: '1px solid #e2e8f0', fontSize: '0.95rem', outline: 'none', transition: 'border-color 0.2s', width: '100%', boxSizing: 'border-box' }} onFocus={(e) => e.target.style.borderColor = 'var(--accent, #3b82f6)'} onBlur={(e) => e.target.style.borderColor = '#e2e8f0'} />
                 </div>
                 
