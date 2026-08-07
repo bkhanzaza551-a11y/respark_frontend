@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import CustomDropdown from '../../components/common/CustomDropdown';
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-import { Clock3, Download, FileText, Gift, ScissorsLineDashed, TicketPercent, Trash2, X, FlaskConical, Plus } from "lucide-react";
+import { Clock3, Download, FileText, Gift, ScissorsLineDashed, TicketPercent, Trash2, X, FlaskConical, Plus, Printer } from "lucide-react";
 import { api } from "../../api/client";
 import EmptyState from "../../components/EmptyState";
 import PageLoader from "../../components/PageLoader";
@@ -969,8 +969,11 @@ export default function PosDashboardPage() {
                       className="pos-dash-download-btn"
                       title="Download Invoice"
                       onClick={(event) => downloadInvoiceFromCard(event, row.id, row.invoiceNumber)}
+                      style={{ padding: 0, cursor: 'pointer', transition: 'all 0.2s' }}
+                      onMouseEnter={e => { e.currentTarget.style.background = '#e0f2fe'; e.currentTarget.style.borderColor = '#93c5fd'; }}
+                      onMouseLeave={e => { e.currentTarget.style.background = '#f8fbff'; e.currentTarget.style.borderColor = '#dbeafe'; }}
                     >
-                      <Download size={18} color="#3b82f6" />
+                      <Printer size={18} color="#3b82f6" />
                     </button>
                   ) : null}
                   <div className="pos-dash-card-icon">
