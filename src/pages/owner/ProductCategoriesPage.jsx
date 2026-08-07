@@ -724,17 +724,15 @@ export default function ProductCategoriesPage() {
                   </div>
                 </div>
 
-                {/* Description + Video Link */}
+                {/* Description + Benefits */}
                 <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20, marginBottom: 24 }}>
                   <div className="hub-form-group">
                     <label style={{ fontSize: 13, fontWeight: 600, color: "#475569", marginBottom: 6, display: "block" }}>Description <span style={{ fontWeight: 400, color: "#94a3b8", fontSize: 11 }}>(Optional)</span></label>
                     <textarea className="hub-input" value={productForm.description} onChange={e => setProductForm({...productForm, description: e.target.value})} placeholder="Detailed product description..." rows={4} style={{ width: "100%", resize: "vertical", padding: "10px 14px", borderRadius: 8, border: "1px solid #cbd5e1" }} />
                   </div>
                   <div className="hub-form-group">
-                    <label style={{ fontSize: 13, fontWeight: 600, color: "#475569", marginBottom: 6, display: "block" }}>Video Link <span style={{ fontWeight: 400, color: "#94a3b8", fontSize: 11 }}>(Optional)</span></label>
-                    <input type="text" className="hub-input" value={productForm.videoLink} onChange={e => setProductForm({...productForm, videoLink: e.target.value})} placeholder="https://youtube.com/..." style={{ width: "100%", padding: "10px 14px", borderRadius: 8, border: "1px solid #cbd5e1", marginBottom: 16 }} />
                     <label style={{ fontSize: 13, fontWeight: 600, color: "#475569", marginBottom: 6, display: "block" }}>Benefits <span style={{ fontWeight: 400, color: "#94a3b8", fontSize: 11 }}>(Optional)</span></label>
-                    <textarea className="hub-input" value={productForm.benefits} onChange={e => setProductForm({...productForm, benefits: e.target.value})} placeholder="Key benefits..." rows={2} style={{ width: "100%", resize: "vertical", padding: "10px 14px", borderRadius: 8, border: "1px solid #cbd5e1" }} />
+                    <textarea className="hub-input" value={productForm.benefits} onChange={e => setProductForm({...productForm, benefits: e.target.value})} placeholder="Key benefits..." rows={4} style={{ width: "100%", resize: "vertical", padding: "10px 14px", borderRadius: 8, border: "1px solid #cbd5e1" }} />
                   </div>
                 </div>
 
@@ -752,7 +750,10 @@ export default function ProductCategoriesPage() {
 
                 {/* Display Images */}
                 <div style={{ padding: "20px", border: "1px dashed #cbd5e1", borderRadius: 12, background: "#f8fafc" }}>
-                  <label style={{ fontSize: 14, fontWeight: 700, color: "#0f172a", marginBottom: 12, display: "block" }}>Display Images</label>
+                  <div style={{ marginBottom: 12 }}>
+                    <label style={{ fontSize: 14, fontWeight: 700, color: "#0f172a", display: "block" }}>Display Images</label>
+                    <span style={{ fontSize: 12, color: "#64748b", display: "block", marginTop: 4 }}>Recommended size: 800x800px (1:1 Ratio). Max size: 2MB per image.</span>
+                  </div>
                   <div style={{ display: "flex", gap: 12, flexWrap: "wrap", alignItems: "flex-start" }}>
                     {(productForm.displayImages || []).map((img, idx) => (
                       <div key={idx} style={{ position: "relative", width: 100, height: 100, borderRadius: 12, overflow: "hidden", border: "1px solid #e2e8f0", boxShadow: "0 2px 4px rgba(0,0,0,0.05)" }}>
