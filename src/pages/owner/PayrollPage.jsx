@@ -575,7 +575,7 @@ export default function PayrollPage() {
             </div>
           </div>
           
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: 20, marginBottom: 40 }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(6, 1fr)", gap: 20, marginBottom: 40 }}>
             {statCards.map((stat, idx) => (
               <div key={idx} className="att-stat-card">
                 <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
