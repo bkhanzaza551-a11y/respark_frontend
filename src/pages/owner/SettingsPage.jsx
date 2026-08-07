@@ -2475,7 +2475,8 @@ export default function SettingsPage() {
                 return (
                   <div key={item.key} style={{
                     display: "grid",
-                    gridTemplateColumns: "1fr 190px",
+                    gridTemplateColumns: "1fr 180px 40px",
+                    gap: "12px",
                     alignItems: "center",
                     padding: "12px 16px",
                     borderBottom: index === category.items.length - 1 ? "none" : "1px solid #f1f5f9",
@@ -2483,13 +2484,20 @@ export default function SettingsPage() {
                     color: "#0f172a"
                   }}>
                     <div style={{ fontWeight: 500, color: "#334155" }}>{item.label}</div>
+                    <div style={{ 
+                      fontSize: 13, 
+                      fontWeight: 600, 
+                      textAlign: "right", 
+                      color: isChecked ? "#3b82f6" : (channelLabels[item.key] === "Not wired yet" ? "#b45309" : "#475569"), 
+                      transition: "color 0.2s" 
+                    }}>
+                      {channelLabels[item.key] || "Saved rule"}
+                    </div>
                     <div style={{ display: "flex", justifyContent: "flex-end", alignItems: "center" }}>
                       <ToggleSwitch
                         checked={isChecked}
                         onChange={(e) => handleToggleChange(item.key, e.target.checked)}
-                        label={channelLabels[item.key] || "Saved rule"}
                         color="#3b82f6"
-                        labelColor={channelLabels[item.key] === "Not wired yet" ? "#b45309" : "#475569"}
                       />
                     </div>
                   </div>
