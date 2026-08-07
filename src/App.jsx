@@ -5,20 +5,35 @@ import Topbar from "./components/Topbar.jsx";
 import { useAuth } from "./context/AuthContext";
 import PageLoader from "./components/PageLoader.jsx";
 import { SETTINGS_WORKSPACE_SECTIONS } from "./pages/owner/settingsWorkspaceConfig.js";
+const isChunkLoadError = (error) =>
+  error?.message && (
+    /Failed to fetch dynamically imported module/i.test(error.message) ||
+    /Importing a module script failed/i.test(error.message) ||
+    /Loading chunk \d+ failed/i.test(error.message) ||
+    /dynamically imported module/i.test(error.message)
+  );
+
+const hardReload = () => {
+  sessionStorage.clear();
+  const url = new URL(window.location.href);
+  url.searchParams.set("_v", Date.now().toString());
+  window.location.replace(url.toString());
+};
+
 const lazyWithRetry = (componentImport) =>
   lazy(async () => {
-    const pageHasAlreadyBeenForceRefreshed = JSON.parse(
-      window.sessionStorage.getItem("page-has-been-force-refreshed") || "false"
+    const retryCount = parseInt(
+      window.sessionStorage.getItem("chunk_retry_count") || "0"
     );
     try {
       return await componentImport();
     } catch (error) {
-      if (!pageHasAlreadyBeenForceRefreshed) {
-        window.sessionStorage.setItem("page-has-been-force-refreshed", "true");
-        window.location.reload();
+      if (isChunkLoadError(error) && retryCount < 3) {
+        window.sessionStorage.setItem("chunk_retry_count", String(retryCount + 1));
+        hardReload();
         return new Promise(() => {});
       }
-      window.sessionStorage.removeItem("page-has-been-force-refreshed");
+      window.sessionStorage.removeItem("chunk_retry_count");
       throw error;
     }
   });

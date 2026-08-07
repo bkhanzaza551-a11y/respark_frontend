@@ -1,9 +1,24 @@
 import { Component } from "react";
 
+const isChunkLoadError = (error) =>
+  error?.message && (
+    /Failed to fetch dynamically imported module/i.test(error.message) ||
+    /Importing a module script failed/i.test(error.message) ||
+    /Loading chunk \d+ failed/i.test(error.message) ||
+    /dynamically imported module/i.test(error.message)
+  );
+
+const hardReload = () => {
+  sessionStorage.clear();
+  const url = new URL(window.location.href);
+  url.searchParams.set("_v", Date.now().toString());
+  window.location.replace(url.toString());
+};
+
 export default class ErrorBoundary extends Component {
   constructor(props) {
     super(props);
-    this.state = { hasError: false, error: null, retryCount: 0 };
+    this.state = { hasError: false, error: null };
   }
 
   static getDerivedStateFromError(error) {
@@ -12,35 +27,30 @@ export default class ErrorBoundary extends Component {
 
   componentDidCatch(error, errorInfo) {
     console.error("ErrorBoundary caught:", error, errorInfo);
-    
-    const isChunkLoadError = error?.message && (
-      /Failed to fetch dynamically imported module/i.test(error.message) || 
-      /Importing a module script failed/i.test(error.message) ||
-      /dynamically imported module/i.test(error.message)
-    );
-    
-    if (isChunkLoadError) {
-      const retryCount = parseInt(sessionStorage.getItem("chunk_reload_count") || "0");
-      if (retryCount < 2) {
-        sessionStorage.setItem("chunk_reload_count", String(retryCount + 1));
-        setTimeout(() => window.location.reload(), 1000);
-      } else {
-        sessionStorage.removeItem("chunk_reload_count");
+
+    if (isChunkLoadError(error)) {
+      const retryCount = parseInt(sessionStorage.getItem("chunk_retry_count") || "0");
+      if (retryCount < 3) {
+        sessionStorage.setItem("chunk_retry_count", String(retryCount + 1));
+        setTimeout(hardReload, 500);
       }
     }
   }
 
   handleRetry = () => {
-    sessionStorage.removeItem("chunk_reload_count");
-    sessionStorage.removeItem("page-has-been-force-refreshed");
-    window.location.reload();
+    sessionStorage.removeItem("chunk_retry_count");
+    hardReload();
+  };
+
+  handleGoHome = () => {
+    sessionStorage.clear();
+    window.location.href = "/login";
   };
 
   render() {
     if (this.state.hasError) {
-      const isChunkError = this.state.error?.message && 
-        /Failed to fetch dynamically imported module/i.test(this.state.error.message);
-      
+      const isChunkError = isChunkLoadError(this.state.error);
+
       return (
         <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", background: "#f8fafc", fontFamily: "system-ui, sans-serif", padding: 24 }}>
           <div style={{ maxWidth: 480, textAlign: "center", background: "white", borderRadius: 16, padding: 32, boxShadow: "0 4px 24px rgba(0,0,0,0.08)" }}>
@@ -49,7 +59,7 @@ export default class ErrorBoundary extends Component {
               {isChunkError ? "Loading Failed" : "Something went wrong"}
             </h2>
             <p style={{ margin: "0 0 20px", color: "#64748b", fontSize: 14 }}>
-              {isChunkError 
+              {isChunkError
                 ? "Failed to load page resources. This usually happens after a new deployment."
                 : "An unexpected error occurred. Please try refreshing the page."}
             </p>
@@ -57,7 +67,7 @@ export default class ErrorBoundary extends Component {
               <button onClick={this.handleRetry} style={{ padding: "10px 24px", background: "#3b82f6", color: "white", border: "none", borderRadius: 8, fontWeight: 600, cursor: "pointer", fontSize: 14 }}>
                 Retry
               </button>
-              <button onClick={() => { sessionStorage.clear(); window.location.href = "/"; }} style={{ padding: "10px 24px", background: "#f1f5f9", color: "#475569", border: "1px solid #e2e8f0", borderRadius: 8, fontWeight: 600, cursor: "pointer", fontSize: 14 }}>
+              <button onClick={this.handleGoHome} style={{ padding: "10px 24px", background: "#f1f5f9", color: "#475569", border: "1px solid #e2e8f0", borderRadius: 8, fontWeight: 600, cursor: "pointer", fontSize: 14 }}>
                 Go Home
               </button>
             </div>
