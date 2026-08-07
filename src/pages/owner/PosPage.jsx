@@ -396,7 +396,13 @@ export default function PosPage() {
           discountPct: 0,
           discountAmt: toAmount(svcObj.price || 0),
           taxPct: svcObj.taxPct || svcObj.taxRate || 0,
-          consumableItems: []
+          consumableItems: (svcObj.consumables || []).map(c => ({
+            productId: c.productId,
+            name: c.product?.name || "Consumable",
+            qty: Number(c.reqdQty || 1),
+            unit: c.product?.secondaryUnit || c.product?.unit || 'pcs',
+            isManual: false
+          }))
         }
       ];
     }
@@ -848,7 +854,14 @@ export default function PosPage() {
           originalUnitPrice: toAmount(service.price),
           discountPct: 0,
           discountAmt: 0,
-          taxPct: service.taxPct || service.taxRate || 0
+          taxPct: service.taxPct || service.taxRate || 0,
+          consumableItems: (service.consumables || []).map(c => ({
+            productId: c.productId,
+            name: c.product?.name || "Consumable",
+            qty: Number(c.reqdQty || 1),
+            unit: c.product?.secondaryUnit || c.product?.unit || 'pcs',
+            isManual: false
+          }))
         }
       ];
       return next;
@@ -1926,40 +1939,7 @@ export default function PosPage() {
                           )}
                           {item.itemType === 'SERVICE' && (
                             <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginTop: 8, alignItems: "center" }}>
-                              {(serviceLookup[item.serviceId]?.consumables || baseObj.consumables || [])
-                                .filter((c, i, self) => i === self.findIndex((t) => t.productId === c.productId))
-                                .map((c, ci) => {
-                                const overrideKey = `${item.serviceId}:${c.productId}`;
-                                const currentVal = consumableOverrides[overrideKey] !== undefined ? consumableOverrides[overrideKey] : c.reqdQty;
-                                const unit = c.product?.secondaryUnit || c.product?.unit || 'pcs';
-                                return (
-                                  <div key={ci} style={{ display: "flex", alignItems: "center", gap: 6, background: "#fafafa", padding: "3px 10px", borderRadius: 16, border: "1px solid #e5e7eb" }}>
-                                    <span style={{ fontSize: 11, color: "#4b5563", fontWeight: 600 }}>{c.product?.name || "Consumable"}</span>
-                                    <input
-                                      type="number"
-                                      min="0"
-                                      value={currentVal}
-                                      onChange={(e) => {
-                                        const val = e.target.value;
-                                        setConsumableOverrides(prev => ({ ...prev, [overrideKey]: val }));
-                                      }}
-                                      onClick={(e) => e.stopPropagation()}
-                                      style={{ width: 36, padding: "2px", border: "none", borderBottom: "1px solid #d1d5db", borderRadius: 0, fontSize: 11, textAlign: "center", fontWeight: 700, background: "transparent", outline: "none", color: "#111827", transition: "border-color 0.2s" }}
-                                      title="Quantity used"
-                                      onFocus={(e) => e.target.style.borderColor = "#3b82f6"}
-                                      onBlur={(e) => e.target.style.borderColor = "#d1d5db"}
-                                    />
-                                    <span style={{ fontSize: 10, fontWeight: 600, color: "#9ca3af", textTransform: "lowercase" }}>{unit}</span>
-                                  </div>
-                                );
-                              })}
-                              {item.consumableItems?.map((ci, cidx) => (
-                                <div key={`extra-${cidx}`} style={{ display: "flex", alignItems: "center", gap: 6, background: "#fafafa", padding: "3px 10px", borderRadius: 16, border: "1px solid #e5e7eb" }}>
-                                  <span style={{ fontSize: 11, color: "#4b5563", fontWeight: 600 }}>{ci.name}</span>
-                                  <span style={{ fontSize: 11, fontWeight: 700, color: "#111827" }}>{ci.qty}</span>
-                                  <span style={{ fontSize: 10, fontWeight: 600, color: "#9ca3af", textTransform: "lowercase" }}>{ci.unit || 'pcs'}</span>
-                                </div>
-                              ))}
+                              {/* Consumables are now fully managed inside the modal */}
                             </div>
                           )}
                         </td>
