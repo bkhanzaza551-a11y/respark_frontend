@@ -1792,59 +1792,59 @@ export default function PosPage() {
               </div>
             </div>
 
-            <div className="pos-guest-row" style={{ justifyContent: "space-between", padding: "16px", borderBottom: "1px solid #f1f5f9" }}>
-              <div className="pos-search-guest" style={{ flex: 1, marginRight: "16px" }}>
-                <label style={{ display: "flex", alignItems: "center", width: "100%" }}>
-                  <div style={{ position: "relative", flex: 1 }}>
-                    <input 
-                      type="text" 
-                      placeholder={!form.customerId ? "Please select guest..." : "Search By Name Or No."}
-                      value={guestSearchInput} 
-                      onChange={(e) => {
-                        setGuestSearchInput(e.target.value);
-                        setShowCustomerDropdown(true);
-                        const match = context.customers.find(c => c.name === e.target.value || c.phone === e.target.value);
-                        if (match) {
-                          setForm(current => ({ ...current, customerId: match.id }));
-                        } else {
-                          setForm(current => ({ ...current, customerId: "" }));
-                        }
-                      }}
-                      onFocus={() => setShowCustomerDropdown(true)}
-                      onBlur={() => setTimeout(() => setShowCustomerDropdown(false), 200)}
-                      style={{ 
-                        width: "100%", 
-                        padding: "10px 36px 10px 14px", 
-                        borderRadius: "8px", 
-                        border: !form.customerId ? "1.5px solid #ef4444" : "1px solid #cbd5e1", 
-                        outline: "none", 
-                        fontSize: "14px",
-                        boxSizing: "border-box",
-                        backgroundColor: !form.customerId ? "#fef2f2" : "#ffffff"
-                      }}
-                    />
-                    {showCustomerDropdown && guestSearchInput && (
-                      <div className="pos-customer-dropdown" style={{ position: "absolute", top: "100%", left: 0, right: 0, background: "white", border: "1px solid #e2e8f0", borderRadius: "8px", marginTop: "4px", maxHeight: "300px", overflowY: "auto", zIndex: 50, boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)" }}>
-                        {context.customers.filter(c => c.name.toLowerCase().includes(guestSearchInput.toLowerCase()) || c.phone.includes(guestSearchInput)).map(c => (
-                          <div key={c.id} style={{ padding: "10px 12px", borderBottom: "1px solid #f1f5f9", cursor: "pointer" }} onClick={() => {
-                            setGuestSearchInput(c.name);
-                            setForm(current => ({ ...current, customerId: c.id }));
-                            setShowCustomerDropdown(false);
-                          }} onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#f8fafc'} onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}>
-                            <div style={{ fontWeight: 600, fontSize: "13px", color: "#0f172a" }}>{c.name}</div>
-                            <div style={{ fontSize: "11px", color: "#64748b" }}>{c.phone}</div>
-                          </div>
-                        ))}
-                        {context.customers.filter(c => c.name.toLowerCase().includes(guestSearchInput.toLowerCase()) || c.phone.includes(guestSearchInput)).length === 0 && (
-                          <div style={{ padding: "10px 12px", color: "#64748b", fontSize: "13px", textAlign: "center" }}>No matches found</div>
-                        )}
-                      </div>
-                    )}
-                    <svg style={{ position: "absolute", right: 10, top: "50%", transform: "translateY(-50%)", width: 18, height: 18, color: !form.customerId ? "#ef4444" : "#94a3b8", pointerEvents: "none" }} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
-                  </div>
-                </label>
+            <div className="pos-guest-row" style={{ display: "flex", alignItems: "center", padding: "16px", gap: "16px", borderBottom: "1px solid #f1f5f9" }}>
+              <div className="pos-search-guest" style={{ flex: 1, margin: 0, padding: 0 }}>
+                <div style={{ position: "relative", width: "100%", display: "block" }}>
+                  <input 
+                    type="text" 
+                    placeholder={!form.customerId ? "Please select guest..." : "Search By Name Or No."}
+                    value={guestSearchInput} 
+                    onChange={(e) => {
+                      setGuestSearchInput(e.target.value);
+                      setShowCustomerDropdown(true);
+                      const match = context.customers.find(c => c.name === e.target.value || c.phone === e.target.value);
+                      if (match) {
+                        setForm(current => ({ ...current, customerId: match.id }));
+                      } else {
+                        setForm(current => ({ ...current, customerId: "" }));
+                      }
+                    }}
+                    onFocus={() => setShowCustomerDropdown(true)}
+                    onBlur={() => setTimeout(() => setShowCustomerDropdown(false), 200)}
+                    style={{ 
+                      display: "block",
+                      width: "100%", 
+                      padding: "10px 36px 10px 14px", 
+                      borderRadius: "8px", 
+                      border: !form.customerId ? "1.5px solid #ef4444" : "1px solid #cbd5e1", 
+                      outline: "none", 
+                      fontSize: "14px",
+                      boxSizing: "border-box",
+                      backgroundColor: !form.customerId ? "#fef2f2" : "#ffffff",
+                      margin: 0
+                    }}
+                  />
+                  {showCustomerDropdown && guestSearchInput && (
+                    <div className="pos-customer-dropdown" style={{ position: "absolute", top: "100%", left: 0, right: 0, background: "white", border: "1px solid #e2e8f0", borderRadius: "8px", marginTop: "4px", maxHeight: "300px", overflowY: "auto", zIndex: 50, boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)", textAlign: "left" }}>
+                      {context.customers.filter(c => c.name.toLowerCase().includes(guestSearchInput.toLowerCase()) || c.phone.includes(guestSearchInput)).map(c => (
+                        <div key={c.id} style={{ padding: "10px 12px", borderBottom: "1px solid #f1f5f9", cursor: "pointer" }} onClick={() => {
+                          setGuestSearchInput(c.name);
+                          setForm(current => ({ ...current, customerId: c.id }));
+                          setShowCustomerDropdown(false);
+                        }} onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#f8fafc'} onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}>
+                          <div style={{ fontWeight: 600, fontSize: "13px", color: "#0f172a" }}>{c.name}</div>
+                          <div style={{ fontSize: "11px", color: "#64748b" }}>{c.phone}</div>
+                        </div>
+                      ))}
+                      {context.customers.filter(c => c.name.toLowerCase().includes(guestSearchInput.toLowerCase()) || c.phone.includes(guestSearchInput)).length === 0 && (
+                        <div style={{ padding: "10px 12px", color: "#64748b", fontSize: "13px", textAlign: "center" }}>No matches found</div>
+                      )}
+                    </div>
+                  )}
+                  <svg style={{ position: "absolute", right: 10, top: "50%", transform: "translateY(-50%)", width: 18, height: 18, color: !form.customerId ? "#ef4444" : "#94a3b8", pointerEvents: "none" }} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
+                </div>
               </div>
-              <button type="button" className="pos-add-guest-btn" onClick={() => setShowAddGuestModal(true)} style={{ padding: "10px 16px", background: "#f8fafc", border: "1px solid #cbd5e1", borderRadius: "8px", fontWeight: 600, color: "#334155", display: "flex", alignItems: "center", gap: "6px", cursor: "pointer" }}>
+              <button type="button" className="pos-add-guest-btn" onClick={() => setShowAddGuestModal(true)} style={{ flexShrink: 0, padding: "10px 16px", background: "#f8fafc", border: "1px solid #cbd5e1", borderRadius: "8px", fontWeight: 600, color: "#334155", display: "flex", alignItems: "center", gap: "6px", cursor: "pointer" }}>
                 <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" /></svg>
                 Add Guest
               </button>
