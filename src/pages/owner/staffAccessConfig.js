@@ -54,23 +54,9 @@ export const MODULE_GROUPS = [
     ]
   },
   {
-    title: "Marketing & Communication",
-    hint: "Campaigns, templates, and outreach",
-    modules: [
-      { key: "campaigns", label: "Campaigns" },
-      { key: "campaignTemplates", label: "Campaign Templates" },
-      { key: "messageTemplates", label: "Message Templates" },
-      { key: "whatsapp", label: "WhatsApp" },
-      { key: "notifications", label: "Notifications" }
-    ]
-  },
-  {
     title: "Platform",
     hint: "Storefront and system configuration",
     modules: [
-      { key: "catalog", label: "Website Catalogue" },
-      { key: "catalogAnalytics", label: "Catalogue Analytics" },
-      { key: "ecommerce", label: "Online Orders" },
       { key: "customerPortalSettings", label: "Staff Portal Settings" },
       { key: "auditLogs", label: "Audit Logs" }
     ]
