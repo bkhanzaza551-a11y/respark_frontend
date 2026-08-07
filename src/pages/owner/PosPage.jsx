@@ -197,7 +197,7 @@ export default function PosPage() {
   };
 
   const addConsumableProduct = (product) => {
-    setConsumableItems(prev => [...prev, { productId: product.id, name: product.name, qty: product.netWeight || 1, unit: product.unit || "" }]);
+    setConsumableItems(prev => [...prev, { productId: product.id, name: product.name, qty: product.netWeight || 1, unit: product.secondaryUnit || product.unit || "" }]);
     setConsumableSearch("");
   };
 
@@ -1931,7 +1931,7 @@ export default function PosPage() {
                                 .map((c, ci) => {
                                 const overrideKey = `${item.serviceId}:${c.productId}`;
                                 const currentVal = consumableOverrides[overrideKey] !== undefined ? consumableOverrides[overrideKey] : c.reqdQty;
-                                const unit = c.product?.unit || 'pcs';
+                                const unit = c.product?.secondaryUnit || c.product?.unit || 'pcs';
                                 return (
                                   <div key={ci} style={{ display: "flex", alignItems: "center", gap: 6, background: "#fafafa", padding: "3px 10px", borderRadius: 16, border: "1px solid #e5e7eb" }}>
                                     <span style={{ fontSize: 11, color: "#4b5563", fontWeight: 600 }}>{c.product?.name || "Consumable"}</span>
