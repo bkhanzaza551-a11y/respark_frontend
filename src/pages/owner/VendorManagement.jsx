@@ -41,29 +41,27 @@ const toApiPhone = (value) => {
 const inputStyle = {
   width: "100%",
   padding: "12px 14px",
-  border: "1px solid #cbd5e1",
+  border: "1px solid #e2e8f0",
   borderRadius: 8,
   fontSize: "0.95rem",
   boxSizing: "border-box",
-  background: "white",
-  outline: "none"
+  background: "#f8fafc",
+  color: "#0f172a",
+  outline: "none",
+  transition: "all 0.2s ease"
 };
 
 const labelStyle = {
   fontSize: "0.85rem",
   fontWeight: 600,
-  color: "#475569",
+  color: "#334155",
   marginBottom: 6,
-  display: "inline-flex",
-  alignItems: "center",
-  gap: 4,
-  whiteSpace: "nowrap"
+  display: "block"
 };
 
 const formGroupStyle = {
   display: "flex",
-  flexDirection: "column",
-  gap: 6
+  flexDirection: "column"
 };
 
 function Toggle({ checked, onChange, activeLabel = "Active", inactiveLabel = "Inactive" }) {
@@ -376,7 +374,7 @@ export default function VendorManagement({ branches = [], formatMoney }) {
         )}
 
         {(mode === "create" || mode === "edit") && (
-          <div style={{ maxWidth: 900, margin: "0 auto", background: "white", borderRadius: 12, border: "1px solid #e2e8f0", overflow: "hidden" }}>
+          <div style={{ maxWidth: 900, margin: "0 auto", background: "white", borderRadius: 12, boxShadow: "0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)", border: "1px solid #e2e8f0", overflow: "hidden" }}>
             <div style={{ padding: "18px 24px", borderBottom: "1px solid #e2e8f0", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
               <h2 style={{ margin: 0, fontSize: "1.3rem", color: "var(--accent, #3b82f6)", fontWeight: 600 }}>{mode === "create" ? "Create Vendor" : "Update Vendor"}</h2>
               <Toggle
@@ -389,9 +387,9 @@ export default function VendorManagement({ branches = [], formatMoney }) {
               {status.error && <div style={{ color: "#ef4444", padding: 12, background: "#fef2f2", borderRadius: 8, fontSize: "0.9rem", marginBottom: 16 }}>{status.error}</div>}
               {status.success && <div style={{ color: "#10b981", padding: 12, background: "#f0fdf4", borderRadius: 8, fontSize: "0.9rem", marginBottom: 16 }}>{status.success}</div>}
 
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: "16px 20px", marginBottom: 24 }}>
-                <TextInput label="Vendor Name" required value={form.name} onChange={(v) => setForm({ ...form, name: v })} placeholder="Name*" />
-                <TextInput label="Firm Name" required value={form.firmName} onChange={(v) => setForm({ ...form, firmName: v })} placeholder="Firm Name*" />
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: "20px 24px", marginBottom: 32 }}>
+                <TextInput label="Vendor Name" required value={form.name} onChange={(v) => setForm({ ...form, name: v })} placeholder="Name" />
+                <TextInput label="Firm Name" required value={form.firmName} onChange={(v) => setForm({ ...form, firmName: v })} placeholder="Firm Name" />
 
                 <PhoneInput
                   label="Mobile"
@@ -407,18 +405,18 @@ export default function VendorManagement({ branches = [], formatMoney }) {
                   placeholder="XXXXXXXXXX"
                 />
 
-                <TextInput label="Email" required type="email" value={form.email} onChange={(v) => setForm({ ...form, email: v })} placeholder="Email*" />
-                <TextInput label="GST Number" value={form.gstNumber} onChange={(v) => setForm({ ...form, gstNumber: v })} placeholder="GstNo" />
+                <TextInput label="Email" required type="email" value={form.email} onChange={(v) => setForm({ ...form, email: v })} placeholder="Email Address" />
+                <TextInput label="GST Number" value={form.gstNumber} onChange={(v) => setForm({ ...form, gstNumber: v })} placeholder="e.g. 22AAAAA0000A1Z5" />
 
                 <div style={{ ...formGroupStyle, gridColumn: "1 / -1" }}>
                   <label style={labelStyle}>Address <span style={{ color: "#ef4444" }}>*</span></label>
-                  <input value={form.address} onChange={(e) => setForm({ ...form, address: e.target.value })} placeholder="Address*" style={inputStyle} />
+                  <input value={form.address} onChange={(e) => setForm({ ...form, address: e.target.value })} placeholder="Full Address" style={inputStyle} />
                 </div>
 
-                <TextInput label="Area" value={form.area} onChange={(v) => setForm({ ...form, area: v })} placeholder="Area" />
-                <TextInput label="Landmark" value={form.landmark} onChange={(v) => setForm({ ...form, landmark: v })} placeholder="Landmark" />
+                <TextInput label="Area" value={form.area} onChange={(v) => setForm({ ...form, area: v })} placeholder="Area/Locality" />
+                <TextInput label="Landmark" value={form.landmark} onChange={(v) => setForm({ ...form, landmark: v })} placeholder="Nearest Landmark" />
 
-                <TextInput label="City" required value={form.city} onChange={(v) => setForm({ ...form, city: v })} placeholder="City*" />
+                <TextInput label="City" required value={form.city} onChange={(v) => setForm({ ...form, city: v })} placeholder="City" />
                 <TextInput label="Pincode" value={form.pincode} onChange={(v) => setForm({ ...form, pincode: v })} placeholder="Pincode" />
 
                 <div style={formGroupStyle}>
@@ -428,20 +426,20 @@ export default function VendorManagement({ branches = [], formatMoney }) {
                     {branches.map((branch) => <option key={branch.id} value={branch.id}>{branch.name}</option>)}
                   </CustomDropdown>
                 </div>
-                <TextInput label="Notes" value={form.notes} onChange={(v) => setForm({ ...form, notes: v })} placeholder="Notes" />
+                <TextInput label="Notes" value={form.notes} onChange={(v) => setForm({ ...form, notes: v })} placeholder="Any additional notes" />
               </div>
 
               <div style={{ display: "flex", justifyContent: "flex-end", gap: 12, borderTop: "1px solid #e2e8f0", paddingTop: 20 }}>
                 {mode === "edit" && (
-                  <button type="button" onClick={() => handleOpenItems(selectedVendor)} style={{ padding: "12px 24px", background: "white", border: "1px solid var(--accent, #3b82f6)", color: "var(--accent, #3b82f6)", borderRadius: 8, fontWeight: 600, cursor: "pointer" }}>
+                  <button type="button" onClick={() => handleOpenItems(selectedVendor)} style={{ padding: "12px 24px", background: "white", border: "1px solid var(--accent, #3b82f6)", color: "var(--accent, #3b82f6)", borderRadius: 8, fontWeight: 600, cursor: "pointer", transition: "all 0.2s" }} onMouseEnter={e => e.currentTarget.style.background = "#f0f9ff"} onMouseLeave={e => e.currentTarget.style.background = "white"}>
                     Vendor Items
                   </button>
                 )}
-                <button type="button" onClick={() => setMode("list")} style={{ padding: "12px 24px", background: "#f1f5f9", border: "1px solid #cbd5e1", color: "#475569", borderRadius: 8, fontWeight: 600, cursor: "pointer" }}>
+                <button type="button" onClick={() => setMode("list")} style={{ padding: "12px 24px", background: "#f1f5f9", border: "none", color: "#475569", borderRadius: 8, fontWeight: 600, cursor: "pointer", transition: "all 0.2s" }} onMouseEnter={e => e.currentTarget.style.background = "#e2e8f0"} onMouseLeave={e => e.currentTarget.style.background = "#f1f5f9"}>
                   Cancel
                 </button>
-                <button type="submit" disabled={loading} style={{ padding: "12px 32px", background: "var(--button-bg-solid, #3b82f6)", color: "white", border: "none", borderRadius: 8, fontWeight: 600, cursor: loading ? "not-allowed" : "pointer", opacity: loading ? 0.7 : 1 }}>
-                  {mode === "create" ? "Create" : "Update"}
+                <button type="submit" disabled={loading} style={{ padding: "12px 32px", background: "var(--button-bg-solid, #3b82f6)", color: "white", border: "none", borderRadius: 8, fontWeight: 600, cursor: loading ? "not-allowed" : "pointer", opacity: loading ? 0.7 : 1, transition: "all 0.2s" }} onMouseEnter={e => { if(!loading) e.currentTarget.style.background = "var(--button-bg-hover, #2563eb)" }} onMouseLeave={e => { if(!loading) e.currentTarget.style.background = "var(--button-bg-solid, #3b82f6)" }}>
+                  {mode === "create" ? "Create Vendor" : "Update Vendor"}
                 </button>
               </div>
             </form>
