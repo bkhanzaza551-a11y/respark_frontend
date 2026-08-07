@@ -105,9 +105,12 @@ export default function ServiceCategoriesPage() {
     load();
   }, [selectedBranchId]);
 
-  // Categories are global to the salon, so we do not filter them by branch.
-  // The backend already filters the services inside them by branchId.
-  const filteredCategories = categories;
+  const filteredCategories = useMemo(
+    () => selectedBranchId
+      ? categories.filter(cat => !cat.branchId || cat.branchId === selectedBranchId)
+      : categories,
+    [categories, selectedBranchId]
+  );
 
   const selectedCategory = useMemo(
     () => filteredCategories.find((category) => category.id === selectedCatId) || null,

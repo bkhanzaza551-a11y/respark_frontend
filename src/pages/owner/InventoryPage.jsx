@@ -431,7 +431,7 @@ export default function InventoryPage() {
   const handleCategorySubmit = async (e) => {
     e.preventDefault();
     try {
-      await api.post("/owner/inventory/categories", { ...categoryForm, sortOrder: Number(categoryForm.sortOrder) });
+      await api.post("/owner/inventory/categories", { ...categoryForm, branchId: selectedBranchId || null, sortOrder: Number(categoryForm.sortOrder) });
       setIsCategoryModalOpen(false);
       setCategoryForm(emptyCategory);
       loadAll();
