@@ -34,6 +34,7 @@ const initialData = {
   branchSales: [],
   cancelled: [],
   lowStock: [],
+  consumableTracking: [],
   advanced: null,
   profitLoss: null,
   campaignRoi: [],
@@ -155,6 +156,7 @@ export default function ReportsPage() {
         branchSales: api.get("/reports/branch-sales", { params: sharedParams }),
         cancelled: api.get("/reports/cancelled-invoices", { params: sharedParams }),
         lowStock: api.get("/reports/low-stock", { params: sharedParams }),
+        consumableTracking: api.get("/owner/reports/consumable-tracking", { params: sharedParams }),
         advanced: api.get("/owner/reports/advanced", { params: sharedParams }),
         profitLoss: api.get("/owner/reports/profit-loss", { params: sharedParams }),
         campaignRoi: api.get("/owner/reports/campaign-roi", { params: sharedParams }),
@@ -415,6 +417,14 @@ export default function ReportsPage() {
                 rows={(data.lowStock || []).slice(0, 8)}
                 emptyText="Inventory health looks good."
                 renderMeta={(item) => `${item.branch?.name || "Shared"} | Current ${cardCurrency(item.currentStock)} | Min ${cardCurrency(item.minStock)}`}
+              />
+            </div>
+            <div className="two-col" style={{ marginTop: 18 }}>
+              <ReportList
+                title="Consumable Tracking"
+                rows={(data.consumableTracking || []).slice(0, 8)}
+                emptyText="No consumables used in this period."
+                renderMeta={(item) => `${item.productName || "Product"} | Used ${item.totalUsed} ${item.unit || ""} | Remaining: ${item.currentStock || 0} ${item.unit || ""}`}
               />
             </div>
           )}
