@@ -4,6 +4,7 @@ import CustomDropdown from '../../components/common/CustomDropdown';
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Edit2, Trash2, RefreshCw, ChevronLeft, ChevronRight, Plus, Clock, Coffee, X, ArrowLeft } from "lucide-react";
 import { api } from "../../api/client";
+import PremiumToast from "../../components/common/PremiumToast";
 import EmptyState from "../../components/EmptyState";
 import PageLoader from "../../components/PageLoader";
 import { useAuth } from "../../context/AuthContext";
@@ -4403,8 +4404,20 @@ export default function SettingsPage() {
           <p className="success-text">Read-only mode enabled. This role can review settings but cannot save changes without `settings.edit` permission.</p>
         </div>
       ) : null}
-      {status.error ? <div className="settings-panel-card"><p className="error-text">{status.error}</p></div> : null}
-      {status.success ? <div className="settings-panel-card"><p className="success-text">{status.success}</p></div> : null}
+      {status.error && (
+        <PremiumToast
+          type="error"
+          message={status.error}
+          onClose={() => setStatus((current) => ({ ...current, error: "" }))}
+        />
+      )}
+      {status.success && (
+        <PremiumToast
+          type="success"
+          message={status.success}
+          onClose={() => setStatus((current) => ({ ...current, success: "" }))}
+        />
+      )}
 
       {!canViewSettings ? null : status.loading ? (
         <PageLoader title="Loading settings workspace" message="Bringing together generic settings, staff controls, tax mappings, and communication defaults." />
