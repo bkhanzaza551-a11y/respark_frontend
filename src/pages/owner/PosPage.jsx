@@ -1793,9 +1793,8 @@ export default function PosPage() {
             </div>
 
             <div className="pos-guest-row" style={{ justifyContent: "flex-start", padding: "16px", borderBottom: "1px solid #f1f5f9" }}>
-              <div className="pos-search-guest" style={{ width: "380px" }}>
-                <label style={{ display: "flex", alignItems: "center", width: "100%", gap: "12px" }}>
-                  <span style={{ fontWeight: 600, color: "#334155" }}>Guest :</span>
+              <div className="pos-search-guest" style={{ width: "380px", flex: "none" }}>
+                <label style={{ display: "flex", alignItems: "center", width: "100%" }}>
                   <div style={{ position: "relative", flex: 1 }}>
                     <input 
                       type="text" 
