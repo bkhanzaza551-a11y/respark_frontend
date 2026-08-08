@@ -641,8 +641,8 @@ export default function AppointmentCheckoutModal({ appointment, onClose, onCompl
                                   const currentVal = consumableOverrides[overrideKey] !== undefined ? consumableOverrides[overrideKey] : c.reqdQty;
                                   const unit = c.product?.unit || 'pcs';
                                   return (
-                                    <div key={i} style={{ fontSize: "0.65rem", color: "#334155", display: "flex", alignItems: "center", gap: "4px", background: "#f1f5f9", padding: "2px 6px", borderRadius: "4px", width: "fit-content" }}>
-                                      <span style={{ color: "#2563eb", fontWeight: 600 }}>🧪 {c.product?.name}:</span>
+                                    <div key={i} style={{ fontSize: "0.55rem", display: "flex", alignItems: "center", gap: "3px", background: "#f8fafc", padding: "1px 4px", borderRadius: "3px", width: "fit-content", border: "1px solid #e2e8f0", marginTop: "2px" }}>
+                                      <span style={{ color: "#10b981", fontWeight: 600 }}>🧪 {c.product?.name?.length > 12 ? c.product.name.substring(0, 12) + ".." : c.product?.name}</span>
                                       <input
                                         type="number"
                                         min="0"
@@ -652,10 +652,10 @@ export default function AppointmentCheckoutModal({ appointment, onClose, onCompl
                                           setConsumableOverrides(prev => ({ ...prev, [overrideKey]: val }));
                                         }}
                                         onClick={(e) => e.stopPropagation()}
-                                        style={{ width: "42px", padding: "1px 3px", border: "1px solid #cbd5e1", borderRadius: "4px", fontSize: "0.65rem", textAlign: "center", fontWeight: 700, background: "#fff" }}
+                                        style={{ width: "30px", height: "14px", padding: "0", border: "1px solid #cbd5e1", borderRadius: "2px", fontSize: "0.55rem", textAlign: "center", fontWeight: 700, background: "#fff", outline: "none" }}
                                         title="Edit quantity of consumable used for this client"
                                       />
-                                      <span style={{ fontWeight: 600, color: "#64748b" }}>{unit}</span>
+                                      <span style={{ fontWeight: 600, color: "#94a3b8" }}>{unit}</span>
                                     </div>
                                   );
                                 })}
