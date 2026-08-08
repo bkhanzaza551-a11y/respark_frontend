@@ -7,6 +7,17 @@ const MIN_FACE_RATIO = 0.08;
 const MAX_OCCLUSION_RATIO = 0.35;
 
 let modelLoadPromise = null;
+let _faceDetectionError = null;
+
+if (typeof window !== "undefined") {
+  window.addEventListener("unhandledrejection", (e) => {
+    const msg = e?.reason?.message || "";
+    if (msg.includes("Box.constructor") || msg.includes("IBoundingBox") || msg.includes("IRect")) {
+      _faceDetectionError = e.reason;
+      e.preventDefault();
+    }
+  });
+}
 
 const toImageElement = async (source) => {
   if (source instanceof HTMLCanvasElement || source instanceof HTMLVideoElement || source instanceof HTMLImageElement) {
@@ -113,35 +124,37 @@ const validateFaceQuality = (detection, imageWidth, imageHeight) => {
 const detectSingleFaceDescriptor = async (source) => {
   await loadFaceVerificationModels();
   const { image, cleanup } = await toImageElement(source);
-  
+
+  _faceDetectionError = null;
+
   let detections;
   try {
-    detections = await new Promise(async (resolve, reject) => {
-      try {
-        const result = await faceapi
-          .detectAllFaces(image, new faceapi.TinyFaceDetectorOptions({ inputSize: 416, scoreThreshold: MIN_DETECTION_SCORE }))
-          .withFaceLandmarks(true)
-          .withFaceDescriptors();
-        resolve(result);
-      } catch (err) {
-        reject(err);
-      }
-    });
-  } catch (faceErr) {
+    detections = await faceapi
+      .detectAllFaces(image, new faceapi.TinyFaceDetectorOptions({ inputSize: 416, scoreThreshold: MIN_DETECTION_SCORE }))
+      .withFaceLandmarks(true)
+      .withFaceDescriptors();
+  } catch (err) {
     cleanup();
-    if (faceErr?.message?.includes("Box.constructor") || faceErr?.message?.includes("IBoundingBox") || faceErr?.message?.includes("IRect")) {
-      throw new Error("Could not detect a valid face. Ensure your face is clearly visible, centered, and well-lit.");
-    }
-    throw faceErr;
+    throw new Error("Could not detect a valid face. Ensure your face is clearly visible, centered, and well-lit.");
   }
   cleanup();
+
+  if (_faceDetectionError) {
+    _faceDetectionError = null;
+    throw new Error("Could not detect a valid face. Ensure your face is clearly visible, centered, and well-lit.");
+  }
 
   if (!detections || !detections.length) {
     throw new Error("No face detected. Ensure your face is well-lit and centered in the frame.");
   }
 
   const validDetections = detections.filter(
-    (d) => d.detection?.box && d.detection.box.left != null && d.detection.box.width > 0 && d.detection.box.height > 0
+    (d) => {
+      try {
+        const box = d.detection?.box;
+        return box && box.width > 0 && box.height > 0 && Number.isFinite(box.x) && Number.isFinite(box.y);
+      } catch { return false; }
+    }
   );
   if (!validDetections.length) {
     throw new Error("Could not detect a valid face. Ensure your face is clearly visible, centered, and well-lit.");
