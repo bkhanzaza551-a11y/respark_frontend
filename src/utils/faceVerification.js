@@ -8,9 +8,11 @@ const MAX_OCCLUSION_RATIO = 0.35;
 
 let modelLoadPromise = null;
 
-const loadImageElement = (source) => new Promise((resolve, reject) => {
+const loadImageElement = (source, isBlob = false) => new Promise((resolve, reject) => {
   const image = new Image();
-  image.crossOrigin = "anonymous";
+  if (!isBlob) {
+    image.crossOrigin = "anonymous";
+  }
   image.onload = () => {
     image.width = image.naturalWidth;
     image.height = image.naturalHeight;
@@ -22,10 +24,10 @@ const loadImageElement = (source) => new Promise((resolve, reject) => {
 
 const toImageElement = async (source) => {
   if (typeof source === "string") {
-    return { image: await loadImageElement(source), cleanup: () => {} };
+    return { image: await loadImageElement(source, false), cleanup: () => {} };
   }
   const objectUrl = URL.createObjectURL(source);
-  const image = await loadImageElement(objectUrl);
+  const image = await loadImageElement(objectUrl, true);
   return { image, cleanup: () => URL.revokeObjectURL(objectUrl) };
 };
 
