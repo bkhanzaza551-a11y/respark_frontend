@@ -121,10 +121,29 @@ const validateFaceQuality = (detection, imageWidth, imageHeight) => {
   return true;
 };
 
+const brightenCanvas = (sourceCanvas) => {
+  const w = sourceCanvas.width || 640;
+  const h = sourceCanvas.height || 480;
+  const offscreen = document.createElement("canvas");
+  offscreen.width = w;
+  offscreen.height = h;
+  const ctx = offscreen.getContext("2d");
+  ctx.drawImage(sourceCanvas, 0, 0, w, h);
+  const imageData = ctx.getImageData(0, 0, w, h);
+  const data = imageData.data;
+  for (let i = 0; i < data.length; i += 4) {
+    data[i] = Math.min(255, data[i] * 1.4 + 20);
+    data[i + 1] = Math.min(255, data[i + 1] * 1.4 + 20);
+    data[i + 2] = Math.min(255, data[i + 2] * 1.4 + 20);
+  }
+  ctx.putImageData(imageData, 0, 0);
+  return offscreen;
+};
+
 const detectWithTimeout = (image, options, timeoutMs = 15000) => {
   return new Promise((resolve, reject) => {
     const timer = setTimeout(() => {
-      reject(new Error("Face detection timed out. Ensure your face is clearly visible and well-lit."));
+      reject(new Error("Face detection timed out."));
     }, timeoutMs);
 
     faceapi
@@ -146,24 +165,28 @@ const detectSingleFaceDescriptor = async (source) => {
   await loadFaceVerificationModels();
   const { image, cleanup } = await toImageElement(source);
 
-  let detections;
-  try {
-    detections = await detectWithTimeout(
-      image,
-      new faceapi.TinyFaceDetectorOptions({ inputSize: 512, scoreThreshold: 0.3 })
-    );
-  } catch (err) {
-    cleanup();
-    const msg = err?.message || "";
-    if (msg.includes("Box.constructor") || msg.includes("IBoundingBox") || msg.includes("IRect") || msg.includes("timed out")) {
-      throw new Error("Could not detect a valid face. Ensure your face is clearly visible, centered in the frame, and well-lit.");
+  const brightened = (image instanceof HTMLCanvasElement || image instanceof HTMLVideoElement)
+    ? brightenCanvas(image) : image;
+
+  let detections = null;
+  const detectors = [
+    new faceapi.TinyFaceDetectorOptions({ inputSize: 640, scoreThreshold: 0.2 }),
+    new faceapi.TinyFaceDetectorOptions({ inputSize: 416, scoreThreshold: 0.1 }),
+    new faceapi.TinyFaceDetectorOptions({ inputSize: 320, scoreThreshold: 0.05 })
+  ];
+
+  for (const detectorOpts of detectors) {
+    try {
+      detections = await detectWithTimeout(brightened, detectorOpts, 12000);
+      if (detections && detections.length > 0) break;
+    } catch {
+      continue;
     }
-    throw new Error("Could not detect a valid face. Ensure your face is clearly visible, centered, and well-lit.");
   }
   cleanup();
 
   if (!detections || !detections.length) {
-    throw new Error("No face detected. Ensure your face is well-lit and centered in the frame.");
+    throw new Error("No face detected. Ensure your face is well-lit, centered in the frame, and remove any obstructions.");
   }
 
   const validDetections = detections.filter(
@@ -178,7 +201,7 @@ const detectSingleFaceDescriptor = async (source) => {
     throw new Error("Could not detect a valid face. Ensure your face is clearly visible, centered, and well-lit.");
   }
   if (validDetections.length > 1) {
-    throw new Error("Only one face should be visible during attendance verification.");
+    throw new Error("Only one face should be visible during enrollment.");
   }
 
   validateFaceQuality(validDetections[0], image.naturalWidth || image.width, image.naturalHeight || image.height);
