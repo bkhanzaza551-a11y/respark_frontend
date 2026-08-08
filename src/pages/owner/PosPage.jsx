@@ -869,6 +869,11 @@ export default function PosPage() {
   };
 
   const addQuickProduct = (product) => {
+    const isOutOfStock = Number(product.currentStock || 0) <= 0 && !product.allowNegativeStock;
+    if (isOutOfStock) {
+      alert("This product is out of stock and cannot be added.");
+      return;
+    }
     if (Array.isArray(product.variations) && product.variations.length > 0) {
       setVariationModal({ open: true, product });
       return;
@@ -1715,8 +1720,11 @@ export default function PosPage() {
                  <div key={group.title}>
                    <div className="pos-group-header">{group.title}</div>
                    <div className="pos-item-grid">
-                       {group.items.map(product => (
-                        <button type="button" key={product.id} className="pos-item-card" onClick={() => addQuickProduct(product)}>
+                       {group.items.map(product => {
+                         const isOutOfStock = Number(product.currentStock || 0) <= 0 && !product.allowNegativeStock;
+                         return (
+                         <button type="button" key={product.id} className="pos-item-card" onClick={() => { if(!isOutOfStock) addQuickProduct(product); else alert("This product is out of stock."); }} style={{ opacity: isOutOfStock ? 0.6 : 1, cursor: isOutOfStock ? 'not-allowed' : 'pointer' }}>
+                          {isOutOfStock && <div style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)", background: "rgba(239, 68, 68, 0.9)", color: "white", padding: "4px 8px", borderRadius: 4, fontSize: 11, fontWeight: "bold", zIndex: 10, whiteSpace: "nowrap" }}>Out of Stock</div>}
                           {product.featured && <div style={{ position: "absolute", top: 4, right: 4, fontSize: 9, background: "#fef3c7", color: "#92400e", padding: "1px 5px", borderRadius: 4, fontWeight: 700, lineHeight: "14px" }}>★</div>}
                           {Array.isArray(product.variations) && product.variations.length > 0 && <div style={{ position: "absolute", top: 4, left: 4, fontSize: 9, background: "#dbeafe", color: "#1d4ed8", padding: "1px 5px", borderRadius: 4, fontWeight: 700, lineHeight: "14px" }}>Customisable</div>}
                           <div className="pos-item-card-name">{product.name}</div>
@@ -1724,7 +1732,7 @@ export default function PosPage() {
                             <span className="pos-item-card-price-new">{Number(product.sellingPrice || 0).toFixed(0)}</span>
                           </div>
                         </button>
-                      ))}
+                      )})}
                    </div>
                  </div>
                )) : <EmptyState title="No products found" message="Try All, another product category, or clear product search." />
