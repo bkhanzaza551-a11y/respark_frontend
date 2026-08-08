@@ -291,19 +291,20 @@ export default function MyDashboardPage() {
         accuracyMeters: position.coords.accuracy
       };
 
-      const geofence = getBranchGeofenceValidation(coords);
-      if (!geofence.valid) {
-        setFlow((c) => ({ ...c, busy: false, error: geofence.error }));
-        return;
-      }
-
       let accuracyWarning = "";
-      if (coords.accuracyMeters > 5000) {
-        accuracyWarning = `GPS accuracy is low (~${Math.round(coords.accuracyMeters)}m). Location is approximate (IP-based). Attendance will be recorded but location may not be precise.`;
-      } else if (coords.accuracyMeters > 200) {
-        accuracyWarning = `GPS accuracy is moderate (~${Math.round(coords.accuracyMeters)}m). Location may be approximate.`;
+      const hasRealGPS = coords.accuracyMeters <= 5000;
+      if (!hasRealGPS) {
+        accuracyWarning = `GPS accuracy is low (~${Math.round(coords.accuracyMeters)}m). Your device may not have GPS. Attendance will be recorded without distance verification.`;
+      } else {
+        const geofence = getBranchGeofenceValidation(coords);
+        if (!geofence.valid) {
+          setFlow((c) => ({ ...c, busy: false, error: geofence.error }));
+          return;
+        }
+        if (geofence.warning) accuracyWarning = geofence.warning;
+        else if (coords.accuracyMeters > 200) accuracyWarning = `GPS accuracy is moderate (~${Math.round(coords.accuracyMeters)}m). Location may be approximate.`;
       }
-      setFlow((c) => ({ ...c, step: STEPS.CAPTURE, busy: true, coords, error: "", warning: geofence.warning || accuracyWarning }));
+      setFlow((c) => ({ ...c, step: STEPS.CAPTURE, busy: true, coords, error: "", warning: accuracyWarning }));
 
       if (flowIdRef.current !== thisFlowId) return;
       try {
@@ -351,19 +352,20 @@ export default function MyDashboardPage() {
         accuracyMeters: position.coords.accuracy
       };
 
-      const geofence = getBranchGeofenceValidation(coords);
-      if (!geofence.valid) {
-        setFlow((c) => ({ ...c, busy: false, error: geofence.error }));
-        return;
-      }
-
       let accuracyWarning = "";
-      if (coords.accuracyMeters > 5000) {
-        accuracyWarning = `GPS accuracy is low (~${Math.round(coords.accuracyMeters)}m). Location is approximate (IP-based). Attendance will be recorded but location may not be precise.`;
-      } else if (coords.accuracyMeters > 200) {
-        accuracyWarning = `GPS accuracy is moderate (~${Math.round(coords.accuracyMeters)}m). Location may be approximate.`;
+      const hasRealGPS = coords.accuracyMeters <= 5000;
+      if (!hasRealGPS) {
+        accuracyWarning = `GPS accuracy is low (~${Math.round(coords.accuracyMeters)}m). Your device may not have GPS. Attendance will be recorded without distance verification.`;
+      } else {
+        const geofence = getBranchGeofenceValidation(coords);
+        if (!geofence.valid) {
+          setFlow((c) => ({ ...c, busy: false, error: geofence.error }));
+          return;
+        }
+        if (geofence.warning) accuracyWarning = geofence.warning;
+        else if (coords.accuracyMeters > 200) accuracyWarning = `GPS accuracy is moderate (~${Math.round(coords.accuracyMeters)}m). Location may be approximate.`;
       }
-      setFlow((c) => ({ ...c, step: STEPS.CAPTURE, busy: true, coords, error: "", warning: geofence.warning || accuracyWarning }));
+      setFlow((c) => ({ ...c, step: STEPS.CAPTURE, busy: true, coords, error: "", warning: accuracyWarning }));
 
       if (flowIdRef.current !== thisFlowId) return;
       try {
