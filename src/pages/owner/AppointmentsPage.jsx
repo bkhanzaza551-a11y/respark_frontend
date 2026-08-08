@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState, useRef } from "react";
 import CustomDropdown from '../../components/common/CustomDropdown';
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { ChevronLeft, ChevronRight, Search, X, ArrowLeft, CheckCircle2, Calendar, XCircle, PlusCircle, Trash2, User, Edit3, FileText, CreditCard, Gift, Wallet, AlertCircle, Package, Users, UserCog, Tag, Phone, StickyNote } from "lucide-react";
 import { api } from "../../api/client";
 import { useSalonSettings } from "../../context/SalonSettingsContext";
@@ -108,6 +108,7 @@ const formatCompactDate = (value, withYear = true) => {
 
 export default function AppointmentsPage() {
   const navigate = useNavigate();
+  const location = useLocation();
   const { formatMoney } = useSalonSettings();
   const { selectedBranchId } = useBranch();
   const [currentDate, setCurrentDate] = useState(new Date());
@@ -863,6 +864,18 @@ export default function AppointmentsPage() {
     });
     return result;
   }, [rows, isCreateModalOpen, editMode, editingAppointmentId, form.items]);
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const editId = params.get("edit");
+    if (editId && appointments.length > 0) {
+      const appt = appointments.find(a => a.id === editId);
+      if (appt) {
+        setCheckoutAppointment(appt);
+        navigate(location.pathname, { replace: true });
+      }
+    }
+  }, [location.search, appointments, navigate, location.pathname]);
 
   const appointmentsByStaffStartSlot = useMemo(() => {
     const byStaff = new Map();

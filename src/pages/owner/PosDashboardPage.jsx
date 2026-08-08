@@ -277,9 +277,9 @@ export default function PosDashboardPage() {
           payments: [],
           status: "SCHEDULED",
           total: 0,
-          createdAt: a.startAt,
-          startedAt: a.startAt,
-          completedAt: null,
+          createdAt: a.createdAt,
+          startedAt: a.actualStartedAt || null,
+          completedAt: a.actualCompletedAt || null,
           appointment: { id: a.id, status: a.status },
           appointmentData: a,
           discount: 0,
@@ -957,7 +957,10 @@ export default function PosDashboardPage() {
             const schedTime = isAppointment && row.appointmentTime ? new Date(row.appointmentTime).toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" }) : null;
             const schedEndTime = isAppointment && row.appointmentEndTime ? new Date(row.appointmentEndTime).toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" }) : null;
             const handleCardClick = () => {
-              if (isAppointment) return;
+              if (isAppointment) {
+                navigate(`/admin/appointments?edit=${row.id}`);
+                return;
+              }
               openInvoice(row.id);
             };
             return (
@@ -1004,8 +1007,8 @@ export default function PosDashboardPage() {
                   <div className="pos-dash-card-meta" style={{ display: "flex", flexDirection: "column", gap: 2 }}>
                     <span>{dateStr}, {timeStr}</span>
                     {isAppointment && schedTime && <span style={{ fontSize: 11, color: "#64748b" }}>Scheduled: {schedTime}{schedEndTime ? ` - ${schedEndTime}` : ""}</span>}
-                    {!isAppointment && startedStr && <span style={{ fontSize: 11, color: "#64748b" }}>Started: {startedStr}</span>}
-                    {!isAppointment && completedStr && <span style={{ fontSize: 11, color: "#64748b" }}>Completed: {completedStr}</span>}
+                    {startedStr && (apptStatus === "IN_PROGRESS" || apptStatus === "COMPLETED" || !isAppointment) && <span style={{ fontSize: 11, color: "#64748b" }}>Started: {startedStr}</span>}
+                    {completedStr && (apptStatus === "COMPLETED" || !isAppointment) && <span style={{ fontSize: 11, color: "#64748b" }}>Completed: {completedStr}</span>}
                     {!isAppointment && <span style={{ fontWeight: 700 }}>Total: {formatMoney(row.total)}</span>}
                     {isAppointment && row.staffName && <span style={{ fontSize: 11, color: "#64748b" }}>Staff: {row.staffName}</span>}
                   </div>

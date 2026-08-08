@@ -11,21 +11,22 @@ let modelLoadPromise = null;
 const loadImageElement = (source) => new Promise((resolve, reject) => {
   const image = new Image();
   image.crossOrigin = "anonymous";
-  image.onload = () => resolve(image);
+  image.onload = () => {
+    image.width = image.naturalWidth;
+    image.height = image.naturalHeight;
+    resolve(image);
+  };
   image.onerror = () => reject(new Error("Could not load selfie image for face verification."));
   image.src = source;
 });
 
 const toImageElement = async (source) => {
   if (typeof source === "string") {
-    return loadImageElement(source);
+    return { image: await loadImageElement(source), cleanup: () => {} };
   }
   const objectUrl = URL.createObjectURL(source);
-  try {
-    return await loadImageElement(objectUrl);
-  } finally {
-    URL.revokeObjectURL(objectUrl);
-  }
+  const image = await loadImageElement(objectUrl);
+  return { image, cleanup: () => URL.revokeObjectURL(objectUrl) };
 };
 
 export const loadFaceVerificationModels = async () => {
@@ -120,11 +121,17 @@ const validateFaceQuality = (detection, imageWidth, imageHeight) => {
 
 const detectSingleFaceDescriptor = async (source) => {
   await loadFaceVerificationModels();
-  const image = await toImageElement(source);
-  const detections = await faceapi
-    .detectAllFaces(image, new faceapi.TinyFaceDetectorOptions({ inputSize: 416, scoreThreshold: MIN_DETECTION_SCORE }))
-    .withFaceLandmarks(true)
-    .withFaceDescriptors();
+  const { image, cleanup } = await toImageElement(source);
+  
+  let detections;
+  try {
+    detections = await faceapi
+      .detectAllFaces(image, new faceapi.TinyFaceDetectorOptions({ inputSize: 416, scoreThreshold: MIN_DETECTION_SCORE }))
+      .withFaceLandmarks(true)
+      .withFaceDescriptors();
+  } finally {
+    cleanup();
+  }
 
   if (!detections.length) {
     throw new Error("No face detected. Ensure your face is well-lit and centered in the frame.");
