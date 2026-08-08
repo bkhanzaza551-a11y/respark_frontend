@@ -158,6 +158,13 @@ export default function AppointmentCheckoutModal({ appointment, onClose, onCompl
   }, [posContext.products, search, categoryFilter, posTab]);
 
   const addItem = (item, type) => {
+    if (type === "product") {
+      const isOutOfStock = Number(item.currentStock || 0) <= 0 && !item.allowNegativeStock;
+      if (isOutOfStock) {
+        alert("This product is out of stock and cannot be added.");
+        return;
+      }
+    }
     setForm(prev => {
       const existing = prev.items.find(i => (type === 'service' && i.serviceId === item.id) || (type === 'product' && i.productId === item.id));
       if (existing) {
@@ -554,15 +561,18 @@ export default function AppointmentCheckoutModal({ appointment, onClose, onCompl
                 <div key={group.title}>
                   <h4 style={{ margin: "0 0 8px 0", color: "#0f172a", fontSize: "0.8rem", fontWeight: 800 }}>{group.title}</h4>
                   <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "6px" }}>
-                    {group.items.map((product) => (
-                      <div key={product.id} onClick={() => addItem(product, "product")} style={{ border: "1px solid #cbd5e1", borderRadius: "6px", padding: "6px", display: "flex", flexDirection: "column", justifyContent: "space-between", gap: "6px", cursor: "pointer", background: "white", transition: "all 0.2s", boxShadow: "none" }} onMouseEnter={(e) => { e.currentTarget.style.borderColor = "#3b82f6"; }} onMouseLeave={(e) => { e.currentTarget.style.borderColor = "#cbd5e1"; }}>
+                    {group.items.map(product => {
+                      const isOutOfStock = Number(product.currentStock || 0) <= 0 && !product.allowNegativeStock;
+                      return (
+                      <div key={product.id} onClick={() => { if(!isOutOfStock) addItem(product, "product"); else alert("This product is out of stock."); }} style={{ border: "1px solid #cbd5e1", borderRadius: "6px", padding: "6px", display: "flex", flexDirection: "column", justifyContent: "space-between", gap: "6px", cursor: isOutOfStock ? "not-allowed" : "pointer", background: "white", transition: "all 0.2s", boxShadow: "none", opacity: isOutOfStock ? 0.6 : 1, position: "relative" }} onMouseEnter={(e) => { if(!isOutOfStock) e.currentTarget.style.borderColor = "#3b82f6"; }} onMouseLeave={(e) => { if(!isOutOfStock) e.currentTarget.style.borderColor = "#cbd5e1"; }}>
+                        {isOutOfStock && <div style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)", background: "rgba(239, 68, 68, 0.9)", color: "white", padding: "4px 8px", borderRadius: 4, fontSize: 11, fontWeight: "bold", zIndex: 10, whiteSpace: "nowrap" }}>Out of Stock</div>}
                         <div style={{ fontWeight: 600, fontSize: "0.7rem", color: "#1e293b", lineHeight: "1.2" }}>{product.name}</div>
                         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", width: "100%" }}>
                           <span style={{ color: "#94a3b8", fontSize: "0.6rem", textDecoration: "line-through" }}>{product.costPrice ? product.costPrice : ""}</span>
                           <span style={{ color: "#16a34a", fontWeight: 700, fontSize: "0.75rem" }}>{product.sellingPrice}</span>
                         </div>
                       </div>
-                    ))}
+                    )})}
                   </div>
                 </div>
               ))}
