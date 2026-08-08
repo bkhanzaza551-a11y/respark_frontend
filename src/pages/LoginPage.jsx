@@ -114,12 +114,7 @@ export default function LoginPage() {
               </button>
             </form>
 
-            <div style={{ marginTop: 28 }}>
-              <Link to="/forgot-password" style={{ display: "inline-block", fontSize: 13, fontWeight: 600, color: "#64748b", textDecoration: "none", transition: "color 0.2s" }} onMouseEnter={(e) => e.target.style.color = "#0ea5e9"} onMouseLeave={(e) => e.target.style.color = "#64748b"}>
-                Forgot your password?
-              </Link>
-            </div>
-          </>
+
         )}
       </div>
     </div>
