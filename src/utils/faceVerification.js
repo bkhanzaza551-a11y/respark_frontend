@@ -121,28 +121,46 @@ const validateFaceQuality = (detection, imageWidth, imageHeight) => {
   return true;
 };
 
+const detectWithTimeout = (image, options, timeoutMs = 15000) => {
+  return new Promise((resolve, reject) => {
+    const timer = setTimeout(() => {
+      reject(new Error("Face detection timed out. Ensure your face is clearly visible and well-lit."));
+    }, timeoutMs);
+
+    faceapi
+      .detectAllFaces(image, options)
+      .withFaceLandmarks(true)
+      .withFaceDescriptors()
+      .then((result) => {
+        clearTimeout(timer);
+        resolve(result);
+      })
+      .catch((err) => {
+        clearTimeout(timer);
+        reject(err);
+      });
+  });
+};
+
 const detectSingleFaceDescriptor = async (source) => {
   await loadFaceVerificationModels();
   const { image, cleanup } = await toImageElement(source);
 
-  _faceDetectionError = null;
-
   let detections;
   try {
-    detections = await faceapi
-      .detectAllFaces(image, new faceapi.TinyFaceDetectorOptions({ inputSize: 416, scoreThreshold: MIN_DETECTION_SCORE }))
-      .withFaceLandmarks(true)
-      .withFaceDescriptors();
+    detections = await detectWithTimeout(
+      image,
+      new faceapi.TinyFaceDetectorOptions({ inputSize: 512, scoreThreshold: 0.3 })
+    );
   } catch (err) {
     cleanup();
+    const msg = err?.message || "";
+    if (msg.includes("Box.constructor") || msg.includes("IBoundingBox") || msg.includes("IRect") || msg.includes("timed out")) {
+      throw new Error("Could not detect a valid face. Ensure your face is clearly visible, centered in the frame, and well-lit.");
+    }
     throw new Error("Could not detect a valid face. Ensure your face is clearly visible, centered, and well-lit.");
   }
   cleanup();
-
-  if (_faceDetectionError) {
-    _faceDetectionError = null;
-    throw new Error("Could not detect a valid face. Ensure your face is clearly visible, centered, and well-lit.");
-  }
 
   if (!detections || !detections.length) {
     throw new Error("No face detected. Ensure your face is well-lit and centered in the frame.");
