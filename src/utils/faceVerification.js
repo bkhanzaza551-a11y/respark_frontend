@@ -125,15 +125,27 @@ const detectSingleFaceDescriptor = async (source) => {
   
   let detections;
   try {
-    detections = await faceapi
-      .detectAllFaces(image, new faceapi.TinyFaceDetectorOptions({ inputSize: 416, scoreThreshold: MIN_DETECTION_SCORE }))
-      .withFaceLandmarks(true)
-      .withFaceDescriptors();
-  } finally {
+    detections = await new Promise(async (resolve, reject) => {
+      try {
+        const result = await faceapi
+          .detectAllFaces(image, new faceapi.TinyFaceDetectorOptions({ inputSize: 416, scoreThreshold: MIN_DETECTION_SCORE }))
+          .withFaceLandmarks(true)
+          .withFaceDescriptors();
+        resolve(result);
+      } catch (err) {
+        reject(err);
+      }
+    });
+  } catch (faceErr) {
     cleanup();
+    if (faceErr?.message?.includes("Box.constructor") || faceErr?.message?.includes("IBoundingBox") || faceErr?.message?.includes("IRect")) {
+      throw new Error("Could not detect a valid face. Ensure your face is clearly visible, centered, and well-lit.");
+    }
+    throw faceErr;
   }
+  cleanup();
 
-  if (!detections.length) {
+  if (!detections || !detections.length) {
     throw new Error("No face detected. Ensure your face is well-lit and centered in the frame.");
   }
 
