@@ -116,6 +116,10 @@ export default function UsersPage() {
     setEnrollmentCaptureBusy(true);
     setEnrollmentCameraError("");
     try {
+      console.log("[Biometric] Running face verification on live video...");
+      await ensureSingleFaceInImage(video);
+      console.log("[Biometric] Face verified, capturing frame...");
+
       canvas.width = video.videoWidth || 640;
       canvas.height = video.videoHeight || 480;
       const ctx = canvas.getContext("2d");
@@ -124,7 +128,8 @@ export default function UsersPage() {
       const blob = await new Promise((resolve) => canvas.toBlob(resolve, "image/jpeg", 0.92));
       if (!blob) throw new Error("Failed to capture frame.");
       const file = new File([blob], "enrollment-selfie.jpg", { type: "image/jpeg" });
-      const url = await uploadEnrollmentImage(file, canvas);
+      console.log("[Biometric] Uploading verified selfie...");
+      const url = await uploadEnrollmentImageUploadOnly(file);
       stopEnrollmentCamera();
       setEnrollmentCameraError("");
       setForm((c) => ({ ...c, attendanceEnrollmentPhotoUrl: url, attendanceEnabled: true }));
@@ -151,6 +156,16 @@ export default function UsersPage() {
     console.log("[Biometric] Running face verification...");
     await ensureSingleFaceInImage(canvas || file);
     console.log("[Biometric] Face verified, uploading...");
+    const formData = new FormData();
+    formData.append("image", file);
+    const response = await api.post("/upload", formData, {
+      headers: { "Content-Type": "multipart/form-data" }
+    });
+    return response.data?.url || "";
+  };
+
+  const uploadEnrollmentImageUploadOnly = async (file) => {
+    if (!file) return "";
     const formData = new FormData();
     formData.append("image", file);
     const response = await api.post("/upload", formData, {

@@ -121,14 +121,14 @@ const validateFaceQuality = (detection, imageWidth, imageHeight) => {
   return true;
 };
 
-const brightenCanvas = (sourceCanvas) => {
-  const w = sourceCanvas.width || 640;
-  const h = sourceCanvas.height || 480;
+const brightenCanvas = (source) => {
+  const w = source.videoWidth || source.width || 640;
+  const h = source.videoHeight || source.height || 480;
   const offscreen = document.createElement("canvas");
   offscreen.width = w;
   offscreen.height = h;
   const ctx = offscreen.getContext("2d");
-  ctx.drawImage(sourceCanvas, 0, 0, w, h);
+  ctx.drawImage(source, 0, 0, w, h);
   const imageData = ctx.getImageData(0, 0, w, h);
   const data = imageData.data;
   for (let i = 0; i < data.length; i += 4) {
@@ -165,8 +165,12 @@ const detectSingleFaceDescriptor = async (source) => {
   await loadFaceVerificationModels();
   const { image, cleanup } = await toImageElement(source);
 
+  console.log("[FaceAPI] Source type:", image.constructor.name, "dimensions:", image.videoWidth || image.width, "x", image.videoHeight || image.height);
+
   const brightened = (image instanceof HTMLCanvasElement || image instanceof HTMLVideoElement)
     ? brightenCanvas(image) : image;
+
+  console.log("[FaceAPI] Brightened canvas:", brightened.width, "x", brightened.height);
 
   let detections = null;
   const detectors = [
@@ -175,11 +179,15 @@ const detectSingleFaceDescriptor = async (source) => {
     new faceapi.TinyFaceDetectorOptions({ inputSize: 320, scoreThreshold: 0.05 })
   ];
 
-  for (const detectorOpts of detectors) {
+  for (let i = 0; i < detectors.length; i++) {
+    const detectorOpts = detectors[i];
     try {
+      console.log(`[FaceAPI] Trying detector ${i + 1}: inputSize=${detectorOpts.inputSize}, scoreThreshold=${detectorOpts.scoreThreshold}`);
       detections = await detectWithTimeout(brightened, detectorOpts, 12000);
+      console.log(`[FaceAPI] Detector ${i + 1} result: ${detections?.length || 0} face(s) found`);
       if (detections && detections.length > 0) break;
-    } catch {
+    } catch (err) {
+      console.log(`[FaceAPI] Detector ${i + 1} error:`, err.message);
       continue;
     }
   }
