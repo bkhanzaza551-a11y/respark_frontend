@@ -8,27 +8,16 @@ const MAX_OCCLUSION_RATIO = 0.35;
 
 let modelLoadPromise = null;
 
-const loadImageElement = (source, isBlob = false) => new Promise((resolve, reject) => {
-  const image = new Image();
-  if (!isBlob) {
-    image.crossOrigin = "anonymous";
-  }
-  image.onload = () => {
-    image.width = image.naturalWidth;
-    image.height = image.naturalHeight;
-    resolve(image);
-  };
-  image.onerror = () => reject(new Error("Could not load selfie image for face verification."));
-  image.src = source;
-});
-
 const toImageElement = async (source) => {
-  if (typeof source === "string") {
-    return { image: await loadImageElement(source, false), cleanup: () => {} };
+  if (source instanceof HTMLCanvasElement || source instanceof HTMLVideoElement || source instanceof HTMLImageElement) {
+    return { image: source, cleanup: () => {} };
   }
-  const objectUrl = URL.createObjectURL(source);
-  const image = await loadImageElement(objectUrl, true);
-  return { image, cleanup: () => URL.revokeObjectURL(objectUrl) };
+  if (typeof source === "string") {
+    const img = await faceapi.fetchImage(source);
+    return { image: img, cleanup: () => {} };
+  }
+  const img = await faceapi.bufferToImage(source);
+  return { image: img, cleanup: () => {} };
 };
 
 export const loadFaceVerificationModels = async () => {

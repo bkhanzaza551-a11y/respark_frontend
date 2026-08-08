@@ -124,7 +124,7 @@ export default function UsersPage() {
       const blob = await new Promise((resolve) => canvas.toBlob(resolve, "image/jpeg", 0.92));
       if (!blob) throw new Error("Failed to capture frame.");
       const file = new File([blob], "enrollment-selfie.jpg", { type: "image/jpeg" });
-      const url = await uploadEnrollmentImage(file);
+      const url = await uploadEnrollmentImage(file, canvas);
       stopEnrollmentCamera();
       setEnrollmentCameraError("");
       setForm((c) => ({ ...c, attendanceEnrollmentPhotoUrl: url, attendanceEnabled: true }));
@@ -146,10 +146,10 @@ export default function UsersPage() {
 
   useEffect(() => () => stopEnrollmentCamera(), []);
 
-  const uploadEnrollmentImage = async (file) => {
+  const uploadEnrollmentImage = async (file, canvas = null) => {
     if (!file) return "";
     console.log("[Biometric] Running face verification...");
-    await ensureSingleFaceInImage(file);
+    await ensureSingleFaceInImage(canvas || file);
     console.log("[Biometric] Face verified, uploading...");
     const formData = new FormData();
     formData.append("image", file);
