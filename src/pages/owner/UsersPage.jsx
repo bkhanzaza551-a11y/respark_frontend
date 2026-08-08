@@ -116,24 +116,27 @@ export default function UsersPage() {
     setEnrollmentCaptureBusy(true);
     setEnrollmentCameraError("");
     try {
-      console.log("[Biometric] Running face verification on live video...");
-      await ensureSingleFaceInImage(video);
-      console.log("[Biometric] Face verified, capturing frame...");
-
       canvas.width = video.videoWidth || 640;
       canvas.height = video.videoHeight || 480;
       const ctx = canvas.getContext("2d");
       if (!ctx) throw new Error("Failed to access camera capture.");
       ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-      const blob = await new Promise((resolve) => canvas.toBlob(resolve, "image/jpeg", 0.92));
+      const blob = await new Promise((resolve) => canvas.toBlob(resolve, "image/jpeg", 0.95));
       if (!blob) throw new Error("Failed to capture frame.");
+
       const file = new File([blob], "enrollment-selfie.jpg", { type: "image/jpeg" });
-      console.log("[Biometric] Uploading verified selfie...");
-      const url = await uploadEnrollmentImageUploadOnly(file);
+      const formData = new FormData();
+      formData.append("image", file);
+      const response = await api.post("/upload", formData, {
+        headers: { "Content-Type": "multipart/form-data" }
+      });
+      const url = response.data?.url || "";
+      if (!url) throw new Error("Upload failed.");
+
       stopEnrollmentCamera();
       setEnrollmentCameraError("");
       setForm((c) => ({ ...c, attendanceEnrollmentPhotoUrl: url, attendanceEnabled: true }));
-      setStatus((s) => ({ ...s, success: "Enrollment selfie captured successfully.", error: "" }));
+      setStatus((s) => ({ ...s, success: "Enrollment selfie captured successfully. Face will be verified during check-in.", error: "" }));
     } catch (err) {
       console.error("[Biometric] Capture failed:", err);
       setEnrollmentCameraError(formatApiError(err, "Could not capture enrollment selfie"));

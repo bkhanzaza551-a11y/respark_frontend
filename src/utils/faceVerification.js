@@ -140,24 +140,26 @@ const brightenCanvas = (source) => {
   return offscreen;
 };
 
-const detectWithTimeout = (image, options, timeoutMs = 15000) => {
+const detectWithTimeout = (image, options, timeoutMs = 10000) => {
   return new Promise((resolve, reject) => {
     const timer = setTimeout(() => {
       reject(new Error("Face detection timed out."));
     }, timeoutMs);
 
-    faceapi
-      .detectAllFaces(image, options)
-      .withFaceLandmarks(true)
-      .withFaceDescriptors()
-      .then((result) => {
+    const runDetection = async () => {
+      try {
+        const task = faceapi.detectAllFaces(image, options);
+        const taskWithLandmarks = task.withFaceLandmarks(true);
+        const taskWithDescriptors = taskWithLandmarks.withFaceDescriptors();
+        const result = await taskWithDescriptors.run();
         clearTimeout(timer);
         resolve(result);
-      })
-      .catch((err) => {
+      } catch (err) {
         clearTimeout(timer);
         reject(err);
-      });
+      }
+    };
+    runDetection();
   });
 };
 
