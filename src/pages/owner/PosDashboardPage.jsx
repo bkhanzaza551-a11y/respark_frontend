@@ -383,6 +383,8 @@ export default function PosDashboardPage() {
       grouped[cat].push(p);
     });
     return Object.entries(grouped).map(([title, items]) => ({ title, items }));
+  }, [posContext.products, productSearch, productCategoryFilter]);
+
   const [variationModal, setVariationModal] = useState({ open: false, product: null });
 
   const addQuickProduct = (product) => {
