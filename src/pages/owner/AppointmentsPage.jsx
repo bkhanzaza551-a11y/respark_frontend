@@ -868,14 +868,14 @@ export default function AppointmentsPage() {
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const editId = params.get("edit");
-    if (editId && appointments.length > 0) {
-      const appt = appointments.find(a => a.id === editId);
+    if (editId && rows.length > 0) {
+      const appt = rows.find(a => a.id === editId);
       if (appt) {
         setCheckoutAppointment(appt);
         navigate(location.pathname, { replace: true });
       }
     }
-  }, [location.search, appointments, navigate, location.pathname]);
+  }, [location.search, rows, navigate, location.pathname]);
 
   const appointmentsByStaffStartSlot = useMemo(() => {
     const byStaff = new Map();
