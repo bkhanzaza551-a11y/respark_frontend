@@ -3210,8 +3210,11 @@ export default function PosPage() {
               </button>
               <button type="button" onClick={async () => {
                 try {
+                  const serviceToUpdate = context.services.find(s => s.id === reminderModalDraft.serviceId);
                   await api.patch(`/owner/services/${reminderModalDraft.serviceId}`, {
                     name: reminderModalDraft.serviceName,
+                    price: Number(serviceToUpdate?.price || 0),
+                    durationMin: Number(serviceToUpdate?.durationMin || 30),
                     serviceRemainderDays: Number(reminderModalDraft.reminderDays)
                   });
                   setContext(prev => {
