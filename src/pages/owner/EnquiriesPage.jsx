@@ -82,6 +82,7 @@ export default function EnquiriesPage() {
   const [form, setForm] = useState(emptyForm);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [status, setStatus] = useState({ error: "", success: "" });
+  const [fieldErrors, setFieldErrors] = useState({});
   const [loading, setLoading] = useState(true);
 
   // Status/Detail modal for actions
@@ -140,8 +141,15 @@ export default function EnquiriesPage() {
   // Handle Save
   const save = async (event) => {
     event.preventDefault();
+    setFieldErrors({});
     if (!form.name || !form.phone || !form.interestedServiceId) {
       setStatus({ error: "Please fill in all required fields (*)", success: "" });
+      return;
+    }
+
+    // Check invalid date manually before sending
+    if (form.followUpAt && isNaN(new Date(form.followUpAt).getTime())) {
+      setFieldErrors({ followUpAt: "Invalid date" });
       return;
     }
 
@@ -172,12 +180,26 @@ export default function EnquiriesPage() {
       }
 
       setForm(emptyForm);
+      setFieldErrors({});
       setShowModal(false);
       setStatus({ error: "", success: "Enquiry successfully captured." });
       setTimeout(() => setStatus({ error: "", success: "" }), 3000);
       await load();
     } catch (error) {
-      setStatus({ error: formatApiError(error, "Could not save enquiry"), success: "" });
+      const data = error?.response?.data;
+      if (data?.issues && Array.isArray(data.issues)) {
+        const errors = {};
+        data.issues.forEach(issue => {
+          if (issue.field) {
+            // map backend 'followupAt' to frontend 'followUpAt'
+            const field = issue.field.replace('body.', '');
+            errors[field === 'followupAt' ? 'followUpAt' : field] = issue.message;
+          }
+        });
+        setFieldErrors(errors);
+      } else {
+        setStatus({ error: formatApiError(error, "Could not save enquiry"), success: "" });
+      }
     } finally {
       setIsSubmitting(false);
     }
@@ -522,6 +544,7 @@ export default function EnquiriesPage() {
                     value={form.followUpAt}
                     onChange={(e) => setForm({ ...form, followUpAt: e.target.value })}
                   />
+                  {fieldErrors.followUpAt && <div style={{ color: "#dc2626", fontSize: "0.8rem", marginTop: "4px", fontWeight: "500" }}>{fieldErrors.followUpAt}</div>}
                 </div>
 
                 {/* Mobile No. * */}
@@ -533,6 +556,7 @@ export default function EnquiriesPage() {
                     className="eq-input"
                     style={{ border: "none", borderRadius: 0, padding: 0 }}
                   />
+                  {fieldErrors.phone && <div style={{ color: "#dc2626", fontSize: "0.8rem", marginTop: "4px", fontWeight: "500" }}>{fieldErrors.phone}</div>}
                 </div>
 
                 {/* Name * */}
@@ -546,6 +570,7 @@ export default function EnquiriesPage() {
                     value={form.name}
                     onChange={(e) => setForm({ ...form, name: e.target.value })}
                   />
+                  {fieldErrors.name && <div style={{ color: "#dc2626", fontSize: "0.8rem", marginTop: "4px", fontWeight: "500" }}>{fieldErrors.name}</div>}
                 </div>
 
                 {/* Email */}
