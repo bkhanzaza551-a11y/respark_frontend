@@ -1,6 +1,6 @@
 import { useState, useMemo, useEffect } from "react";
 import CustomDropdown from '../../components/common/CustomDropdown';
-import { X, Trash2, FlaskConical, Plus } from "lucide-react";
+import { X, Trash2, FlaskConical, Plus, TicketPercent } from "lucide-react";
 import { api } from "../../api/client";
 import { useAuth } from "../../context/AuthContext";
 import { useSalonSettings } from "../../context/SalonSettingsContext";
@@ -55,7 +55,31 @@ export default function AppointmentCheckoutModal({ appointment, onClose, onCompl
   const [paymentDraft, setPaymentDraft] = useState({ online: "", offline: "" });
   const [invoiceDiscount, setInvoiceDiscount] = useState(0);
   const [consumableOverrides, setConsumableOverrides] = useState({});
+  const [consumableModal, setConsumableModal] = useState({ open: false, index: -1, rows: [{ name: "", qty: 1, cost: 0 }] });
   const [status, setStatus] = useState({ error: "", success: "" });
+
+  const openConsumableModal = (index) => {
+    const item = form.items[index];
+    setConsumableModal({
+      open: true,
+      index,
+      rows: item.consumables?.length ? [...item.consumables] : [{ name: "", qty: 1, cost: 0 }]
+    });
+  };
+
+  const saveConsumables = () => {
+    const validRows = consumableModal.rows.filter(r => r.name.trim());
+    setForm(current => {
+      const newItems = [...current.items];
+      newItems[consumableModal.index] = {
+        ...newItems[consumableModal.index],
+        consumables: validRows.length ? validRows : undefined
+      };
+      return { ...current, items: newItems };
+    });
+    setConsumableModal({ open: false, index: -1, rows: [{ name: "", qty: 1, cost: 0 }] });
+  };
+
   const [isCompleting, setIsCompleting] = useState(false);
   const [billInvoice, setBillInvoice] = useState(null); // For receipt popup
   const [showPackageModal, setShowPackageModal] = useState(false);
@@ -669,6 +693,12 @@ export default function AppointmentCheckoutModal({ appointment, onClose, onCompl
                                     </div>
                                   );
                                 })}
+                                {item.consumables?.length ? item.consumables.map((entry, cidx) => (
+                                  <div key={`extra-${cidx}`} style={{ fontSize: "0.55rem", display: "flex", alignItems: "center", gap: "3px", background: "#f8fafc", padding: "1px 4px", borderRadius: "3px", width: "fit-content", border: "1px solid #e2e8f0", marginTop: "2px" }}>
+                                    <span style={{ color: "#10b981", fontWeight: 600 }}>{entry.name?.length > 12 ? entry.name.substring(0, 12) + ".." : entry.name}</span>
+                                    <span style={{ fontSize: "0.6rem", fontWeight: 700, color: "#111827", marginLeft: "4px" }}>{entry.qty}</span>
+                                  </div>
+                                )) : null}
                               </div>
                             )}
                           </div>
@@ -737,7 +767,12 @@ export default function AppointmentCheckoutModal({ appointment, onClose, onCompl
                           </div>
                           <div style={{ color: "#16a34a", fontWeight: 600 }}>{subTotal}</div>
                           <div style={{ color: "#64748b", fontSize: "0.65rem" }}>09:00 AM</div>
-                          <button onClick={() => removeItem(index)} style={{ background: "transparent", border: "none", color: "#ef4444", cursor: "pointer", display: "flex", justifyContent: "center" }}><Trash2 size={14} /></button>
+                          <div style={{ display: "flex", gap: "6px", justifyContent: "center" }}>
+                            {item.itemType === 'SERVICE' ? (
+                              <button type="button" title="Add Consumable Items" onClick={() => openConsumableModal(index)} style={{ background: "transparent", border: "none", cursor: "pointer", color: item.consumables?.length ? "#16a34a" : "#3b82f6", display: "flex" }}><TicketPercent size={14} /></button>
+                            ) : null}
+                            <button type="button" onClick={() => removeItem(index)} style={{ background: "transparent", border: "none", color: "#ef4444", cursor: "pointer", display: "flex" }}><Trash2 size={14} /></button>
+                          </div>
                         </div>
                       );
                     })}
@@ -1273,6 +1308,45 @@ export default function AppointmentCheckoutModal({ appointment, onClose, onCompl
           </div>
         </div>
       )}
+
+      {consumableModal.open ? (
+        <div className="premium-modal-overlay" onClick={() => setConsumableModal({ open: false, index: -1, rows: [{ name: "", qty: 1, cost: 0 }] })} style={{ zIndex: 10010, background: "rgba(0,0,0,0.55)" }}>
+          <div className="premium-modal-content" onClick={(event) => event.stopPropagation()} style={{ maxWidth: 620, padding: 24 }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 18 }}>
+              <strong style={{ fontSize: 20 }}>Consumable Items</strong>
+              <button type="button" onClick={() => setConsumableModal({ open: false, index: -1, rows: [{ name: "", qty: 1, cost: 0 }] })} style={{ background: "transparent", border: "none", cursor: "pointer" }}>
+                <X size={18} />
+              </button>
+            </div>
+            <div style={{ display: "grid", gap: 12 }}>
+              {consumableModal.rows.map((entry, entryIndex) => (
+                <div key={entryIndex} style={{ display: "grid", gridTemplateColumns: "2fr 1fr 1fr auto", gap: 10, alignItems: "end" }}>
+                  <label style={{ display: "grid", gap: 6 }}>
+                    <span style={{ fontWeight: 600, color: "#334155" }}>Item Name</span>
+                    <input type="text" value={entry.name} onChange={(event) => setConsumableModal((current) => ({ ...current, rows: current.rows.map((row, rowIndex) => rowIndex === entryIndex ? { ...row, name: event.target.value } : row) }))} style={{ padding: "10px 12px", borderRadius: 8, border: "1px solid #cbd5e1" }} />
+                  </label>
+                  <label style={{ display: "grid", gap: 6 }}>
+                    <span style={{ fontWeight: 600, color: "#334155" }}>Qty</span>
+                    <input type="number" min="1" value={entry.qty} onChange={(event) => setConsumableModal((current) => ({ ...current, rows: current.rows.map((row, rowIndex) => rowIndex === entryIndex ? { ...row, qty: Number(event.target.value || 1) } : row) }))} style={{ padding: "10px 12px", borderRadius: 8, border: "1px solid #cbd5e1" }} />
+                  </label>
+                  <label style={{ display: "grid", gap: 6 }}>
+                    <span style={{ fontWeight: 600, color: "#334155" }}>Cost</span>
+                    <input type="number" min="0" value={entry.cost} onChange={(event) => setConsumableModal((current) => ({ ...current, rows: current.rows.map((row, rowIndex) => rowIndex === entryIndex ? { ...row, cost: Number(event.target.value || 0) } : row) }))} style={{ padding: "10px 12px", borderRadius: 8, border: "1px solid #cbd5e1" }} />
+                  </label>
+                  <button type="button" onClick={() => setConsumableModal((current) => ({ ...current, rows: current.rows.length === 1 ? [{ name: "", qty: 1, cost: 0 }] : current.rows.filter((_, rowIndex) => rowIndex !== entryIndex) }))} style={{ padding: "10px", borderRadius: "8px", border: "1px solid #e2e8f0", background: "white", color: "#ef4444", fontWeight: 600, cursor: "pointer" }}>Remove</button>
+                </div>
+              ))}
+            </div>
+            <div style={{ display: "flex", justifyContent: "space-between", gap: 12, marginTop: 20 }}>
+              <button type="button" onClick={() => setConsumableModal((current) => ({ ...current, rows: [...current.rows, { name: "", qty: 1, cost: 0 }] }))} style={{ padding: "10px 16px", borderRadius: "8px", border: "1px solid #cbd5e1", background: "white", color: "#0f172a", fontWeight: 600, cursor: "pointer" }}>Add Row</button>
+              <div style={{ display: "flex", gap: 12 }}>
+                <button type="button" onClick={() => setConsumableModal({ open: false, index: -1, rows: [{ name: "", qty: 1, cost: 0 }] })} style={{ padding: "10px 16px", borderRadius: "8px", border: "1px solid #cbd5e1", background: "white", color: "#475569", fontWeight: 600, cursor: "pointer" }}>Cancel</button>
+                <button type="button" onClick={saveConsumables} style={{ padding: "10px 16px", borderRadius: "8px", border: "none", background: "#3b82f6", color: "white", fontWeight: 600, cursor: "pointer" }}>Save Consumables</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      ) : null}
 
     </div>
   );
