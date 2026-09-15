@@ -54,7 +54,6 @@ export default function AppointmentCheckoutModal({ appointment, onClose, onCompl
   
   const [paymentDraft, setPaymentDraft] = useState({ online: "", offline: "" });
   const [invoiceDiscount, setInvoiceDiscount] = useState(0);
-  const [consumableOverrides, setConsumableOverrides] = useState({});
   const [showConsumableModal, setShowConsumableModal] = useState(false);
   const [consumableItemIndex, setConsumableItemIndex] = useState(null);
   const [consumableItems, setConsumableItems] = useState([]);
@@ -64,8 +63,22 @@ export default function AppointmentCheckoutModal({ appointment, onClose, onCompl
   const [status, setStatus] = useState({ error: "", success: "" });
 
   const openConsumableModal = (itemIndex) => {
+    const item = form.items[itemIndex];
+    let initialConsumables = item.consumables;
+    
+    // If no custom overrides exist yet, load defaults from the service definition
+    if (!initialConsumables || initialConsumables.length === 0) {
+       const serviceDefs = posContext.services.find(s => s.id === item.serviceId)?.consumables || [];
+       initialConsumables = serviceDefs.map(c => ({
+         productId: c.productId,
+         name: c.product?.name || "Consumable",
+         qty: c.reqdQty || 1,
+         unit: c.product?.unit || 'pcs'
+       }));
+    }
+    
     setConsumableItemIndex(itemIndex);
-    setConsumableItems(form.items[itemIndex]?.consumables || []);
+    setConsumableItems(initialConsumables);
     setConsumableSearch("");
     setManualConsumableDraft({ name: "", qty: 1, unit: "ml" });
     setShowConsumableModal(true);
@@ -482,7 +495,7 @@ export default function AppointmentCheckoutModal({ appointment, onClose, onCompl
         await api.patch(`/owner/appointments/${appointment.id}/status`, { status: "COMPLETED" });
         
         // 2. Convert to Invoice (this creates the base invoice from original items)
-        const convertRes = await api.post(`/owner/appointments/${appointment.id}/convert-to-invoice`, { consumableOverrides });
+        const convertRes = await api.post(`/owner/appointments/${appointment.id}/convert-to-invoice`, {});
         activeInvoiceId = convertRes.data.id;
       }
 
@@ -496,7 +509,6 @@ export default function AppointmentCheckoutModal({ appointment, onClose, onCompl
         notes: form.notes,
         discount: Number(invoiceDiscount || 0),
         additionalPayments,
-        consumableOverrides,
         items: form.items.map(item => ({
           itemType: item.itemType,
           serviceId: item.itemType === 'SERVICE' ? (item.serviceId || null) : null,
@@ -513,7 +525,8 @@ export default function AppointmentCheckoutModal({ appointment, onClose, onCompl
           taxPct: Number(item.taxPct || 0),
           isCustom: item.isCustom,
           validityDays: item.validityDays,
-          customServices: item.customServices || []
+          customServices: item.customServices || [],
+          consumableItems: item.consumables || []
         }))
       });
 
@@ -698,39 +711,6 @@ export default function AppointmentCheckoutModal({ appointment, onClose, onCompl
                         <div key={index} style={{ display: "grid", gridTemplateColumns: "2fr 2fr 0.5fr 1fr 1fr 1fr 1fr 1fr 1fr 0.5fr", gap: "8px", padding: "8px 0", borderBottom: "1px solid #f1f5f9", fontSize: "0.7rem", alignItems: "center" }}>
                           <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
                             <div style={{ fontWeight: 600, color: "#1e293b" }}>{item.name || "Item"}</div>
-                            {item.itemType === 'SERVICE' && (
-                              <div style={{ display: "flex", flexDirection: "column", gap: "4px", marginTop: "3px" }}>
-                                {posContext.services.find(s => s.id === item.serviceId)?.consumables?.map((c, i) => {
-                                  const overrideKey = `${item.serviceId}:${c.productId}`;
-                                  const currentVal = consumableOverrides[overrideKey] !== undefined ? consumableOverrides[overrideKey] : c.reqdQty;
-                                  const unit = c.product?.unit || 'pcs';
-                                  return (
-                                    <div key={i} style={{ fontSize: "0.55rem", display: "flex", alignItems: "center", gap: "3px", background: "#f8fafc", padding: "1px 4px", borderRadius: "3px", width: "fit-content", border: "1px solid #e2e8f0", marginTop: "2px" }}>
-                                      <span style={{ color: "#10b981", fontWeight: 600 }}>🧪 {c.product?.name?.length > 12 ? c.product.name.substring(0, 12) + ".." : c.product?.name}</span>
-                                      <input
-                                        type="number"
-                                        min="0"
-                                        value={currentVal}
-                                        onChange={(e) => {
-                                          const val = e.target.value;
-                                          setConsumableOverrides(prev => ({ ...prev, [overrideKey]: val }));
-                                        }}
-                                        onClick={(e) => e.stopPropagation()}
-                                        style={{ width: "30px", height: "14px", padding: "0", border: "1px solid #cbd5e1", borderRadius: "2px", fontSize: "0.55rem", textAlign: "center", fontWeight: 700, background: "#fff", outline: "none" }}
-                                        title="Edit quantity of consumable used for this client"
-                                      />
-                                      <span style={{ fontWeight: 600, color: "#94a3b8" }}>{unit}</span>
-                                    </div>
-                                  );
-                                })}
-                                {item.consumables?.length ? item.consumables.map((entry, cidx) => (
-                                  <div key={`extra-${cidx}`} style={{ fontSize: "0.55rem", display: "flex", alignItems: "center", gap: "3px", background: "#f8fafc", padding: "1px 4px", borderRadius: "3px", width: "fit-content", border: "1px solid #e2e8f0", marginTop: "2px" }}>
-                                    <span style={{ color: "#10b981", fontWeight: 600 }}>{entry.name?.length > 12 ? entry.name.substring(0, 12) + ".." : entry.name}</span>
-                                    <span style={{ fontSize: "0.6rem", fontWeight: 700, color: "#111827", marginLeft: "4px" }}>{entry.qty}</span>
-                                  </div>
-                                )) : null}
-                              </div>
-                            )}
                           </div>
                           
                           {/* Staff Selection Dropdown */}
@@ -796,12 +776,14 @@ export default function AppointmentCheckoutModal({ appointment, onClose, onCompl
                             />
                           </div>
                           <div style={{ color: "#16a34a", fontWeight: 600 }}>{subTotal}</div>
-                          <div style={{ color: "#64748b", fontSize: "0.65rem" }}>09:00 AM</div>
-                          <div style={{ display: "flex", gap: "6px", justifyContent: "center" }}>
-                            {item.itemType === 'SERVICE' ? (
-                              <button type="button" title="Add Consumable Items" onClick={() => openConsumableModal(index)} style={{ background: "transparent", border: "none", cursor: "pointer", color: item.consumables?.length ? "#16a34a" : "#3b82f6", display: "flex" }}><TicketPercent size={14} /></button>
-                            ) : null}
-                            <button type="button" onClick={() => removeItem(index)} style={{ background: "transparent", border: "none", color: "#ef4444", cursor: "pointer", display: "flex" }}><Trash2 size={14} /></button>
+                          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "8px", alignItems: "center" }}>
+                            <div style={{ color: "#64748b", fontSize: "0.65rem" }}>09:00 AM</div>
+                            <div style={{ display: "flex", gap: "6px", justifyContent: "center" }}>
+                              {item.itemType === 'SERVICE' ? (
+                                <button type="button" title="Add Consumable Items" onClick={() => openConsumableModal(index)} style={{ background: "transparent", border: "none", cursor: "pointer", color: item.consumables?.length ? "#16a34a" : "#3b82f6", display: "flex" }}><FlaskConical size={14} /></button>
+                              ) : null}
+                              <button type="button" onClick={() => removeItem(index)} style={{ background: "transparent", border: "none", color: "#ef4444", cursor: "pointer", display: "flex" }}><Trash2 size={14} /></button>
+                            </div>
                           </div>
                         </div>
                       );
