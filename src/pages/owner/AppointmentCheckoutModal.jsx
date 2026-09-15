@@ -55,29 +55,59 @@ export default function AppointmentCheckoutModal({ appointment, onClose, onCompl
   const [paymentDraft, setPaymentDraft] = useState({ online: "", offline: "" });
   const [invoiceDiscount, setInvoiceDiscount] = useState(0);
   const [consumableOverrides, setConsumableOverrides] = useState({});
-  const [consumableModal, setConsumableModal] = useState({ open: false, index: -1, rows: [{ name: "", qty: 1, cost: 0 }] });
+  const [showConsumableModal, setShowConsumableModal] = useState(false);
+  const [consumableItemIndex, setConsumableItemIndex] = useState(null);
+  const [consumableItems, setConsumableItems] = useState([]);
+  const [consumableSearch, setConsumableSearch] = useState("");
+  const [manualConsumableDraft, setManualConsumableDraft] = useState({ name: "", qty: 1, unit: "ml" });
+
   const [status, setStatus] = useState({ error: "", success: "" });
 
-  const openConsumableModal = (index) => {
-    const item = form.items[index];
-    setConsumableModal({
-      open: true,
-      index,
-      rows: item.consumables?.length ? [...item.consumables] : [{ name: "", qty: 1, cost: 0 }]
-    });
+  const openConsumableModal = (itemIndex) => {
+    setConsumableItemIndex(itemIndex);
+    setConsumableItems(form.items[itemIndex]?.consumables || []);
+    setConsumableSearch("");
+    setManualConsumableDraft({ name: "", qty: 1, unit: "ml" });
+    setShowConsumableModal(true);
+  };
+
+  const addConsumableProduct = (product) => {
+    setConsumableItems(prev => [...prev, { productId: product.id, name: product.name, qty: product.netWeight || 1, unit: product.secondaryUnit || product.unit || "" }]);
+    setConsumableSearch("");
+  };
+
+  const addManualConsumableItem = (customData = null) => {
+    const itemToAdd = customData || manualConsumableDraft;
+    if (!itemToAdd.name.trim()) return;
+    setConsumableItems(prev => [...prev, {
+      productId: null,
+      name: itemToAdd.name || "",
+      qty: Number(itemToAdd.qty) || 1,
+      unit: itemToAdd.unit || "ml",
+      isManual: true
+    }]);
+    setManualConsumableDraft({ name: "", qty: 1, unit: "ml" });
+  };
+
+  const updateConsumableItem = (ciIndex, patch) => {
+    setConsumableItems(prev => prev.map((ci, i) => i === ciIndex ? { ...ci, ...patch } : ci));
+  };
+
+  const removeConsumableItem = (ciIndex) => {
+    setConsumableItems(prev => prev.filter((_, i) => i !== ciIndex));
   };
 
   const saveConsumables = () => {
-    const validRows = consumableModal.rows.filter(r => r.name.trim());
+    if (consumableItemIndex == null) return;
     setForm(current => {
       const newItems = [...current.items];
-      newItems[consumableModal.index] = {
-        ...newItems[consumableModal.index],
-        consumables: validRows.length ? validRows : undefined
+      newItems[consumableItemIndex] = {
+        ...newItems[consumableItemIndex],
+        consumables: consumableItems.length ? consumableItems : undefined
       };
       return { ...current, items: newItems };
     });
-    setConsumableModal({ open: false, index: -1, rows: [{ name: "", qty: 1, cost: 0 }] });
+    setShowConsumableModal(false);
   };
 
   const [isCompleting, setIsCompleting] = useState(false);
@@ -1309,44 +1339,159 @@ export default function AppointmentCheckoutModal({ appointment, onClose, onCompl
         </div>
       )}
 
-      {consumableModal.open ? (
-        <div className="premium-modal-overlay" onClick={() => setConsumableModal({ open: false, index: -1, rows: [{ name: "", qty: 1, cost: 0 }] })} style={{ zIndex: 10010, background: "rgba(0,0,0,0.55)" }}>
-          <div className="premium-modal-content" onClick={(event) => event.stopPropagation()} style={{ maxWidth: 620, padding: 24 }}>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 18 }}>
-              <strong style={{ fontSize: 20 }}>Consumable Items</strong>
-              <button type="button" onClick={() => setConsumableModal({ open: false, index: -1, rows: [{ name: "", qty: 1, cost: 0 }] })} style={{ background: "transparent", border: "none", cursor: "pointer" }}>
-                <X size={18} />
-              </button>
+      {showConsumableModal && (
+        <div style={{ position: 'fixed', inset: 0, backgroundColor: 'rgba(0,0,0,0.5)', zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20 }} onClick={() => setShowConsumableModal(false)}>
+          <div onClick={(e) => e.stopPropagation()} style={{ background: '#fff', borderRadius: 16, width: '100%', maxWidth: 600, maxHeight: '90vh', display: 'flex', flexDirection: 'column', overflow: 'hidden', boxShadow: '0 20px 60px rgba(0,0,0,0.3)' }}>
+            <div style={{ padding: '20px 24px', borderBottom: '1px solid #f1f5f9', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <h2 style={{ margin: 0, fontSize: 20, fontWeight: 700, color: '#0f172a' }}>Update Consumable Items</h2>
+              <button type="button" onClick={() => setShowConsumableModal(false)} style={{ background: 'none', border: 'none', fontSize: 22, cursor: 'pointer', color: '#64748b', display: 'flex' }}><X size={22} /></button>
             </div>
-            <div style={{ display: "grid", gap: 12 }}>
-              {consumableModal.rows.map((entry, entryIndex) => (
-                <div key={entryIndex} style={{ display: "grid", gridTemplateColumns: "2fr 1fr 1fr auto", gap: 10, alignItems: "end" }}>
-                  <label style={{ display: "grid", gap: 6 }}>
-                    <span style={{ fontWeight: 600, color: "#334155" }}>Item Name</span>
-                    <input type="text" value={entry.name} onChange={(event) => setConsumableModal((current) => ({ ...current, rows: current.rows.map((row, rowIndex) => rowIndex === entryIndex ? { ...row, name: event.target.value } : row) }))} style={{ padding: "10px 12px", borderRadius: 8, border: "1px solid #cbd5e1" }} />
-                  </label>
-                  <label style={{ display: "grid", gap: 6 }}>
-                    <span style={{ fontWeight: 600, color: "#334155" }}>Qty</span>
-                    <input type="number" min="1" value={entry.qty} onChange={(event) => setConsumableModal((current) => ({ ...current, rows: current.rows.map((row, rowIndex) => rowIndex === entryIndex ? { ...row, qty: Number(event.target.value || 1) } : row) }))} style={{ padding: "10px 12px", borderRadius: 8, border: "1px solid #cbd5e1" }} />
-                  </label>
-                  <label style={{ display: "grid", gap: 6 }}>
-                    <span style={{ fontWeight: 600, color: "#334155" }}>Cost</span>
-                    <input type="number" min="0" value={entry.cost} onChange={(event) => setConsumableModal((current) => ({ ...current, rows: current.rows.map((row, rowIndex) => rowIndex === entryIndex ? { ...row, cost: Number(event.target.value || 0) } : row) }))} style={{ padding: "10px 12px", borderRadius: 8, border: "1px solid #cbd5e1" }} />
-                  </label>
-                  <button type="button" onClick={() => setConsumableModal((current) => ({ ...current, rows: current.rows.length === 1 ? [{ name: "", qty: 1, cost: 0 }] : current.rows.filter((_, rowIndex) => rowIndex !== entryIndex) }))} style={{ padding: "10px", borderRadius: "8px", border: "1px solid #e2e8f0", background: "white", color: "#ef4444", fontWeight: 600, cursor: "pointer" }}>Remove</button>
+
+            <div style={{ padding: '16px 24px', borderBottom: '1px solid #f1f5f9', position: 'relative', zIndex: 1000, display: 'flex', flexDirection: 'column', gap: 12 }}>
+              <div>
+                <label style={{ fontSize: 12, fontWeight: 700, color: '#475569', marginBottom: 4, display: 'block' }}>Search From Inventory</label>
+                <input
+                  type="text"
+                  placeholder="Search products by name..."
+                  value={consumableSearch}
+                  onChange={(e) => setConsumableSearch(e.target.value)}
+                  style={{ width: '100%', padding: '10px 14px', border: '1px solid #cbd5e1', borderRadius: 8, fontSize: 14, boxSizing: 'border-box' }}
+                />
+                {consumableSearch && (
+                  <div style={{ position: 'absolute', top: '70px', left: 24, right: 24, background: '#fff', border: '1px solid #e2e8f0', borderRadius: 8, boxShadow: '0 4px 12px rgba(0,0,0,0.1)', maxHeight: 200, overflowY: 'auto', zIndex: 1010 }}>
+                    {(posContext.products || [])
+                      .filter(p => p.productType === "CONSUMABLE" && (p.name || "").toLowerCase().includes(consumableSearch.toLowerCase()))
+                      .slice(0, 10)
+                      .map(p => (
+                        <div
+                          key={p.id}
+                          onClick={() => addConsumableProduct(p)}
+                          style={{ padding: '10px 14px', cursor: 'pointer', borderBottom: '1px solid #f1f5f9', fontSize: 13, color: '#334155', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
+                          onMouseEnter={(e) => e.currentTarget.style.background = '#f1f5f9'}
+                          onMouseLeave={(e) => e.currentTarget.style.background = '#fff'}
+                        >
+                          <span>{p.name}</span>
+                          <span style={{ fontSize: 11, color: '#64748b' }}>{p.unit || "pcs"}</span>
+                        </div>
+                      ))}
+                    {(posContext.products || []).filter(p => p.productType === "CONSUMABLE" && (p.name || "").toLowerCase().includes(consumableSearch.toLowerCase())).length === 0 && (
+                      <div style={{ padding: '12px 14px', color: '#94a3b8', fontSize: 13, textAlign: 'center' }}>No products found</div>
+                    )}
+                  </div>
+                )}
+              </div>
+
+              {/* 3 Fields for Manual Addition */}
+              <div style={{ background: '#f8fafc', padding: 12, borderRadius: 8, border: '1px solid #e2e8f0' }}>
+                <label style={{ fontSize: 12, fontWeight: 700, color: '#475569', marginBottom: 6, display: 'block' }}>Add Custom Consumable Manually (3 Fields)</label>
+                <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+                  <input
+                    type="text"
+                    placeholder="Consumable Name"
+                    value={manualConsumableDraft.name}
+                    onChange={(e) => setManualConsumableDraft(prev => ({ ...prev, name: e.target.value }))}
+                    style={{ flex: 2, padding: '8px 10px', border: '1px solid #cbd5e1', borderRadius: 6, fontSize: 13, background: '#fff' }}
+                  />
+                  <input
+                    type="number"
+                    placeholder="Qty"
+                    min="0.01"
+                    step="0.01"
+                    value={manualConsumableDraft.qty}
+                    onChange={(e) => setManualConsumableDraft(prev => ({ ...prev, qty: e.target.value }))}
+                    style={{ width: 70, padding: '8px 10px', border: '1px solid #cbd5e1', borderRadius: 6, fontSize: 13, background: '#fff' }}
+                  />
+                  <CustomDropdown
+                    value={manualConsumableDraft.unit}
+                    onChange={(e) => setManualConsumableDraft(prev => ({ ...prev, unit: e.target.value }))}
+                    style={{ width: 80, padding: '8px 10px', border: '1px solid #cbd5e1', borderRadius: 6, fontSize: 13, background: '#fff', appearance: 'none', backgroundImage: "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M3 4.5L6 7.5L9 4.5' stroke='%2364748b' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E\")", backgroundRepeat: 'no-repeat', backgroundPosition: 'right 8px center' }}
+                  >
+                    <option value="">Unit</option>
+                    {["mg","gm","kg","oz","ltr","ml","sachet","ox","can","pcs","carton","roll","pkt","box","unit","btl","jar","cane"].map(u => <option key={u} value={u}>{u}</option>)}
+                  </CustomDropdown>
+                  <button
+                    type="button"
+                    onClick={() => addManualConsumableItem()}
+                    style={{ padding: '8px 14px', background: '#16a34a', color: '#fff', border: 'none', borderRadius: 6, fontWeight: 600, fontSize: 13, cursor: 'pointer', whiteSpace: 'nowrap' }}
+                  >
+                    + Add
+                  </button>
                 </div>
-              ))}
+              </div>
             </div>
-            <div style={{ display: "flex", justifyContent: "space-between", gap: 12, marginTop: 20 }}>
-              <button type="button" onClick={() => setConsumableModal((current) => ({ ...current, rows: [...current.rows, { name: "", qty: 1, cost: 0 }] }))} style={{ padding: "10px 16px", borderRadius: "8px", border: "1px solid #cbd5e1", background: "white", color: "#0f172a", fontWeight: 600, cursor: "pointer" }}>Add Row</button>
-              <div style={{ display: "flex", gap: 12 }}>
-                <button type="button" onClick={() => setConsumableModal({ open: false, index: -1, rows: [{ name: "", qty: 1, cost: 0 }] })} style={{ padding: "10px 16px", borderRadius: "8px", border: "1px solid #cbd5e1", background: "white", color: "#475569", fontWeight: 600, cursor: "pointer" }}>Cancel</button>
-                <button type="button" onClick={saveConsumables} style={{ padding: "10px 16px", borderRadius: "8px", border: "none", background: "#3b82f6", color: "white", fontWeight: 600, cursor: "pointer" }}>Save Consumables</button>
+
+            <div style={{ flex: 1, overflowY: 'auto', padding: '16px 24px' }}>
+              {consumableItems.length === 0 ? (
+                <div style={{ textAlign: 'center', padding: '20px 0', color: '#94a3b8', fontSize: 14 }}>
+                  No consumables added yet. Search from inventory or add manually above.
+                </div>
+              ) : (
+                consumableItems.map((ci, ciIndex) => (
+                  <div key={ciIndex} style={{ display: 'flex', gap: 8, alignItems: 'center', marginBottom: 10, padding: '10px 12px', background: ci.productId ? '#f8fafc' : '#f0fdf4', borderRadius: 8, border: ci.productId ? '1px solid #e2e8f0' : '1px solid #bbf7d0' }}>
+                    <span style={{ fontSize: 13, color: '#64748b', minWidth: 20 }}>{ciIndex + 1}</span>
+                    <div style={{ flex: 2, position: 'relative' }}>
+                      <input
+                        type="text"
+                        placeholder="Item Name (e.g. Shampoo)"
+                        value={ci.name || ""}
+                        readOnly={Boolean(ci.productId)}
+                        onChange={(e) => updateConsumableItem(ciIndex, { name: e.target.value })}
+                        style={{ width: '100%', padding: '8px 10px', border: '1px solid #cbd5e1', borderRadius: 6, fontSize: 13, boxSizing: 'border-box', background: ci.productId ? '#f8fafc' : '#fff' }}
+                      />
+                    </div>
+                    <div style={{ flex: 0, position: 'relative' }}>
+                      <input
+                        type="number"
+                        placeholder="qty"
+                        min="0.01"
+                        step="0.01"
+                        value={ci.qty}
+                        onChange={(e) => updateConsumableItem(ciIndex, { qty: Number(e.target.value) || 1 })}
+                        style={{ width: 70, padding: '8px 10px', border: '1px solid #cbd5e1', borderRadius: 6, fontSize: 13, boxSizing: 'border-box' }}
+                      />
+                    </div>
+                    <input
+                      type="text"
+                      placeholder="unit"
+                      value={ci.unit || ""}
+                      readOnly={Boolean(ci.productId)}
+                      onChange={(e) => updateConsumableItem(ciIndex, { unit: e.target.value })}
+                      style={{ width: 70, padding: '8px 10px', border: '1px solid #cbd5e1', borderRadius: 6, fontSize: 13, background: ci.productId ? '#f1f5f9' : '#fff', color: ci.productId ? '#64748b' : '#0f172a' }}
+                    />
+                    <button type="button" onClick={() => removeConsumableItem(ciIndex)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#ef4444', display: 'flex', padding: 4 }}><Trash2 size={18} /></button>
+                  </div>
+                ))
+              )}
+            </div>
+
+            <div style={{ padding: '14px 24px', borderTop: '1px solid #f1f5f9', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
+              <button
+                type="button"
+                onClick={() => addManualConsumableItem()}
+                style={{
+                  padding: '10px 18px',
+                  background: '#eff6ff',
+                  border: '1.5px dashed #2563eb',
+                  borderRadius: 8,
+                  fontWeight: 600,
+                  cursor: 'pointer',
+                  color: '#1d4ed8',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: 6,
+                  fontSize: 13
+                }}
+              >
+                <Plus size={16} /> Add Manual Consumable
+              </button>
+              <div style={{ display: 'flex', gap: 12 }}>
+                <button type="button" onClick={() => setShowConsumableModal(false)} style={{ padding: '10px 24px', background: '#fff', border: '1px solid #cbd5e1', borderRadius: 8, fontWeight: 600, cursor: 'pointer', color: '#475569' }}>Close</button>
+                <button type="button" onClick={saveConsumables} style={{ padding: '10px 24px', background: '#2563eb', color: '#fff', border: 'none', borderRadius: 8, fontWeight: 700, cursor: 'pointer' }}>Save</button>
               </div>
             </div>
           </div>
         </div>
-      ) : null}
+      )}
 
     </div>
   );
