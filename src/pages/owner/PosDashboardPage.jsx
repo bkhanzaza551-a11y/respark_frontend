@@ -1042,9 +1042,9 @@ export default function PosDashboardPage() {
       {detail ? (
         <div className="premium-modal-overlay" onClick={closeDetail} style={{ zIndex: 9999, background: "rgba(0,0,0,0.6)" }}>
           <div className="premium-modal-content pos-dashboard-detail-modal" onClick={(event) => event.stopPropagation()}>
-            <div className="pos-detail-header-strip" style={{ position: 'relative' }}>
+            <div className="pos-detail-header-strip" style={{ position: 'relative', minHeight: '36px' }}>
               <span style={{ color: '#ec4899', fontWeight: 'bold', margin: '0 auto', fontSize: '15px' }}>Update Bill ({invoiceDetail?.status || detailStatus || detail.status}) Invoice Id: {invoiceDetail?.invoiceNumber || detail?.invoiceNumber || "-"}</span>
-              <button type="button" onClick={closeDetail} style={{ position: 'absolute', right: 0, background: '#f1f5f9', border: '1px solid #cbd5e1', borderRadius: '50%', cursor: 'pointer', padding: '6px', color: '#0f172a', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><X size={18} /></button>
+              <button type="button" onClick={closeDetail} style={{ position: 'absolute', right: '12px', top: '50%', transform: 'translateY(-50%)', background: '#f1f5f9', border: '1px solid #cbd5e1', borderRadius: '50%', cursor: 'pointer', padding: '6px', color: '#0f172a', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><X size={18} /></button>
             </div>
 
             <div className="pos-layout" style={{ height: "calc(95vh - 50px)", margin: 0, padding: 0, borderRadius: "0 0 16px 16px" }}>
