@@ -1772,7 +1772,31 @@ export default function AppointmentsPage() {
         <div className="date-navigator">
           <button className="nav-icon" type="button" onClick={() => handleDayChange(-1)}><ChevronLeft size={18} /></button>
           <button className="nav-btn" type="button" onClick={setToday}>TODAY</button>
-          <span style={{ fontSize: "1.1rem" }}>{formatDate(currentDate)}</span>
+          <input 
+            type="date"
+            value={`${currentDate.getFullYear()}-${String(currentDate.getMonth() + 1).padStart(2, '0')}-${String(currentDate.getDate()).padStart(2, '0')}`}
+            onChange={(e) => {
+              if (e.target.value) {
+                const parts = e.target.value.split('-');
+                setCurrentDate(new Date(parts[0], parts[1] - 1, parts[2]));
+              }
+            }}
+            style={{
+              fontSize: "1rem",
+              padding: "6px 12px",
+              borderRadius: "8px",
+              border: "1px solid #cbd5e1",
+              fontFamily: "inherit",
+              fontWeight: 600,
+              color: "#0f172a",
+              cursor: "pointer",
+              outline: "none",
+              background: "#f8fafc",
+              transition: "border-color 0.2s"
+            }}
+            onFocus={(e) => e.target.style.borderColor = "#3b82f6"}
+            onBlur={(e) => e.target.style.borderColor = "#cbd5e1"}
+          />
           <button className="nav-btn" type="button" onClick={() => handleDayChange(1)}>TOMORROW</button>
           <button className="nav-icon" type="button" onClick={() => handleDayChange(1)}><ChevronRight size={18} /></button>
         </div>
