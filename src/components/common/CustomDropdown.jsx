@@ -110,7 +110,7 @@ export default function CustomDropdown({ value, onChange, children, className, s
   return (
     <div ref={containerRef} style={{ position: 'relative', width: '100%', ...inheritedStyles, padding: 0, border: 'none', background: 'transparent' }} className={className}>
       {/* Hidden native select for form submissions and required validation */}
-      <select name={name} value={value} onChange={onChange} style={{ display: 'none' }} disabled={disabled} required={required}>
+      <select name={name} value={value} onChange={onChange} style={{ opacity: 0, width: '100%', height: 0, position: 'absolute', zIndex: -1, bottom: 0, left: 0, pointerEvents: 'none' }} disabled={disabled} required={required}>
         {children}
       </select>
       
