@@ -568,6 +568,7 @@ export default function AppointmentsPage() {
     setForm({
       customerId: "",
       branchId: staffBranchId || defaultBranchId,
+        appointmentDate: startDate.toISOString().slice(0, 10),
       bookingChannel: "MANUAL",
       title: "Appointment",
       startAt: startAtStr,
@@ -615,6 +616,7 @@ export default function AppointmentsPage() {
     setForm({
       customerId: appt.customerId || "",
       branchId: appt.branchId || branches[0]?.id || "",
+        appointmentDate: appt.startAt ? new Date(appt.startAt).toISOString().slice(0, 10) : currentDate.toISOString().slice(0, 10),
       bookingChannel: appt.bookingChannel || "MANUAL",
       title: appt.title || "Appointment",
       startAt: toLocalInput(appt.startAt),
@@ -1258,7 +1260,7 @@ export default function AppointmentsPage() {
         }
         .sp-btn-primary {
   width: 100%;
-  padding: 12px;
+  padding: 10px 14px;
   background: #2563eb;
   color: white;
   border: none;
@@ -1325,12 +1327,12 @@ export default function AppointmentsPage() {
         }
         .sp-btn-primary {
           width: 100%;
-          padding: 14px;
+          padding: 10px 14px;
           background: #3b82f6;
-          color: white;
           border: none;
           border-radius: 8px;
-          font-size: 1.05rem;
+          color: white;
+          font-size: 0.95rem;
           font-weight: 600;
           cursor: pointer;
         }
@@ -1976,7 +1978,7 @@ export default function AppointmentsPage() {
                 </div>
 
                 <div className="sp-card">
-                  <h4 className="sp-card-title">Service Details</h4>
+                  <h4 className="sp-card-title">Appointment Date</h4><div className="sp-input-group" style={{ marginBottom: 16 }}><input type="date" className="sp-input" value={form.appointmentDate || ""} onChange={(e) => { const newD = e.target.value; setForm(cur => { const baseD = newD ? new Date(newD) : currentDate; return { ...cur, appointmentDate: newD, items: cur.items.map(it => ({ ...it, startAt: it.startAt ? combineDateAndTime(baseD, formatTimeForSelect(it.startAt)) : it.startAt, endAt: it.endAt ? combineDateAndTime(baseD, formatTimeForSelect(it.endAt)) : it.endAt })) }; }); }} required /></div><h4 className="sp-card-title">Service Details</h4>
                   <div style={{ display: "flex", gap: 8, flexWrap: "wrap", alignItems: "center", marginBottom: 14 }}>
                     <button
                       type="button"
@@ -2069,7 +2071,7 @@ export default function AppointmentsPage() {
                       <div className="sp-time-grid">
                         <div>
                           <label style={{ fontSize: "0.8rem", color: "#94a3b8", display: "block", marginBottom: 4 }}>From Time</label>
-                          <CustomDropdown className="sp-input" value={item.startAt ? formatTimeForSelect(item.startAt) : ""} onChange={(event) => handleUpdateItem(idx, "startAt", combineDateAndTime(currentDate, event.target.value))} required>
+                          <CustomDropdown className="sp-input" value={item.startAt ? formatTimeForSelect(item.startAt) : ""} onChange={(event) => handleUpdateItem(idx, "startAt", combineDateAndTime(form.appointmentDate ? new Date(form.appointmentDate) : currentDate, event.target.value))} required>
                             <option value="">Select Time</option>
                             {TIME_SLOTS.filter(slot => {
                               if (!item.endAt) return true;
@@ -2081,7 +2083,7 @@ export default function AppointmentsPage() {
                         </div>
                         <div>
                           <label style={{ fontSize: "0.8rem", color: "#94a3b8", display: "block", marginBottom: 4 }}>To Time</label>
-                          <CustomDropdown className="sp-input" value={item.endAt ? formatTimeForSelect(item.endAt) : ""} onChange={(event) => handleUpdateItem(idx, "endAt", combineDateAndTime(currentDate, event.target.value))} required disabled={!item.startAt}>
+                          <CustomDropdown className="sp-input" value={item.endAt ? formatTimeForSelect(item.endAt) : ""} onChange={(event) => handleUpdateItem(idx, "endAt", combineDateAndTime(form.appointmentDate ? new Date(form.appointmentDate) : currentDate, event.target.value))} required disabled={!item.startAt}>
                             <option value="">Select Time</option>
                             {TIME_SLOTS.filter(slot => {
                               if (!item.startAt) return true;
