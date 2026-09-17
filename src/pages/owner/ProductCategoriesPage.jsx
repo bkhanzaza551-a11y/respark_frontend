@@ -427,10 +427,15 @@ export default function ProductCategoriesPage() {
                     <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: 4 }}>
                       <div style={{ fontSize: 15, fontWeight: 700, color: "#0f172a", display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap", lineHeight: 1.3 }}>
                         {p.name}
-                        {p.featured && <span style={{ fontSize: 10, background: "#fef3c7", color: "#92400e", padding: "2px 6px", borderRadius: 4, fontWeight: 700, display: "inline-flex", alignItems: "center", height: 18 }}>★ Featured</span>}
+                        {p.featured && <span style={{ fontSize: 10, background: "#fef3c7", color: "#92400e", padding: "2px 6px", borderRadius: 4, fontWeight: 700, display: "inline-flex", alignItems: "center", height: 18 }}>⭐ Featured</span>}
                         {Array.isArray(p.variations) && p.variations.length > 0 && <span style={{ fontSize: 10, background: "#dbeafe", color: "#1d4ed8", padding: "2px 6px", borderRadius: 4, fontWeight: 700, display: "inline-flex", alignItems: "center", height: 18 }}>Customisable</span>}
                       </div>
                       <div style={{ fontSize: 12, color: "#64748b", fontWeight: 500 }}>SKU: {p.sku || "N/A"}</div>
+                      {!selectedBranchId && (
+                        <div style={{ fontSize: 11, color: "#475569", fontWeight: 600, background: "#f1f5f9", padding: "2px 6px", borderRadius: 4, display: "inline-block", marginTop: 4, width: "max-content" }}>
+                          {branches.find(b => b.id === p.branchId)?.name || 'Global'}
+                        </div>
+                      )}
                     </div>
                   </div>
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", borderTop: "1px solid #f1f5f9", paddingTop: 16, marginTop: "auto" }}>
