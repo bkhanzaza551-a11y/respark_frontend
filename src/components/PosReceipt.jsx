@@ -169,7 +169,7 @@ export default function PosReceipt({ invoice, salonName, salonAddress, salonPhon
         </div>
 
         {/* Receipt Body */}
-        <div style={{ padding: isThermal ? "8px 10px" : "0 24px 24px" }}>
+        <div id="receipt-print-area" style={{ padding: isThermal ? "8px 10px" : "0 24px 24px" }}>
           {/* Header */}
           <div style={{ textAlign: "center", padding: isThermal ? "8px 0 2px" : "20px 0 4px" }}>
             <div style={{ fontSize: isThermal ? 14 : 26, fontWeight: 900, letterSpacing: isThermal ? 1 : 3, color: "#0f172a", margin: 0, lineHeight: 1, fontFamily: "'Poppins', system-ui, sans-serif" }}>{displaySalonName.toUpperCase()}</div>
