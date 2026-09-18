@@ -77,30 +77,34 @@ export default function PosReceipt({ invoice, salonName, salonAddress, salonPhon
   const handleLocalPrint = (e) => {
     e.stopPropagation();
     e.preventDefault();
-    const printContent = document.getElementById('receipt-print-area').innerHTML;
-    const iframe = document.createElement('iframe');
-    iframe.style.display = 'none';
-    document.body.appendChild(iframe);
+    const printContent = document.getElementById("receipt-print-area").innerHTML;
 
     const thermalCSS = isThermal ? `
       @page { margin: 2mm; size: ${fmt.pageWidth} auto; }
-      body { font-size: 11px !important; }
-      .invoice-paper { width: ${fmt.pageWidth} !important; max-width: ${fmt.pageWidth} !important; padding: 4px 6px !important; font-size: 11px !important; }
+      body { font-size: 11px !important; margin: 0; padding: 0; }
+      .invoice-paper { width: ${fmt.pageWidth} !important; max-width: ${fmt.pageWidth} !important; padding: 4px 6px !important; font-size: 11px !important; margin: 0 auto; }
       .invoice-paper * { font-size: inherit !important; }
     ` : `
       @page { margin: 10mm; size: ${fmt.pageWidth} ${fmt.pageHeight}; }
-      .invoice-paper { width: 100% !important; max-width: ${fmt.width}px !important; }
+      body { margin: 0; padding: 0; }
+      .invoice-paper { width: 100% !important; max-width: ${fmt.width}px !important; margin: 0 auto; }
     `;
 
-    iframe.contentWindow.document.open();
-    iframe.contentWindow.document.write(`
+    const printWindow = window.open("", "_blank", "width=800,height=600");
+    if (!printWindow) {
+      alert("Please allow popups to print the receipt.");
+      return;
+    }
+
+    printWindow.document.open();
+    printWindow.document.write(`
       <!DOCTYPE html>
       <html>
         <head>
           <title>Print Receipt</title>
           <style>
             * { box-sizing: border-box; margin: 0; padding: 0; }
-            body { background: white !important; display: flex !important; justify-content: center !important; font-family: 'Poppins', 'Segoe UI', system-ui, sans-serif; }
+            body { background: white !important; display: flex !important; justify-content: center !important; font-family: 'Poppins', sans-serif; }
             .no-print { display: none !important; }
             ${thermalCSS}
           </style>
@@ -109,16 +113,19 @@ export default function PosReceipt({ invoice, salonName, salonAddress, salonPhon
           <div class="invoice-paper">
             ${printContent}
           </div>
+          <script>
+            window.onload = () => {
+              setTimeout(() => {
+                window.focus();
+                window.print();
+                setTimeout(() => window.close(), 500);
+              }, 500);
+            };
+          </script>
         </body>
       </html>
     `);
-    iframe.contentWindow.document.close();
-
-    setTimeout(() => {
-      iframe.contentWindow.focus();
-      iframe.contentWindow.print();
-      setTimeout(() => document.body.removeChild(iframe), 1000);
-    }, 500);
+    printWindow.document.close();
   };
 
   const handleFormatChange = (newFormat) => {
