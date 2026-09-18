@@ -560,7 +560,14 @@ export default function PayrollPage() {
           border: 1px solid #e2e8f0;
           box-shadow: 0 4px 6px rgba(0,0,0,0.02);
         }
-      `}</style>
+      
+        @media (max-width: 900px) {
+          .responsive-att-grid { grid-template-columns: 1fr !important; }
+          .att-tabs-container { flex-wrap: wrap !important; overflow-x: auto !important; }
+          .modern-table-container { overflow-x: auto !important; }
+          .att-stat-card { width: 100% !important; }
+        }
+`}</style>
 
       <ModuleTabs
         title="Staff Attendance"
@@ -587,7 +594,7 @@ export default function PayrollPage() {
         ))}
       </div>
 
-      <div style={{ display: "grid", gap: 24, minWidth: 0, maxWidth: "100%", padding: "0 24px" }}>
+      <div className="responsive-att-grid" style={{ display: "grid", gap: 24, minWidth: 0, maxWidth: "100%", padding: "0 24px" }}>
         {activeTab === "dashboard" && (
         <div className="att-glass-panel" style={{ padding: 32 }}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 24 }}>
@@ -597,7 +604,7 @@ export default function PayrollPage() {
             </div>
           </div>
           
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(6, 1fr)", gap: 20, marginBottom: 40 }}>
+          <div className="responsive-att-grid" style={{ display: "grid", gridTemplateColumns: "repeat(6, 1fr)", gap: 20, marginBottom: 40 }}>
             {statCards.map((stat, idx) => (
               <div key={idx} className="att-stat-card">
                 <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
@@ -637,7 +644,7 @@ export default function PayrollPage() {
                 </label>
               </div>
 
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginTop: 24, background: "white", padding: 20, borderRadius: 12, border: "1px solid #e2e8f0" }}>
+              <div className="responsive-att-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginTop: 24, background: "white", padding: 20, borderRadius: 12, border: "1px solid #e2e8f0" }}>
                 <ToggleSwitch 
                   checked={attendanceSettings.overtimeEnabled} 
                   onChange={(e) => setAttendanceSettings((current) => ({ ...current, overtimeEnabled: e.target.checked }))} 
@@ -701,7 +708,7 @@ export default function PayrollPage() {
               </div>
             ))}
           </div>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(130px, 1fr))", gap: 16, marginTop: 24 }}>
+          <div className="responsive-att-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(130px, 1fr))", gap: 16, marginTop: 24 }}>
             {[{ label: "Total Rows", value: attendanceCalendar.summary?.totalRows || 0, bg: "#f1f5f9", color: "#334155" },
               { label: "Present", value: attendanceCalendar.summary?.present || 0, bg: "#dcfce7", color: "#166534" },
               { label: "Late", value: attendanceCalendar.summary?.late || 0, bg: "#fef3c7", color: "#92400e" },
@@ -842,7 +849,7 @@ export default function PayrollPage() {
         ) : null}
 
         {activeTab === "records" && (
-        <div style={{ display: "grid", gridTemplateColumns: "minmax(320px, 1fr) minmax(400px, 1.5fr)", gap: 24, alignItems: "start" }}>
+        <div className="responsive-att-grid" style={{ display: "grid", gridTemplateColumns: "minmax(320px, 1fr) minmax(400px, 1.5fr)", gap: 24, alignItems: "start" }}>
           <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
             <div className="att-glass-panel" ref={manualCreateRef} style={{ padding: 28 }}>
               <div style={{ borderBottom: "1px solid #f1f5f9", paddingBottom: 16, marginBottom: 20 }}>
@@ -866,7 +873,7 @@ export default function PayrollPage() {
                   </CustomDropdown>
                 </label>
                 
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+                <div className="responsive-att-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
                   <label style={{ display: "grid", gap: 8 }}>
                     <span style={{ fontSize: 12, fontWeight: 700, color: "#475569", textTransform: "uppercase", letterSpacing: 0.5 }}>Date</span>
                     <input type="date" required value={manualCreate.attendanceDate} onChange={(e) => {
@@ -890,7 +897,7 @@ export default function PayrollPage() {
                   </label>
                 </div>
                 
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+                <div className="responsive-att-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
                   <label style={{ display: "grid", gap: 8 }}>
                     <span style={{ fontSize: 12, fontWeight: 700, color: "#475569", textTransform: "uppercase", letterSpacing: 0.5 }}>Check-in Time</span>
                     <input type="datetime-local" value={manualCreate.checkInAt} onChange={(e) => setManualCreate((current) => ({ ...current, checkInAt: e.target.value }))} style={{ width: "100%", boxSizing: "border-box", padding: "12px 16px", borderRadius: 12, border: "1px solid #cbd5e1", background: "#f8fafc", fontSize: 14, outline: "none" }} />
@@ -941,7 +948,7 @@ export default function PayrollPage() {
                     </div>
                   </div>
                   
-                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+                  <div className="responsive-att-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
                      <div style={{ background: "#fff", padding: 16, borderRadius: 12, border: "1px solid #e2e8f0" }}>
                       <div style={{ fontSize: 11, fontWeight: 700, color: "#94a3b8", textTransform: "uppercase", letterSpacing: 0.5 }}>Date</div>
                       <div style={{ fontSize: 15, fontWeight: 700, color: "#1e293b", marginTop: 6 }}>{new Date(selectedAttendance.attendanceDate || selectedAttendance.checkInAt).toLocaleDateString([], { weekday: "short", month: "short", day: "numeric", year: "numeric" })}</div>
@@ -954,7 +961,7 @@ export default function PayrollPage() {
                      </div>
                   </div>
 
-                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, background: "#f8fafc", padding: 20, borderRadius: 16, border: "1px solid #e2e8f0" }}>
+                  <div className="responsive-att-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, background: "#f8fafc", padding: 20, borderRadius: 16, border: "1px solid #e2e8f0" }}>
                     <div>
                       <div style={{ fontSize: 12, fontWeight: 800, color: "#475569", textTransform: "uppercase", display: "flex", alignItems: "center", gap: 6, letterSpacing: 0.5 }}><LogIn size={14}/> Check-In</div>
                       <div style={{ fontSize: 16, fontWeight: 700, color: "#0f172a", marginTop: 8 }}>{selectedAttendance.checkInAt ? new Date(selectedAttendance.checkInAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : "-"}</div>
@@ -1016,7 +1023,7 @@ export default function PayrollPage() {
               <p style={{ margin: 0, color: "#64748b", fontSize: 13 }}>Browse and filter staff attendance records.</p>
             </div>
             
-            <div style={{ display: "grid", gridTemplateColumns: "1.5fr 1fr 1fr auto", gap: 12, marginBottom: 24, background: "#f8fafc", padding: 16, borderRadius: 16, border: "1px solid #e2e8f0" }}>
+            <div className="responsive-att-grid" style={{ display: "grid", gridTemplateColumns: "1.5fr 1fr 1fr auto", gap: 12, marginBottom: 24, background: "#f8fafc", padding: 16, borderRadius: 16, border: "1px solid #e2e8f0" }}>
               <input value={filters.attendanceQ} placeholder="Search name..." onChange={(e) => setFilters((current) => ({ ...current, attendanceQ: e.target.value }))} style={{ boxSizing: "border-box", padding: "10px 14px", borderRadius: 10, border: "1px solid #cbd5e1", fontSize: 13, outline: "none" }} />
               <CustomDropdown value={filters.attendanceStatus} onChange={(e) => setFilters((current) => ({ ...current, attendanceStatus: e.target.value }))} style={{ padding: "10px 14px", borderRadius: 10, border: "1px solid #cbd5e1", fontSize: 13, outline: "none" }}>
                 <option value="">All statuses</option>
