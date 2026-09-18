@@ -684,14 +684,14 @@ export default function InventoryPage() {
             </div>
 
             {/* Summary Cards Row */}
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1.5fr", gap: 24, marginTop: 8 }}>
+            <div className="inventory-summary-cards" style={{ marginTop: 8 }}>
               
               <div style={{ background: "white", borderRadius: 20, border: "1px solid #f1f5f9", padding: "32px 24px", textAlign: "center", boxShadow: "0 10px 15px -3px rgba(0, 0, 0, 0.02)" }}>
                 <div style={{ width: 48, height: 48, borderRadius: "50%", background: "#f8fafc", color: "#64748b", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 16px" }}>
                   <Package size={24} />
                 </div>
                 <h3 style={{ margin: "0 0 24px 0", fontSize: "1.1rem", color: "#0f172a", fontWeight: 700 }}>Inventory Summary</h3>
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 24 }}>
+                <div className="inventory-product-summary-inner" style={{ gap: 24 }}>
                   <div style={{ background: "#f8fafc", padding: "16px", borderRadius: 16 }}>
                     <div style={{ fontSize: "0.75rem", color: "#64748b", textTransform: "uppercase", letterSpacing: "0.05em", fontWeight: 700 }}>Stock In Hand</div>
                     <div style={{ fontSize: "1.8rem", color: "#0ea5e9", fontWeight: 800, marginTop: 8 }}>{totalStock.toFixed(0)}</div>
@@ -708,7 +708,7 @@ export default function InventoryPage() {
                   <Layers size={24} />
                 </div>
                 <h3 style={{ margin: "0 0 24px 0", fontSize: "1.1rem", color: "#0f172a", fontWeight: 700 }}>Product Summary</h3>
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 16 }}>
+                <div className="inventory-product-summary">
                   <div style={{ background: "#f8fafc", padding: "16px", borderRadius: 16 }}>
                     <div style={{ fontSize: "0.75rem", color: "#64748b", textTransform: "uppercase", letterSpacing: "0.05em", fontWeight: 700 }}>Total Items</div>
                     <div style={{ fontSize: "1.8rem", color: "#0ea5e9", fontWeight: 800, marginTop: 8 }}>{products.length}</div>
@@ -772,7 +772,7 @@ export default function InventoryPage() {
                 <div style={{ width: 8, height: 24, background: "#10b981", borderRadius: 4 }}></div>
                 <h3 style={{ margin: 0, fontSize: "1.1rem", color: "#0f172a", fontWeight: 700 }}>Most Used Consumables</h3>
               </div>
-              <table style={{ width: "100%", borderCollapse: "collapse", textAlign: "left" }}>
+              <div style={{ overflowX: "auto" }}><table style={{ width: "100%", borderCollapse: "collapse", textAlign: "left" }}>
                 <thead>
                   <tr style={{ background: "#f8fafc", color: "#64748b", fontSize: "0.75rem", textTransform: "uppercase", letterSpacing: "0.05em" }}>
                     <th style={{ padding: "16px 24px", fontWeight: 700 }}>Product Name</th>
@@ -957,7 +957,7 @@ export default function InventoryPage() {
                   </span>
                 </div>
               ) : (
-                <table style={{ width: "100%", borderCollapse: "collapse", textAlign: "left" }}>
+                <div style={{ overflowX: "auto" }}><table style={{ width: "100%", borderCollapse: "collapse", textAlign: "left" }}>
                   <thead>
                     <tr style={{ background: "#f8fafc", color: "#475569", fontSize: "0.85rem", textTransform: "uppercase" }}>
                       <th style={{ padding: "16px 24px", fontWeight: 600 }}>PO #</th>
@@ -1089,7 +1089,7 @@ export default function InventoryPage() {
 
                   {/* Items List Table */}
                   <div style={{ flexGrow: 1, overflowY: "auto", minHeight: 250 }}>
-                    <table style={{ width: "100%", borderCollapse: "collapse", textAlign: "left" }}>
+                    <div style={{ overflowX: "auto" }}><table style={{ width: "100%", borderCollapse: "collapse", textAlign: "left" }}>
                       <thead>
                         <tr style={{ background: "#e0f2fe", color: "#0369a1", fontSize: "0.85rem", textTransform: "uppercase" }}>
                           <th style={{ padding: "12px 16px", fontWeight: 600 }}>Sr.No.</th>
@@ -1792,6 +1792,7 @@ export default function InventoryPage() {
     </div>
   );
 }
+
 
 
 
