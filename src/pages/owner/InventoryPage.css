@@ -163,3 +163,31 @@
     padding: 16px !important;
   }
 }
+
+@media (max-width: 900px) {
+  .inv-status-roller {
+    width: 100%;
+    flex-wrap: nowrap !important;
+    overflow-x: auto;
+    padding-bottom: 8px;
+  }
+  .inv-status-roller::-webkit-scrollbar {
+    display: none;
+  }
+  .inv-status-roller button {
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+}
+
+@media (max-width: 900px) {
+  .inv-filters-date-group {
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+}
+
+/* Hide scrollbar for the sidebar tabs on mobile */
+.inventory-sidebar::-webkit-scrollbar {
+  display: none;
+}

@@ -855,7 +855,7 @@ export default function InventoryPage() {
             {/* Filters Row */}
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 16 }}>
               {/* Left Side: Date Inputs */}
-              <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+              <div className="inv-filters-date-group" style={{ display: "flex", alignItems: "center", gap: 12 }}>
                 <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
                   <span style={{ fontSize: "0.9rem", color: "#64748b", fontWeight: 500 }}>From :</span>
                   <input 
@@ -879,7 +879,7 @@ export default function InventoryPage() {
               </div>
 
               {/* Right Side: Status Tabs and New Button */}
-              <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
+              <div className="inv-status-roller" style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
                 {[
                   { label: "Placed", count: poCounts.Placed },
                   { label: "Approved", count: poCounts.Approved },
