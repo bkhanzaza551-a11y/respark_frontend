@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Calendar, MapPin, Clock } from 'lucide-react';
 import { api } from "../../api/client";
 import EmptyState from "../../components/EmptyState";
 import ModuleTabs from "../../components/ModuleTabs";
@@ -130,7 +131,7 @@ export default function MyAppointmentsPage() {
           </div>
           <div style={{ display: "flex", gap: 10, flexShrink: 0 }}>
             <span style={{ background: "rgba(59,130,246,0.2)", color: "#93c5fd", padding: "6px 16px", borderRadius: 20, fontSize: 12, fontWeight: 700, border: "1px solid rgba(59,130,246,0.3)" }}>
-              📅 Assigned: {rows.length}
+              <Calendar size={16} style={{ display: 'inline', marginBottom: -2, marginRight: 4 }} /> Assigned: {rows.length}
             </span>
           </div>
         </div>
@@ -156,9 +157,9 @@ export default function MyAppointmentsPage() {
                 <div>
                   <h3 style={{ margin: "0 0 6px 0", fontSize: 18, fontWeight: 800, color: "#1e293b" }}>{item.customer?.name}</h3>
                   <div style={{ color: "#64748b", fontSize: 13, display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap" }}>
-                    <span style={{ display: "inline-flex", alignItems: "center", gap: 4 }}>📍 {item.branch?.name || "Branch"}</span>
+                    <span style={{ display: "inline-flex", alignItems: "center", gap: 4 }}><MapPin size={14} style={{ display: 'inline', marginBottom: -2, marginRight: 4 }} /> {item.branch?.name || "Branch"}</span>
                     <span style={{ color: "#cbd5e1" }}>•</span>
-                    <span style={{ display: "inline-flex", alignItems: "center", gap: 4, fontWeight: 600, color: "#475569" }}>🕒 {new Date(item.startAt).toLocaleString([], { weekday: 'short', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}</span>
+                    <span style={{ display: "inline-flex", alignItems: "center", gap: 4, fontWeight: 600, color: "#475569" }}><Clock size={14} style={{ display: 'inline', marginBottom: -2, marginRight: 4 }} /> {new Date(item.startAt).toLocaleString([], { weekday: 'short', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}</span>
                   </div>
                 </div>
                 <span style={{ background: sc.bg, color: sc.color, border: `1px solid ${sc.border}`, padding: "6px 14px", borderRadius: 20, fontSize: 12, fontWeight: 800, letterSpacing: 0.5, textTransform: "uppercase", boxShadow: "0 2px 4px rgba(0,0,0,0.05)" }}>

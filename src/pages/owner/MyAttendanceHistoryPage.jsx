@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import CustomDropdown from '../../components/common/CustomDropdown';
 import { CalendarDays, CheckCircle2, Clock, Filter, LogIn, LogOut, RotateCcw, Timer, XCircle, Camera, Building2, CalendarOff } from "lucide-react";
+import { Calendar, Timer } from 'lucide-react';
 import { api } from "../../api/client";
 import EmptyState from "../../components/EmptyState";
 import ModuleTabs from "../../components/ModuleTabs";
@@ -174,13 +175,13 @@ export default function MyAttendanceHistoryPage() {
           </div>
           <div style={{ display: "flex", gap: 10, flexShrink: 0, flexWrap: "wrap" }}>
             <span style={{ background: "rgba(59,130,246,0.2)", color: "#93c5fd", padding: "6px 16px", borderRadius: 20, fontSize: 12, fontWeight: 700, border: "1px solid rgba(59,130,246,0.3)" }}>
-              📅 Total: {stats.total}
+              <Calendar size={16} style={{ display: 'inline', marginBottom: -2, marginRight: 4 }} /> Total: {stats.total}
             </span>
             <span style={{ background: "rgba(16,185,129,0.2)", color: "#6ee7b7", padding: "6px 16px", borderRadius: 20, fontSize: 12, fontWeight: 700, border: "1px solid rgba(16,185,129,0.3)" }}>
-              ✓ Present: {stats.present}
+              <CheckCircle2 size={16} style={{ display: "inline", marginBottom: -2, marginRight: 4 }} /> Present: {stats.present}
             </span>
             <span style={{ background: "rgba(245,158,11,0.2)", color: "#fcd34d", padding: "6px 16px", borderRadius: 20, fontSize: 12, fontWeight: 700, border: "1px solid rgba(245,158,11,0.3)" }}>
-              ⏱️ Hours: {formatHours(stats.totalMinutes)}
+              <Timer size={16} style={{ display: 'inline', marginBottom: -2, marginRight: 4 }} /> Hours: {formatHours(stats.totalMinutes)}
             </span>
           </div>
         </div>

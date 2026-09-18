@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { User, Mail, Tag, MapPin, Globe, IdCard, Lock, Target, Calendar, Save } from "lucide-react";
 import { api } from "../../api/client";
 import EmptyState from "../../components/EmptyState";
 import ModuleTabs from "../../components/ModuleTabs";
@@ -161,7 +162,7 @@ export default function MyProfilePage() {
                   />
                 ) : (
                   <div style={{ width: 96, height: 96, borderRadius: "50%", background: "linear-gradient(135deg, #3b82f6, #8b5cf6)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 32, fontWeight: 800, color: "#fff", border: "4px solid rgba(255,255,255,0.2)", boxShadow: "0 4px 20px rgba(0,0,0,0.3)" }}>
-                    {initials || "👤"}
+                    {initials || <User size={32} color="white" />}
                   </div>
                 )}
                 <div style={{ position: "absolute", bottom: 4, right: 4, width: 20, height: 20, borderRadius: "50%", background: "linear-gradient(135deg, #10b981, #059669)", border: "3px solid #0f172a" }} />
@@ -176,13 +177,13 @@ export default function MyProfilePage() {
                     {role}
                   </span>
                   <span style={{ background: "rgba(139,92,246,0.2)", color: "#c4b5fd", padding: "6px 14px", borderRadius: 20, fontSize: 12, fontWeight: 700, border: "1px solid rgba(139,92,246,0.3)" }}>
-                    📍 {branch}
+                    <MapPin size={14} style={{ display: "inline", marginBottom: -2, marginRight: 4 }} /> {branch}
                   </span>
                   <span style={{ background: profileMeta?.showInCatalog ? "rgba(16,185,129,0.2)" : "rgba(100,116,139,0.2)", color: profileMeta?.showInCatalog ? "#6ee7b7" : "#94a3b8", padding: "6px 14px", borderRadius: 20, fontSize: 12, fontWeight: 700, border: `1px solid ${profileMeta?.showInCatalog ? "rgba(16,185,129,0.3)" : "rgba(100,116,139,0.3)"}` }}>
-                    {profileMeta?.showInCatalog ? "🌐 Visible in catalog" : "🔒 Hidden from catalog"}
+                    {profileMeta?.showInCatalog ? "<Globe size={16} style={{ display: "inline", marginBottom: -2, marginRight: 4 }} /> Visible in catalog" : "<Lock size={16} style={{ display: "inline", marginBottom: -2, marginRight: 4 }} /> Hidden from catalog"}
                   </span>
                   <span style={{ background: "rgba(245,158,11,0.15)", color: "#fcd34d", padding: "6px 14px", borderRadius: 20, fontSize: 12, fontWeight: 700, border: "1px solid rgba(245,158,11,0.25)" }}>
-                    🎯 {services.length} services
+                    <Target size={16} style={{ display: "inline", marginBottom: -2, marginRight: 4 }} /> {services.length} services
                   </span>
                 </div>
               </div>
@@ -221,7 +222,7 @@ export default function MyProfilePage() {
                   {form.avatarUrl && !imgError && (
                     <div style={{ display: "flex", alignItems: "center", gap: 12, padding: "12px 16px", background: "linear-gradient(135deg, #f0fdf4, #dcfce7)", borderRadius: 12, border: "1px solid #bbf7d0" }}>
                       <img src={form.avatarUrl} alt="" style={{ width: 44, height: 44, borderRadius: "50%", objectFit: "cover", border: "2px solid #fff", boxShadow: "0 2px 6px rgba(0,0,0,0.1)" }} onError={() => setImgError(true)} />
-                      <span style={{ fontSize: 14, color: "#166534", fontWeight: 700 }}>✓ Image preview looks good</span>
+                      <span style={{ fontSize: 14, color: "#166534", fontWeight: 700 }}><CheckCircle2 size={16} style={{ display: "inline", marginBottom: -2, marginRight: 4 }} /> Image preview looks good</span>
                     </div>
                   )}
                 </label>
@@ -244,11 +245,11 @@ export default function MyProfilePage() {
                     disabled={saving}
                     className="premium-btn premium-btn-primary"
                   >
-                    {saving ? "Saving..." : "💾 Save Changes"}
+                    {saving ? "Saving..." : "<Save size={16} style={{ display: "inline", marginBottom: -2, marginRight: 4 }} /> Save Changes"}
                   </button>
                   {status === "success" && (
                     <span style={{ display: "flex", alignItems: "center", gap: 8, color: "#059669", fontWeight: 800, fontSize: 14, background: "linear-gradient(135deg, #ecfdf5, #d1fae5)", padding: "10px 18px", borderRadius: 10, border: "1px solid #a7f3d0" }}>
-                      ✓ Profile updated!
+                      <CheckCircle2 size={16} style={{ display: "inline", marginBottom: -2, marginRight: 4 }} /> Profile updated!
                     </span>
                   )}
                   {status === "error" && (
@@ -265,20 +266,20 @@ export default function MyProfilePage() {
               {/* Profile Info */}
               <div className="premium-card">
                 <h3 style={{ margin: "0 0 4px", fontSize: 18, fontWeight: 800, color: "#1e293b", display: "flex", alignItems: "center", gap: 8 }}>
-                  <span>🪪</span> Profile Snapshot
+                  <span><IdCard size={18} style={{ display: "inline", marginBottom: -2, marginRight: 4 }} /></span> Profile Snapshot
                 </h3>
                 <p style={{ margin: "0 0 20px", color: "#64748b", fontSize: 13 }}>Your current account identity</p>
-                <InfoRow icon="👤" label="Full Name" value={profileMeta?.user?.name || "—"} />
-                <InfoRow icon="📧" label="Email" value={profileMeta?.user?.email || "—"} />
-                <InfoRow icon="🏷️" label="Role" value={role} />
-                <InfoRow icon="📍" label="Branch" value={branch} />
-                <InfoRow icon="🌐" label="Catalog visibility" value={profileMeta?.showInCatalog ? "Visible to customers" : "Hidden from catalog"} />
+                <InfoRow icon={<User size={16} color="#475569" />} label="Full Name" value={profileMeta?.user?.name || "—"} />
+                <InfoRow icon={<Mail size={16} color="#475569" />} label="Email" value={profileMeta?.user?.email || "—"} />
+                <InfoRow icon={<Tag size={16} color="#475569" />} label="Role" value={role} />
+                <InfoRow icon={<MapPin size={16} color="#475569" />} label="Branch" value={branch} />
+                <InfoRow icon={<Globe size={16} color="#475569" />} label="Catalog visibility" value={profileMeta?.showInCatalog ? "Visible to customers" : "Hidden from catalog"} />
               </div>
 
               {/* Assigned Services */}
               <div className="premium-card">
                 <h3 style={{ margin: "0 0 4px", fontSize: 18, fontWeight: 800, color: "#1e293b", display: "flex", alignItems: "center", gap: 8 }}>
-                  <span>🎯</span> Assigned Services
+                  <span><Target size={16} style={{ display: "inline", marginBottom: -2, marginRight: 4 }} /></span> Assigned Services
                   <span style={{ marginLeft: "auto", background: "linear-gradient(135deg, #eff6ff, #dbeafe)", color: "#1d4ed8", fontSize: 12, fontWeight: 800, padding: "4px 12px", borderRadius: 12, border: "1px solid #bfdbfe" }}>{services.length}</span>
                 </h3>
                 <p style={{ margin: "0 0 20px", color: "#64748b", fontSize: 13 }}>Services you are linked to perform</p>
@@ -286,7 +287,7 @@ export default function MyProfilePage() {
                   <div style={{ display: "flex", flexWrap: "wrap", gap: 10 }}>
                     {services.map((item) => (
                       <span key={item.id} style={{ background: "#f8fafc", color: "#0f172a", border: "1px solid #cbd5e1", padding: "6px 14px", borderRadius: 20, fontSize: 13, fontWeight: 700, boxShadow: "0 2px 4px rgba(0,0,0,0.02)" }}>
-                        ✓ {item.service?.name}
+                        <CheckCircle2 size={16} style={{ display: "inline", marginBottom: -2, marginRight: 4 }} /> {item.service?.name}
                       </span>
                     ))}
                   </div>
@@ -298,7 +299,7 @@ export default function MyProfilePage() {
               {/* Recent Attendance */}
               <div className="premium-card">
                 <h3 style={{ margin: "0 0 4px", fontSize: 18, fontWeight: 800, color: "#1e293b", display: "flex", alignItems: "center", gap: 8 }}>
-                  <span>📅</span> Recent Attendance
+                  <span><Calendar size={18} style={{ display: "inline", marginBottom: -2, marginRight: 4 }} /></span> Recent Attendance
                 </h3>
                 <p style={{ margin: "0 0 20px", color: "#64748b", fontSize: 13 }}>Last 10 attendance records</p>
                 {attendanceHistory.length > 0 ? (
