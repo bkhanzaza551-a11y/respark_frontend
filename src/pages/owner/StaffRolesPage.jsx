@@ -332,12 +332,17 @@ export default function StaffRolesPage() {
         .srp-expand-icon { transition:transform .2s; color:#94a3b8; font-size:18px; }
         .srp-expand-icon.open { transform:rotate(180deg); }
         @media (max-width: 900px) {
-          .srp-container { flex-direction: column !important; }
-          .srp-sidebar { width: 100% !important; max-height: 45vh; border-right: none; border-bottom: 1px solid #e2e8f0; }
-          .srp-content { padding: 16px; width: 100% !important; box-sizing: border-box; }
+          .srp-container { flex-direction: column !important; height: auto !important; min-height: calc(100vh - 108px); }
+          .srp-sidebar { width: 100% !important; max-height: none !important; border-right: none; border-bottom: 1px solid #e2e8f0; flex-shrink: 0; }
+          .srp-sidebar-header { padding: 16px !important; }
+          .srp-sidebar > div:last-child { display: flex; flex-direction: row; overflow-x: auto; }
+          .srp-role-item { min-width: 140px; border-bottom: none !important; border-right: 1px solid #f1f5f9; padding: 10px 14px !important; }
+          .srp-content { padding: 12px !important; width: 100% !important; box-sizing: border-box; overflow-y: auto; }
+          .srp-card { padding: 16px !important; margin-bottom: 16px !important; }
           .srp-form-grid { grid-template-columns: 1fr !important; }
-          .srp-user-header { flex-direction: column; align-items: flex-start !important; gap: 12px; }
-          .srp-user-header > div:last-child { width: 100%; justify-content: flex-start; }
+          .srp-user-header { flex-wrap: wrap !important; gap: 10px; padding: 12px !important; }
+          .srp-user-header > div:last-child { width: 100%; justify-content: flex-start; flex-wrap: wrap; }
+          .srp-user-body { padding: 0 12px 16px !important; }
         }
       `}} />
 

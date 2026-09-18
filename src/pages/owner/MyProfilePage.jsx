@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { User, Mail, Tag, MapPin, Globe, IdCard, Lock, Target, Calendar, Save } from "lucide-react";
+import { User, Mail, Tag, MapPin, Globe, IdCard, Lock, Target, Calendar, Save, CheckCircle2 } from "lucide-react";
 import { api } from "../../api/client";
 import EmptyState from "../../components/EmptyState";
 import ModuleTabs from "../../components/ModuleTabs";
