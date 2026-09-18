@@ -121,6 +121,17 @@ export default function MyProfilePage() {
           transform: translateY(-2px);
           box-shadow: 0 6px 16px rgba(59,130,246,0.3);
         }
+        .profile-layout-grid {
+          display: grid;
+          grid-template-columns: minmax(350px, 1.5fr) minmax(300px, 1fr);
+          gap: 24px;
+          align-items: start;
+        }
+        @media (max-width: 900px) {
+          .profile-layout-grid {
+            grid-template-columns: 1fr;
+          }
+        }
       `}</style>
       <ModuleTabs
         title="My Profile"
@@ -190,7 +201,7 @@ export default function MyProfilePage() {
             </div>
           </div>
 
-          <div style={{ display: "grid", gridTemplateColumns: "minmax(350px, 1.5fr) minmax(300px, 1fr)", gap: 24, alignItems: "start" }}>
+          <div className="profile-layout-grid">
             {/* Left: Edit Form */}
             <div className="premium-card">
               <div style={{ marginBottom: 24, paddingBottom: 20, borderBottom: "1px solid #f1f5f9" }}>
