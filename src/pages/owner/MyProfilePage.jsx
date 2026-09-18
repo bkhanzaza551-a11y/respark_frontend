@@ -191,7 +191,7 @@ export default function MyProfilePage() {
                     <MapPin size={14} style={{ display: "inline", marginBottom: -2, marginRight: 4 }} /> {branch}
                   </span>
                   <span style={{ background: profileMeta?.showInCatalog ? "rgba(16,185,129,0.2)" : "rgba(100,116,139,0.2)", color: profileMeta?.showInCatalog ? "#6ee7b7" : "#94a3b8", padding: "6px 14px", borderRadius: 20, fontSize: 12, fontWeight: 700, border: `1px solid ${profileMeta?.showInCatalog ? "rgba(16,185,129,0.3)" : "rgba(100,116,139,0.3)"}` }}>
-                    {profileMeta?.showInCatalog ? "<Globe size={16} style={{ display: "inline", marginBottom: -2, marginRight: 4 }} /> Visible in catalog" : "<Lock size={16} style={{ display: "inline", marginBottom: -2, marginRight: 4 }} /> Hidden from catalog"}
+                    {profileMeta?.showInCatalog ? <><Globe size={16} style={{ display: "inline", marginBottom: -2, marginRight: 4 }} /> Visible in catalog</> : <><Lock size={16} style={{ display: "inline", marginBottom: -2, marginRight: 4 }} /> Hidden from catalog</>}
                   </span>
                   <span style={{ background: "rgba(245,158,11,0.15)", color: "#fcd34d", padding: "6px 14px", borderRadius: 20, fontSize: 12, fontWeight: 700, border: "1px solid rgba(245,158,11,0.25)" }}>
                     <Target size={16} style={{ display: "inline", marginBottom: -2, marginRight: 4 }} /> {services.length} services
@@ -256,7 +256,7 @@ export default function MyProfilePage() {
                     disabled={saving}
                     className="premium-btn premium-btn-primary"
                   >
-                    {saving ? "Saving..." : "<Save size={16} style={{ display: "inline", marginBottom: -2, marginRight: 4 }} /> Save Changes"}
+                    {saving ? "Saving..." : <><Save size={16} style={{ display: "inline", marginBottom: -2, marginRight: 4 }} /> Save Changes</>}
                   </button>
                   {status === "success" && (
                     <span style={{ display: "flex", alignItems: "center", gap: 8, color: "#059669", fontWeight: 800, fontSize: 14, background: "linear-gradient(135deg, #ecfdf5, #d1fae5)", padding: "10px 18px", borderRadius: 10, border: "1px solid #a7f3d0" }}>

@@ -772,7 +772,7 @@ export default function InventoryPage() {
                 <div style={{ width: 8, height: 24, background: "#10b981", borderRadius: 4 }}></div>
                 <h3 style={{ margin: 0, fontSize: "1.1rem", color: "#0f172a", fontWeight: 700 }}>Most Used Consumables</h3>
               </div>
-              <div style={{ overflowX: "auto" }}><table style={{ width: "100%", borderCollapse: "collapse", textAlign: "left" }}>
+              <table style={{ width: "100%", borderCollapse: "collapse", textAlign: "left" }}>
                 <thead>
                   <tr style={{ background: "#f8fafc", color: "#64748b", fontSize: "0.75rem", textTransform: "uppercase", letterSpacing: "0.05em" }}>
                     <th style={{ padding: "16px 24px", fontWeight: 700 }}>Product Name</th>
@@ -957,7 +957,7 @@ export default function InventoryPage() {
                   </span>
                 </div>
               ) : (
-                <div style={{ overflowX: "auto" }}><table style={{ width: "100%", borderCollapse: "collapse", textAlign: "left" }}>
+                <table style={{ width: "100%", borderCollapse: "collapse", textAlign: "left" }}>
                   <thead>
                     <tr style={{ background: "#f8fafc", color: "#475569", fontSize: "0.85rem", textTransform: "uppercase" }}>
                       <th style={{ padding: "16px 24px", fontWeight: 600 }}>PO #</th>
@@ -1089,7 +1089,7 @@ export default function InventoryPage() {
 
                   {/* Items List Table */}
                   <div style={{ flexGrow: 1, overflowY: "auto", minHeight: 250 }}>
-                    <div style={{ overflowX: "auto" }}><table style={{ width: "100%", borderCollapse: "collapse", textAlign: "left" }}>
+                    <table style={{ width: "100%", borderCollapse: "collapse", textAlign: "left" }}>
                       <thead>
                         <tr style={{ background: "#e0f2fe", color: "#0369a1", fontSize: "0.85rem", textTransform: "uppercase" }}>
                           <th style={{ padding: "12px 16px", fontWeight: 600 }}>Sr.No.</th>

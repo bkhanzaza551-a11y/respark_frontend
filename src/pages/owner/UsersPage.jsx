@@ -483,7 +483,7 @@ export default function UsersPage() {
 
   return (
     <div className="page-shell users-page-shell" style={{ padding: 0, height: '100vh', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
-      <style>{
+      <style>{`
   @media (max-width: 900px) {
     .users-page-shell .hub-container {
       flex-direction: column !important;
@@ -527,7 +527,7 @@ export default function UsersPage() {
     }
   }
   .mobile-back-btn { display: none; }
-}</style>
+`}</style>
         {enrollmentCameraOpen && (
         <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.92)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', zIndex: 99999, padding: 16 }}>
           <div style={{ width: 'min(100%, 480px)', display: 'flex', flexDirection: 'column', gap: 14 }}>
