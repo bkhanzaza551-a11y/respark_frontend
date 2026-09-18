@@ -22,7 +22,7 @@ export default function Topbar({ auth, sidebarExpanded, onToggleSidebar, onLogou
   const can = (key, action = "view") => Array.isArray(permissions[key]) && permissions[key].includes(action);
   const enabled = (key) => featureFlags[key] !== false;
   const canPos = can("pos") && enabled("pos");
-  const canNotifications = can("notifications");
+  const canNotifications = true;
   const canGlobalSearch = can("customers") || can("appointments") || can("services");
   const canSettings = can("settings", "edit");
   const canProfile = can("myProfile");
@@ -547,6 +547,9 @@ export default function Topbar({ auth, sidebarExpanded, onToggleSidebar, onLogou
       {/* Top White Row */}
       <div className="skillify-top-row">
         <div className="skillify-logo-area">
+          <button className="skillify-menu-btn-top" onClick={onToggleSidebar} style={{ background: "none", border: "none", cursor: "pointer", display: "flex", alignItems: "center", color: "#64748b", padding: 0 }}>
+            <Menu size={24} />
+          </button>
           <img src="/skillify-logo.png" alt="Skillify" className="skillify-brand-image" />
           <div className="skillify-salon-name">{salonName}</div>
         </div>
@@ -735,12 +738,10 @@ export default function Topbar({ auth, sidebarExpanded, onToggleSidebar, onLogou
       </div>
 
       {/* Dark Tabs Row */}
+      {visibleTabs.length > 0 && (
       <div className="skillify-nav-row">
-        <button className="skillify-menu-btn" onClick={onToggleSidebar}>
-          <Menu size={20} />
-        </button>
-        <div className="skillify-tabs">
-          {tabs.map(tab => {
+        <div className="skillify-tabs" style={{ paddingLeft: 16 }}>
+          {visibleTabs.map(tab => {
              const isActive = location.pathname.startsWith(tab.path);
              return (
                <Link key={tab.path} to={tab.path} className={`skillify-tab ${isActive ? 'active' : ''}`}>
@@ -750,6 +751,7 @@ export default function Topbar({ auth, sidebarExpanded, onToggleSidebar, onLogou
           })}
         </div>
       </div>
+      )}
     </div>
   );
 }
