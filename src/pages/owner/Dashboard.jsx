@@ -239,16 +239,16 @@ export default function OwnerDashboard() {
           items={data.recentInvoices}
           emptyState={<EmptyState title="No invoices yet" message="This branch scope has no invoice activity yet. New sales will show up here automatically." />}
           renderItem={(invoice) => (
-            <div key={invoice.id} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "16px 20px", background: "#fff", border: "1px solid #e2e8f0", borderRadius: 12, cursor: "pointer", transition: "all 0.2s" }} onClick={() => navigate(`/admin/invoices/${invoice.id}`)} onMouseEnter={e => { e.currentTarget.style.borderColor = "#cbd5e1"; e.currentTarget.style.boxShadow = "0 4px 6px -1px rgba(0,0,0,0.05)"; }} onMouseLeave={e => { e.currentTarget.style.borderColor = "#e2e8f0"; e.currentTarget.style.boxShadow = "none"; }}>
-              <div>
-                <div style={{ fontSize: "1rem", fontWeight: 800, color: "#0f172a" }}>{invoice.invoiceNumber}</div>
-                <div style={{ fontSize: "0.85rem", color: "#64748b", marginTop: 6, display: "flex", alignItems: "center", gap: 6 }}>
-                  <Users size={14} /> {invoice.customer?.name || "Walk-in"}
+            <div key={invoice.id} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "16px 20px", background: "#fff", border: "1px solid #e2e8f0", borderRadius: 12, cursor: "pointer", transition: "all 0.2s", gap: "12px" }} onClick={() => navigate(`/admin/invoices/${invoice.id}`)} onMouseEnter={e => { e.currentTarget.style.borderColor = "#cbd5e1"; e.currentTarget.style.boxShadow = "0 4px 6px -1px rgba(0,0,0,0.05)"; }} onMouseLeave={e => { e.currentTarget.style.borderColor = "#e2e8f0"; e.currentTarget.style.boxShadow = "none"; }}>
+              <div style={{ minWidth: 0 }}>
+                <div style={{ fontSize: "1rem", fontWeight: 800, color: "#0f172a", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{invoice.invoiceNumber}</div>
+                <div style={{ fontSize: "0.85rem", color: "#64748b", marginTop: 6, display: "flex", alignItems: "center", gap: 6, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+                  <Users size={14} style={{ flexShrink: 0 }} /> <span style={{ overflow: "hidden", textOverflow: "ellipsis" }}>{invoice.customer?.name || "Walk-in"}</span>
                   <span style={{ color: "#cbd5e1" }}>|</span>
-                  {invoice.branch?.name || "Main salon"}
+                  <span style={{ overflow: "hidden", textOverflow: "ellipsis" }}>{invoice.branch?.name || "Main salon"}</span>
                 </div>
               </div>
-              <div style={{ background: "#f8fafc", color: "var(--accent)", fontSize: "1rem", fontWeight: 800, padding: "8px 14px", borderRadius: 8, border: "1px solid #e2e8f0" }}>
+              <div style={{ background: "#f8fafc", color: "var(--accent)", fontSize: "1rem", fontWeight: 800, padding: "6px 12px", borderRadius: 8, border: "1px solid #e2e8f0", whiteSpace: "nowrap", flexShrink: 0 }}>
                 {formatMoney(invoice.total)}
               </div>
             </div>
@@ -263,14 +263,14 @@ export default function OwnerDashboard() {
           items={data.recentPayments}
           emptyState={<EmptyState title="No payments yet" message="Payment entries will start populating here once billing activity begins for this scope." />}
           renderItem={(payment) => (
-            <div key={payment.id} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "16px 20px", background: "#fff", border: "1px solid #e2e8f0", borderRadius: 12, cursor: "pointer", transition: "all 0.2s" }} onClick={() => navigate(`/admin/payments`)} onMouseEnter={e => { e.currentTarget.style.borderColor = "#cbd5e1"; e.currentTarget.style.boxShadow = "0 4px 6px -1px rgba(0,0,0,0.05)"; }} onMouseLeave={e => { e.currentTarget.style.borderColor = "#e2e8f0"; e.currentTarget.style.boxShadow = "none"; }}>
-              <div>
-                <div style={{ fontSize: "1rem", fontWeight: 800, color: "#0f172a" }}>{payment.invoice?.invoiceNumber || "Direct Payment"}</div>
-                <div style={{ fontSize: "0.8rem", color: "#64748b", marginTop: 6, fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.05em" }}>
+            <div key={payment.id} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "16px 20px", background: "#fff", border: "1px solid #e2e8f0", borderRadius: 12, cursor: "pointer", transition: "all 0.2s", gap: "12px" }} onClick={() => navigate(`/admin/payments`)} onMouseEnter={e => { e.currentTarget.style.borderColor = "#cbd5e1"; e.currentTarget.style.boxShadow = "0 4px 6px -1px rgba(0,0,0,0.05)"; }} onMouseLeave={e => { e.currentTarget.style.borderColor = "#e2e8f0"; e.currentTarget.style.boxShadow = "none"; }}>
+              <div style={{ minWidth: 0 }}>
+                <div style={{ fontSize: "1rem", fontWeight: 800, color: "#0f172a", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{payment.invoice?.invoiceNumber || "Direct Payment"}</div>
+                <div style={{ fontSize: "0.8rem", color: "#64748b", marginTop: 6, fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.05em", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
                   Paid via <span style={{ color: "#3b82f6" }}>{payment.mode}</span>
                 </div>
               </div>
-              <div style={{ background: "#ecfdf5", color: "#059669", fontSize: "1rem", fontWeight: 800, padding: "8px 14px", borderRadius: 8, border: "1px solid #a7f3d0" }}>
+              <div style={{ background: "#ecfdf5", color: "#059669", fontSize: "1rem", fontWeight: 800, padding: "6px 12px", borderRadius: 8, border: "1px solid #a7f3d0", whiteSpace: "nowrap", flexShrink: 0 }}>
                 + {formatMoney(payment.amount)}
               </div>
             </div>
