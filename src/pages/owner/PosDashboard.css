@@ -523,7 +523,222 @@
 }
 
 @media (max-width: 480px) {
+  gap: 8px;
+  padding: 8px 0;
+  font-size: 0.75rem;
+  align-items: center;
+}
+
+.cart-table-head {
+  border-bottom: 1px solid #dbe4f0;
+  color: #475569;
+  font-size: 0.85rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.cart-table-row {
+  border-bottom: 1px solid #eef2f7;
+}
+
+.cart-table-footer {
+  border-top: 1px solid #dbe4f0;
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 16px;
+  padding-top: 16px;
+}
+
+.pos-detail-payment-section .payment-title {
+  color: #0f172a;
+  font-size: 1.05rem;
+  font-weight: 800;
+  margin-bottom: 14px;
+}
+
+.payment-inputs {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.payment-box {
+  background: #f8fafc;
+  border: 1px solid #dbe4f0;
+  border-radius: 8px;
+  padding: 8px;
+  font-size: 0.8rem;
+}
+
+.payment-done {
+  margin-top: 16px;
+  color: #475569;
+  font-weight: 600;
+}
+
+.pos-detail-bottom-actions {
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  margin-top: 18px;
+}
+
+@media (max-width: 1180px) {
+  .pos-detail-split-pane {
+    grid-template-columns: 1fr;
+  }
+  .pos-detail-left,
+  .pos-detail-right {
+    max-height: 45vh;
+  }
+}
+
+@media (max-width: 860px) {
+  .skillify-pos-dashboard {
+    padding: 16px;
+  }
+
+  .pos-dash-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .pos-dash-grid,
+  .payment-inputs,
+  .pos-detail-cat-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .cart-table-head,
+  .cart-table-row {
+    grid-template-columns: 1fr;
+  }
+}
+/* Missing Modal Overlay Classes */
+.premium-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(2px);
+}
+
+.premium-modal-content {
+  background: white;
+  border-radius: 8px;
+  box-shadow: none;
+  position: relative;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+/* Edit Shield Overlay */
+.pos-detail-edit-shield {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(1px);
+  z-index: 100;
+  display: block;
+  text-align: center;
+}
+
+.btn-edit-shield {
+  background: #3b82f6;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 16px;
+  cursor: pointer;
+  box-shadow: none;
+  transition: transform 0.2s;
+}
+
+.btn-edit-shield:hover {
+  transform: scale(1.05);
+}
+
+.btn-edit-shield {
+  position: sticky !important;
+  top: 200px !important;
+  margin-top: 200px !important;
+  z-index: 1000;
+}
+
+/* Date Picker Responsive Styles */
+.pos-dash-date-picker {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  background: white;
+  padding: 6px 12px;
+  border-radius: 6px;
+  border: 1px solid #cbd5e1;
+}
+
+@media (max-width: 860px) {
+  .pos-dash-date-picker {
+    flex-wrap: wrap;
+    padding: 10px;
+    width: 100%;
+    justify-content: center;
+  }
+  .pos-dash-date-picker input {
+    flex: 1;
+    min-width: 120px;
+  }
+}
+
+/* Responsive Guest Grid */
+.pos-detail-guest-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  font-size: 12px;
+  margin-bottom: 12px;
+}
+
+@media (max-width: 860px) {
+  .pos-detail-guest-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .pos-detail-top-tabs {
+    flex-wrap: wrap;
+  }
+}
+
+@media (max-width: 480px) {
   .pos-detail-guest-grid {
     grid-template-columns: 1fr;
+  }
+}
+ 
+ @media (max-width: 860px) {
+  .pos-dash-header-left,
+  .pos-dash-header-right {
+    flex-wrap: nowrap !important;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    width: 100%;
+    scrollbar-width: none;
+    padding-bottom: 4px;
+  }
+  .pos-dash-header-left::-webkit-scrollbar,
+  .pos-dash-header-right::-webkit-scrollbar {
+    display: none;
+  }
+  .pos-dash-show-btn,
+  .pos-dash-filter-pill {
+    flex-shrink: 0;
   }
 }
