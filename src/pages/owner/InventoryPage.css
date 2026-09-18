@@ -144,3 +144,22 @@
     grid-column: 1 / -1; /* Make product dropdown span full width */
   }
 }
+
+/* Split Pane Responsive (Vendor Management & Approval Tab) */
+@media (max-width: 768px) {
+  .split-pane-container {
+    flex-direction: column !important;
+    height: auto !important;
+    min-height: calc(100vh - 200px);
+  }
+  .split-pane-left {
+    width: 100% !important;
+    max-width: 100% !important;
+    max-height: 40vh; /* Allow it to scroll independently if it has a list */
+    border-right: none !important;
+    border-bottom: 1px solid #e2e8f0 !important;
+  }
+  .split-pane-right {
+    padding: 16px !important;
+  }
+}

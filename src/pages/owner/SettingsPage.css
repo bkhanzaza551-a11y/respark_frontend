@@ -936,3 +936,24 @@
     gap: 12px;
   }
 }
+
+/* Notifications List Mobile Fixes */
+@media (max-width: 900px) {
+  .notification-row-grid {
+    grid-template-columns: 1fr 40px !important;
+    gap: 8px !important;
+  }
+  .notification-title-col {
+    grid-column: 1 / 2;
+  }
+  .notification-channel-col {
+    grid-column: 1 / 2;
+    text-align: left !important;
+    font-size: 12px !important;
+  }
+  .notification-toggle-col {
+    grid-column: 2 / 3;
+    grid-row: 1 / 3;
+    align-self: center;
+  }
+}

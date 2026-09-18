@@ -299,10 +299,11 @@ export default function StaffRolesPage() {
         .srp-create-btn:hover { background:#1e293b; }
         .srp-role-item { display:flex; flex-direction:column; padding:14px 20px; border:none; background:transparent; border-bottom:1px solid #f8fafc; cursor:pointer; text-align:left; width:100%; transition:background .15s; }
         .srp-role-item:hover { background:#f8fafc; }
-        .srp-role-item.active { background:#eff6ff; border-left:3px solid #3b82f6; }
+        .srp-role-item.active { background:#eff6ff !important; border-left:3px solid #3b82f6 !important; }
         .srp-role-item .role-name { font-size:13px; font-weight:600; color:#0f172a; }
         .srp-role-item .role-desc { font-size:11px; color:#94a3b8; margin-top:2px; }
-        .srp-role-item.active .role-name { color:#1d4ed8; }
+        .srp-role-item.active .role-name { color:#1d4ed8 !important; }
+        .srp-role-item.active .role-desc { color:#3b82f6 !important; }
         .srp-content { flex:1; overflow-y:auto; padding:24px; }
         .srp-card { background:white; border-radius:12px; border:1px solid #e2e8f0; padding:28px; margin-bottom:24px; }
         .srp-card-title { font-size:16px; font-weight:700; color:#0f172a; margin:0 0 4px; }
@@ -326,23 +327,26 @@ export default function StaffRolesPage() {
         .status-chip-inactive { padding:4px 12px; border-radius:20px; font-size:11px; font-weight:700; background:#fef2f2; color:#dc2626; border:1.5px solid #fecaca; }
         .srp-deactivate-btn { font-size:12px; font-weight:600; padding:6px 14px; border-radius:8px; border:1.5px solid #e2e8f0; background:white; color:#64748b; cursor:pointer; }
         .srp-deactivate-btn:hover { border-color:#cbd5e1; background:#f8fafc; }
-        .srp-saving-badge { display:inline-flex; align-items:center; gap:6px; font-size:11px; color:#64748b; }
-        .srp-saving-dot { width:6px; height:6px; border-radius:50%; background:#3b82f6; animation:pulse 1s infinite; }
-        @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.3} }
+        .srp-saving-badge { font-size:11px; font-weight:700; color:#0f172a; display:flex; align-items:center; gap:6px; background:#f1f5f9; padding:4px 10px; border-radius:12px; }
+        .srp-saving-dot { width:6px; height:6px; background:#3b82f6; border-radius:50%; animation: pulse 1s infinite; }
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.3; } 100% { opacity: 1; } }
         .srp-expand-icon { transition:transform .2s; color:#94a3b8; font-size:18px; }
         .srp-expand-icon.open { transform:rotate(180deg); }
-        @media (max-width: 900px) {
-          .srp-container { flex-direction: column !important; height: auto !important; min-height: calc(100vh - 108px); }
+        @media (max-width: 860px) {
+          .srp-container { flex-direction: column; height: auto; }
           .srp-sidebar { width: 100% !important; max-height: none !important; border-right: none; border-bottom: 1px solid #e2e8f0; flex-shrink: 0; }
           .srp-sidebar-header { padding: 16px !important; }
-          .srp-sidebar > div:last-child { display: flex; flex-direction: row; overflow-x: auto; }
-          .srp-role-item { min-width: 140px; border-bottom: none !important; border-right: 1px solid #f1f5f9; padding: 10px 14px !important; }
+          .srp-sidebar > div:last-child { display: flex; flex-direction: row; overflow-x: auto; gap: 12px; padding: 0 16px 16px 16px; }
+          .srp-role-item { min-width: 160px; border-bottom: none !important; border: 1px solid #e2e8f0 !important; border-radius: 12px; padding: 12px 16px !important; }
+          .srp-role-item.active { border: 2px solid #3b82f6 !important; background: #eff6ff !important; }
           .srp-content { padding: 12px !important; width: 100% !important; box-sizing: border-box; overflow-y: auto; }
           .srp-card { padding: 16px !important; margin-bottom: 16px !important; }
           .srp-form-grid { grid-template-columns: 1fr !important; }
           .srp-user-header { flex-wrap: wrap !important; gap: 10px; padding: 12px !important; }
           .srp-user-header > div:last-child { width: 100%; justify-content: flex-start; flex-wrap: wrap; }
           .srp-user-body { padding: 0 12px 16px !important; }
+          .srp-module-row { flex-direction: column !important; align-items: flex-start !important; gap: 10px !important; }
+          .srp-module-row > div:first-child { margin-bottom: 4px; }
         }
       `}} />
 

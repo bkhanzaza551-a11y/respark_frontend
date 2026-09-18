@@ -1040,7 +1040,7 @@ export default function InventoryPage() {
             </div>
 
             {/* Right details block */}
-            <div style={{ flexGrow: 1, display: "flex", flexDirection: "column", padding: 24 }}>
+            <div className="split-pane-right" style={{ flexGrow: 1, display: "flex", flexDirection: "column", padding: 24 }}>
               {!selectedOrder ? (
                 <div style={{ flexGrow: 1, display: "flex", alignItems: "center", justifyContent: "center", color: "#64748b", fontWeight: 600 }}>
                   Select a purchase order to view details and approval actions.

@@ -738,10 +738,10 @@ export default function Topbar({ auth, sidebarExpanded, onToggleSidebar, onLogou
       </div>
 
       {/* Dark Tabs Row */}
-      {visibleTabs.length > 0 && (
+      {tabs.length > 0 && (
       <div className="skillify-nav-row">
         <div className="skillify-tabs" style={{ paddingLeft: 16 }}>
-          {visibleTabs.map(tab => {
+          {tabs.map(tab => {
              const isActive = location.pathname.startsWith(tab.path);
              return (
                <Link key={tab.path} to={tab.path} className={`skillify-tab ${isActive ? 'active' : ''}`}>

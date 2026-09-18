@@ -1192,46 +1192,33 @@ export default function SettingsPage() {
     const shiftList = shifts;
     const selectedShift = shiftList.find(s => s.id === selectedShiftId) || shiftList[0] || null;
 
-    const createShift = async () => {
-      try {
-        setShiftSaving(true);
-        const payload = {
-          name: "New Shift",
-          active: true,
-          sameForAllDays: true,
-          startTime: "09:00",
-          endTime: "21:00",
-          days: WEEK_DAYS.map(d => ({ dayOfWeek: d.dayOfWeekValue, startTime: "09:00", endTime: "21:00", active: true })),
-          breaks: [],
-          branchId: selectedBranchId || undefined
-        };
-        const res = await api.post("/owner/shifts", payload);
-        setShifts((prev) => [...prev, res.data]);
-        setSelectedShiftId(res.data.id);
-        setForm((prev) => ({
-          ...prev,
-          advancedSettings: {
-            ...prev.advancedSettings,
-            shiftManagement: {
-              ...(prev.advancedSettings?.shiftManagement || {}),
-              shifts: [...((prev.advancedSettings?.shiftManagement?.shifts) || []), res.data]
-            }
-          }
-        }));
-        setStatus({ loading: false, error: "", success: "Shift created." });
-      } catch (err) {
-        setStatus({ loading: false, error: formatApiError(err, "Could not create shift"), success: "" });
-      } finally {
-        setShiftSaving(false);
-      }
+    const createShift = () => {
+      const newShiftDraft = {
+        id: "new",
+        name: "New Shift",
+        active: true,
+        sameForAllDays: true,
+        startTime: "09:00",
+        endTime: "21:00",
+        days: WEEK_DAYS.map(d => ({ dayOfWeek: d.dayOfWeekValue, startTime: "09:00", endTime: "21:00", active: true })),
+        breaks: [],
+      };
+      setShifts((prev) => [...prev, newShiftDraft]);
+      setSelectedShiftId("new");
+    };
+
+    const closeShiftModal = () => {
+      setSelectedShiftId(null);
+      setShifts(prev => prev.filter(s => s.id !== "new"));
     };
 
     const deleteShift = async (id) => {
+      if (!window.confirm("Are you sure you want to delete this shift?")) return;
       try {
         setShiftSaving(true);
         await api.delete(`/owner/shifts/${id}`);
         setShifts((prev) => prev.filter(s => s.id !== id));
-        if (selectedShiftId === id) setSelectedShiftId(null);
+        if (selectedShiftId === id) closeShiftModal();
         setForm((prev) => ({
           ...prev,
           advancedSettings: {
@@ -1275,20 +1262,27 @@ export default function SettingsPage() {
           })),
           branchId: selectedBranchId || undefined
         };
-        const res = await api.patch(`/owner/shifts/${selectedShift.id}`, payload);
-        setShifts((prev) => prev.map(s => s.id === res.data.id ? res.data : s));
+        let res;
+        if (selectedShift.id === "new") {
+          res = await api.post("/owner/shifts", payload);
+          setShifts((prev) => prev.map(s => s.id === "new" ? res.data : s));
+        } else {
+          res = await api.patch(`/owner/shifts/${selectedShift.id}`, payload);
+          setShifts((prev) => prev.map(s => s.id === res.data.id ? res.data : s));
+        }
+        
         setForm((prev) => ({
           ...prev,
           advancedSettings: {
             ...prev.advancedSettings,
             shiftManagement: {
               ...(prev.advancedSettings?.shiftManagement || {}),
-              shifts: (prev.advancedSettings?.shiftManagement?.shifts || []).map(s => s.id === res.data.id ? res.data : s)
+              shifts: [...((prev.advancedSettings?.shiftManagement?.shifts) || []).filter(s => s.id !== res.data.id && s.id !== "new"), res.data]
             }
           }
         }));
         setStatus({ loading: false, error: "", success: "Shift saved." });
-        setSelectedShiftId(null); // Close modal on save
+        closeShiftModal(); // Close modal on save
       } catch (err) {
         setStatus({ loading: false, error: formatApiError(err, "Could not save shift"), success: "" });
       } finally {
@@ -1365,7 +1359,7 @@ export default function SettingsPage() {
 
         {/* Slide Panel Overlay */}
         {selectedShiftId && selectedShift && shiftDraft && (
-          <div style={{ position: "fixed", top: 0, left: 0, right: 0, bottom: 0, backgroundColor: "rgba(15, 23, 42, 0.4)", zIndex: 9999, backdropFilter: "blur(2px)" }} onClick={() => setSelectedShiftId(null)}>
+          <div style={{ position: "fixed", top: 0, left: 0, right: 0, bottom: 0, backgroundColor: "rgba(15, 23, 42, 0.4)", zIndex: 9999, backdropFilter: "blur(2px)" }} onClick={closeShiftModal}>
             <div 
               style={{ position: "fixed", top: 0, right: 0, bottom: 0, width: "100%", maxWidth: 650, background: "#fff", zIndex: 10000, display: "flex", flexDirection: "column", boxShadow: "-10px 0 40px rgba(0,0,0,0.1)", animation: "slideInRight 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards" }} 
               onClick={e => e.stopPropagation()}
@@ -1374,7 +1368,7 @@ export default function SettingsPage() {
               
               <div style={{ display: "flex", alignItems: "center", gap: 16, padding: "20px 24px", background: "white", borderBottom: "1px solid #e2e8f0" }}>
                 <button 
-                  onClick={() => setSelectedShiftId(null)} 
+                  onClick={closeShiftModal} 
                   style={{ background: "#f1f5f9", border: "none", borderRadius: "50%", width: 36, height: 36, display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", color: "#475569", transition: "all 0.2s" }}
                   onMouseEnter={(e) => { e.currentTarget.style.background = "#e2e8f0"; e.currentTarget.style.color = "#0f172a"; }}
                   onMouseLeave={(e) => { e.currentTarget.style.background = "#f1f5f9"; e.currentTarget.style.color = "#475569"; }}
@@ -1499,7 +1493,7 @@ export default function SettingsPage() {
                   {shiftSaving ? "Deleting..." : "Delete Shift"}
                 </button>
                 <div style={{ display: "flex", gap: 10 }}>
-                  <button type="button" onClick={() => setSelectedShiftId(null)} style={{ padding: "10px 20px", background: "#f8fafc", color: "#475569", border: "1px solid #e2e8f0", borderRadius: 8, fontWeight: 600, cursor: "pointer", fontSize: 13, transition: "all 0.2s" }} onMouseEnter={(e) => { e.currentTarget.style.background = "#f1f5f9"; e.currentTarget.style.borderColor = "#cbd5e1"; }} onMouseLeave={(e) => { e.currentTarget.style.background = "#f8fafc"; e.currentTarget.style.borderColor = "#e2e8f0"; }}>
+                  <button type="button" onClick={closeShiftModal} style={{ padding: "10px 20px", background: "#f8fafc", color: "#475569", border: "1px solid #e2e8f0", borderRadius: 8, fontWeight: 600, cursor: "pointer", fontSize: 13, transition: "all 0.2s" }} onMouseEnter={(e) => { e.currentTarget.style.background = "#f1f5f9"; e.currentTarget.style.borderColor = "#cbd5e1"; }} onMouseLeave={(e) => { e.currentTarget.style.background = "#f8fafc"; e.currentTarget.style.borderColor = "#e2e8f0"; }}>
                     Cancel
                   </button>
                   <button type="button" onClick={saveShift} disabled={shiftSaving} style={{ padding: "10px 24px", background: "#3b82f6", color: "white", border: "none", borderRadius: 8, fontWeight: 600, cursor: shiftSaving ? "not-allowed" : "pointer", fontSize: 13, transition: "all 0.2s" }} onMouseEnter={(e) => e.currentTarget.style.background = "#2563eb"} onMouseLeave={(e) => e.currentTarget.style.background = "#3b82f6"}>
@@ -1637,8 +1631,8 @@ export default function SettingsPage() {
         ) : null}
 
         <div style={{ display: "flex", alignItems: "center", gap: 20, marginBottom: 24, flexWrap: "wrap", background: "#f8fafc", padding: "16px 20px", borderRadius: 12, border: "1px solid #e2e8f0" }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-            <span style={{ fontSize: 13, fontWeight: 700, color: "#334155", textTransform: "uppercase", letterSpacing: 0.5 }}>Apply Shift for</span>
+          <div style={{ display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
+            <span style={{ fontSize: 13, fontWeight: 700, color: "#334155", textTransform: "uppercase", letterSpacing: 0.5, whiteSpace: "nowrap" }}>Apply Shift for</span>
             <input
               type="number"
               min="1"
@@ -1649,12 +1643,12 @@ export default function SettingsPage() {
               onFocus={(e) => { e.target.style.borderColor = "#3b82f6"; e.target.style.boxShadow = "0 0 0 3px rgba(59, 130, 246, 0.1)"; }}
               onBlur={(e) => { e.target.style.borderColor = "#cbd5e1"; e.target.style.boxShadow = "none"; }}
             />
-            <span style={{ fontSize: 13, fontWeight: 700, color: "#334155", textTransform: "uppercase", letterSpacing: 0.5 }}>Days:</span>
+            <span style={{ fontSize: 13, fontWeight: 700, color: "#334155", textTransform: "uppercase", letterSpacing: 0.5, whiteSpace: "nowrap" }}>Days:</span>
             <CustomDropdown
               disabled={!rosterModuleEnabled}
               value={roster.useShiftId}
               onChange={(event) => updateAdvancedObject("rosterManagement", { useShiftId: event.target.value })}
-              style={{ minWidth: 220, padding: "10px 14px", border: "1px solid #cbd5e1", borderRadius: 8, fontSize: 14, background: "#fff", outline: "none" }}
+              style={{ flex: 1, minWidth: 200, padding: "10px 14px", border: "1px solid #cbd5e1", borderRadius: 8, fontSize: 14, background: "#fff", outline: "none" }}
             >
               <option value="">Select shift template</option>
               {shifts.filter((shift) => shift.active !== false).map((shift) => <option key={shift.id} value={shift.id}>{shift.name || "Unnamed Shift"}</option>)}
@@ -1710,7 +1704,7 @@ export default function SettingsPage() {
           </button>
         </div>
 
-        <div className="settings-table-wrap cpn-card" style={{ background: "#fff", borderRadius: 12, overflow: "hidden", border: "1px solid #e2e8f0", boxShadow: "0 4px 12px rgba(0,0,0,0.03)" }}>
+        <div className="settings-table-wrap cpn-card" style={{ background: "#fff", borderRadius: 12, overflowX: "auto", overflowY: "hidden", border: "1px solid #e2e8f0", boxShadow: "0 4px 12px rgba(0,0,0,0.03)" }}>
           <div style={{ minWidth: 900 }}>
             <div style={{ padding: "16px 20px", borderBottom: "1px solid #e2e8f0", background: "#f8fafc", display: "grid", gridTemplateColumns: "120px 1fr 180px 180px 120px 1fr", alignItems: "center", gap: 16, fontSize: 13, fontWeight: 700, color: "#64748b", textTransform: "uppercase", letterSpacing: 0.5 }}>
             <label style={{ display: "flex", alignItems: "center", gap: 10, cursor: "pointer" }}>
@@ -2473,7 +2467,7 @@ export default function SettingsPage() {
               {category.items.map((item, index) => {
                 const isChecked = config.toggles ? (config.toggles[item.key] !== false) : true;
                 return (
-                  <div key={item.key} style={{
+                  <div key={item.key} className="notification-row-grid" style={{
                     display: "grid",
                     gridTemplateColumns: "1fr 180px 40px",
                     gap: "12px",
@@ -2483,8 +2477,8 @@ export default function SettingsPage() {
                     fontSize: 14,
                     color: "#0f172a"
                   }}>
-                    <div style={{ fontWeight: 500, color: "#334155" }}>{item.label}</div>
-                    <div style={{ 
+                    <div className="notification-title-col" style={{ fontWeight: 500, color: "#334155" }}>{item.label}</div>
+                    <div className="notification-channel-col" style={{ 
                       fontSize: 13, 
                       fontWeight: 600, 
                       textAlign: "right", 
@@ -2493,7 +2487,7 @@ export default function SettingsPage() {
                     }}>
                       {channelLabels[item.key] || "Saved rule"}
                     </div>
-                    <div style={{ display: "flex", justifyContent: "flex-end", alignItems: "center" }}>
+                    <div className="notification-toggle-col" style={{ display: "flex", justifyContent: "flex-end", alignItems: "center" }}>
                       <ToggleSwitch
                         checked={isChecked}
                         onChange={(e) => handleToggleChange(item.key, e.target.checked)}

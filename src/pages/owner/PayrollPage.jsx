@@ -563,9 +563,22 @@ export default function PayrollPage() {
       
         @media (max-width: 900px) {
           .responsive-att-grid { grid-template-columns: 1fr !important; }
-          .att-tabs-container { flex-wrap: wrap !important; overflow-x: auto !important; }
+          .att-main-container { padding: 0 16px !important; }
+          .att-glass-panel { padding: 16px !important; }
+          .form-grid { grid-template-columns: 1fr !important; }
+          .att-tabs-scroll { 
+            flex-wrap: nowrap !important; 
+            overflow-x: auto !important; 
+            -webkit-overflow-scrolling: touch;
+            padding: 0 16px !important;
+            gap: 8px !important;
+            scrollbar-width: none;
+          }
+          .att-tabs-scroll::-webkit-scrollbar { display: none; }
+          .att-premium-tab { padding: 10px 16px; font-size: 13px; white-space: nowrap; }
           .modern-table-container { overflow-x: auto !important; }
           .att-stat-card { width: 100% !important; }
+          .att-actions-row { flex-wrap: wrap !important; gap: 8px !important; }
         }
 `}</style>
 
@@ -577,7 +590,7 @@ export default function PayrollPage() {
       {status.error && <div className="panel-card" style={{margin: "0 24px 16px", background: "#fef2f2", borderColor: "#fecaca", color: "#991b1b"}}><p style={{margin: 0, padding: 16}}>{status.error}</p></div>}
       {status.success && <div className="panel-card" style={{margin: "0 24px 16px", background: "#f0fdf4", borderColor: "#bbf7d0", color: "#166534"}}><p style={{margin: 0, padding: 16}}>{status.success}</p></div>}
 
-      <div style={{ display: "flex", gap: 12, padding: "0 24px", marginBottom: 24, overflowX: "auto" }}>
+      <div className="att-tabs-scroll" style={{ display: "flex", gap: 12, padding: "0 24px", marginBottom: 24, overflowX: "auto" }}>
         {[
           { id: "dashboard", label: "Dashboard", icon: LayoutDashboard },
           { id: "calendar", label: "Calendar", icon: CalendarDays },
@@ -589,12 +602,12 @@ export default function PayrollPage() {
             onClick={() => setActiveTab(t.id)}
             className={`att-premium-tab ${activeTab === t.id ? "active" : ""}`}
           >
-            <t.icon size={18} /> {t.label}
+            <t.icon size={16} /> {t.label}
           </button>
         ))}
       </div>
 
-      <div className="responsive-att-grid" style={{ display: "grid", gap: 24, minWidth: 0, maxWidth: "100%", padding: "0 24px" }}>
+      <div className="responsive-att-grid att-main-container" style={{ display: "grid", gap: 24, minWidth: 0, maxWidth: "100%", padding: "0 24px" }}>
         {activeTab === "dashboard" && (
         <div className="att-glass-panel" style={{ padding: 32 }}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 24 }}>
@@ -1099,7 +1112,7 @@ export default function PayrollPage() {
               </div>
             </div>
             
-            <div style={{ display: "flex", alignItems: "flex-end", gap: 16, marginTop: 24 }}>
+            <div className="att-actions-row" style={{ display: "flex", alignItems: "flex-end", gap: 16, marginTop: 24 }}>
                <label style={{ flex: 1 }}>
                  <span style={{ display: "block", marginBottom: 8, fontWeight: 600, color: "#475569", fontSize: 13 }}>Period</span>
                  <CustomDropdown value={attendanceReportPeriod} onChange={(e) => setAttendanceReportPeriod(e.target.value)}>
