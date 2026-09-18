@@ -460,7 +460,7 @@ export default function MyDashboardPage() {
                 <video ref={videoRef} autoPlay playsInline muted style={{ width: "100%", borderRadius: 20, background: "#0f172a", display: "block", minHeight: 320, maxHeight: 400, objectFit: "cover" }} />
                 <div style={{ position: "absolute", inset: 20, borderRadius: 16, border: "2px dashed rgba(255,255,255,0.4)", pointerEvents: "none" }} />
                 <div style={{ position: "absolute", left: 16, top: 16, padding: "6px 12px", borderRadius: 20, background: "rgba(15,23,42,0.8)", color: "#fff", fontSize: 11, fontWeight: 700, letterSpacing: 0.5, textTransform: "uppercase" }}>
-                  📷 Live Feed
+                  <Camera size={14} style={{ display: 'inline', marginBottom: -2, marginRight: 4 }} /> Live Feed
                 </div>
               </div>
               <canvas ref={canvasRef} style={{ display: "none" }} />
@@ -562,7 +562,7 @@ export default function MyDashboardPage() {
       return (
         <div style={{ display: "flex", flexDirection: "column", gap: 18, alignItems: "center", padding: "10px 0" }}>
           <div style={{ width: 64, height: 64, borderRadius: "50%", background: "#ecfdf5", border: "2px solid #a7f3d0", display: "flex", alignItems: "center", justifyContent: "center", color: "#10b981", fontSize: 32, marginBottom: 8, boxShadow: "0 4px 12px rgba(16,185,129,0.15)" }}>
-            ✓
+            <CheckCircle2 size={16} />
           </div>
           <div style={{ textAlign: "center" }}>
             <h3 style={{ margin: 0, fontSize: 18, fontWeight: 800, color: "#1e293b" }}>
@@ -643,10 +643,10 @@ export default function MyDashboardPage() {
           </div>
           <div style={{ display: "flex", gap: 8, flexShrink: 0 }}>
             <span style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "6px 14px", borderRadius: 20, fontSize: 12, fontWeight: 700, background: "rgba(59,130,246,0.2)", color: "#93c5fd", border: "1px solid rgba(59,130,246,0.3)" }}>
-              📅 Today: {data.todayAppointments.length}
+              <CalendarCheck size={14} style={{ display: 'inline', marginBottom: -2, marginRight: 4 }} /> Today: {data.todayAppointments.length}
             </span>
             <span style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "6px 14px", borderRadius: 20, fontSize: 12, fontWeight: 700, background: "rgba(139,92,246,0.2)", color: "#c4b5fd", border: "1px solid rgba(139,92,246,0.3)" }}>
-              🕒 Recent: {data.recentAppointments.length}
+              <Clock size={14} style={{ display: 'inline', marginBottom: -2, marginRight: 4 }} /> Recent: {data.recentAppointments.length}
             </span>
           </div>
         </div>
@@ -670,10 +670,10 @@ export default function MyDashboardPage() {
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 20, flexWrap: "wrap", borderBottom: "1px solid #f1f5f9", paddingBottom: 20, marginBottom: 20 }}>
               <div>
                 <h3 style={{ margin: 0, fontSize: 18, fontWeight: 800, color: "#1e293b", display: "flex", alignItems: "center", gap: 8 }}>
-                  <span>⏱️</span> Attendance Controls
+                  <Timer size={18} /> Attendance Controls
                 </h3>
                 <div style={{ color: "#64748b", fontSize: 13, marginTop: 4, display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap" }}>
-                  <span>📍 {data.profile?.branch?.name || "No branch assigned"}</span>
+                  <span><MapPin size={12} style={{ display: 'inline', marginBottom: -2, marginRight: 4 }} /> {data.profile?.branch?.name || "No branch assigned"}</span>
                   <span>•</span>
                   <span style={{ fontWeight: 600, color: isCheckedIn ? "#059669" : "#64748b" }}>
                     {todayAttendance ? `Status: ${todayAttendance.status}` : "No attendance marked today"}
@@ -685,7 +685,7 @@ export default function MyDashboardPage() {
                   </div>
                 ) : (
                   <div style={{ fontSize: 11, color: "#dc2626", fontWeight: 500, marginTop: 6 }}>
-                    ⚠️ Branch GPS coordinates not set. Ask your manager to configure this branch location.
+                    <Shield size={14} style={{ display: 'inline', marginBottom: -2, marginRight: 4, color: '#d97706' }} /> Branch GPS coordinates not set. Ask your manager to configure this branch location.
                   </div>
                 )}
                 {todayAttendance && (
@@ -753,7 +753,7 @@ export default function MyDashboardPage() {
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: 16 }}>
               <div style={{ padding: 16, borderRadius: 12, background: "#f0fdfa", border: "1px solid #ccfbf1", display: "flex", gap: 12 }}>
                 <div style={{ width: 36, height: 36, borderRadius: "50%", background: "#fff", display: "flex", alignItems: "center", justifyContent: "center", color: "#0f766e", fontSize: 16, flexShrink: 0 }}>
-                  📍
+                  <MapPin size={16} />
                 </div>
                 <div>
                   <div style={{ fontSize: 13, fontWeight: 700, color: "#115e59" }}>Location Verification</div>
@@ -762,7 +762,7 @@ export default function MyDashboardPage() {
               </div>
               <div style={{ padding: 16, borderRadius: 12, background: "#f5f3ff", border: "1px solid #ede9fe", display: "flex", gap: 12 }}>
                 <div style={{ width: 36, height: 36, borderRadius: "50%", background: "#fff", display: "flex", alignItems: "center", justifyContent: "center", color: "#6d28d9", fontSize: 16, flexShrink: 0 }}>
-                  📷
+                  <Camera size={16} />
                 </div>
                 <div>
                   <div style={{ fontSize: 13, fontWeight: 700, color: "#5b21b6" }}>Selfie & Biometrics</div>
@@ -771,7 +771,7 @@ export default function MyDashboardPage() {
               </div>
               <div style={{ padding: 16, borderRadius: 12, background: "#fff8e1", border: "1px solid #ffe8cc", display: "flex", gap: 12 }}>
                 <div style={{ width: 36, height: 36, borderRadius: "50%", background: "#fff", display: "flex", alignItems: "center", justifyContent: "center", color: "#b25e00", fontSize: 16, flexShrink: 0 }}>
-                  🕒
+                  <Clock size={16} />
                 </div>
                 <div>
                   <div style={{ fontSize: 13, fontWeight: 700, color: "#b25e00" }}>Roster Shift Status</div>
@@ -789,7 +789,7 @@ export default function MyDashboardPage() {
           {/* Today's Appointments Section */}
           <div className="glass-panel" style={{ padding: 32 }}>
             <h3 style={{ margin: "0 0 4px 0", fontSize: 18, fontWeight: 800, color: "#1e293b", display: "flex", alignItems: "center", gap: 8 }}>
-              <span>📅</span> Today's Assigned Appointments
+              <CalendarCheck size={18} /> Today's Assigned Appointments
             </h3>
             <p style={{ margin: "0 0 20px 0", color: "#94a3b8", fontSize: 13 }}>Schedule queue for services assigned to you</p>
             
@@ -812,9 +812,9 @@ export default function MyDashboardPage() {
                       </span>
                     </div>
                     <div style={{ display: "flex", gap: 6, color: "#64748b", fontSize: 12, fontWeight: 600, marginTop: "auto" }}>
-                      <span>🕒 {new Date(item.startAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+                      <span><Clock size={12} style={{ display: 'inline', marginBottom: -2, marginRight: 4 }} /> {new Date(item.startAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
                       <span>•</span>
-                      <span>📍 {item.branch?.name || "Salon"}</span>
+                      <span><MapPin size={12} style={{ display: 'inline', marginBottom: -2, marginRight: 4 }} /> {item.branch?.name || "Salon"}</span>
                     </div>
                   </div>
                 );
@@ -829,14 +829,14 @@ export default function MyDashboardPage() {
             {/* Services */}
             <div className="glass-panel" style={{ padding: 32 }}>
               <h3 style={{ margin: "0 0 4px 0", fontSize: 17, fontWeight: 800, color: "#1e293b", display: "flex", alignItems: "center", gap: 8 }}>
-                <span>🎯</span> My Services
+                <CheckCircle2 size={18} /> My Services
               </h3>
               <p style={{ margin: "0 0 20px 0", color: "#94a3b8", fontSize: 13 }}>Your active performing specialties</p>
               
               <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
                 {(data.assignedServices || []).map((item) => (
                   <span key={item.id} style={{ background: "#f8fafc", border: "1px solid #e2e8f0", padding: "6px 14px", borderRadius: 8, fontSize: 13, color: "#334155", fontWeight: 600, boxShadow: "0 1px 2px rgba(0,0,0,0.01)" }}>
-                    ✓ {item.service?.name}
+                    <CheckCircle2 size={12} style={{ display: 'inline', marginBottom: -2, marginRight: 4 }} /> {item.service?.name}
                   </span>
                 ))}
                 {!data.assignedServices?.length && <div style={{ color: "#94a3b8", fontSize: 13, fontStyle: "italic" }}>No service assignments yet.</div>}
@@ -846,7 +846,7 @@ export default function MyDashboardPage() {
             {/* Notifications */}
             <div className="glass-panel" style={{ padding: 32 }}>
               <h3 style={{ margin: "0 0 4px 0", fontSize: 17, fontWeight: 800, color: "#1e293b", display: "flex", alignItems: "center", gap: 8 }}>
-                <span>🔔</span> Notifications
+                <Bell size={18} /> Notifications
               </h3>
               <p style={{ margin: "0 0 20px 0", color: "#94a3b8", fontSize: 13 }}>Recent alerts and updates</p>
               
