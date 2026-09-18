@@ -725,8 +725,22 @@
   }
 }
  
- @media (max-width: 860px) {
-  .pos-dash-header-left,
+@media (max-width: 860px) {
+  .pos-dash-header-left {
+    flex-wrap: wrap !important;
+    overflow-x: visible;
+    width: 100%;
+    gap: 12px;
+  }
+  .pos-dash-date-picker {
+    flex-wrap: nowrap !important;
+    width: 100%;
+    justify-content: flex-start;
+  }
+  .pos-dash-date-picker input {
+    flex: 1;
+    min-width: 100px;
+  }
   .pos-dash-header-right {
     flex-wrap: nowrap !important;
     overflow-x: auto;
@@ -735,7 +749,6 @@
     scrollbar-width: none;
     padding-bottom: 4px;
   }
-  .pos-dash-header-left::-webkit-scrollbar,
   .pos-dash-header-right::-webkit-scrollbar {
     display: none;
   }
