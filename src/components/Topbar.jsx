@@ -29,6 +29,8 @@ export default function Topbar({ auth, sidebarExpanded, onToggleSidebar, onLogou
 
   useEffect(() => {
     let active = true;
+    let notifInterval;
+
     if (canPos) {
       api.get("/owner/pos/context").then(res => {
         if (active && res.data?.salon?.name) setSalonName(res.data.salon.name);
@@ -36,14 +38,21 @@ export default function Topbar({ auth, sidebarExpanded, onToggleSidebar, onLogou
     }
 
     if (canNotifications) {
-      api.get("/owner/notifications", { params: { limit: 5 } }).then((res) => {
-        if (active && res.data) {
-          setNotifications(res.data);
-        }
-      }).catch(() => {});
+      const fetchNotifs = () => {
+        api.get("/owner/notifications", { params: { limit: 5 } }).then((res) => {
+          if (active && res.data) {
+            setNotifications(res.data);
+          }
+        }).catch(() => {});
+      };
+      fetchNotifs();
+      notifInterval = setInterval(fetchNotifs, 10000); // Poll every 10 seconds for real-time feel
     }
 
-    return () => { active = false; };
+    return () => { 
+      active = false; 
+      if (notifInterval) clearInterval(notifInterval);
+    };
   }, [canNotifications, canPos]);
 
   useEffect(() => {
