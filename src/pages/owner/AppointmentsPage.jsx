@@ -2048,9 +2048,10 @@ export default function AppointmentsPage() {
                               const nextItems = form.items.filter((_, i) => i !== idx);
                               setForm({ ...form, items: nextItems });
                             }}
-                            style={{ background: "none", border: "none", color: "#ef4444", fontSize: "0.8rem", cursor: "pointer", display: "flex", alignItems: "center", gap: 4 }}
+                            style={{ background: "none", border: "none", color: "#ef4444", cursor: "pointer", display: "flex", alignItems: "center", padding: 2 }}
+                            title="Remove Service"
                           >
-                            Remove
+                            <Trash2 size={16} />
                           </button>
                         )}
                       </div>
