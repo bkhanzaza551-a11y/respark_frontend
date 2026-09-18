@@ -981,7 +981,7 @@ export default function PosDashboardPage() {
                       onMouseEnter={e => { e.currentTarget.style.background = '#e0f2fe'; e.currentTarget.style.borderColor = '#93c5fd'; }}
                       onMouseLeave={e => { e.currentTarget.style.background = '#f8fbff'; e.currentTarget.style.borderColor = '#dbeafe'; }}
                     >
-                      <Printer size={18} color="#3b82f6" />
+                      <Download size={18} color="#3b82f6" />
                     </button>
                   ) : null}
                   <div className="pos-dash-card-icon">
