@@ -1727,7 +1727,9 @@ export default function AppointmentsPage() {
 
         @media (max-width: 768px) {
           .calendar-toolbar { flex-direction: column; align-items: stretch; gap: 12px; padding: 12px 16px; }
-          .date-navigator { flex-wrap: wrap; justify-content: center; gap: 8px; }
+          .date-navigator { flex-wrap: nowrap; justify-content: space-between; gap: 8px; }
+          
+          .date-navigator input[type="date"] { flex: 1; }
           .counters-row { flex-wrap: wrap; justify-content: center; gap: 8px; }
         }
         .styled-checkbox {
@@ -1799,7 +1801,7 @@ export default function AppointmentsPage() {
             onFocus={(e) => e.target.style.borderColor = "#3b82f6"}
             onBlur={(e) => e.target.style.borderColor = "#cbd5e1"}
           />
-          <button className="nav-btn" type="button" onClick={() => handleDayChange(1)}>TOMORROW</button>
+          
           <button className="nav-icon" type="button" onClick={() => handleDayChange(1)}><ChevronRight size={18} /></button>
         </div>
         <div className="counters-row">
