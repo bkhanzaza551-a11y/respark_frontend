@@ -356,18 +356,20 @@
   }
 
   .map-picker__toolbar {
-    grid-template-columns: minmax(90px, 1fr) max-content max-content;
-    gap: 6px;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto;
+    gap: 8px;
   }
 
   .map-picker__search-field {
-    grid-column: auto;
+    grid-column: 1 / -1;
   }
 
   .map-picker__button {
-    width: auto;
+    width: 100%;
+    justify-content: center;
     padding-inline: 9px;
-    font-size: 12px;
+    font-size: 13px;
   }
 
   .map-picker__preview {
