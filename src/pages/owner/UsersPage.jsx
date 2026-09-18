@@ -917,9 +917,14 @@ export default function UsersPage() {
                           }}>
                             <option value="">Select Shift...</option>
                             {shifts.map(s => (
-                              <option key={s.id} value={s.id}>{s.name} ({s.startTime || 'Custom'} - {s.endTime || 'Custom'})</option>
+                              <option key={s.id} value={s.id}>{s.name}</option>
                             ))}
                           </select>
+                          {form.workingHours && (
+                            <div style={{ fontSize: "0.8rem", color: "#64748b", marginTop: 4 }}>
+                              Time: {form.workingHours}
+                            </div>
+                          )}
                         </div>
                         <div className="hub-form-group">
                           <label>Reporting To</label>
