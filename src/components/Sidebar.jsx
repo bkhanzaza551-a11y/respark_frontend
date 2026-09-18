@@ -148,7 +148,7 @@ export default function Sidebar({ groups, auth, onLogout, sidebarExpanded = true
         </div>
 
         {/* Nav Groups */}
-        <nav className="sidebar-nav">
+        <nav className="sidebar-nav" style={{ overflowY: 'auto', flex: '1 1 auto', minHeight: 0, paddingBottom: '40px' }}>
           <div className="sidebar-mobile-only-actions">
             {isOwner && branches.length > 0 && (
               <div style={{ marginBottom: 12 }}>
