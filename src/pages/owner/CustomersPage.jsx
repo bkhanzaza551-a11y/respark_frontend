@@ -1344,7 +1344,11 @@ export default function CustomersPage() {
             .filter-categories { width:160px; }
             .cust-detail-panel { width:100vw; }
             .cust-detail-layout { flex-direction: column; }
-            .cust-detail-sidebar { width: 100%; max-height: 40vh; flex-shrink: 0; }
+            .cust-detail-sidebar { width: 100%; max-height: none; height: auto; flex-shrink: 0; }
+            .cust-detail-sidebar-fields { display: none !important; }
+            .cust-detail-sidebar-nav { flex-direction: row; overflow-x: auto; padding: 0 16px 16px 16px; white-space: nowrap; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+            .cust-detail-sidebar-nav::-webkit-scrollbar { display: none; }
+            .cust-detail-nav-btn { flex-shrink: 0; width: auto; padding: 8px 16px; }
             .cust-detail-content { width: 100%; flex: 1; }
           }
         `}
