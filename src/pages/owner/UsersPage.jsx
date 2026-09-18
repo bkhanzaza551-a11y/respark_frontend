@@ -749,9 +749,9 @@ export default function UsersPage() {
                       
                       {/* PRIMARY: Custom role from Access Control */}
                       <div style={{ background: 'linear-gradient(135deg, #eff6ff, #dbeafe)', border: '1px solid #93c5fd', borderRadius: 10, padding: 16, marginBottom: 20 }}>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
-                          <div>
-                            <div style={{ fontSize: 13, fontWeight: 700, color: '#1e3a8a', display: 'flex', alignItems: 'center', gap: 6 }}>
+                        <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'flex-start', gap: 10, marginBottom: 10 }}>
+                          <div style={{ flex: '1 1 200px' }}>
+                            <div style={{ fontSize: 13, fontWeight: 700, color: '#1e3a8a', display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: 6 }}>
                               <span>🎯 Access Role (from Access Control)</span>
                               <span style={{ background: '#2563eb', color: 'white', fontSize: 10, fontWeight: 700, padding: '2px 7px', borderRadius: 10, letterSpacing: 0.5 }}>RECOMMENDED</span>
                             </div>
@@ -905,18 +905,18 @@ export default function UsersPage() {
                         </div>
                         <div className="hub-form-group">
                           <label>Working Hours</label>
-                          <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+                          <div style={{ display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap" }}>
                             <input type="time" className="hub-input" value={form.workingHoursStart || ""} onChange={e => {
                               const start = e.target.value;
                               const end = form.workingHoursEnd || "";
                               setForm({ ...form, workingHoursStart: start, workingHours: start && end ? `${start} - ${end}` : start || "" });
-                            }} style={{ flex: 1 }} />
+                            }} style={{ flex: 1, minWidth: 110 }} />
                             <span style={{ color: "#64748b", fontSize: 13, flexShrink: 0 }}>to</span>
                             <input type="time" className="hub-input" value={form.workingHoursEnd || ""} onChange={e => {
                               const end = e.target.value;
                               const start = form.workingHoursStart || "";
                               setForm({ ...form, workingHoursEnd: end, workingHours: start && end ? `${start} - ${end}` : "" });
-                            }} style={{ flex: 1 }} />
+                            }} style={{ flex: 1, minWidth: 110 }} />
                           </div>
                         </div>
                         <div className="hub-form-group">
@@ -1105,18 +1105,18 @@ export default function UsersPage() {
                   </div>
                   <div className="hub-form-group" style={{ marginBottom: 16 }}>
                     <label>Working Hours</label>
-                    <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+                    <div style={{ display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap" }}>
                       <input type="time" className="hub-input" value={form.workingHoursStart || ""} onChange={e => {
                         const start = e.target.value;
                         const end = form.workingHoursEnd || "";
                         setForm({ ...form, workingHoursStart: start, workingHours: start && end ? `${start} - ${end}` : start || "" });
-                      }} style={{ flex: 1 }} />
+                      }} style={{ flex: 1, minWidth: 110 }} />
                       <span style={{ color: "#64748b", fontSize: 13, flexShrink: 0 }}>to</span>
                       <input type="time" className="hub-input" value={form.workingHoursEnd || ""} onChange={e => {
                         const end = e.target.value;
                         const start = form.workingHoursStart || "";
                         setForm({ ...form, workingHoursEnd: end, workingHours: start && end ? `${start} - ${end}` : "" });
-                      }} style={{ flex: 1 }} />
+                      }} style={{ flex: 1, minWidth: 110 }} />
                     </div>
                   </div>
                   <div className="hub-form-group" style={{ marginBottom: 16 }}>
