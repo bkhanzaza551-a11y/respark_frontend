@@ -523,10 +523,12 @@
 }
 
 @media (max-width: 480px) {
-  gap: 8px;
-  padding: 8px 0;
-  font-size: 0.75rem;
-  align-items: center;
+  .cart-table-row {
+    gap: 8px;
+    padding: 8px 0;
+    font-size: 0.75rem;
+    align-items: center;
+  }
 }
 
 .cart-table-head {

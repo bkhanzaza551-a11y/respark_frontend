@@ -316,9 +316,9 @@ export default function VendorManagement({ branches = [], formatMoney }) {
   };
 
   return (
-    <div style={{ display: "flex", height: "calc(100vh - 140px)", background: "#f1f5f9", borderRadius: 12, overflow: "hidden", border: "1px solid #e2e8f0" }}>
+    <div className="split-pane-container" style={{ display: "flex", height: "calc(100vh - 140px)", background: "#f1f5f9", borderRadius: 12, overflow: "hidden", border: "1px solid #e2e8f0" }}>
       {/* LEFT SIDEBAR */}
-      <div style={{ width: 320, background: "white", borderRight: "1px solid #e2e8f0", display: "flex", flexDirection: "column" }}>
+      <div className="split-pane-left" style={{ width: 320, background: "white", borderRight: "1px solid #e2e8f0", display: "flex", flexDirection: "column" }}>
         <div style={{ padding: 16, borderBottom: "1px solid #e2e8f0" }}>
           <div style={{ display: "flex", gap: 8, marginBottom: 12 }}>
             <div style={{ position: "relative", flex: 1 }}>
@@ -365,7 +365,7 @@ export default function VendorManagement({ branches = [], formatMoney }) {
       </div>
 
       {/* RIGHT CONTENT */}
-      <div style={{ flex: 1, overflowY: "auto", padding: 24, background: "#f8fafc" }}>
+      <div className="split-pane-right" style={{ flex: 1, overflowY: "auto", padding: 24, background: "#f8fafc" }}>
         {mode === "list" && (
           <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", height: "100%", color: "#64748b" }}>
             <div style={{ fontSize: "1.1rem", fontWeight: 600, marginBottom: 8 }}>Vendor Management</div>

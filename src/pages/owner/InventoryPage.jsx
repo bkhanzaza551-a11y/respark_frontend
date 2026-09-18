@@ -994,9 +994,9 @@ export default function InventoryPage() {
 
         {/* Approval Tab Custom Implementation */}
         {activeTab !== "Dashboard" && activeTab === "Approval" && (
-          <div style={{ display: "flex", gap: 24, background: "white", borderRadius: 12, border: "1px solid #e2e8f0", overflow: "hidden", minHeight: 600 }}>
+          <div className="split-pane-container" style={{ display: "flex", background: "white", borderRadius: 12, border: "1px solid #e2e8f0", overflow: "hidden", minHeight: 600 }}>
             {/* Left sidebar block */}
-            <div style={{ width: 280, minWidth: 280, borderRight: "1px solid #e2e8f0", background: "#f8fafc", display: "flex", flexDirection: "column" }}>
+            <div className="split-pane-left" style={{ width: 280, minWidth: 280, borderRight: "1px solid #e2e8f0", background: "#f8fafc", display: "flex", flexDirection: "column" }}>
               <div style={{ padding: "16px 20px", display: "flex", justifyContent: "space-between", alignItems: "center", borderBottom: "1px solid #e2e8f0", fontWeight: 700, color: "#1e293b", fontSize: "0.95rem" }}>
                 <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
                   <ChevronDown size={18} color="#64748b" />

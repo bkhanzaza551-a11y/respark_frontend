@@ -1111,20 +1111,26 @@ export default function UsersPage() {
                     <input type="text" className="hub-input" value={form.uanNumber} onChange={e => setForm({ ...form, uanNumber: e.target.value })} placeholder="12-digit UAN" pattern="\d{12}" maxLength={12} />
                   </div>
                   <div className="hub-form-group" style={{ marginBottom: 16 }}>
-                    <label>Working Hours</label>
-                    <div style={{ display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap" }}>
-                      <input type="time" className="hub-input" value={form.workingHoursStart || ""} onChange={e => {
-                        const start = e.target.value;
-                        const end = form.workingHoursEnd || "";
-                        setForm({ ...form, workingHoursStart: start, workingHours: start && end ? `${start} - ${end}` : start || "" });
-                      }} style={{ flex: 1, minWidth: 110 }} />
-                      <span style={{ color: "#64748b", fontSize: 13, flexShrink: 0 }}>to</span>
-                      <input type="time" className="hub-input" value={form.workingHoursEnd || ""} onChange={e => {
-                        const end = e.target.value;
-                        const start = form.workingHoursStart || "";
-                        setForm({ ...form, workingHoursEnd: end, workingHours: start && end ? `${start} - ${end}` : "" });
-                      }} style={{ flex: 1, minWidth: 110 }} />
-                    </div>
+                    <label>Working Shift</label>
+                    <select className="hub-input" value={form.shiftId || ""} onChange={e => {
+                      const sid = e.target.value;
+                      const shift = shifts.find(s => s.id === sid);
+                      setForm({
+                        ...form, 
+                        shiftId: sid,
+                        workingHours: shift && shift.startTime && shift.endTime ? `${shift.startTime} - ${shift.endTime}` : ""
+                      });
+                    }}>
+                      <option value="">Select Shift...</option>
+                      {shifts.map(s => (
+                        <option key={s.id} value={s.id}>{s.name}</option>
+                      ))}
+                    </select>
+                    {form.workingHours && (
+                      <div style={{ fontSize: "0.8rem", color: "#64748b", marginTop: 4 }}>
+                        Time: {form.workingHours}
+                      </div>
+                    )}
                   </div>
                   <div className="hub-form-group" style={{ marginBottom: 16 }}>
                     <label>Reporting To</label>
