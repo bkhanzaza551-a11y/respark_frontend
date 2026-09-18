@@ -883,6 +883,39 @@ export default function ExpensesPage() {
           .ledger-table-container {
             overflow-x: auto !important;
           }
+          /* Fix filter panel on mobile */
+          .expenses-filter-panel {
+            flex-direction: column !important;
+            align-items: stretch !important;
+            gap: 12px !important;
+          }
+          .filters-group {
+            flex-direction: column !important;
+            align-items: stretch !important;
+            gap: 10px !important;
+            width: 100% !important;
+          }
+          .filter-item {
+            flex-direction: column !important;
+            align-items: flex-start !important;
+            gap: 4px !important;
+            width: 100% !important;
+          }
+          .filter-select, .filter-input {
+            width: 100% !important;
+            min-width: unset !important;
+            box-sizing: border-box !important;
+          }
+          .filter-actions {
+            display: flex !important;
+            gap: 10px !important;
+            flex-wrap: wrap !important;
+            width: 100% !important;
+          }
+          .blue-btn, .blue-btn-secondary {
+            flex: 1 !important;
+            justify-content: center !important;
+          }
         }
       `}</style>
 
@@ -1000,7 +1033,7 @@ export default function ExpensesPage() {
                     </div>
                   </div>
 
-                  <div style={{ display: "flex", gap: 10 }}>
+                  <div className="filter-actions" style={{ display: "flex", gap: 10 }}>
                     <button className="blue-btn-secondary" onClick={loadData}>
                       <Search size={14} /> Show Expenses
                     </button>
@@ -1263,7 +1296,7 @@ export default function ExpensesPage() {
                     </div>
                   </div>
 
-                  <div style={{ display: "flex", gap: 10 }}>
+                  <div className="filter-actions" style={{ display: "flex", gap: 10 }}>
                     <button className="blue-btn-secondary" onClick={() => setShowAddBalanceModal(true)}>
                       <Plus size={14} /> Add Balance
                     </button>
