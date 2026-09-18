@@ -67,6 +67,7 @@ export default function UsersPage() {
   const [rows, setRows] = useState([]);
   const [services, setServices] = useState([]);
   const [customRoles, setCustomRoles] = useState([]);
+  const [shifts, setShifts] = useState([]);
   const [designationOptions, setDesignationOptions] = useState([]);
   const [query, setQuery] = useState("");
   const [selectedId, setSelectedId] = useState("");
@@ -204,7 +205,7 @@ export default function UsersPage() {
         api.get("/owner/users", { params: branchId ? { branchId } : {} }),
         api.get("/owner/services", { params: branchId ? { branchId } : {} }),
         api.get("/owner/custom-roles"),
-        api.get("/owner/designations")
+        api.get("/owner/designations"), api.get("/owner/shifts", { params: branchId ? { branchId } : {} })
       ]);
       setRows(usersResponse.data);
       setServices(servicesResponse.data);
@@ -904,20 +905,21 @@ export default function UsersPage() {
                           <input type="text" className="hub-input" value={form.uanNumber} onChange={(event) => setForm({ ...form, uanNumber: event.target.value })} placeholder="12-digit UAN" pattern="\d{12}" maxLength={12} />
                         </div>
                         <div className="hub-form-group">
-                          <label>Working Hours</label>
-                          <div style={{ display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap" }}>
-                            <input type="time" className="hub-input" value={form.workingHoursStart || ""} onChange={e => {
-                              const start = e.target.value;
-                              const end = form.workingHoursEnd || "";
-                              setForm({ ...form, workingHoursStart: start, workingHours: start && end ? `${start} - ${end}` : start || "" });
-                            }} style={{ flex: 1, minWidth: 110 }} />
-                            <span style={{ color: "#64748b", fontSize: 13, flexShrink: 0 }}>to</span>
-                            <input type="time" className="hub-input" value={form.workingHoursEnd || ""} onChange={e => {
-                              const end = e.target.value;
-                              const start = form.workingHoursStart || "";
-                              setForm({ ...form, workingHoursEnd: end, workingHours: start && end ? `${start} - ${end}` : "" });
-                            }} style={{ flex: 1, minWidth: 110 }} />
-                          </div>
+                          <label>Working Shift</label>
+                          <select className="hub-input" value={form.shiftId || ""} onChange={e => {
+                            const sid = e.target.value;
+                            const shift = shifts.find(s => s.id === sid);
+                            setForm({
+                              ...form, 
+                              shiftId: sid,
+                              workingHours: shift && shift.startTime && shift.endTime ? `${shift.startTime} - ${shift.endTime}` : ""
+                            });
+                          }}>
+                            <option value="">Select Shift...</option>
+                            {shifts.map(s => (
+                              <option key={s.id} value={s.id}>{s.name} ({s.startTime || 'Custom'} - {s.endTime || 'Custom'})</option>
+                            ))}
+                          </select>
                         </div>
                         <div className="hub-form-group">
                           <label>Reporting To</label>
