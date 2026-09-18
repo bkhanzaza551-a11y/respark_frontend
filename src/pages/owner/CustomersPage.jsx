@@ -1343,6 +1343,9 @@ export default function CustomersPage() {
             .crm-actions { overflow-x:auto; padding-bottom:8px; }
             .filter-categories { width:160px; }
             .cust-detail-panel { width:100vw; }
+            .cust-detail-layout { flex-direction: column; }
+            .cust-detail-sidebar { width: 100%; max-height: 40vh; flex-shrink: 0; }
+            .cust-detail-content { width: 100%; flex: 1; }
           }
         `}
       </style>
