@@ -551,24 +551,24 @@ export default function ReferralProgramPage() {
               ) : (
                 <div className="list-stack" style={{ gap: 12, maxHeight: "55vh", overflowY: "auto" }}>
                   {wallets.map((w) => (
-                    <div key={w.id} className="list-item" style={{ cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "space-between", padding: "16px 20px", transition: "all 0.2s" }} onClick={() => loadWalletDetail(w.partnerId)}>
-                      <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
+                    <div key={w.id} className="list-item" style={{ cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 12, padding: "16px 20px", transition: "all 0.2s" }} onClick={() => loadWalletDetail(w.partnerId)}>
+                      <div style={{ display: "flex", alignItems: "center", gap: 12, flex: 1, minWidth: 0 }}>
                         <div style={{ width: 44, height: 44, borderRadius: "50%", background: "#f0fdf4", color: "#16a34a", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18, fontWeight: 600, flexShrink: 0 }}>
                           {(w.partner?.name || "?").charAt(0).toUpperCase()}
                         </div>
-                        <div>
-                          <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                        <div style={{ minWidth: 0 }}>
+                          <div style={{ display: "flex", alignItems: "center", flexWrap: "wrap", gap: 8 }}>
                             <strong style={{ fontSize: 15, color: "#0f172a" }}>{w.partner?.name || "Unknown Partner"}</strong>
                             {w.partner?.phone && <span style={{ fontSize: 13, color: "#64748b", background: "#f1f5f9", padding: "2px 8px", borderRadius: 12 }}>{w.partner.phone}</span>}
                           </div>
-                          <div style={{ display: "flex", gap: 16, marginTop: 6, fontSize: 13 }}>
+                          <div style={{ display: "flex", flexWrap: "wrap", gap: 10, marginTop: 6, fontSize: 13 }}>
                             <span style={{ display: "flex", alignItems: "center", gap: 4, color: "#16a34a", fontWeight: 600 }}><div style={{ width: 6, height: 6, borderRadius: "50%", background: "#22c55e" }}></div> {Number(w.balance)} cr</span>
                             <span style={{ color: "#64748b" }}>Earned: {Number(w.totalEarned)} cr</span>
                             <span style={{ color: "#64748b" }}>Redeemed: {Number(w.totalRedeemed)} cr</span>
                           </div>
                         </div>
                       </div>
-                      <button className="cpn-btn cpn-btn-ghost" style={{ fontSize: 13, color: "#16a34a", padding: "6px 12px", border: "1px solid #f0fdf4", background: "#f0fdf4" }}>Ledger →</button>
+                      <button className="cpn-btn cpn-btn-ghost" style={{ fontSize: 13, color: "#16a34a", padding: "6px 12px", border: "1px solid #f0fdf4", background: "#f0fdf4", flexShrink: 0 }}>Ledger →</button>
                     </div>
                   ))}
                 </div>
