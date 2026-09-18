@@ -1713,7 +1713,7 @@ export default function InventoryPage() {
 
       {isPurchaseOrderModalOpen && (
         <div className="slide-panel-overlay" onClick={closePurchaseOrderModal}>
-          <div className="slide-panel" onClick={e => e.stopPropagation()} style={{ width: 560 }}>
+          <div className="slide-panel po-slide-panel" onClick={e => e.stopPropagation()} style={{ width: 560 }}>
             <div className="sp-header">
               <button className="sp-close" onClick={closePurchaseOrderModal}><ArrowLeft size={18} /></button>
               <h3>Create Purchase Order</h3>
@@ -1721,7 +1721,7 @@ export default function InventoryPage() {
             <form onSubmit={handlePurchaseOrderSubmit} style={{ display: "flex", flexDirection: "column", flexGrow: 1, overflow: "hidden" }}>
               <div className="sp-body">
                 {status.error && <div style={{ color: "#ef4444", padding: 12, background: "#fef2f2", borderRadius: 8, fontSize: "0.9rem" }}>{status.error}</div>}
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+                <div className="po-form-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
                   <div className="sp-group">
                     <label className="sp-label">Branch</label>
                     <CustomDropdown className="sp-input" required value={purchaseOrderForm.branchId} onChange={e => setPurchaseOrderForm({ ...purchaseOrderForm, branchId: e.target.value })}>
@@ -1753,7 +1753,7 @@ export default function InventoryPage() {
                 {purchaseOrderForm.items.map((item, index) => {
                   const selectedProduct = products.find((product) => product.id === item.productId);
                   return (
-                    <div key={`${item.productId || "item"}-${index}`} style={{ background: "white", border: "1px solid #e2e8f0", borderRadius: 12, padding: 16, display: "grid", gridTemplateColumns: "2fr 1fr 1fr auto", gap: 12, alignItems: "end" }}>
+                    <div className="po-item-row" key={`${item.productId || "item"}-${index}`} style={{ background: "white", border: "1px solid #e2e8f0", borderRadius: 12, padding: 16, display: "grid", gridTemplateColumns: "2fr 1fr 1fr auto", gap: 12, alignItems: "end" }}>
                       <div className="sp-group">
                         <label className="sp-label">Product</label>
                         <CustomDropdown
