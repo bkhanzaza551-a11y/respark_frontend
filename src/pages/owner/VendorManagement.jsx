@@ -74,6 +74,9 @@ function Toggle({ checked, onChange, activeLabel = "Active", inactiveLabel = "In
         type="button"
         onClick={onChange}
         style={{
+          padding: 0,
+          margin: 0,
+          boxSizing: "border-box",
           width: 52,
           height: 28,
           borderRadius: 14,
