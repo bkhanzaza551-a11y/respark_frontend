@@ -772,7 +772,8 @@ export default function InventoryPage() {
                 <div style={{ width: 8, height: 24, background: "#10b981", borderRadius: 4 }}></div>
                 <h3 style={{ margin: 0, fontSize: "1.1rem", color: "#0f172a", fontWeight: 700 }}>Most Used Consumables</h3>
               </div>
-              <table style={{ width: "100%", borderCollapse: "collapse", textAlign: "left" }}>
+              <div style={{ overflowX: "auto", width: "100%" }}>
+              <table style={{ width: "100%", minWidth: "650px", borderCollapse: "collapse", textAlign: "left" }}>
                 <thead>
                   <tr style={{ background: "#f8fafc", color: "#64748b", fontSize: "0.75rem", textTransform: "uppercase", letterSpacing: "0.05em" }}>
                     <th style={{ padding: "16px 24px", fontWeight: 700 }}>Product Name</th>
@@ -797,6 +798,7 @@ export default function InventoryPage() {
                   {mostUsedConsumables.length === 0 && <tr><td colSpan="4" style={{ padding: 32, textAlign: "center", color: "#94a3b8", fontSize: "0.95rem" }}>No consumables used yet.</td></tr>}
                 </tbody>
               </table>
+              </div>
             </div>
           </div>
         )}
@@ -957,7 +959,8 @@ export default function InventoryPage() {
                   </span>
                 </div>
               ) : (
-                <table style={{ width: "100%", borderCollapse: "collapse", textAlign: "left" }}>
+                <div style={{ overflowX: "auto", width: "100%" }}>
+                <table style={{ width: "100%", minWidth: "650px", borderCollapse: "collapse", textAlign: "left" }}>
                   <thead>
                     <tr style={{ background: "#f8fafc", color: "#475569", fontSize: "0.85rem", textTransform: "uppercase" }}>
                       <th style={{ padding: "16px 24px", fontWeight: 600 }}>PO #</th>
@@ -983,6 +986,7 @@ export default function InventoryPage() {
                     ))}
                   </tbody>
                 </table>
+                </div>
               )}
             </div>
           </div>
@@ -1089,9 +1093,10 @@ export default function InventoryPage() {
 
                   {/* Items List Table */}
                   <div style={{ flexGrow: 1, overflowY: "auto", minHeight: 250 }}>
-                    <table style={{ width: "100%", borderCollapse: "collapse", textAlign: "left" }}>
-                      <thead>
-                        <tr style={{ background: "#e0f2fe", color: "#0369a1", fontSize: "0.85rem", textTransform: "uppercase" }}>
+                    <div style={{ overflowX: "auto", width: "100%" }}>
+                      <table style={{ width: "100%", minWidth: "600px", borderCollapse: "collapse", textAlign: "left" }}>
+                        <thead>
+                          <tr style={{ background: "#e0f2fe", color: "#0369a1", fontSize: "0.85rem", textTransform: "uppercase" }}>
                           <th style={{ padding: "12px 16px", fontWeight: 600 }}>Sr.No.</th>
                           <th style={{ padding: "12px 16px", fontWeight: 600 }}>Item Name</th>
                           <th style={{ padding: "12px 16px", fontWeight: 600 }}>In Stock</th>
@@ -1131,6 +1136,7 @@ export default function InventoryPage() {
                         )}
                       </tbody>
                     </table>
+                      </div>
                   </div>
 
                   {/* Comment & Buttons Block */}
@@ -1312,7 +1318,7 @@ export default function InventoryPage() {
 
             {/* Table Area */}
             <div style={{ background: "white", borderRadius: 12, border: "1px solid #e2e8f0", overflowX: "auto" }}>
-              <table style={{ width: "100%", borderCollapse: "collapse", textAlign: "left", fontSize: "0.9rem" }}>
+              <table style={{ width: "100%", minWidth: "700px", borderCollapse: "collapse", textAlign: "left", fontSize: "0.9rem" }}>
                 <thead>
                   <tr style={{ background: "#e0f2fe", color: "#0369a1", textTransform: "none", borderBottom: "1px solid #cbd5e1" }}>
                     <th style={{ padding: "12px 16px", fontWeight: 600 }}>Category Name</th>
