@@ -1571,7 +1571,7 @@ export default function CustomersPage() {
                     }}
                     style={{ cursor: "pointer" }}
                   >
-                    <td><input type="checkbox" className="crm-table-checkbox" /></td>
+                    <td><input type="checkbox" className="crm-table-checkbox" onClick={(e) => e.stopPropagation()} /></td>
                     <td style={{ color: "#0f172a", fontWeight: 600 }}>{row.phone || "-"}</td>
                     <td style={{ fontWeight: 600 }}>{row.name || "-"}</td>
                     <td>{row.gender ? `${row.gender.charAt(0).toUpperCase()}${row.gender.slice(1).toLowerCase()}` : "-"}</td>
