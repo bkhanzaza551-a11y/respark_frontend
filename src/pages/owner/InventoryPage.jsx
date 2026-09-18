@@ -633,52 +633,52 @@ export default function InventoryPage() {
         {loading && <div style={{ position: "absolute", top: 20, left: "50%", transform: "translateX(-50%)", zIndex: 100 }}><PageLoader title="Loading..." /></div>}
         
         {activeTab === "Dashboard" && (
-          <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
-            <h2 style={{ margin: 0, fontSize: "1.6rem", color: "#0f172a", fontWeight: "700" }}>Inventory Dashboard</h2>
+          <div className="inv-dashboard-wrapper" style={{ display: "flex", flexDirection: "column", gap: 24 }}>
+            <h2 className="inv-dash-page-title" style={{ margin: 0, fontSize: "1.6rem", color: "#0f172a", fontWeight: "700" }}>Inventory Dashboard</h2>
             
             {/* Top KPI Row */}
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: 24 }}>
+            <div className="inv-kpi-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: 24 }}>
               
-              <div style={{ background: "#fff", borderRadius: 20, padding: "24px", display: "flex", justifyContent: "space-between", alignItems: "center", border: "1px solid #f1f5f9", boxShadow: "0 10px 15px -3px rgba(0, 0, 0, 0.02), 0 4px 6px -4px rgba(0, 0, 0, 0.02)" }}>
+              <div className="inv-kpi-card" style={{ background: "#fff", borderRadius: 20, padding: "24px", display: "flex", justifyContent: "space-between", alignItems: "center", border: "1px solid #f1f5f9", boxShadow: "0 10px 15px -3px rgba(0, 0, 0, 0.02), 0 4px 6px -4px rgba(0, 0, 0, 0.02)" }}>
                 <div>
-                  <div style={{ fontSize: "0.85rem", color: "#64748b", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.05em" }}>Pending PO</div>
-                  <div style={{ fontSize: "2.2rem", fontWeight: 800, color: "#0f172a", marginTop: 8 }}>{pendingOrders}</div>
+                  <div className="inv-kpi-label" style={{ fontSize: "0.85rem", color: "#64748b", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.05em" }}>Pending PO</div>
+                  <div className="inv-kpi-val" style={{ fontSize: "2.2rem", fontWeight: 800, color: "#0f172a", marginTop: 8 }}>{pendingOrders}</div>
                 </div>
-                <div style={{ width: 60, height: 60, borderRadius: 16, background: "#f3e8ff", display: "flex", alignItems: "center", justifyContent: "center", color: "#9333ea", boxShadow: "0 4px 10px rgba(147, 51, 234, 0.1)" }}>
-                  <ShoppingCart size={28} strokeWidth={2.5} />
+                <div className="inv-kpi-icon-box" style={{ width: 60, height: 60, borderRadius: 16, background: "#f3e8ff", display: "flex", alignItems: "center", justifyContent: "center", color: "#9333ea", boxShadow: "0 4px 10px rgba(147, 51, 234, 0.1)" }}>
+                  <ShoppingCart className="inv-kpi-icon" size={28} strokeWidth={2.5} />
                 </div>
               </div>
 
-              <div style={{ background: "#fff", borderRadius: 20, padding: "24px", display: "flex", justifyContent: "space-between", alignItems: "center", border: "1px solid #f1f5f9", boxShadow: "0 10px 15px -3px rgba(0, 0, 0, 0.02), 0 4px 6px -4px rgba(0, 0, 0, 0.02)" }}>
+              <div className="inv-kpi-card" style={{ background: "#fff", borderRadius: 20, padding: "24px", display: "flex", justifyContent: "space-between", alignItems: "center", border: "1px solid #f1f5f9", boxShadow: "0 10px 15px -3px rgba(0, 0, 0, 0.02), 0 4px 6px -4px rgba(0, 0, 0, 0.02)" }}>
                 <div>
-                  <div style={{ fontSize: "0.85rem", color: "#64748b", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.05em" }}>Approved PO</div>
-                  <div style={{ fontSize: "2.2rem", fontWeight: 800, color: "#0f172a", marginTop: 8 }}>{approvedOrders}</div>
+                  <div className="inv-kpi-label" style={{ fontSize: "0.85rem", color: "#64748b", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.05em" }}>Approved PO</div>
+                  <div className="inv-kpi-val" style={{ fontSize: "2.2rem", fontWeight: 800, color: "#0f172a", marginTop: 8 }}>{approvedOrders}</div>
                 </div>
-                <div style={{ width: 60, height: 60, borderRadius: 16, background: "#ecfdf5", display: "flex", alignItems: "center", justifyContent: "center", color: "#10b981", boxShadow: "0 4px 10px rgba(16, 185, 129, 0.1)" }}>
-                  <CheckCircle size={28} strokeWidth={2.5} />
+                <div className="inv-kpi-icon-box" style={{ width: 60, height: 60, borderRadius: 16, background: "#ecfdf5", display: "flex", alignItems: "center", justifyContent: "center", color: "#10b981", boxShadow: "0 4px 10px rgba(16, 185, 129, 0.1)" }}>
+                  <CheckCircle className="inv-kpi-icon" size={28} strokeWidth={2.5} />
                 </div>
               </div>
 
-              <div style={{ background: "#fff", borderRadius: 20, padding: "24px", display: "flex", justifyContent: "space-between", alignItems: "center", border: "1px solid #f1f5f9", boxShadow: "0 10px 15px -3px rgba(0, 0, 0, 0.02), 0 4px 6px -4px rgba(0, 0, 0, 0.02)" }}>
+              <div className="inv-kpi-card" style={{ background: "#fff", borderRadius: 20, padding: "24px", display: "flex", justifyContent: "space-between", alignItems: "center", border: "1px solid #f1f5f9", boxShadow: "0 10px 15px -3px rgba(0, 0, 0, 0.02), 0 4px 6px -4px rgba(0, 0, 0, 0.02)" }}>
                 <div>
-                  <div style={{ fontSize: "0.85rem", color: "#64748b", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.05em" }}>Rejected PO</div>
-                  <div style={{ fontSize: "2.2rem", fontWeight: 800, color: "#0f172a", marginTop: 8 }}>{rejectedOrders}</div>
+                  <div className="inv-kpi-label" style={{ fontSize: "0.85rem", color: "#64748b", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.05em" }}>Rejected PO</div>
+                  <div className="inv-kpi-val" style={{ fontSize: "2.2rem", fontWeight: 800, color: "#0f172a", marginTop: 8 }}>{rejectedOrders}</div>
                 </div>
-                <div style={{ width: 60, height: 60, borderRadius: 16, background: "#fef2f2", display: "flex", alignItems: "center", justifyContent: "center", color: "#ef4444", boxShadow: "0 4px 10px rgba(239, 68, 68, 0.1)" }}>
-                  <XCircle size={28} strokeWidth={2.5} />
+                <div className="inv-kpi-icon-box" style={{ width: 60, height: 60, borderRadius: 16, background: "#fef2f2", display: "flex", alignItems: "center", justifyContent: "center", color: "#ef4444", boxShadow: "0 4px 10px rgba(239, 68, 68, 0.1)" }}>
+                  <XCircle className="inv-kpi-icon" size={28} strokeWidth={2.5} />
                 </div>
               </div>
 
-              <div style={{ background: "#fff", borderRadius: 20, padding: "24px", display: "flex", justifyContent: "space-between", alignItems: "center", border: "1px solid #f1f5f9", boxShadow: "0 10px 15px -3px rgba(0, 0, 0, 0.02), 0 4px 6px -4px rgba(0, 0, 0, 0.02)", cursor: "pointer", transition: "transform 0.2s, box-shadow 0.2s" }} 
+              <div className="inv-kpi-card" style={{ background: "#fff", borderRadius: 20, padding: "24px", display: "flex", justifyContent: "space-between", alignItems: "center", border: "1px solid #f1f5f9", boxShadow: "0 10px 15px -3px rgba(0, 0, 0, 0.02), 0 4px 6px -4px rgba(0, 0, 0, 0.02)", cursor: "pointer", transition: "transform 0.2s, box-shadow 0.2s" }} 
                    onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 20px 25px -5px rgba(0, 0, 0, 0.05)'; }}
                    onMouseLeave={e => { e.currentTarget.style.transform = 'none'; e.currentTarget.style.boxShadow = '0 10px 15px -3px rgba(0, 0, 0, 0.02)'; }}
                    onClick={() => { setActiveTab("Low Stock"); navigate("/admin/inventory/low-stock"); }}>
                 <div>
-                  <div style={{ fontSize: "0.85rem", color: "#64748b", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.05em" }}>Min Stock Items</div>
-                  <div style={{ fontSize: "2.2rem", fontWeight: 800, color: "#0f172a", marginTop: 8 }}>{lowStock.length}</div>
+                  <div className="inv-kpi-label" style={{ fontSize: "0.85rem", color: "#64748b", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.05em" }}>Min Stock Items</div>
+                  <div className="inv-kpi-val" style={{ fontSize: "2.2rem", fontWeight: 800, color: "#0f172a", marginTop: 8 }}>{lowStock.length}</div>
                 </div>
-                <div style={{ width: 60, height: 60, borderRadius: 16, background: "#fffbeb", display: "flex", alignItems: "center", justifyContent: "center", color: "#f59e0b", boxShadow: "0 4px 10px rgba(245, 158, 11, 0.1)" }}>
-                  <AlertTriangle size={28} strokeWidth={2.5} />
+                <div className="inv-kpi-icon-box" style={{ width: 60, height: 60, borderRadius: 16, background: "#fffbeb", display: "flex", alignItems: "center", justifyContent: "center", color: "#f59e0b", boxShadow: "0 4px 10px rgba(245, 158, 11, 0.1)" }}>
+                  <AlertTriangle className="inv-kpi-icon" size={28} strokeWidth={2.5} />
                 </div>
               </div>
             </div>
