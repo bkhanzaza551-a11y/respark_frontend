@@ -270,6 +270,13 @@ export default function ReferralProgramPage() {
         .cpn-radio-group { display: flex; gap: 16px; background: #f8fafc; padding: 6px; border-radius: 12px; border: 1px solid #e2e8f0; }
         .cpn-radio-option { flex: 1; text-align: center; padding: 8px 12px; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: 600; transition: all 0.2s; color: #64748b; }
         .cpn-radio-option.active { background: white; color: #0f172a; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        @media (max-width: 700px) {
+          .cpn-card { padding: 16px !important; }
+          .cpn-header-row { flex-direction: column !important; align-items: stretch !important; }
+          .cpn-search-area { flex-direction: column !important; align-items: stretch !important; justify-content: flex-start !important; }
+          .cpn-input { width: 100% !important; max-width: none !important; }
+          .cpn-btn { width: 100% !important; }
+        }
       `}</style>
       <div style={{ marginBottom: 18 }}>
         <h1 style={{ margin: 0, fontSize: 22, fontWeight: 700, color: "#0f172a" }}>Referral Program</h1>
@@ -291,9 +298,9 @@ export default function ReferralProgramPage() {
         <div className="cpn-card anim-fade">
           {!showCouponForm ? (
             <>
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16, flexWrap: "wrap", gap: 12 }}>
+              <div className="cpn-header-row" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16, flexWrap: "wrap", gap: 12 }}>
                 <h3 style={{ margin: 0 }}>Referral Coupons <span style={{ fontSize: 13, fontWeight: 400, color: "#64748b" }}>({filteredCoupons.length})</span></h3>
-                <div style={{ display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap", flex: 1, justifyContent: "flex-end" }}>
+                <div className="cpn-search-area" style={{ display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap", flex: 1, justifyContent: "flex-end" }}>
                   <input type="text" className="cpn-input" placeholder="Search..." value={couponSearch} onChange={(e) => setCouponSearch(e.target.value)} style={{ padding: "8px 12px", fontSize: 13, flex: 1, minWidth: 120, maxWidth: 180 }} />
                   <label style={{ fontSize: 12, color: "#475569", display: "flex", alignItems: "center", gap: 4, whiteSpace: "nowrap" }}>
                     <input type="checkbox" checked={showArchived} onChange={(e) => setShowArchived(e.target.checked)} />
@@ -479,7 +486,7 @@ export default function ReferralProgramPage() {
 
       {!loading && activeTab === "partners" && (
         <div className="cpn-card anim-fade">
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16, flexWrap: "wrap", gap: 12 }}>
+          <div className="cpn-header-row" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16, flexWrap: "wrap", gap: 12 }}>
             <h3 style={{ margin: 0 }}>Affiliate Partners</h3>
             <button onClick={() => { setOnboardForm({ name: "", phone: "", discountValue: 10, partnerCreditValue: 5, title: "" }); setShowOnboardModal(true); }} className="cpn-btn cpn-btn-primary" style={{ fontSize: 13, whiteSpace: "nowrap" }}>+ Onboard Partner</button>
           </div>
