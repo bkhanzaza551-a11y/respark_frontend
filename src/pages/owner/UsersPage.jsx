@@ -78,6 +78,7 @@ export default function UsersPage() {
   const [enrollmentCaptureBusy, setEnrollmentCaptureBusy] = useState(false);
   const [enrollmentCameraOpen, setEnrollmentCameraOpen] = useState(false);
   const [enrollmentCameraError, setEnrollmentCameraError] = useState("");
+  const [isMobileDetailView, setIsMobileDetailView] = useState(false);
   const enrollmentVideoRef = useRef(null);
   const enrollmentCanvasRef = useRef(null);
   const enrollmentStreamRef = useRef(null);
@@ -298,6 +299,7 @@ export default function UsersPage() {
   };
 
   const startCreate = () => {
+    setIsMobileDetailView(true);
     resetForm();
     setForm((current) => ({ ...current, branchId: selectedBranchId || "" }));
     setStatus((current) => ({ ...current, error: "", success: "" }));
@@ -475,13 +477,58 @@ export default function UsersPage() {
     startTransition(() => {
       setSelectedId(rowId);
       const row = filteredRows.find((r) => r.id === rowId);
-      if (row) startEdit(row);
+      if (row) { startEdit(row); setIsMobileDetailView(true); }
     });
   };
 
   return (
     <div className="page-shell users-page-shell" style={{ padding: 0, height: '100vh', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
-      {enrollmentCameraOpen && (
+      <style>{
+  @media (max-width: 900px) {
+    .users-page-shell .hub-container {
+      flex-direction: column !important;
+    }
+    .users-page-shell .hub-container.has-selection .hub-sidebar {
+      display: none !important;
+    }
+    .users-page-shell .hub-container:not(.has-selection) .hub-items-col {
+      display: none !important;
+    }
+    .users-page-shell .hub-sidebar, .users-page-shell .hub-items-col {
+      width: 100% !important;
+      height: 100% !important;
+      max-height: none !important;
+      border-right: none !important;
+      flex: 1 !important;
+      overflow-y: auto !important;
+    }
+    .users-page-shell .responsive-profile-padding {
+      padding: 16px !important;
+      width: 100% !important;
+      box-sizing: border-box !important;
+    }
+    .users-page-shell .responsive-profile-header {
+      padding: 16px !important;
+      width: 100% !important;
+      box-sizing: border-box !important;
+    }
+    .users-page-shell .responsive-grid {
+      grid-template-columns: 1fr !important;
+    }
+    .users-page-shell .responsive-stats-grid {
+      grid-template-columns: 1fr !important;
+    }
+    .users-page-shell .hub-form-group {
+      width: 100% !important;
+      box-sizing: border-box !important;
+    }
+    .mobile-back-btn {
+      display: block !important;
+    }
+  }
+  .mobile-back-btn { display: none; }
+}</style>
+        {enrollmentCameraOpen && (
         <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.92)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', zIndex: 99999, padding: 16 }}>
           <div style={{ width: 'min(100%, 480px)', display: 'flex', flexDirection: 'column', gap: 14 }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -540,7 +587,7 @@ export default function UsersPage() {
         <PageLoader title="Loading staff workspace" message="Pulling users, saved roles, branches, and services into one permission-controlled workspace." />
       ) : null}
 
-      <div className="hub-container" style={{ flex: 1, minHeight: 0, display: 'flex' }}>
+      <div className={`hub-container ${isMobileDetailView ? "has-selection" : ""}`} style={{ flex: 1, minHeight: 0, display: "flex" }}>
         {/* Left Sidebar: Directory */}
         <div className="hub-sidebar" style={{ width: 340, display: 'flex', flexDirection: 'column', background: 'white', borderRight: '1px solid #e2e8f0', paddingTop: 0 }}>
           <div className="hub-sidebar-header" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '20px 24px', borderBottom: '1px solid #e2e8f0', background: '#f8fafc' }}>
@@ -602,7 +649,8 @@ export default function UsersPage() {
             <>
               <div style={{ position: 'sticky', top: 0, zIndex: 10, background: 'white', borderBottom: '1px solid #e2e8f0' }}>
                 <div className="responsive-profile-header" style={{ padding: '24px 32px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', maxWidth: 900, margin: '0 auto' }}>
-                  <div className="responsive-profile-header-user" style={{ display: 'flex', gap: 20, alignItems: 'center' }}>
+                  <div className="responsive-profile-header-user" style={{ display: "flex", gap: 20, alignItems: "center" }}>
+  <button className="mobile-back-btn" onClick={() => setIsMobileDetailView(false)} style={{ background: "transparent", border: "none", fontSize: 16, cursor: "pointer", color: "#3b82f6", fontWeight: 600, padding: 0 }}>&larr; Back</button>
                     <div style={{ width: 72, height: 72, borderRadius: '50%', background: 'white', boxShadow: '0 4px 12px rgba(0, 0, 0, 0.05)' }}>
                       {selectedRow.avatarUrl ? (
                         <img
