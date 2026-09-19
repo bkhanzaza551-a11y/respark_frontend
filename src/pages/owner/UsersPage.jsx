@@ -908,7 +908,7 @@ export default function UsersPage() {
                         </div>
                         <div className="hub-form-group">
                           <label>Working Shift</label>
-                          <select className="hub-input" value={form.shiftId || ""} onChange={e => {
+                          <CustomDropdown className="hub-input" value={form.shiftId || ""} onChange={e => {
                             const sid = e.target.value;
                             const shift = shifts.find(s => s.id === sid);
                             setForm({
@@ -921,7 +921,7 @@ export default function UsersPage() {
                             {shifts.map(s => (
                               <option key={s.id} value={s.id}>{s.name}</option>
                             ))}
-                          </select>
+                          </CustomDropdown>
                           {form.workingHours && (
                             <div style={{ fontSize: "0.8rem", color: "#64748b", marginTop: 4 }}>
                               Time: {form.workingHours}
@@ -1114,7 +1114,7 @@ export default function UsersPage() {
                   </div>
                   <div className="hub-form-group" style={{ marginBottom: 16 }}>
                     <label>Working Shift</label>
-                    <select className="hub-input" value={form.shiftId || ""} onChange={e => {
+                    <CustomDropdown className="hub-input" value={form.shiftId || ""} onChange={e => {
                       const sid = e.target.value;
                       const shift = shifts.find(s => s.id === sid);
                       setForm({
@@ -1127,7 +1127,7 @@ export default function UsersPage() {
                       {shifts.map(s => (
                         <option key={s.id} value={s.id}>{s.name}</option>
                       ))}
-                    </select>
+                    </CustomDropdown>
                     {form.workingHours && (
                       <div style={{ fontSize: "0.8rem", color: "#64748b", marginTop: 4 }}>
                         Time: {form.workingHours}
