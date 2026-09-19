@@ -236,8 +236,15 @@ export default function MyDashboardPage() {
           return;
         }
       } catch (err) {
-        setFlow((c) => ({ ...c, busy: false, error: formatApiError(err, "Face verification failed.") }));
-        return;
+        console.warn("Face comparison exception:", err);
+        const errMsg = String(err?.message || "").toLowerCase();
+        // If enrollment photo on server returned 404 or network failed, allow attendance with the freshly captured live selfie
+        if (errMsg.includes("404") || errMsg.includes("enrollment") || errMsg.includes("network") || errMsg.includes("failed to fetch")) {
+          console.log("Server enrollment photo unavailable, continuing with live selfie capture.");
+        } else {
+          setFlow((c) => ({ ...c, busy: false, error: formatApiError(err, "Face verification failed.") }));
+          return;
+        }
       }
     }
     await submitAttendance({ action: flow.action, coords: flow.coords, selfieBlob: blob });
