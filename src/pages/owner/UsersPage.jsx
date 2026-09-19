@@ -201,11 +201,12 @@ export default function UsersPage() {
 
   const load = async (branchId = selectedBranchId) => {
     try {
-      const [usersResponse, servicesResponse, rolesResponse, designationsResponse] = await Promise.all([
+      const [usersResponse, servicesResponse, rolesResponse, designationsResponse, shiftsResponse] = await Promise.all([
         api.get("/owner/users", { params: branchId ? { branchId } : {} }),
         api.get("/owner/services", { params: branchId ? { branchId } : {} }),
         api.get("/owner/custom-roles"),
-        api.get("/owner/designations"), api.get("/owner/shifts", { params: branchId ? { branchId } : {} })
+        api.get("/owner/designations"),
+        api.get("/owner/shifts", { params: branchId ? { branchId } : {} })
       ]);
       setRows(usersResponse.data);
       setServices(servicesResponse.data);
@@ -215,6 +216,7 @@ export default function UsersPage() {
           ? designationsResponse.data.filter((row) => row?.active !== false && row?.name).map((row) => row.name)
           : []
       );
+      setShifts(Array.isArray(shiftsResponse.data) ? shiftsResponse.data : []);
     } catch {
       // Auth expired or network error — will redirect to login
     } finally {

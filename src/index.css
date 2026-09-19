@@ -588,6 +588,7 @@ pre {
 .sidebar-group {
   border-radius: 10px;
   overflow: hidden;
+  flex-shrink: 0;
 }
 
 .sidebar-group-toggle {
@@ -604,6 +605,7 @@ pre {
   transition: background 150ms ease, color 150ms ease;
   box-shadow: none;
   color: #9099a8;
+  flex-shrink: 0;
 }
 
 .sidebar-group-toggle:hover {
