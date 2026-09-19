@@ -8,11 +8,13 @@ import IndianPhoneInput from "../../components/IndianPhoneInput";
 import ModuleTabs from "../../components/ModuleTabs";
 import { formatApiError } from "../../utils/apiError";
 import PageLoader from "../../components/PageLoader";
+import { downloadFromApi } from "../../utils/download";
 import { 
 
   Users, UserPlus, Phone, Mail, FileText, Share2, AlertCircle, CheckCircle2, 
   BarChart3, RefreshCw, Filter, CalendarClock, MessageSquare, Briefcase, Plus,
-  Calendar, Edit3, Trash2, CheckSquare, Sparkles, MapPin, X
+  Calendar, Edit3, Trash2, CheckSquare, Sparkles, MapPin, X,
+  Download, Upload, FileSpreadsheet, ChevronDown
 } from "lucide-react";
 
 // Mapping between UI Status and DB Status
@@ -91,6 +93,10 @@ export default function EnquiriesPage() {
   const [actionNotes, setActionNotes] = useState("");
   const [newStatus, setNewStatus] = useState("");
 
+  // Import / Export states
+  const [showExportMenu, setShowExportMenu] = useState(false);
+  const [importing, setImporting] = useState(false);
+
   const mode = location.pathname.includes("/follow-ups")
     ? "followUps"
     : location.pathname.includes("/reports")
@@ -137,6 +143,16 @@ export default function EnquiriesPage() {
     void loadOptions();
     void load();
   }, [load, loadOptions, selectedBranchId]);
+
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (showExportMenu && !e.target.closest('.export-dropdown')) {
+        setShowExportMenu(false);
+      }
+    };
+    document.addEventListener('click', handleClickOutside);
+    return () => document.removeEventListener('click', handleClickOutside);
+  }, [showExportMenu]);
 
   // Handle Save
   const save = async (event) => {
@@ -268,7 +284,140 @@ export default function EnquiriesPage() {
     }
   };
 
-  const getStatusColor = (s) => {
+
+  // Export Enquiries (XLSX, XLS, CSV)
+  const handleExport = async (format) => {
+    setShowExportMenu(false);
+    try {
+      await downloadFromApi(`/owner/enquiries/export`, {
+        params: {
+          format,
+          ...(selectedBranchId ? { branchId: selectedBranchId } : {}),
+          ...(filterPhone ? { phone: filterPhone } : {}),
+          ...(filterFromDate ? { fromDate: filterFromDate } : {}),
+          ...(filterToDate ? { toDate: filterToDate } : {})
+        },
+        fallbackFilename: `Enquiries_Export.${format === "csv" ? "csv" : "xlsx"}`
+      });
+    } catch {
+      alert("Could not export enquiries");
+    }
+  };
+
+  // Client-side fallback sample excel sheet
+  const downloadClientSideSampleExcel = () => {
+    const headers = [
+      "Client Name (Mandatory)",
+      "Mobile No (Mandatory)",
+      "Email (Optional)",
+      "Service Interested (Optional)",
+      "Source (Optional)",
+      "Priority (Optional: LOW/MEDIUM/HIGH)",
+      "Status (Optional: NEW/CONTACTED/INTERESTED/CONVERTED/LOST)",
+      "Budget (Optional)",
+      "Follow Up Date (Optional YYYY-MM-DD)",
+      "Notes (Optional)"
+    ];
+
+    const sampleRows = [
+      ["Pooja Sharma", "9876543210", "pooja.sharma@example.com", "Hair Spa", "Instagram", "HIGH", "NEW", "2500", "2026-03-25", "Interested in bridal package inquiry"],
+      ["Rahul Verma", "9812345678", "rahul.v@example.com", "Beard Trim & Styling", "Walk-in", "MEDIUM", "CONTACTED", "800", "2026-03-22", "Followed up via phone call"],
+      ["Ananya Roy", "9898765432", "ananya.roy@example.com", "Facial & Glow Treatment", "Website", "HIGH", "INTERESTED", "3500", "2026-03-24", "Requested weekend appointment slot"],
+      ["Vikas Kapoor", "9765432109", "vikas.k@example.com", "Men's Haircut", "Referral", "LOW", "NEW", "500", "", "Friend referred by existing member"],
+      ["Simran Kaur", "9988776655", "simran.kaur@example.com", "Keratin Treatment", "Phone Call", "HIGH", "INTERESTED", "6000", "2026-03-26", "Asked about chemical-free keratin options"]
+    ];
+
+    let xml = '<?xml version="1.0"?>\n<?mso-application progid="Excel.Sheet"?>\n<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:excel" xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet">\n';
+    xml += '<Styles>\n';
+    xml += '  <Style ss:ID="Default" ss:Name="Normal"><Alignment ss:Vertical="Center"/><Font ss:FontName="Calibri" ss:Size="11"/></Style>\n';
+    xml += '  <Style ss:ID="HeaderMandatory"><Alignment ss:Horizontal="Center" ss:Vertical="Center"/><Font ss:FontName="Calibri" ss:Size="11" ss:Bold="1" ss:Color="#FFFFFF"/><Interior ss:Color="#1E3A8A" ss:Pattern="Solid"/><Borders><Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="2"/></Borders></Style>\n';
+    xml += '  <Style ss:ID="HeaderOptional"><Alignment ss:Horizontal="Center" ss:Vertical="Center"/><Font ss:FontName="Calibri" ss:Size="11" ss:Bold="1" ss:Color="#FFFFFF"/><Interior ss:Color="#1E293B" ss:Pattern="Solid"/><Borders><Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="2"/></Borders></Style>\n';
+    xml += '  <Style ss:ID="DataCell"><Alignment ss:Vertical="Center"/><Font ss:FontName="Calibri" ss:Size="10"/><Borders><Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#E2E8F0"/><Border ss:Position="Right" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#E2E8F0"/></Borders></Style>\n';
+    xml += '  <Style ss:ID="DataCellAlt"><Alignment ss:Vertical="Center"/><Font ss:FontName="Calibri" ss:Size="10"/><Interior ss:Color="#F8FAFC" ss:Pattern="Solid"/><Borders><Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#E2E8F0"/><Border ss:Position="Right" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#E2E8F0"/></Borders></Style>\n';
+    xml += '</Styles>\n';
+    xml += '<Worksheet ss:Name="Enquiry Test Data">\n<Table>\n';
+
+    headers.forEach(() => {
+      xml += '<Column ss:AutoFitWidth="1" ss:Width="140"/>\n';
+    });
+
+    xml += '<Row ss:Height="28">\n';
+    headers.forEach((h, i) => {
+      const style = i < 2 ? 'HeaderMandatory' : 'HeaderOptional';
+      xml += `  <Cell ss:StyleID="${style}"><Data ss:Type="String">${h}</Data></Cell>\n`;
+    });
+    xml += '</Row>\n';
+
+    sampleRows.forEach((row, rowIdx) => {
+      const style = rowIdx % 2 === 1 ? 'DataCellAlt' : 'DataCell';
+      xml += '<Row ss:Height="22">\n';
+      row.forEach((val) => {
+        xml += `  <Cell ss:StyleID="${style}"><Data ss:Type="String">${String(val || '')}</Data></Cell>\n`;
+      });
+      xml += '</Row>\n';
+    });
+
+    xml += '</Table>\n</Worksheet>\n</Workbook>';
+
+    const blob = new Blob([xml], { type: 'application/vnd.ms-excel;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'Enquiries_Test_Data.xls';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
+
+  // Download Test Excel Sheet (Sample Template)
+  const handleDownloadTestExcel = async () => {
+    setShowExportMenu(false);
+    try {
+      await downloadFromApi(`/owner/enquiries/test-template`, {
+        fallbackFilename: "Enquiries_Test_Data.xlsx"
+      });
+    } catch {
+      try {
+        downloadClientSideSampleExcel();
+      } catch {
+        alert("Could not download test Excel sheet");
+      }
+    }
+  };
+
+  // Import Enquiries from file
+  const handleImportClick = () => {
+    const input = document.createElement("input");
+    input.type = "file";
+    input.accept = ".csv,.xlsx,.xls";
+    input.onchange = async (e) => {
+      const file = e.target.files?.[0];
+      if (!file) return;
+
+      const formData = new FormData();
+      formData.append("file", file);
+
+      setImporting(true);
+      setStatus({ error: "", success: "" });
+      try {
+        const response = await api.post("/owner/enquiries/import", formData, {
+          headers: { "Content-Type": "multipart/form-data" }
+        });
+        alert(response.data.message || "Enquiries imported successfully!");
+        setStatus({ error: "", success: response.data.message || "Enquiries imported successfully!" });
+        await load();
+      } catch (err) {
+        alert(formatApiError(err, "Could not import enquiries file"));
+        setStatus({ error: formatApiError(err, "Could not import enquiries file"), success: "" });
+      } finally {
+        setImporting(false);
+      }
+    };
+    input.click();
+  };
+
+    const getStatusColor = (s) => {
     switch (s) {
       case 'NEW': return { bg: '#dbeafe', text: '#1e40af' };
       case 'CONTACTED': return { bg: '#fef3c7', text: '#b45309' };
@@ -322,6 +471,21 @@ export default function EnquiriesPage() {
         .filter-group label { font-size: 14px; font-weight: 600; color: #475569; white-space: nowrap; }
         
         .empty-records-container { border: 2px dashed #e2e8f0; border-radius: 12px; padding: 60px 20px; text-align: center; color: #64748b; font-weight: 600; font-size: 18px; background: #fafafa; }
+        
+        .export-dropdown { position: relative; display: inline-block; }
+        .export-menu { position: absolute; right: 0; top: calc(100% + 6px); background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.12), 0 8px 10px -6px rgba(0,0,0,0.08); z-index: 100; min-width: 220px; padding: 6px 0; overflow: hidden; animation: modalFadeIn 0.15s ease both; }
+        .export-item { display: flex; align-items: center; width: 100%; padding: 10px 16px; border: none; background: transparent; text-align: left; font-size: 13px; font-weight: 500; color: #334155; cursor: pointer; transition: background 0.15s; }
+        .export-item:hover { background: #f8fafc; color: #0f172a; }
+        .eq-actions-group { display: flex; align-items: center; gap: 10px; margin-left: auto; flex-wrap: wrap; }
+        
+        @media (max-width: 900px) {
+          .filter-bar { flex-direction: column !important; align-items: stretch !important; gap: 12px !important; }
+          .filter-group { width: 100% !important; }
+          .filter-group .eq-input { width: 100% !important; }
+          .eq-actions-group { width: 100% !important; margin-left: 0 !important; justify-content: stretch !important; }
+          .eq-actions-group .eq-btn, .eq-actions-group .export-dropdown { flex: 1 1 calc(50% - 6px) !important; width: 100% !important; }
+          .eq-actions-group .export-dropdown .eq-btn { width: 100% !important; }
+        }
       `}</style>
 
       <ModuleTabs
@@ -338,9 +502,9 @@ export default function EnquiriesPage() {
 
       {mode === "enquiries" && (
         <div className="anim-fade">
-          {/* ── FILTER BAR (Matching Screenshot 1) ── */}
+          {/* ── FILTER BAR with Import, Export, Test Excel Sheet ── */}
           <div className="filter-bar">
-            <div className="filter-group" style={{ flex: "1 1 200px" }}>
+            <div className="filter-group" style={{ flex: "1 1 180px" }}>
               <input 
                 type="text" 
                 className="eq-input" 
@@ -355,7 +519,7 @@ export default function EnquiriesPage() {
               <input 
                 type="date" 
                 className="eq-input" 
-                style={{ width: "160px" }}
+                style={{ width: "150px" }}
                 value={filterFromDate}
                 onChange={(e) => setFilterFromDate(e.target.value)}
                 max={filterToDate || undefined}
@@ -367,24 +531,59 @@ export default function EnquiriesPage() {
               <input 
                 type="date" 
                 className="eq-input" 
-                style={{ width: "160px" }}
+                style={{ width: "150px" }}
                 value={filterToDate}
                 onChange={(e) => setFilterToDate(e.target.value)}
                 min={filterFromDate || undefined}
               />
             </div>
 
-            <button className="eq-btn eq-btn-secondary" style={{ height: "40px" }} onClick={() => { setFilterPhone(""); setFilterFromDate(""); setFilterToDate(""); }}>
+            <button className="eq-btn eq-btn-secondary" style={{ height: "40px" }} onClick={() => { setFilterPhone(""); setFilterFromDate(""); setFilterToDate(""); }} title="Reset Filters">
               <RefreshCw size={15} />
             </button>
 
-            <button 
-              className="eq-btn eq-btn-primary" 
-              style={{ marginLeft: "auto" }}
-              onClick={() => setShowModal(true)}
-            >
-              <Plus size={16} /> Add Enquiry
-            </button>
+            <div className="eq-actions-group">
+              <button 
+                className="eq-btn eq-btn-secondary" 
+                onClick={handleImportClick}
+                disabled={importing}
+                title="Import Enquiries from Excel or CSV"
+              >
+                <Upload size={16} /> {importing ? "Importing..." : "Import"}
+              </button>
+
+              <button 
+                className="eq-btn" 
+                onClick={handleDownloadTestExcel} 
+                title="Download Test / Sample Excel Sheet" 
+                style={{ borderColor: '#3b82f6', color: '#1d4ed8', background: '#eff6ff', border: '1px solid #bfdbfe' }}
+              >
+                <FileSpreadsheet size={16} /> Test Excel Sheet
+              </button>
+
+              <div className="export-dropdown">
+                <button className="eq-btn eq-btn-secondary" onClick={() => setShowExportMenu((current) => !current)}>
+                  <Download size={16} /> Export <ChevronDown size={14} />
+                </button>
+                {showExportMenu && (
+                  <div className="export-menu">
+                    <button className="export-item" onClick={() => handleExport("xlsx")}>Export as XLSX</button>
+                    <button className="export-item" onClick={() => handleExport("xls")}>Export as XLS</button>
+                    <button className="export-item" onClick={() => handleExport("csv")}>Export as CSV</button>
+                    <button className="export-item" onClick={handleDownloadTestExcel} style={{ borderTop: '1px solid #e2e8f0', fontWeight: 600, color: '#2563eb' }}>
+                      <FileSpreadsheet size={14} style={{ marginRight: 6 }} /> Download Test Excel Sheet
+                    </button>
+                  </div>
+                )}
+              </div>
+
+              <button 
+                className="eq-btn eq-btn-primary" 
+                onClick={() => setShowModal(true)}
+              >
+                <Plus size={16} /> Add Enquiry
+              </button>
+            </div>
           </div>
 
           {/* ── ENQUIRIES TABLE OR EMPTY STATE ── */}
