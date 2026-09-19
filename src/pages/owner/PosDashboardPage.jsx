@@ -289,9 +289,11 @@ export default function PosDashboardPage() {
           staffName: a.primaryStaff?.user?.name || ""
         }));
 
-      let merged = [...invoiceRows, ...scheduledAppointments];
-      if (statusFilter === "SCHEDULED") {
-        merged = merged.filter(r => r._type === "appointment");
+      let merged = [...invoiceRows];
+      if (!statusFilter) {
+        merged = [...merged, ...scheduledAppointments];
+      } else if (statusFilter === "SCHEDULED") {
+        merged = [...scheduledAppointments];
       }
 
       merged.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
