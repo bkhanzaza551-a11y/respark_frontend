@@ -689,6 +689,7 @@ pre {
   font-weight: 500;
   color: #7c8494;
   transition: background 140ms ease, color 140ms ease;
+  flex-shrink: 0;
 }
 
 .sidebar-link:hover {
