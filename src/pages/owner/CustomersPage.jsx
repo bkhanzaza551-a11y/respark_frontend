@@ -80,6 +80,7 @@ export default function CustomersPage() {
   const { selectedBranchId } = useBranch();
   const [selectedBillInvoice, setSelectedBillInvoice] = useState(null);
   const [rows, setRows] = useState([]);
+  const [selectedRows, setSelectedRows] = useState([]);
   const [sortConfig, setSortConfig] = useState({ key: null, direction: "desc" });
   const [currentPage, setCurrentPage] = useState(1);
   const pageSize = 15;
@@ -1545,7 +1546,7 @@ export default function CustomersPage() {
             <table className="crm-table">
               <thead>
                 <tr>
-                  <th style={{ width: 40 }}><input type="checkbox" className="crm-table-checkbox" /></th>
+                  <th style={{ width: 40 }}><input type="checkbox" className="crm-table-checkbox" checked={paginatedRows.length > 0 && paginatedRows.every(r => selectedRows.includes(r.id))} onChange={(e) => { if (e.target.checked) { setSelectedRows(prev => [...new Set([...prev, ...paginatedRows.map(r => r.id)])]); } else { setSelectedRows(prev => prev.filter(id => !paginatedRows.find(r => r.id === id))); } }} /></th>
                   <th>MOBILE NO.</th>
                   <SortHeader sortKey="name">NAME</SortHeader>
                   <SortHeader sortKey="gender">GENDER</SortHeader>
@@ -1575,7 +1576,7 @@ export default function CustomersPage() {
                     }}
                     style={{ cursor: "pointer" }}
                   >
-                    <td><input type="checkbox" className="crm-table-checkbox" onClick={(e) => e.stopPropagation()} /></td>
+                    <td><input type="checkbox" className="crm-table-checkbox" checked={selectedRows.includes(row.id)} onChange={(e) => { setSelectedRows(prev => e.target.checked ? [...prev, row.id] : prev.filter(id => id !== row.id)); }} onClick={(e) => e.stopPropagation()} /></td>
                     <td style={{ color: "#0f172a", fontWeight: 600 }}>{row.phone || "-"}</td>
                     <td style={{ fontWeight: 600 }}>{row.name || "-"}</td>
                     <td>{row.gender ? `${row.gender.charAt(0).toUpperCase()}${row.gender.slice(1).toLowerCase()}` : "-"}</td>
