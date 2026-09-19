@@ -321,25 +321,16 @@ export default function MyDashboardPage() {
   };
 
   const handleStartCheckOut = async () => {
-    const thisFlowId = ++flowIdRef.current;
-    setFlow({ open: true, action: "check-out", step: STEPS.PERMISSIONS, busy: true, error: "", success: "", coords: null });
+    setFlow({ open: true, action: "check-out", step: STEPS.GPS, busy: true, error: "", success: "", coords: null });
     setAttendanceStatus({ loading: false, error: "", success: "" });
 
     try {
-      const locPerm = await new Promise((resolve, reject) => {
-        if (!navigator.geolocation) { reject(Object.assign(new Error("Geolocation not supported"), { code: 0 })); return; }
-        navigator.geolocation.getCurrentPosition(
-          () => resolve("granted"),
-          (err) => reject(err),
-          { enableHighAccuracy: true, timeout: 30000, maximumAge: 0 }
-        );
-      }).catch((err) => { throw err; });
-
-      setFlow((c) => ({ ...c, step: STEPS.GPS, busy: true, error: "" }));
-
       let position;
       try {
-        position = await getCurrentPosition();
+        position = await new Promise((resolve, reject) => {
+          if (!navigator.geolocation) { reject(Object.assign(new Error("Geolocation not supported"), { code: 0 })); return; }
+          navigator.geolocation.getCurrentPosition(resolve, reject, { enableHighAccuracy: true, timeout: 15000, maximumAge: 30000 });
+        });
       } catch (err) {
         setFlow((c) => ({ ...c, busy: false, error: formatGeoError(err) }));
         return;
@@ -351,32 +342,29 @@ export default function MyDashboardPage() {
         accuracyMeters: position.coords.accuracy
       };
 
-      let accuracyWarning = "";
       const geofence = getBranchGeofenceValidation(coords);
       const isLowAccuracy = coords.accuracyMeters > 1000;
-      if (geofence.warning) {
-        accuracyWarning = geofence.warning;
-      } else if (isLowAccuracy) {
-        accuracyWarning = `GPS accuracy is low (~${Math.round(coords.accuracyMeters)}m). Location may be approximate.`;
-      }
       if (!isLowAccuracy && !geofence.valid) {
         setFlow((c) => ({ ...c, busy: false, error: geofence.error }));
         return;
       }
-      setFlow((c) => ({ ...c, step: STEPS.CAPTURE, busy: true, coords, error: "", warning: accuracyWarning }));
 
-      if (flowIdRef.current !== thisFlowId) return;
-      try {
-        stopCameraStream();
-        streamRef.current = await requestCameraStream();
-        if (flowIdRef.current !== thisFlowId) { stopCameraStream(); return; }
-        setStreamReady(true);
-        setFlow((c) => ({ ...c, busy: false }));
-      } catch (err) {
-        setFlow((c) => ({ ...c, busy: false, coords, error: formatCameraError(err) }));
-      }
+      // Directly submit check-out without camera/selfie
+      setFlow((c) => ({ ...c, step: STEPS.SUBMITTING, busy: true, coords }));
+      setAttendanceStatus({ loading: true, error: "", success: "" });
+      await api.post("/owner/attendance/check-out-self", {
+        latitude: coords.latitude,
+        longitude: coords.longitude,
+        accuracyMeters: coords.accuracyMeters
+      });
+      const msg = "Check-out completed successfully.";
+      setAttendanceStatus({ loading: false, error: "", success: msg });
+      setFlow((c) => ({ ...c, step: STEPS.SUCCESS, busy: false, success: msg }));
+      load().catch(() => {});
     } catch (err) {
-      setFlow((c) => ({ ...c, busy: false, error: formatApiError(err, "Failed to start check-out flow.") }));
+      const message = formatApiError(err, "Check-out failed. Please try again.");
+      setAttendanceStatus({ loading: false, error: message, success: "" });
+      setFlow((c) => ({ ...c, busy: false, error: message, step: "" }));
     }
   };
 
