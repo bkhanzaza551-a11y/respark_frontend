@@ -1743,9 +1743,9 @@ export default function InventoryPage() {
                   <textarea className="sp-input" rows="3" value={purchaseOrderForm.notes} onChange={e => setPurchaseOrderForm({ ...purchaseOrderForm, notes: e.target.value })} placeholder="PO notes" />
                 </div>
 
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                  <div className="sp-label" style={{ fontSize: "1rem" }}>Items</div>
-                  <button type="button" onClick={addPoItemRow} style={{ border: "none", background: "transparent", color: "#2563eb", fontWeight: 700, cursor: "pointer" }}>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", position: "sticky", top: -24, background: "#f8fafc", zIndex: 10, padding: "12px 24px", margin: "0 -24px", borderBottom: "1px solid #e2e8f0", boxShadow: "0 4px 6px -1px rgba(0,0,0,0.05)" }}>
+                  <div className="sp-label" style={{ fontSize: "1rem", margin: 0 }}>Items</div>
+                  <button type="button" onClick={addPoItemRow} style={{ border: "none", background: "transparent", color: "#2563eb", fontWeight: 700, cursor: "pointer", padding: 0 }}>
                     + Add item
                   </button>
                 </div>
