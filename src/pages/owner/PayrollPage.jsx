@@ -495,23 +495,27 @@ export default function PayrollPage() {
           font-weight: 600;
           font-size: 14px;
           cursor: pointer;
-          display: flex;
-          align-items: center;
-          gap: 10px;
-          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-          background: transparent;
+          display: inline-flex !important;
+          align-items: center !important;
+          gap: 8px !important;
+          transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+          background: rgba(255,255,255,0.7);
           color: #64748b;
           position: relative;
-          overflow: hidden;
+          flex-shrink: 0 !important;
+          white-space: nowrap !important;
+          min-width: max-content !important;
+          box-shadow: 0 1px 3px rgba(0,0,0,0.04);
         }
         .att-premium-tab:hover {
           color: #0f172a;
-          background: rgba(255,255,255,0.6);
+          background: #ffffff;
         }
         .att-premium-tab.active {
-          background: #ffffff;
-          color: #2563eb;
-          box-shadow: 0 4px 15px rgba(37, 99, 235, 0.1);
+          background: #ffffff !important;
+          color: #2563eb !important;
+          font-weight: 700 !important;
+          box-shadow: 0 4px 15px rgba(37, 99, 235, 0.15) !important;
         }
         .att-stat-card {
           background: #ffffff;
@@ -563,22 +567,103 @@ export default function PayrollPage() {
       
         @media (max-width: 900px) {
           .responsive-att-grid { grid-template-columns: 1fr !important; }
-          .att-main-container { padding: 0 16px !important; }
-          .att-glass-panel { padding: 16px !important; }
+          .att-main-container { padding: 0 14px !important; gap: 16px !important; }
+          .att-glass-panel { padding: 18px 16px !important; border-radius: 18px !important; }
           .form-grid { grid-template-columns: 1fr !important; }
           .att-tabs-scroll { 
+            display: flex !important;
             flex-wrap: nowrap !important; 
             overflow-x: auto !important; 
-            -webkit-overflow-scrolling: touch;
-            padding: 0 16px !important;
+            -webkit-overflow-scrolling: touch !important;
+            padding: 2px 14px 14px !important;
             gap: 8px !important;
-            scrollbar-width: none;
+            scrollbar-width: none !important;
+            margin-bottom: 16px !important;
           }
-          .att-tabs-scroll::-webkit-scrollbar { display: none; }
-          .att-premium-tab { padding: 10px 16px; font-size: 13px; white-space: nowrap; }
+          .att-tabs-scroll::-webkit-scrollbar { display: none !important; }
+          .att-premium-tab { 
+            padding: 9px 18px !important; 
+            font-size: 13px !important; 
+            flex-shrink: 0 !important;
+            white-space: nowrap !important;
+            min-width: max-content !important;
+          }
+          .att-stats-grid {
+            grid-template-columns: repeat(2, 1fr) !important;
+            gap: 10px !important;
+            margin-bottom: 24px !important;
+          }
+          .att-stat-card {
+            width: 100% !important;
+            box-sizing: border-box !important;
+            padding: 14px 12px !important;
+            border-radius: 16px !important;
+            gap: 6px !important;
+          }
+          .att-stat-card .att-stat-value {
+            font-size: 26px !important;
+            margin-top: 4px !important;
+          }
+          .att-stat-card .att-stat-label {
+            font-size: 12px !important;
+          }
+          .att-stat-card .att-stat-icon-wrap {
+            width: 36px !important;
+            height: 36px !important;
+            border-radius: 10px !important;
+          }
+          .att-settings-toggles {
+            grid-template-columns: 1fr !important;
+            padding: 14px !important;
+            gap: 14px !important;
+          }
+          .att-records-grid {
+            grid-template-columns: 1fr !important;
+            gap: 16px !important;
+          }
+          .att-history-panel {
+            height: auto !important;
+            max-height: 520px !important;
+            padding: 18px 14px !important;
+          }
+          .att-history-filter-bar {
+            grid-template-columns: 1fr 1fr !important;
+            gap: 8px !important;
+            padding: 10px !important;
+          }
+          .att-history-filter-bar input:first-child {
+            grid-column: span 2;
+          }
+          .att-cal-header {
+            flex-direction: column !important;
+            align-items: stretch !important;
+            gap: 14px !important;
+          }
+          .att-cal-controls {
+            width: 100% !important;
+            box-sizing: border-box !important;
+            justify-content: space-between !important;
+            flex-wrap: wrap !important;
+            gap: 6px !important;
+          }
+          .att-cal-summary {
+            grid-template-columns: repeat(3, 1fr) !important;
+            gap: 8px !important;
+          }
           .modern-table-container { overflow-x: auto !important; }
-          .att-stat-card { width: 100% !important; }
-          .att-actions-row { flex-wrap: wrap !important; gap: 8px !important; }
+          .att-actions-row { flex-direction: column !important; align-items: stretch !important; gap: 12px !important; }
+          .att-actions-row button { width: 100% !important; justify-content: center !important; }
+        }
+
+        @media (max-width: 480px) {
+          .att-tabs-scroll { padding: 2px 12px 12px !important; gap: 6px !important; }
+          .att-premium-tab { padding: 8px 14px !important; font-size: 12px !important; }
+          .att-main-container { padding: 0 10px !important; }
+          .att-glass-panel { padding: 14px 12px !important; border-radius: 16px !important; }
+          .att-stats-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 8px !important; }
+          .att-stat-card { padding: 12px 10px !important; }
+          .att-stat-card .att-stat-value { font-size: 22px !important; }
+          .att-cal-summary { grid-template-columns: repeat(3, 1fr) !important; gap: 6px !important; }
         }
 `}</style>
 
@@ -617,16 +702,16 @@ export default function PayrollPage() {
             </div>
           </div>
           
-          <div className="responsive-att-grid" style={{ display: "grid", gridTemplateColumns: "repeat(6, 1fr)", gap: 20, marginBottom: 40 }}>
+          <div className="responsive-att-grid att-stats-grid" style={{ display: "grid", gridTemplateColumns: "repeat(6, 1fr)", gap: 20, marginBottom: 40 }}>
             {statCards.map((stat, idx) => (
               <div key={idx} className="att-stat-card">
                 <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-                  <div style={{ width: 44, height: 44, borderRadius: 14, background: stat.bg, display: "grid", placeItems: "center", color: stat.color }}>
+                  <div className="att-stat-icon-wrap" style={{ width: 44, height: 44, borderRadius: 14, background: stat.bg, display: "grid", placeItems: "center", color: stat.color }}>
                     <stat.icon size={22} />
                   </div>
-                  <div style={{ fontWeight: 600, color: "#64748b", fontSize: 14 }}>{stat.label}</div>
+                  <div className="att-stat-label" style={{ fontWeight: 600, color: "#64748b", fontSize: 14 }}>{stat.label}</div>
                 </div>
-                <div style={{ fontSize: 36, fontWeight: 800, color: "#0f172a", marginTop: 8 }}>{stat.value}</div>
+                <div className="att-stat-value" style={{ fontSize: 36, fontWeight: 800, color: "#0f172a", marginTop: 8 }}>{stat.value}</div>
               </div>
             ))}
           </div>
@@ -657,7 +742,7 @@ export default function PayrollPage() {
                 </label>
               </div>
 
-              <div className="responsive-att-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginTop: 24, background: "white", padding: 20, borderRadius: 12, border: "1px solid #e2e8f0" }}>
+              <div className="responsive-att-grid att-settings-toggles" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginTop: 24, background: "white", padding: 20, borderRadius: 12, border: "1px solid #e2e8f0" }}>
                 <ToggleSwitch 
                   checked={attendanceSettings.overtimeEnabled} 
                   onChange={(e) => setAttendanceSettings((current) => ({ ...current, overtimeEnabled: e.target.checked }))} 
@@ -697,14 +782,14 @@ export default function PayrollPage() {
 
         {activeTab === "calendar" && (
         <div className="att-glass-panel" style={{ overflow: "hidden", padding: 32, maxWidth: "100%" }}>
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: 16 }}>
+          <div className="att-cal-header" style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: 16 }}>
             <div>
               <h3 style={{ marginTop: 0, marginBottom: 8, fontSize: 24, display: "flex", alignItems: "center", gap: 10, color: "#0f172a" }}>
                 Attendance Calendar
               </h3>
               <p style={{ margin: 0, color: "#64748b", fontSize: 14 }}>Monthly overview. Click any cell for details. Today is highlighted in blue.</p>
             </div>
-            <div style={{ display: "flex", gap: 10, alignItems: "center", background: "#f8fafc", padding: "6px 8px", borderRadius: 16, border: "1px solid #e2e8f0" }}>
+            <div className="att-cal-controls" style={{ display: "flex", gap: 10, alignItems: "center", background: "#f8fafc", padding: "6px 8px", borderRadius: 16, border: "1px solid #e2e8f0" }}>
               <button type="button" onClick={() => { const [y, m] = attendanceCalendarMonth.split("-").map(Number); const prev = m === 1 ? `${y - 1}-12` : `${y}-${String(m - 1).padStart(2, "0")}`; setAttendanceCalendarMonth(prev); }} style={{ width: 36, height: 36, borderRadius: 10, border: "none", background: "white", color: "#475569", cursor: "pointer", display: "grid", placeItems: "center", boxShadow: "0 2px 4px rgba(0,0,0,0.05)" }}><ChevronLeft size={16} /></button>
               <input type="month" value={attendanceCalendarMonth} onChange={(e) => setAttendanceCalendarMonth(e.target.value)} style={{ padding: "8px 12px", borderRadius: 10, border: "none", background: "transparent", fontSize: 15, fontWeight: 700, color: "#0f172a", outline: "none" }} />
               <button type="button" onClick={() => { const [y, m] = attendanceCalendarMonth.split("-").map(Number); const next = m === 12 ? `${y + 1}-01` : `${y}-${String(m + 1).padStart(2, "0")}`; setAttendanceCalendarMonth(next); }} style={{ width: 36, height: 36, borderRadius: 10, border: "none", background: "white", color: "#475569", cursor: "pointer", display: "grid", placeItems: "center", boxShadow: "0 2px 4px rgba(0,0,0,0.05)" }}><ChevronRight size={16} /></button>
@@ -721,7 +806,7 @@ export default function PayrollPage() {
               </div>
             ))}
           </div>
-          <div className="responsive-att-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(130px, 1fr))", gap: 16, marginTop: 24 }}>
+          <div className="responsive-att-grid att-cal-summary" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(130px, 1fr))", gap: 16, marginTop: 24 }}>
             {[{ label: "Total Rows", value: attendanceCalendar.summary?.totalRows || 0, bg: "#f1f5f9", color: "#334155" },
               { label: "Present", value: attendanceCalendar.summary?.present || 0, bg: "#dcfce7", color: "#166534" },
               { label: "Late", value: attendanceCalendar.summary?.late || 0, bg: "#fef3c7", color: "#92400e" },
@@ -862,7 +947,7 @@ export default function PayrollPage() {
         ) : null}
 
         {activeTab === "records" && (
-        <div className="responsive-att-grid" style={{ display: "grid", gridTemplateColumns: "minmax(320px, 1fr) minmax(400px, 1.5fr)", gap: 24, alignItems: "start" }}>
+        <div className="responsive-att-grid att-records-grid" style={{ display: "grid", gridTemplateColumns: "minmax(320px, 1fr) minmax(400px, 1.5fr)", gap: 24, alignItems: "start" }}>
           <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
             <div className="att-glass-panel" ref={manualCreateRef} style={{ padding: 28 }}>
               <div style={{ borderBottom: "1px solid #f1f5f9", paddingBottom: 16, marginBottom: 20 }}>
@@ -1028,7 +1113,7 @@ export default function PayrollPage() {
             </div>
           </div>
 
-          <div className="att-glass-panel" style={{ padding: 28, display: "flex", flexDirection: "column", height: "calc(100vh - 200px)" }}>
+          <div className="att-glass-panel att-history-panel" style={{ padding: 28, display: "flex", flexDirection: "column", height: "calc(100vh - 200px)" }}>
             <div style={{ borderBottom: "1px solid #f1f5f9", paddingBottom: 16, marginBottom: 20 }}>
               <h3 style={{ margin: "0 0 4px", fontSize: 18, fontWeight: 800, color: "#1e293b", display: "flex", alignItems: "center", gap: 10 }}>
                 <div style={{ padding: 8, background: "linear-gradient(135deg, #f5f3ff, #ede9fe)", color: "#8b5cf6", borderRadius: 10, display: "flex", boxShadow: "0 2px 4px rgba(139,92,246,0.1)" }}><History size={18} /></div> History Logs
@@ -1036,7 +1121,7 @@ export default function PayrollPage() {
               <p style={{ margin: 0, color: "#64748b", fontSize: 13 }}>Browse and filter staff attendance records.</p>
             </div>
             
-            <div className="responsive-att-grid" style={{ display: "grid", gridTemplateColumns: "1.5fr 1fr 1fr auto", gap: 12, marginBottom: 24, background: "#f8fafc", padding: 16, borderRadius: 16, border: "1px solid #e2e8f0" }}>
+            <div className="responsive-att-grid att-history-filter-bar" style={{ display: "grid", gridTemplateColumns: "1.5fr 1fr 1fr auto", gap: 12, marginBottom: 24, background: "#f8fafc", padding: 16, borderRadius: 16, border: "1px solid #e2e8f0" }}>
               <input value={filters.attendanceQ} placeholder="Search name..." onChange={(e) => setFilters((current) => ({ ...current, attendanceQ: e.target.value }))} style={{ boxSizing: "border-box", padding: "10px 14px", borderRadius: 10, border: "1px solid #cbd5e1", fontSize: 13, outline: "none" }} />
               <CustomDropdown value={filters.attendanceStatus} onChange={(e) => setFilters((current) => ({ ...current, attendanceStatus: e.target.value }))} style={{ padding: "10px 14px", borderRadius: 10, border: "1px solid #cbd5e1", fontSize: 13, outline: "none" }}>
                 <option value="">All statuses</option>
