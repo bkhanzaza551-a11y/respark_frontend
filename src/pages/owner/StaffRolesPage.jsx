@@ -336,8 +336,9 @@ export default function StaffRolesPage() {
           .srp-container { flex-direction: column; height: auto; }
           .srp-sidebar { width: 100% !important; max-height: none !important; border-right: none; border-bottom: 1px solid #e2e8f0; flex-shrink: 0; }
           .srp-sidebar-header { padding: 16px !important; }
-          .srp-sidebar > div:last-child { display: flex; flex-direction: row; overflow-x: auto; gap: 12px; padding: 0 16px 16px 16px; }
-          .srp-role-item { min-width: 160px; border-bottom: none !important; border: 1px solid #e2e8f0 !important; border-radius: 12px; padding: 12px 16px !important; }
+          .srp-sidebar > div:last-child { display: flex; flex-direction: row; flex-wrap: nowrap; overflow-x: auto; gap: 8px; padding: 0 16px 16px 16px; }
+          .srp-role-item { min-width: auto; flex-shrink: 0; display: inline-flex; flex-direction: row; align-items: center; justify-content: center; border-bottom: none !important; border: 1px solid #e2e8f0 !important; border-radius: 99px !important; padding: 8px 16px !important; }
+          .srp-role-item .role-desc { display: none; }
           .srp-role-item.active { border: 2px solid #3b82f6 !important; background: #eff6ff !important; }
           .srp-content { padding: 12px !important; width: 100% !important; box-sizing: border-box; overflow-y: auto; }
           .srp-card { padding: 16px !important; margin-bottom: 16px !important; }
@@ -442,7 +443,7 @@ export default function StaffRolesPage() {
                           {group.modules.map((moduleKey) => {
                             const current = Array.isArray(roleForm.permissions?.[moduleKey]) ? roleForm.permissions[moduleKey] : [];
                             return (
-                              <div key={moduleKey} style={{
+                              <div key={moduleKey} className="srp-module-row" style={{
                                 display: 'flex', alignItems: 'center', padding: '10px 14px',
                                 borderRadius: 8, background: '#fafafa', border: '1px solid #f1f5f9',
                                 gap: 12, flexWrap: 'wrap',
