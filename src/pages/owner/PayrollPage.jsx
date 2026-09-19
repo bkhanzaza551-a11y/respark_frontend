@@ -665,6 +665,155 @@ export default function PayrollPage() {
           .att-stat-card .att-stat-value { font-size: 22px !important; }
           .att-cal-summary { grid-template-columns: repeat(3, 1fr) !important; gap: 6px !important; }
         }
+
+        .att-cal-controls-box {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          flex-wrap: wrap;
+        }
+        .att-cal-month-stepper {
+          display: flex;
+          align-items: center;
+          background: #f8fafc;
+          padding: 4px 6px;
+          border-radius: 14px;
+          border: 1px solid #e2e8f0;
+        }
+        .att-cal-step-btn {
+          width: 36px;
+          height: 36px;
+          border-radius: 10px;
+          border: none;
+          background: white;
+          color: #475569;
+          cursor: pointer;
+          display: grid;
+          place-items: center;
+          box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .att-cal-month-input {
+          padding: 6px 10px;
+          border: none;
+          background: transparent;
+          font-size: 15px;
+          font-weight: 700;
+          color: #0f172a;
+          outline: none;
+        }
+        .att-cal-actions-group {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+        }
+        .att-cal-today-btn {
+          padding: 8px 16px;
+          border-radius: 10px;
+          border: none;
+          background: #2563eb;
+          color: white;
+          cursor: pointer;
+          font-size: 13px;
+          font-weight: 600;
+          display: flex;
+          align-items: center;
+          gap: 6px;
+          height: 40px;
+          box-shadow: 0 2px 8px rgba(37,99,235,0.2);
+        }
+        .att-cal-excel-btn {
+          padding: 8px 14px;
+          border-radius: 10px;
+          border: 1px solid #e2e8f0;
+          background: white;
+          color: #0f172a;
+          cursor: pointer;
+          font-size: 13px;
+          font-weight: 600;
+          display: flex;
+          align-items: center;
+          gap: 6px;
+          height: 40px;
+        }
+
+        @media (max-width: 900px) {
+          .att-cal-header {
+            flex-direction: column !important;
+            align-items: stretch !important;
+            gap: 12px !important;
+          }
+          .att-cal-controls-box {
+            width: 100% !important;
+            flex-direction: column !important;
+            gap: 8px !important;
+          }
+          .att-cal-month-stepper {
+            width: 100% !important;
+            box-sizing: border-box !important;
+            justify-content: space-between !important;
+            padding: 6px 8px !important;
+          }
+          .att-cal-month-input {
+            flex: 1 !important;
+            text-align: center !important;
+            font-size: 15px !important;
+          }
+          .att-cal-actions-group {
+            width: 100% !important;
+            display: grid !important;
+            grid-template-columns: 1fr 1fr !important;
+            gap: 8px !important;
+          }
+          .att-cal-today-btn, .att-cal-excel-btn {
+            width: 100% !important;
+            justify-content: center !important;
+          }
+          .att-cal-legend {
+            display: flex !important;
+            flex-wrap: wrap !important;
+            gap: 6px !important;
+            margin-top: 14px !important;
+          }
+          .att-cal-chip {
+            padding: 4px 8px !important;
+            font-size: 11px !important;
+            gap: 4px !important;
+          }
+          .att-cal-summary {
+            display: grid !important;
+            grid-template-columns: repeat(3, 1fr) !important;
+            gap: 8px !important;
+            margin-top: 14px !important;
+          }
+          .att-cal-summary-card {
+            padding: 10px 4px !important;
+            border-radius: 12px !important;
+            text-align: center !important;
+          }
+          .att-cal-summary-label {
+            font-size: 10px !important;
+            letter-spacing: 0px !important;
+          }
+          .att-cal-summary-value {
+            font-size: 20px !important;
+          }
+        }
+
+        @media (max-width: 480px) {
+          .att-cal-summary {
+            grid-template-columns: repeat(3, 1fr) !important;
+            gap: 6px !important;
+          }
+          .att-cal-summary-card {
+            padding: 8px 4px !important;
+          }
+          .att-cal-summary-label {
+            font-size: 9px !important;
+          }
+          .att-cal-summary-value {
+            font-size: 18px !important;
+          }
+        }
 `}</style>
 
       <ModuleTabs
@@ -789,24 +938,27 @@ export default function PayrollPage() {
               </h3>
               <p style={{ margin: 0, color: "#64748b", fontSize: 14 }}>Monthly overview. Click any cell for details. Today is highlighted in blue.</p>
             </div>
-            <div className="att-cal-controls" style={{ display: "flex", gap: 10, alignItems: "center", background: "#f8fafc", padding: "6px 8px", borderRadius: 16, border: "1px solid #e2e8f0" }}>
-              <button type="button" onClick={() => { const [y, m] = attendanceCalendarMonth.split("-").map(Number); const prev = m === 1 ? `${y - 1}-12` : `${y}-${String(m - 1).padStart(2, "0")}`; setAttendanceCalendarMonth(prev); }} style={{ width: 36, height: 36, borderRadius: 10, border: "none", background: "white", color: "#475569", cursor: "pointer", display: "grid", placeItems: "center", boxShadow: "0 2px 4px rgba(0,0,0,0.05)" }}><ChevronLeft size={16} /></button>
-              <input type="month" value={attendanceCalendarMonth} onChange={(e) => setAttendanceCalendarMonth(e.target.value)} style={{ padding: "8px 12px", borderRadius: 10, border: "none", background: "transparent", fontSize: 15, fontWeight: 700, color: "#0f172a", outline: "none" }} />
-              <button type="button" onClick={() => { const [y, m] = attendanceCalendarMonth.split("-").map(Number); const next = m === 12 ? `${y + 1}-01` : `${y}-${String(m + 1).padStart(2, "0")}`; setAttendanceCalendarMonth(next); }} style={{ width: 36, height: 36, borderRadius: 10, border: "none", background: "white", color: "#475569", cursor: "pointer", display: "grid", placeItems: "center", boxShadow: "0 2px 4px rgba(0,0,0,0.05)" }}><ChevronRight size={16} /></button>
-              <div style={{ width: 1, height: 24, background: "#cbd5e1", margin: "0 8px" }} />
-              <button type="button" onClick={() => setAttendanceCalendarMonth(toMonthInput())} style={{ padding: "8px 16px", borderRadius: 10, border: "none", background: "#2563eb", color: "white", cursor: "pointer", fontSize: 13, fontWeight: 600, display: "flex", gap: 6, alignItems: "center", boxShadow: "0 2px 8px rgba(37,99,235,0.2)" }}><CalendarDays size={14} /> Today</button>
-              <button type="button" onClick={() => downloadCalendarExport("xlsx")} style={{ padding: "8px 12px", borderRadius: 10, border: "1px solid #e2e8f0", background: "white", color: "#0f172a", cursor: "pointer", fontSize: 13, fontWeight: 600, display: "flex", gap: 6, alignItems: "center" }}><Download size={14} /> Excel</button>
+            <div className="att-cal-controls-box">
+              <div className="att-cal-month-stepper">
+                <button type="button" className="att-cal-step-btn" onClick={() => { const [y, m] = attendanceCalendarMonth.split("-").map(Number); const prev = m === 1 ? `${y - 1}-12` : `${y}-${String(m - 1).padStart(2, "0")}`; setAttendanceCalendarMonth(prev); }}><ChevronLeft size={16} /></button>
+                <input type="month" className="att-cal-month-input" value={attendanceCalendarMonth} onChange={(e) => setAttendanceCalendarMonth(e.target.value)} />
+                <button type="button" className="att-cal-step-btn" onClick={() => { const [y, m] = attendanceCalendarMonth.split("-").map(Number); const next = m === 12 ? `${y + 1}-01` : `${y}-${String(m + 1).padStart(2, "0")}`; setAttendanceCalendarMonth(next); }}><ChevronRight size={16} /></button>
+              </div>
+              <div className="att-cal-actions-group">
+                <button type="button" className="att-cal-today-btn" onClick={() => setAttendanceCalendarMonth(toMonthInput())}><CalendarDays size={14} /> Today</button>
+                <button type="button" className="att-cal-excel-btn" onClick={() => downloadCalendarExport("xlsx")}><Download size={14} /> Excel</button>
+              </div>
             </div>
           </div>
-          <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginTop: 24 }}>
+          <div className="att-cal-legend" style={{ display: "flex", gap: 8, flexWrap: "wrap", marginTop: 20 }}>
             {Object.entries(statusTheme).filter(([key]) => key !== "OFF").map(([key, theme]) => (
-              <div key={key} style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "6px 14px", borderRadius: 20, background: theme.bg, color: theme.color, fontSize: 12, fontWeight: 600 }}>
+              <div key={key} className="att-cal-chip" style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "6px 12px", borderRadius: 20, background: theme.bg, color: theme.color, fontSize: 12, fontWeight: 600 }}>
                 <span style={{ width: 8, height: 8, borderRadius: "50%", background: theme.color }} />
                 {theme.label} = {key.replaceAll("_", " ")}
               </div>
             ))}
           </div>
-          <div className="responsive-att-grid att-cal-summary" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(130px, 1fr))", gap: 16, marginTop: 24 }}>
+          <div className="responsive-att-grid att-cal-summary" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(130px, 1fr))", gap: 16, marginTop: 20 }}>
             {[{ label: "Total Rows", value: attendanceCalendar.summary?.totalRows || 0, bg: "#f1f5f9", color: "#334155" },
               { label: "Present", value: attendanceCalendar.summary?.present || 0, bg: "#dcfce7", color: "#166534" },
               { label: "Late", value: attendanceCalendar.summary?.late || 0, bg: "#fef3c7", color: "#92400e" },
@@ -814,11 +966,14 @@ export default function PayrollPage() {
               { label: "Absent", value: attendanceCalendar.summary?.absent || 0, bg: "#fee2e2", color: "#b91c1c" },
               { label: "Leave", value: attendanceCalendar.summary?.leave || 0, bg: "#dbeafe", color: "#1d4ed8" }
             ].map((s) => (
-              <div key={s.label} style={{ background: s.bg, borderRadius: 16, padding: "16px", textAlign: "center", border: "1px solid rgba(0,0,0,0.03)" }}>
-                <div style={{ fontSize: 12, fontWeight: 700, color: s.color, textTransform: "uppercase", letterSpacing: 0.5, marginBottom: 4 }}>{s.label}</div>
-                <div style={{ fontSize: 28, fontWeight: 800, color: s.color }}>{s.value}</div>
+              <div key={s.label} className="att-cal-summary-card" style={{ background: s.bg, borderRadius: 16, padding: "16px", textAlign: "center", border: "1px solid rgba(0,0,0,0.03)" }}>
+                <div className="att-cal-summary-label" style={{ fontSize: 12, fontWeight: 700, color: s.color, textTransform: "uppercase", letterSpacing: 0.5, marginBottom: 4 }}>{s.label}</div>
+                <div className="att-cal-summary-value" style={{ fontSize: 28, fontWeight: 800, color: s.color }}>{s.value}</div>
               </div>
             ))}
+          </div>
+          <div className="att-scroll-hint" style={{ fontSize: 12, color: "#64748b", fontWeight: 600, display: "flex", alignItems: "center", gap: 6, marginTop: 14 }}>
+            <span>Swipe horizontally to view all calendar days ?</span>
           </div>
           
           <div className="modern-table-container" style={{ overflow: "auto", maxHeight: "60vh", marginTop: 24 }}>

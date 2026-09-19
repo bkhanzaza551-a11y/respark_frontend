@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, useMemo } from "react";
 import CustomDropdown from '../../components/common/CustomDropdown';
-import { Search, Filter, Plus, Download, Upload, MoreVertical, MoreHorizontal, ChevronsLeft, ChevronLeft, ChevronRight, ChevronsRight, X, ChevronDown, Trash2, GitMerge, MessageCircle, User, FileText, CreditCard, Gift, Wallet, AlertCircle, Package, Users, UserCog, Tag, Phone, StickyNote, Edit3, CheckCircle, Circle, Eye, Monitor } from "lucide-react";
+import { Search, Filter, Plus, Download, Upload, FileSpreadsheet, MoreVertical, MoreHorizontal, ChevronsLeft, ChevronLeft, ChevronRight, ChevronsRight, X, ChevronDown, Trash2, GitMerge, MessageCircle, User, FileText, CreditCard, Gift, Wallet, AlertCircle, Package, Users, UserCog, Tag, Phone, StickyNote, Edit3, CheckCircle, Circle, Eye, Monitor } from "lucide-react";
 import { api } from "../../api/client";
 import IndianPhoneInput from "../../components/IndianPhoneInput";
 import { useSalonSettings } from "../../context/SalonSettingsContext";
@@ -793,10 +793,104 @@ export default function CustomersPage() {
     }
   };
 
+  const downloadClientSideSampleExcel = () => {
+    const headers = [
+      "Mobile No (Mandatory)",
+      "Name (Mandatory)",
+      "Gender (Mandatory)",
+      "Email (Optional)",
+      "Date Of Birth (Optional)",
+      "Anniversary (Optional)",
+      "Last Visited (Optional)",
+      "Total Orders (Optional)",
+      "Total Purchase Amount (Optional)",
+      "Average Purchase Amount (Optional)",
+      "Online Visits (Optional)",
+      "Loyalty Points (Optional)",
+      "Referral Code (Optional)",
+      "Advance (Optional)",
+      "Balance (Optional)",
+      "Membership Count (Optional)",
+      "Package Count (Optional)",
+      "Source (Optional)",
+      "GST Number (Optional)",
+      "Notes (Optional)",
+      "Tags (Optional)"
+    ];
+
+    const sampleRows = [
+      ["92397146866", "Sadia Iqbal", "Female", "sadia.iqbal@example.com", "1995-04-12", "2020-11-20", "2026-03-18", "3", "4500", "1500", "1", "150", "SADIA6866", "0", "0", "0", "0", "Walk-in", "", "Prefers organic hair spa products", "Regular; VIP"],
+      ["92394424948", "Hamza Shah", "Male", "hamza.shah@example.com", "1990-08-25", "", "2026-03-15", "5", "12500", "2500", "2", "350", "HAMZA4948", "500", "0", "1", "1", "Instagram", "", "Beard grooming and hair cut regular", "Member; Premium"],
+      ["92320032700", "Zoya Malik", "Female", "zoya.malik@example.com", "1998-01-30", "", "2026-03-10", "8", "22000", "2750", "4", "600", "ZOYA2700", "1000", "0", "1", "2", "Referral", "", "Allergic to ammonia hair dye", "Gold Member; High Value"],
+      ["92330292304", "Fahad Raza", "Male", "fahad.raza@example.com", "1988-12-05", "2016-01-15", "2026-02-28", "1", "1800", "1800", "0", "50", "FAHAD2304", "0", "200", "0", "0", "Google Search", "", "Evening appointments only", "New Customer"],
+      ["92316918941", "Nida Hussain", "Female", "nida.h@example.com", "1993-07-19", "", "2026-03-01", "2", "3200", "1600", "1", "100", "NIDA8941", "0", "0", "0", "0", "Walk-in", "", "Prefers weekend slots", "Regular"],
+      ["92355747179", "Kamran Ali", "Male", "kamran.ali@example.com", "1991-09-14", "2019-04-05", "2026-03-12", "4", "8900", "2225", "0", "220", "KAMRAN7179", "0", "0", "0", "1", "Facebook", "", "Skin treatment routine", "Regular; Package Holder"],
+      ["92358594452", "Hira Smith", "Female", "hira.smith@example.com", "1996-03-22", "", "2026-03-16", "6", "15400", "2566", "3", "450", "HIRA4452", "0", "0", "1", "0", "Referral", "", "Prefers Senior Stylist", "VIP; Platinum"],
+      ["92329807676", "Ibrahim Ahmed", "Male", "ibrahim.ahmed@example.com", "1985-11-11", "2012-12-12", "2026-03-05", "2", "4000", "2000", "0", "80", "IBRAHIM7676", "0", "0", "0", "0", "Walk-in", "", "Monthly haircut", "Regular"]
+    ];
+
+    let xml = '<?xml version="1.0"?>\n<?mso-application progid="Excel.Sheet"?>\n<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet">\n';
+    xml += '<Styles>\n';
+    xml += '  <Style ss:ID="Default" ss:Name="Normal"><Alignment ss:Vertical="Center"/><Font ss:FontName="Calibri" ss:Size="11"/></Style>\n';
+    xml += '  <Style ss:ID="HeaderMandatory"><Alignment ss:Horizontal="Center" ss:Vertical="Center"/><Font ss:FontName="Calibri" ss:Size="11" ss:Bold="1" ss:Color="#FFFFFF"/><Interior ss:Color="#1E3A8A" ss:Pattern="Solid"/><Borders><Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="2"/></Borders></Style>\n';
+    xml += '  <Style ss:ID="HeaderOptional"><Alignment ss:Horizontal="Center" ss:Vertical="Center"/><Font ss:FontName="Calibri" ss:Size="11" ss:Bold="1" ss:Color="#FFFFFF"/><Interior ss:Color="#1E293B" ss:Pattern="Solid"/><Borders><Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="2"/></Borders></Style>\n';
+    xml += '  <Style ss:ID="DataCell"><Alignment ss:Vertical="Center"/><Font ss:FontName="Calibri" ss:Size="10"/><Borders><Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#E2E8F0"/><Border ss:Position="Right" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#E2E8F0"/></Borders></Style>\n';
+    xml += '  <Style ss:ID="DataCellAlt"><Alignment ss:Vertical="Center"/><Font ss:FontName="Calibri" ss:Size="10"/><Interior ss:Color="#F8FAFC" ss:Pattern="Solid"/><Borders><Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#E2E8F0"/><Border ss:Position="Right" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#E2E8F0"/></Borders></Style>\n';
+    xml += '</Styles>\n';
+    xml += '<Worksheet ss:Name="Customer Test Data">\n<Table>\n';
+
+    headers.forEach(() => {
+      xml += '<Column ss:AutoFitWidth="1" ss:Width="130"/>\n';
+    });
+
+    xml += '<Row ss:Height="28">\n';
+    headers.forEach((h, i) => {
+      const style = i < 3 ? 'HeaderMandatory' : 'HeaderOptional';
+      xml += `  <Cell ss:StyleID="${style}"><Data ss:Type="String">${h}</Data></Cell>\n`;
+    });
+    xml += '</Row>\n';
+
+    sampleRows.forEach((row, rowIdx) => {
+      const style = rowIdx % 2 === 1 ? 'DataCellAlt' : 'DataCell';
+      xml += '<Row ss:Height="22">\n';
+      row.forEach((val) => {
+        xml += `  <Cell ss:StyleID="${style}"><Data ss:Type="String">${String(val || '')}</Data></Cell>\n`;
+      });
+      xml += '</Row>\n';
+    });
+
+    xml += '</Table>\n</Worksheet>\n</Workbook>';
+
+    const blob = new Blob([xml], { type: 'application/vnd.ms-excel;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'Customers_Test_Data.xls';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
+
+  const handleDownloadTestExcel = async () => {
+    setShowExportMenu(false);
+    try {
+      await downloadFromApi(`/owner/customers/test-template`, {
+        fallbackFilename: "Customers_Test_Data.xlsx"
+      });
+    } catch {
+      try {
+        downloadClientSideSampleExcel();
+      } catch {
+        alert("Could not download test Excel sheet");
+      }
+    }
+  };
+
   const handleImportClick = () => {
     const input = document.createElement("input");
     input.type = "file";
-    input.accept = ".csv";
+    input.accept = ".csv,.xlsx,.xls";
     input.onchange = async (e) => {
       const file = e.target.files?.[0];
       if (!file) return;
@@ -812,10 +906,10 @@ export default function CustomersPage() {
             "Content-Type": "multipart/form-data"
           }
         });
-        alert(response.data.message || "CSV imported successfully!");
+        alert(response.data.message || "Customers imported successfully!");
         await load();
       } catch (err) {
-        alert(formatApiError(err, "Could not import CSV"));
+        alert(formatApiError(err, "Could not import customers file"));
       } finally {
         setSaving(false);
       }
@@ -1525,6 +1619,7 @@ export default function CustomersPage() {
           <button className="crm-btn crm-btn-light" onClick={() => setShowFilters(true)}><Filter size={16} /> Filters</button>
           <button className="crm-btn" onClick={() => setShowAddGuest(true)}><Plus size={16} /> Add Guest</button>
           <button className="crm-btn" onClick={handleImportClick}><Upload size={16} /> Import</button>
+          <button className="crm-btn crm-btn-light" onClick={handleDownloadTestExcel} title="Download Test / Sample Excel Sheet" style={{ borderColor: '#3b82f6', color: '#1d4ed8', background: '#eff6ff' }}><FileSpreadsheet size={16} /> Test Excel Sheet</button>
           <div className="export-dropdown">
             <button className="crm-btn" onClick={() => setShowExportMenu((current) => !current)}><Download size={16} /> Export <ChevronDown size={16} /></button>
             {showExportMenu && (
@@ -1532,6 +1627,7 @@ export default function CustomersPage() {
                 <button className="export-item" onClick={() => handleExport("xlsx")}>Export as XLSX</button>
                 <button className="export-item" onClick={() => handleExport("xls")}>Export as XLS</button>
                 <button className="export-item" onClick={() => handleExport("csv")}>Export as CSV</button>
+                <button className="export-item" onClick={handleDownloadTestExcel} style={{ borderTop: '1px solid #e2e8f0', fontWeight: 600, color: '#2563eb' }}><FileSpreadsheet size={14} style={{ marginRight: 6, verticalAlign: 'middle' }} />Download Test Excel Sheet</button>
               </div>
             )}
           </div>
