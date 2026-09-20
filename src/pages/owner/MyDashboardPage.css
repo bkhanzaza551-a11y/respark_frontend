@@ -1,0 +1,323 @@
+/* =========================================================
+   MY DASHBOARD RESPONSIVE STYLES & ATTENDANCE MODAL
+   ========================================================= */
+
+.flow-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.75);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  padding: 16px;
+  box-sizing: border-box;
+}
+
+.flow-modal-card {
+  position: relative;
+  width: min(100%, 520px);
+  max-height: 90vh;
+  max-height: 90dvh;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 24px;
+  background: #ffffff;
+  border-radius: 20px;
+  box-shadow: 0 25px 60px rgba(15, 23, 42, 0.35);
+  border: 1px solid rgba(226, 232, 240, 0.8);
+  box-sizing: border-box;
+}
+
+.flow-modal-close-btn {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #f1f5f9;
+  border: 1px solid #e2e8f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #64748b;
+  cursor: pointer;
+  transition: all 0.2s;
+  z-index: 20;
+}
+
+.flow-modal-close-btn:hover {
+  background: #e2e8f0;
+  color: #0f172a;
+}
+
+.flow-step-banner {
+  padding: 16px;
+  border-radius: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.flow-step-tag {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.flow-step-title {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 800;
+  color: #1e293b;
+}
+
+.flow-step-subtitle {
+  color: #64748b;
+  font-size: 13px;
+  line-height: 1.45;
+  margin: 0;
+}
+
+.flow-video-wrapper {
+  position: relative;
+  overflow: hidden;
+  border-radius: 16px;
+  border: 1px solid rgba(226, 232, 240, 0.8);
+  background: #0f172a;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.flow-video-element {
+  width: 100%;
+  height: 270px;
+  max-height: 38vh;
+  object-fit: cover;
+  display: block;
+  border-radius: 16px;
+  background: #0f172a;
+}
+
+.flow-video-overlay-frame {
+  position: absolute;
+  inset: 16px;
+  border-radius: 14px;
+  border: 2px dashed rgba(255, 255, 255, 0.45);
+  pointer-events: none;
+}
+
+.flow-video-badge {
+  position: absolute;
+  left: 14px;
+  top: 14px;
+  padding: 5px 12px;
+  border-radius: 20px;
+  background: rgba(15, 23, 42, 0.85);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.flow-info-alert {
+  padding: 10px 14px;
+  border-radius: 10px;
+  font-size: 12.5px;
+  line-height: 1.45;
+  font-weight: 500;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.flow-actions-row {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  align-items: center;
+  flex-wrap: wrap;
+  border-top: 1px solid #f1f5f9;
+  padding-top: 14px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.flow-cancel-btn {
+  padding: 10px 18px;
+  border-radius: 8px;
+  height: 42px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  background: #f8fafc;
+  border: 1px solid #cbd5e1;
+  color: #334155;
+  transition: all 0.2s;
+  box-sizing: border-box;
+}
+
+.flow-cancel-btn:hover {
+  background: #f1f5f9;
+  border-color: #94a3b8;
+}
+
+.flow-submit-btn {
+  padding: 10px 22px;
+  border-radius: 8px;
+  height: 42px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
+  color: #fff;
+  border: none;
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
+  transition: all 0.2s;
+  box-sizing: border-box;
+}
+
+.flow-submit-btn:hover:not(:disabled) {
+  opacity: 0.95;
+  transform: translateY(-1px);
+}
+
+.flow-submit-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Attendance panel & hero */
+.my-dashboard-hero {
+  background: linear-gradient(135deg, #1e293b 0%, #0f172a 60%, #1e1b4b 100%);
+  border-radius: 20px;
+  padding: 28px 32px;
+  margin-bottom: 24px;
+  position: relative;
+  overflow: hidden;
+}
+
+.attendance-control-panel {
+  padding: 28px;
+  position: relative;
+}
+
+/* Media query for mobile */
+@media (max-width: 640px) {
+  .flow-modal-overlay {
+    padding: 10px 8px;
+    align-items: center;
+  }
+
+  .flow-modal-card {
+    padding: 16px 12px;
+    border-radius: 16px;
+    gap: 10px;
+    max-height: 94dvh;
+    width: 100%;
+  }
+
+  .flow-modal-close-btn {
+    top: 10px;
+    right: 10px;
+    width: 28px;
+    height: 28px;
+  }
+
+  .flow-step-banner {
+    padding: 10px 12px;
+    gap: 4px;
+    border-radius: 10px;
+  }
+
+  .flow-step-tag {
+    font-size: 10px;
+  }
+
+  .flow-step-title {
+    font-size: 14.5px;
+  }
+
+  .flow-step-subtitle {
+    font-size: 11.5px;
+  }
+
+  .flow-video-wrapper {
+    border-radius: 12px;
+  }
+
+  .flow-video-element {
+    height: 200px;
+    max-height: 30vh;
+    border-radius: 12px;
+  }
+
+  .flow-video-overlay-frame {
+    inset: 10px;
+    border-radius: 8px;
+  }
+
+  .flow-video-badge {
+    left: 8px;
+    top: 8px;
+    padding: 3px 8px;
+    font-size: 9.5px;
+  }
+
+  .flow-info-alert {
+    padding: 8px 10px;
+    font-size: 11.5px;
+  }
+
+  .flow-actions-row {
+    padding-top: 10px;
+    gap: 8px;
+  }
+
+  .flow-cancel-btn {
+    flex: 1;
+    min-width: 70px;
+    height: 40px;
+    padding: 8px 12px;
+    font-size: 12.5px;
+    text-align: center;
+  }
+
+  .flow-submit-btn {
+    flex: 2;
+    min-width: 130px;
+    height: 40px;
+    padding: 8px 14px;
+    font-size: 12.5px;
+    text-align: center;
+  }
+
+  .my-dashboard-hero {
+    padding: 20px 16px;
+    border-radius: 16px;
+  }
+
+  .my-dashboard-hero h1 {
+    font-size: 1.3rem !important;
+  }
+
+  .attendance-control-panel {
+    padding: 18px 14px !important;
+    border-radius: 14px !important;
+  }
+}

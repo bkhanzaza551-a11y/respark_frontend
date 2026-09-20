@@ -6,6 +6,7 @@ import ModuleTabs from "../../components/ModuleTabs";
 import PageLoader from "../../components/PageLoader";
 import { formatApiError } from "../../utils/apiError";
 import { compareFaceSources, loadFaceVerificationModels } from "../../utils/faceVerification";
+import "./MyDashboardPage.css";
 
 const uploadImage = async (file, filename = "attendance-selfie.jpg") => {
   if (!file) return "";
@@ -384,23 +385,23 @@ export default function MyDashboardPage() {
 
     if (flow.step === STEPS.PERMISSIONS) {
       return (
-        <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-          <div style={{ padding: 20, borderRadius: 16, background: accent.surface, border: `1px solid ${accent.border}`, display: "grid", gap: 8 }}>
-            <div style={{ fontSize: 11, fontWeight: 800, letterSpacing: "0.12em", textTransform: "uppercase", color: accent.tone, display: "flex", alignItems: "center", gap: 6 }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+          <div className="flow-step-banner" style={{ background: accent.surface, border: `1px solid ${accent.border}` }}>
+            <div className="flow-step-tag" style={{ color: accent.tone }}>
               <Shield size={14} /> Step 1 of 3 — Permissions
             </div>
-            <h3 style={{ margin: "4px 0 0", fontSize: 16, fontWeight: 800, color: "#1e293b" }}>{flow.action === "check-in" ? "Requesting Access" : "Confirming Access"}</h3>
-            <div style={{ color: "#64748b", fontSize: 13, lineHeight: 1.5, marginTop: 4 }}>
+            <h3 className="flow-step-title">{flow.action === "check-in" ? "Requesting Access" : "Confirming Access"}</h3>
+            <p className="flow-step-subtitle">
               {flow.busy
                 ? "Requesting location and camera permissions..."
                 : flow.error
                   ? "Both location and camera permissions are required for attendance."
                   : "Permissions granted. Verifying your location..."}
-            </div>
+            </p>
           </div>
           {flow.busy && (
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "center", padding: 24 }}>
-              <div style={{ width: 36, height: 36, border: "3px solid #f1f5f9", borderTopColor: "#7c3aed", borderRadius: "50%", animation: "spinAround 0.8s linear infinite" }} />
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "center", padding: 20 }}>
+              <div style={{ width: 32, height: 32, border: "3px solid #f1f5f9", borderTopColor: "#7c3aed", borderRadius: "50%", animation: "spinAround 0.8s linear infinite" }} />
             </div>
           )}
         </div>
@@ -409,19 +410,19 @@ export default function MyDashboardPage() {
 
     if (flow.step === STEPS.GPS) {
       return (
-        <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-          <div style={{ padding: 20, borderRadius: 16, background: accent.surface, border: `1px solid ${accent.border}`, display: "grid", gap: 8 }}>
-            <div style={{ fontSize: 11, fontWeight: 800, letterSpacing: "0.12em", textTransform: "uppercase", color: accent.tone, display: "flex", alignItems: "center", gap: 6 }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+          <div className="flow-step-banner" style={{ background: accent.surface, border: `1px solid ${accent.border}` }}>
+            <div className="flow-step-tag" style={{ color: accent.tone }}>
               <MapPin size={14} /> Step 2 of 3 — Location
             </div>
-            <h3 style={{ margin: "4px 0 0", fontSize: 16, fontWeight: 800, color: "#1e293b" }}>Verifying Geofence</h3>
-            <div style={{ color: "#64748b", fontSize: 13, lineHeight: 1.5, marginTop: 4 }}>
+            <h3 className="flow-step-title">Verifying Geofence</h3>
+            <p className="flow-step-subtitle">
               {flow.busy ? "Fetching your GPS coordinates and checking salon radius..." : "Location verified. Opening camera..."}
-            </div>
+            </p>
           </div>
           {flow.busy && (
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "center", padding: 24 }}>
-              <div style={{ width: 36, height: 36, border: "3px solid #f1f5f9", borderTopColor: "#0f766e", borderRadius: "50%", animation: "spinAround 0.8s linear infinite" }} />
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "center", padding: 20 }}>
+              <div style={{ width: 32, height: 32, border: "3px solid #f1f5f9", borderTopColor: "#0f766e", borderRadius: "50%", animation: "spinAround 0.8s linear infinite" }} />
             </div>
           )}
           {flow.warning && !flow.busy && (
@@ -435,58 +436,49 @@ export default function MyDashboardPage() {
       const hasCamera = streamReady && Boolean(streamRef.current);
       const isCheckOut = flow.action === "check-out";
       return (
-        <div style={{ display: "flex", flexDirection: "column", gap: 18 }}>
-          <div style={{ padding: 20, borderRadius: 16, background: accent.surface, border: `1px solid ${accent.border}`, display: "grid", gap: 8 }}>
-            <div style={{ fontSize: 11, fontWeight: 800, letterSpacing: "0.12em", textTransform: "uppercase", color: accent.tone, display: "flex", alignItems: "center", gap: 6 }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+          <div className="flow-step-banner" style={{ background: accent.surface, border: `1px solid ${accent.border}` }}>
+            <div className="flow-step-tag" style={{ color: accent.tone }}>
               <Camera size={14} /> Step 3 of 3 — Selfie {isCheckOut ? "(Optional)" : ""}
             </div>
-            <h3 style={{ margin: "4px 0 0", fontSize: 16, fontWeight: 800, color: "#1e293b" }}>{hasCamera ? "Capture Selfie" : "Selfie Capture"}</h3>
-            <div style={{ color: "#64748b", fontSize: 13, lineHeight: 1.5, marginTop: 4 }}>
+            <h3 className="flow-step-title">{hasCamera ? "Capture Selfie" : "Selfie Capture"}</h3>
+            <p className="flow-step-subtitle">
               {hasCamera
                 ? "Align your face clearly inside the frame and click the capture button below."
                 : isCheckOut
                   ? "Camera is not available. You can skip the selfie and submit with GPS coordinates only."
                   : "Camera is required for check-in. Please allow camera access and try again."}
-            </div>
+            </p>
           </div>
           {hasCamera ? (
             <>
-              <div style={{ position: "relative", overflow: "hidden", borderRadius: 20, border: "1px solid rgba(226,232,240,0.8)", background: "#0f172a", boxShadow: "0 10px 30px rgba(0,0,0,0.1)" }}>
-                <video ref={videoRef} autoPlay playsInline muted style={{ width: "100%", borderRadius: 20, background: "#0f172a", display: "block", minHeight: 320, maxHeight: 400, objectFit: "cover" }} />
-                <div style={{ position: "absolute", inset: 20, borderRadius: 16, border: "2px dashed rgba(255,255,255,0.4)", pointerEvents: "none" }} />
-                <div style={{ position: "absolute", left: 16, top: 16, padding: "6px 12px", borderRadius: 20, background: "rgba(15,23,42,0.8)", color: "#fff", fontSize: 11, fontWeight: 700, letterSpacing: 0.5, textTransform: "uppercase" }}>
-                  <Camera size={14} style={{ display: 'inline', marginBottom: -2, marginRight: 4 }} /> Live Feed
+              <div className="flow-video-wrapper">
+                <video ref={videoRef} autoPlay playsInline muted className="flow-video-element" />
+                <div className="flow-video-overlay-frame" />
+                <div className="flow-video-badge">
+                  <Camera size={13} style={{ display: 'inline', marginBottom: -1 }} /> Live Feed
                 </div>
               </div>
               <canvas ref={canvasRef} style={{ display: "none" }} />
-              <div style={{ padding: "12px 16px", borderRadius: 12, background: isCheckOut ? "#fff9db" : "#eff6ff", border: isCheckOut ? "1px solid #ffe3e3" : "1px solid #bfdbfe", color: isCheckOut ? "#854d0e" : "#1e40af", fontSize: 13, lineHeight: 1.5, fontWeight: 500 }}>
+              <div className="flow-info-alert" style={{ background: isCheckOut ? "#fff9db" : "#eff6ff", border: isCheckOut ? "1px solid #ffe3e3" : "1px solid #bfdbfe", color: isCheckOut ? "#854d0e" : "#1e40af" }}>
                 {isCheckOut
                   ? "Selfie is optional for check-out. Your GPS coordinates will be recorded."
                   : data.profile?.attendanceEnrollmentPhotoUrl
                     ? "Face verification active. We'll match this selfie against your profile photo."
                     : "Selfie is mandatory to verify your attendance presence."}
               </div>
-              <div style={{ display: "flex", gap: 12, justifyContent: "flex-end", flexWrap: "wrap", borderTop: "1px solid #f1f5f9", paddingTop: 16 }}>
-                <button type="button" className="secondary-button" onClick={closeFlow} style={{ padding: "10px 20px", borderRadius: 8 }}>Cancel</button>
+              <div className="flow-actions-row">
+                <button type="button" className="flow-cancel-btn" onClick={closeFlow}>Cancel</button>
                 {isCheckOut && !data.profile?.attendanceEnrollmentPhotoUrl && (
-                  <button type="button" className="secondary-button" onClick={() => void handleSkipSelfie()} disabled={flow.busy} style={{ padding: "10px 20px", borderRadius: 8 }}>
+                  <button type="button" className="flow-cancel-btn" onClick={() => void handleSkipSelfie()} disabled={flow.busy}>
                     Skip Selfie
                   </button>
                 )}
                 <button
                   type="button"
+                  className="flow-submit-btn"
                   onClick={() => void handleCaptureAndSubmit()}
                   disabled={flow.busy}
-                  style={{
-                    padding: "10px 24px",
-                    background: "linear-gradient(135deg, #3b82f6, #2563eb)",
-                    color: "#fff",
-                    border: "none",
-                    borderRadius: 8,
-                    fontWeight: 700,
-                    cursor: flow.busy ? "not-allowed" : "pointer",
-                    boxShadow: "0 4px 12px rgba(59,130,246,0.2)"
-                  }}
                 >
                   {flow.busy ? (data.profile?.attendanceEnrollmentPhotoUrl ? "Verifying Face..." : "Capturing...") : "Capture & Submit"}
                 </button>
@@ -502,21 +494,14 @@ export default function MyDashboardPage() {
                       Camera is required for biometric check-out. Please allow camera access in your browser settings and try again.
                     </div>
                   ) : (
-                    <div style={{ display: "flex", gap: 12, justifyContent: "flex-end", flexWrap: "wrap", borderTop: "1px solid #f1f5f9", paddingTop: 16 }}>
-                      <button type="button" className="secondary-button" onClick={closeFlow} style={{ padding: "10px 20px", borderRadius: 8 }}>Cancel</button>
+                    <div className="flow-actions-row">
+                      <button type="button" className="flow-cancel-btn" onClick={closeFlow}>Cancel</button>
                       <button
                         type="button"
+                        className="flow-submit-btn"
                         onClick={() => void handleSkipSelfie()}
                         disabled={flow.busy}
-                        style={{
-                          padding: "10px 24px",
-                          background: "#0f766e",
-                          color: "#fff",
-                          border: "none",
-                          borderRadius: 8,
-                          fontWeight: 700,
-                          cursor: "pointer"
-                        }}
+                        style={{ background: "#0f766e" }}
                       >
                         Submit Without Selfie
                       </button>
@@ -536,18 +521,18 @@ export default function MyDashboardPage() {
 
     if (flow.step === STEPS.SUBMITTING) {
       return (
-        <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-          <div style={{ padding: 20, borderRadius: 16, background: accent.surface, border: `1px solid ${accent.border}`, display: "grid", gap: 8 }}>
-            <div style={{ fontSize: 11, fontWeight: 800, letterSpacing: "0.12em", textTransform: "uppercase", color: accent.tone, display: "flex", alignItems: "center", gap: 6 }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+          <div className="flow-step-banner" style={{ background: accent.surface, border: `1px solid ${accent.border}` }}>
+            <div className="flow-step-tag" style={{ color: accent.tone }}>
               <Upload size={14} /> Uploading
             </div>
-            <h3 style={{ margin: "4px 0 0", fontSize: 16, fontWeight: 800, color: "#1e293b" }}>{flow.action === "check-in" ? "Saving Attendance" : "Completing Attendance"}</h3>
-            <div style={{ color: "#64748b", fontSize: 13, lineHeight: 1.5 }}>
+            <h3 className="flow-step-title">{flow.action === "check-in" ? "Saving Attendance" : "Completing Attendance"}</h3>
+            <p className="flow-step-subtitle">
               {flow.action === "check-in" ? "Uploading selfie and GPS coordinates to the server..." : "Submitting GPS coordinates and check-out time..."}
-            </div>
+            </p>
           </div>
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "center", padding: 24 }}>
-            <div style={{ width: 36, height: 36, border: "3px solid #f1f5f9", borderTopColor: "#d946ef", borderRadius: "50%", animation: "spinAround 0.8s linear infinite" }} />
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "center", padding: 20 }}>
+            <div style={{ width: 32, height: 32, border: "3px solid #f1f5f9", borderTopColor: "#d946ef", borderRadius: "50%", animation: "spinAround 0.8s linear infinite" }} />
           </div>
         </div>
       );
@@ -555,28 +540,23 @@ export default function MyDashboardPage() {
 
     if (flow.step === STEPS.SUCCESS) {
       return (
-        <div style={{ display: "flex", flexDirection: "column", gap: 18, alignItems: "center", padding: "10px 0" }}>
-          <div style={{ width: 64, height: 64, borderRadius: "50%", background: "#ecfdf5", border: "2px solid #a7f3d0", display: "flex", alignItems: "center", justifyContent: "center", color: "#10b981", fontSize: 32, marginBottom: 8, boxShadow: "0 4px 12px rgba(16,185,129,0.15)" }}>
-            <CheckCircle2 size={16} />
+        <div style={{ display: "flex", flexDirection: "column", gap: 16, alignItems: "center", padding: "10px 0" }}>
+          <div style={{ width: 60, height: 60, borderRadius: "50%", background: "#ecfdf5", border: "2px solid #a7f3d0", display: "flex", alignItems: "center", justifyContent: "center", color: "#10b981", fontSize: 28, boxShadow: "0 4px 12px rgba(16,185,129,0.15)" }}>
+            <CheckCircle2 size={32} />
           </div>
           <div style={{ textAlign: "center" }}>
-            <h3 style={{ margin: 0, fontSize: 18, fontWeight: 800, color: "#1e293b" }}>
+            <h3 style={{ margin: 0, fontSize: 17, fontWeight: 800, color: "#1e293b" }}>
               {flow.action === "check-in" ? "Attendance Marked Successfully" : "Check-Out Successful"}
             </h3>
-            <p style={{ color: "#64748b", fontSize: 14, margin: "8px 0 0", lineHeight: 1.5 }}>{flow.success}</p>
+            <p style={{ color: "#64748b", fontSize: 13.5, margin: "6px 0 0", lineHeight: 1.45 }}>{flow.success}</p>
           </div>
           <button
             type="button"
+            className="flow-submit-btn"
             onClick={closeFlow}
             style={{
-              marginTop: 12,
               padding: "10px 32px",
               background: "#10b981",
-              color: "#fff",
-              border: "none",
-              borderRadius: 8,
-              fontWeight: 700,
-              cursor: "pointer",
               boxShadow: "0 4px 12px rgba(16,185,129,0.2)"
             }}
           >
@@ -605,13 +585,21 @@ export default function MyDashboardPage() {
 
       {/* Selfie Flow Modal */}
       {flow.open && (
-        <div style={{ position: "fixed", inset: 0, background: "rgba(15, 23, 42, 0.75)", backdropFilter: "blur(4px)", display: "grid", placeItems: "center", zIndex: 9999, padding: 16 }}>
-          <div style={{ width: "min(100%, 540px)", maxHeight: "92vh", overflowY: "auto", display: "grid", gap: 16, padding: 28, background: "#fff", borderRadius: 20, boxShadow: "0 25px 60px rgba(15,23,42,0.35)", border: "1px solid rgba(226,232,240,0.8)" }}>
+        <div className="flow-modal-overlay">
+          <div className="flow-modal-card">
+            <button
+              type="button"
+              className="flow-modal-close-btn"
+              onClick={closeFlow}
+              aria-label="Close modal"
+            >
+              <X size={16} />
+            </button>
             {renderFlowBody()}
             {flow.error && <div style={{ padding: "10px 14px", borderRadius: 8, background: "#fef2f2", border: "1px solid #fee2e2", color: "#dc2626", fontSize: 13, fontWeight: 600 }}>{flow.error}</div>}
             {flow.error && flow.step !== STEPS.SUBMITTING && flow.step !== STEPS.SUCCESS && (
-              <div style={{ display: "flex", justifyContent: "flex-end", borderTop: "1px solid #f1f5f9", paddingTop: 14 }}>
-                <button type="button" className="secondary-button" onClick={closeFlow} style={{ padding: "8px 18px", borderRadius: 8 }}>Close</button>
+              <div style={{ display: "flex", justifyContent: "flex-end", borderTop: "1px solid #f1f5f9", paddingTop: 12 }}>
+                <button type="button" className="flow-cancel-btn" onClick={closeFlow}>Close</button>
               </div>
             )}
           </div>
@@ -619,14 +607,7 @@ export default function MyDashboardPage() {
       )}
 
       {/* Hero Banner */}
-      <div style={{
-        background: "linear-gradient(135deg, #1e293b 0%, #0f172a 60%, #1e1b4b 100%)",
-        borderRadius: 20,
-        padding: "32px 36px",
-        marginBottom: 24,
-        position: "relative",
-        overflow: "hidden"
-      }}>
+      <div className="my-dashboard-hero">
         {/* decorative circles */}
         <div style={{ position: "absolute", top: -40, right: -40, width: 200, height: 200, borderRadius: "50%", background: "rgba(139,92,246,0.08)", pointerEvents: "none" }} />
         <div style={{ position: "absolute", bottom: -60, right: 80, width: 160, height: 160, borderRadius: "50%", background: "rgba(59,130,246,0.06)", pointerEvents: "none" }} />
@@ -636,7 +617,7 @@ export default function MyDashboardPage() {
             <h1 style={{ margin: 0, fontSize: 24, fontWeight: 800, color: "#fff", marginBottom: 6 }}>My Dashboard</h1>
             <p style={{ margin: 0, color: "#94a3b8", fontSize: 14 }}>Your staff-scoped overview for bookings, attendance, service assignments, and daily alerts.</p>
           </div>
-          <div style={{ display: "flex", gap: 8, flexShrink: 0 }}>
+          <div style={{ display: "flex", gap: 8, flexShrink: 0, flexWrap: "wrap" }}>
             <span style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "6px 14px", borderRadius: 20, fontSize: 12, fontWeight: 700, background: "rgba(59,130,246,0.2)", color: "#93c5fd", border: "1px solid rgba(59,130,246,0.3)" }}>
               <CalendarCheck size={14} style={{ display: 'inline', marginBottom: -2, marginRight: 4 }} /> Today: {data.todayAppointments.length}
             </span>
@@ -659,7 +640,7 @@ export default function MyDashboardPage() {
         <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
           
           {/* Attendance Section */}
-          <div className="glass-panel" style={{ padding: 32, position: "relative" }}>
+          <div className="glass-panel attendance-control-panel">
             <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 4, background: isCheckedIn ? "linear-gradient(90deg, #10b981, #34d399)" : "linear-gradient(90deg, #0ea5e9, #38bdf8)", borderTopLeftRadius: 16, borderTopRightRadius: 16 }} />
             
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 20, flexWrap: "wrap", borderBottom: "1px solid #f1f5f9", paddingBottom: 20, marginBottom: 20 }}>
