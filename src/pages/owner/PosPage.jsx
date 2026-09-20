@@ -2553,22 +2553,22 @@ export default function PosPage() {
       
       {/* ======= FULL ADD GIFTCARD MODAL ======= */}
       {showGcModal && (
-        <div style={{ position:"fixed", inset:0, background:"rgba(15,23,42,0.55)", zIndex:9000, display:"flex", alignItems:"center", justifyContent:"center" }} onClick={() => setShowGcModal(false)}>
-          <div style={{ background:"#fff", borderRadius:16, width:"min(95vw,900px)", maxHeight:"90vh", overflowY:"auto", boxShadow: "none", display:"flex", flexDirection:"column" }} onClick={e => e.stopPropagation()}>
-            <div style={{ padding:"18px 24px", display:"flex", justifyContent:"space-between", alignItems:"center", borderBottom:"1px solid #f1f5f9" }}>
-              <div style={{ fontWeight:700, fontSize:"1.2rem", color:"#0f172a" }}>Add Gift Card</div>
-              <div style={{ display:"flex", alignItems:"center", gap:12 }}>
-                <div style={{ position:"relative" }}>
-                  <input placeholder="Search For Card" value={gcSearch} onChange={e => setGcSearch(e.target.value)} style={{ padding:"8px 12px", paddingRight:32, border:"1px solid #cbd5e1", borderRadius:8, fontSize:"0.9rem", width:220 }} />
+        <div className="pos-modal-overlay" onClick={() => setShowGcModal(false)}>
+          <div className="pos-modal-container" onClick={e => e.stopPropagation()}>
+            <div className="pos-modal-header">
+              <div className="pos-modal-title">Add Gift Card</div>
+              <div className="pos-modal-header-actions">
+                <div className="pos-modal-search-box">
+                  <input placeholder="Search For Card" value={gcSearch} onChange={e => setGcSearch(e.target.value)} />
                   <span style={{ position:"absolute", right:10, top:8, color:"#94a3b8" }}>🔍</span>
                 </div>
-                <button onClick={() => setShowGcModal(false)} style={{ background:"none", border:"none", fontSize:"1.4rem", cursor:"pointer", color:"#94a3b8" }}>&#x2715;</button>
+                <button className="pos-modal-close-btn" onClick={() => setShowGcModal(false)}>&#x2715;</button>
               </div>
             </div>
             
-            <div style={{ padding:"24px", display:"flex", flexDirection:"column", gap:24, flex:1 }}>
+            <div className="pos-modal-body">
                {/* GiftCard Grid */}
-               <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill, minmax(250px, 1fr))", gap:16, maxHeight:300, overflowY:"auto", paddingRight:8 }}>
+               <div className="pos-modal-cards-grid">
                  {(() => {
                    const raw = context.settings?.advancedSettings;
                    const adv = typeof raw === "string" ? (() => { try { return JSON.parse(raw); } catch { return {}; } })() : (raw || {});
@@ -2607,8 +2607,8 @@ export default function PosPage() {
                </div>
 
                {/* Bottom Form */}
-               <div style={{ display:"flex", gap:16, alignItems:"flex-end", flexWrap:"wrap" }}>
-                 <div style={{ flex:1, minWidth:150 }}>
+               <div className="pos-modal-form-grid">
+                 <div className="pos-field-full" style={{ flex:1, minWidth:140 }}>
                    <label style={{ fontSize:"0.82rem", fontWeight:600, color:"#475569", display:"block", marginBottom:6 }}>Name</label>
                    <input 
                      readOnly={gcModalGc?.id !== "CUSTOM"} 
@@ -2630,23 +2630,23 @@ export default function PosPage() {
                      }} 
                    />
                  </div>
-                 <div style={{ flex:1, minWidth:120 }}>
+                 <div style={{ flex:1, minWidth:110 }}>
                    <label style={{ fontSize:"0.82rem", fontWeight:600, color:"#475569", display:"block", marginBottom:6 }}>Validity (Days)</label>
                    <input type="number" placeholder="Enter Validity" value={gcDraft.validityDays} onChange={e=>setGcDraft(d=>({...d,validityDays:e.target.value}))} style={{ width:"100%", padding:"10px 12px", border:"1px solid #cbd5e1", borderRadius:8, fontSize:"0.9rem", boxSizing:"border-box" }} />
                  </div>
-                 <div style={{ flex:1, minWidth:140 }}>
-                   <label style={{ fontSize:"0.82rem", fontWeight:600, color:"#475569", display:"block", marginBottom:6 }}>Card Activated From</label>
-                    <input type="date" value={gcDraft.purchaseDate} onChange={e=>setGcDraft(d=>({...d,purchaseDate:e.target.value}))} max={new Date().toISOString().slice(0, 10)} style={{ width:"100%", padding:"10px 12px", border:"1px solid #cbd5e1", borderRadius:8, fontSize:"0.9rem", boxSizing:"border-box" }} />
-                 </div>
-                 <div style={{ flex:1, minWidth:120 }}>
+                 <div style={{ flex:1, minWidth:110 }}>
                    <label style={{ fontSize:"0.82rem", fontWeight:600, color:"#475569", display:"block", marginBottom:6 }}>Purchase Amount</label>
                    <input type="number" placeholder="Enter Price" value={gcDraft.price} onChange={e=>setGcDraft(d=>({...d,price:e.target.value}))} style={{ width:"100%", padding:"10px 12px", border:"1px solid #cbd5e1", borderRadius:8, fontSize:"0.9rem", boxSizing:"border-box" }} />
                  </div>
-                 <div style={{ flex:1.2, minWidth:150 }}>
+                 <div className="pos-field-full" style={{ flex:1, minWidth:140 }}>
+                   <label style={{ fontSize:"0.82rem", fontWeight:600, color:"#475569", display:"block", marginBottom:6 }}>Card Activated From</label>
+                    <input type="date" value={gcDraft.purchaseDate} onChange={e=>setGcDraft(d=>({...d,purchaseDate:e.target.value}))} max={new Date().toISOString().slice(0, 10)} style={{ width:"100%", padding:"10px 12px", border:"1px solid #cbd5e1", borderRadius:8, fontSize:"0.9rem", boxSizing:"border-box" }} />
+                 </div>
+                 <div className="pos-field-full" style={{ flex:1.2, minWidth:140 }}>
                    <label style={{ fontSize:"0.82rem", fontWeight:600, color:"#475569", display:"block", marginBottom:6 }}>Card Code (Optional)</label>
                    <input placeholder="Auto-generated" value={gcDraft.code || ""} onChange={e=>setGcDraft(d=>({...d,code:e.target.value}))} style={{ width:"100%", padding:"10px 12px", border:"1px solid #cbd5e1", borderRadius:8, fontSize:"0.9rem", boxSizing:"border-box" }} />
                  </div>
-                 <div style={{ flex:1.2, minWidth:150 }}>
+                 <div className="pos-field-full" style={{ flex:1.2, minWidth:140 }}>
                    <label style={{ fontSize:"0.82rem", fontWeight:600, color:"#475569", display:"block", marginBottom:6 }}>Staff</label>
                    <CustomDropdown value={gcDraft.staffId} onChange={e=>setGcDraft(d=>({...d,staffId:e.target.value}))} style={{ width:"100%", padding:"10px 12px", border:"1px solid #cbd5e1", borderRadius:8, fontSize:"0.9rem", boxSizing:"border-box" }}>
                      <option value="">Select Staff</option>
@@ -2654,31 +2654,31 @@ export default function PosPage() {
                    </CustomDropdown>
                  </div>
                </div>
-             </div>
 
                {/* GiftCard Payments */}
-               <div style={{ marginTop: 16, padding: "16px", background: "#f8fafc", borderRadius: 8, border: "1px solid #e2e8f0" }}>
+               <div className="pos-modal-payment-box" style={{ marginTop: 16 }}>
                  <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 12 }}>
                    <div style={{ fontWeight: 600, color: "#0f172a" }}>Payment Breakup</div>
                    <div style={{ fontWeight: 700, color: "var(--accent, #3b82f6)" }}>Total: {formatMoney(Number(gcDraft.price || 0))}</div>
                  </div>
-                 <div style={{ display: "flex", gap: 16, flexWrap: "wrap" }}>
-                   <div style={{ flex: 1, minWidth: 120 }}>
+                 <div className="pos-modal-payment-grid">
+                   <div style={{ flex: 1, minWidth: 100 }}>
                      <label style={{ fontSize: "0.82rem", fontWeight: 600, color: "#475569", display: "block", marginBottom: 6 }}>Online Amount</label>
                      <input type="number" placeholder="0" value={gcDraft.online} onChange={e => setGcDraft(d => ({ ...d, online: e.target.value }))} style={{ width: "100%", padding: "10px 12px", border: "1px solid #cbd5e1", borderRadius: 8, fontSize: "0.9rem", boxSizing: "border-box" }} />
                    </div>
-                   <div style={{ flex: 1, minWidth: 120 }}>
+                   <div style={{ flex: 1, minWidth: 100 }}>
                      <label style={{ fontSize: "0.82rem", fontWeight: 600, color: "#475569", display: "block", marginBottom: 6 }}>Cash Amount</label>
                      <input type="number" placeholder="0" value={gcDraft.offline} onChange={e => setGcDraft(d => ({ ...d, offline: e.target.value }))} style={{ width: "100%", padding: "10px 12px", border: "1px solid #cbd5e1", borderRadius: 8, fontSize: "0.9rem", boxSizing: "border-box" }} />
                    </div>
-                   <div style={{ flex: 1, minWidth: 120 }}>
+                   <div className="pos-field-full" style={{ flex: 1, minWidth: 100 }}>
                      <label style={{ fontSize: "0.82rem", fontWeight: 600, color: "#475569", display: "block", marginBottom: 6 }}>Balance</label>
                      <input readOnly value={Math.max(0, Number(gcDraft.price || 0) - Number(gcDraft.online || 0) - Number(gcDraft.offline || 0))} style={{ width: "100%", padding: "10px 12px", border: "1px solid #cbd5e1", borderRadius: 8, fontSize: "0.9rem", boxSizing: "border-box", background: "#f1f5f9", color: "#64748b" }} />
                    </div>
                  </div>
                </div>
+             </div>
 
-             <div style={{ padding:"16px 24px", borderTop:"1px solid #f1f5f9", display:"flex", justifyContent:"flex-end", gap:12 }}>
+             <div className="pos-modal-footer">
                <button onClick={() => setShowGcModal(false)} style={{ padding:"10px 24px", background:"#fff", border:"1px solid #cbd5e1", borderRadius:8, fontWeight:600, cursor:"pointer", color:"#475569" }}>Cancel</button>
                <button onClick={handleAddGiftCard} disabled={!gcModalGc || !gcDraft.staffId || submittingGc} style={{ padding:"10px 24px", background:"#2563eb", color:"#fff", border:"none", borderRadius:8, fontWeight:700, cursor:(gcModalGc && gcDraft.staffId && !submittingGc)?"pointer":"not-allowed", opacity:(gcModalGc && gcDraft.staffId && !submittingGc)?1:0.6 }}>{submittingGc ? "Processing..." : "Create Invoice"}</button>
              </div>
@@ -2688,29 +2688,29 @@ export default function PosPage() {
 
   {/* ======= FULL ADD PACKAGE MODAL ======= */}
       {showPkgModal && (
-        <div style={{ position:"fixed", inset:0, background:"rgba(15,23,42,0.65)", zIndex:9000, display:"flex", alignItems:"center", justifyContent:"center", backdropFilter:"blur(4px)" }} onClick={() => setShowPkgModal(false)}>
-          <div style={{ background:"#fff", borderRadius:16, width:"min(95vw,1000px)", maxHeight:"90vh", overflowY:"auto", boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)", display:"flex", flexDirection:"column" }} onClick={e => e.stopPropagation()}>
-            <div style={{ padding:"20px 28px", display:"flex", justifyContent:"space-between", alignItems:"center", borderBottom:"1px solid #e2e8f0", position:"sticky", top:0, background:"#fff", zIndex:10 }}>
-              <div style={{ fontWeight:800, fontSize:"1.3rem", color:"#0f172a" }}>Add packages</div>
-              <div style={{ display:"flex", alignItems:"center", gap:16 }}>
-                <div style={{ position:"relative" }}>
-                  <input placeholder="Search For Package" value={pkgSearch} onChange={e => setPkgSearch(e.target.value)} style={{ padding:"10px 14px", paddingRight:36, border:"1px solid #cbd5e1", borderRadius:8, fontSize:"0.9rem", width:240, outline:"none", transition:"border-color 0.2s" }} onFocus={e => e.target.style.borderColor="#3b82f6"} onBlur={e => e.target.style.borderColor="#cbd5e1"} />
+        <div className="pos-modal-overlay" onClick={() => setShowPkgModal(false)}>
+          <div className="pos-modal-container pos-modal-container-wide" onClick={e => e.stopPropagation()}>
+            <div className="pos-modal-header">
+              <div className="pos-modal-title">Add packages</div>
+              <div className="pos-modal-header-actions">
+                <div className="pos-modal-search-box">
+                  <input placeholder="Search For Package" value={pkgSearch} onChange={e => setPkgSearch(e.target.value)} />
                   <span style={{ position:"absolute", right:12, top:10, color:"#94a3b8" }}>🔍</span>
                 </div>
-                <button onClick={() => setShowPkgModal(false)} style={{ background:"#f1f5f9", border:"none", width:36, height:36, borderRadius:"50%", display:"flex", alignItems:"center", justifyContent:"center", fontSize:"1.2rem", cursor:"pointer", color:"#64748b", transition:"background 0.2s" }} onMouseEnter={e => e.currentTarget.style.background="#e2e8f0"} onMouseLeave={e => e.currentTarget.style.background="#f1f5f9"}>&#x2715;</button>
+                <button className="pos-modal-close-btn" onClick={() => setShowPkgModal(false)}>&#x2715;</button>
               </div>
             </div>
             
-            <div style={{ padding:"28px", display:"flex", flexDirection:"column", gap:32, flex:1 }}>
+            <div className="pos-modal-body">
               {/* Package Grid */}
-              <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill, minmax(280px, 1fr))", gap:20, maxHeight:320, overflowY:"auto", paddingRight:8 }}>
+              <div className="pos-modal-cards-grid">
                 {(context.packages || []).filter(p => p.name.toLowerCase().includes(pkgSearch.toLowerCase())).map(pkg => {
                   const isSelected = pkgModalPkg?.id === pkg.id;
                   return (
                     <div key={pkg.id} onClick={() => {
                       setPkgModalPkg(pkg);
                       setPkgDraft({ staffId: "", price: String(pkg.price||0), validityDays: String(pkg.validityDays||30), purchaseDate: new Date().toISOString().slice(0,10), customServices: (pkg.services||[]).map(s=>({id:s.service?.id||s.serviceId,name:s.service?.name, price: s.service?.salesPrice || s.service?.price || 0, qty:s.sessions||1})), customProducts: [], balance: "", online: "", offline: "", remark: "" });
-                    }} style={{ background: isSelected?"#fdf4ff":"#ffffff", border: isSelected?"2px solid #e879f9":"1px solid #e2e8f0", borderRadius:12, padding:"20px", cursor:"pointer", transition:"all 0.2s", boxShadow: isSelected ? "0 4px 6px -1px rgba(232, 121, 249, 0.1)" : "0 1px 3px rgba(0,0,0,0.05)", display: "flex", flexDirection: "column" }} onMouseEnter={e => { if(!isSelected) e.currentTarget.style.borderColor="#cbd5e1" }} onMouseLeave={e => { if(!isSelected) e.currentTarget.style.borderColor="#e2e8f0" }}>
+                    }} style={{ background: isSelected?"#fdf4ff":"#ffffff", border: isSelected?"2px solid #e879f9":"1px solid #e2e8f0", borderRadius:12, padding:"16px", cursor:"pointer", transition:"all 0.2s", boxShadow: isSelected ? "0 4px 6px -1px rgba(232, 121, 249, 0.1)" : "0 1px 3px rgba(0,0,0,0.05)", display: "flex", flexDirection: "column" }} onMouseEnter={e => { if(!isSelected) e.currentTarget.style.borderColor="#cbd5e1" }} onMouseLeave={e => { if(!isSelected) e.currentTarget.style.borderColor="#e2e8f0" }}>
                       <div style={{ fontSize:"1.05rem", fontWeight:800, color:"#4a044e", marginBottom:12, textTransform:"uppercase", letterSpacing:"0.5px" }}>{pkg.name}</div>
                       <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 12, paddingBottom: 12, borderBottom: "1px dashed #e2e8f0" }}>
                         <div style={{ display: "flex", flexDirection: "column" }}>
@@ -2737,29 +2737,29 @@ export default function PosPage() {
                 <div onClick={() => {
                   setPkgModalPkg({ id: "CUSTOM", name: "CUSTOM PACKAGE" });
                   setPkgDraft({ staffId: "", price: "", validityDays: "", purchaseDate: new Date().toISOString().slice(0,10), customServices: [], customProducts: [], balance: "", online: "", offline: "", remark: "" });
-                }} style={{ background: pkgModalPkg?.id==="CUSTOM"?"#eff6ff":"#f8fafc", border: pkgModalPkg?.id==="CUSTOM"?"2px solid #3b82f6":"1px dashed #cbd5e1", borderRadius:12, padding:20, cursor:"pointer", display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", minHeight:200, transition:"all 0.2s" }} onMouseEnter={e => { if(pkgModalPkg?.id!=="CUSTOM") e.currentTarget.style.borderColor="#94a3b8" }} onMouseLeave={e => { if(pkgModalPkg?.id!=="CUSTOM") e.currentTarget.style.borderColor="#cbd5e1" }}>
-                  <div style={{ width: 48, height: 48, borderRadius: "50%", background: pkgModalPkg?.id==="CUSTOM"?"#dbeafe":"#e2e8f0", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 16, color: pkgModalPkg?.id==="CUSTOM"?"#2563eb":"#64748b", fontSize: "1.5rem" }}>+</div>
-                  <div style={{ fontSize:"1.05rem", fontWeight:800, color:pkgModalPkg?.id==="CUSTOM"?"#2563eb":"#475569", textTransform:"uppercase", letterSpacing:"0.5px" }}>Create Custom</div>
-                  <div style={{ fontSize: "0.85rem", color: "#64748b", marginTop: 8, textAlign: "center" }}>Build a package from scratch</div>
+                }} style={{ background: pkgModalPkg?.id==="CUSTOM"?"#eff6ff":"#f8fafc", border: pkgModalPkg?.id==="CUSTOM"?"2px solid #3b82f6":"1px dashed #cbd5e1", borderRadius:12, padding:16, cursor:"pointer", display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", minHeight:160, transition:"all 0.2s" }} onMouseEnter={e => { if(pkgModalPkg?.id!=="CUSTOM") e.currentTarget.style.borderColor="#94a3b8" }} onMouseLeave={e => { if(pkgModalPkg?.id!=="CUSTOM") e.currentTarget.style.borderColor="#cbd5e1" }}>
+                  <div style={{ width: 44, height: 44, borderRadius: "50%", background: pkgModalPkg?.id==="CUSTOM"?"#dbeafe":"#e2e8f0", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 12, color: pkgModalPkg?.id==="CUSTOM"?"#2563eb":"#64748b", fontSize: "1.3rem" }}>+</div>
+                  <div style={{ fontSize:"1rem", fontWeight:800, color:pkgModalPkg?.id==="CUSTOM"?"#2563eb":"#475569", textTransform:"uppercase", letterSpacing:"0.5px" }}>Create Custom</div>
+                  <div style={{ fontSize: "0.8rem", color: "#64748b", marginTop: 6, textAlign: "center" }}>Build a package from scratch</div>
                 </div>
               </div>
 
               {/* Selected Services & Form */}
-              <div style={{ display:"flex", flexDirection:"column", gap:20 }}>
+              <div style={{ display:"flex", flexDirection:"column", gap:16 }}>
                 {/* Services List */}
                 {pkgDraft.customServices.length > 0 && (
                   <div>
-                    <div style={{ fontWeight:700, color:"#0f172a", fontSize:"1rem", marginBottom:12, paddingBottom: 8, borderBottom: "1px solid #f1f5f9" }}>Selected Services</div>
-                    <div style={{ display:"flex", flexDirection:"column", gap:10 }}>
+                    <div style={{ fontWeight:700, color:"#0f172a", fontSize:"1rem", marginBottom:10, paddingBottom: 6, borderBottom: "1px solid #f1f5f9" }}>Selected Services</div>
+                    <div style={{ display:"flex", flexDirection:"column", gap:8 }}>
                       {pkgDraft.customServices.map((svc, idx) => (
-                        <div key={idx} style={{ display:"flex", alignItems:"center", justifyContent:"space-between", padding:"14px 20px", border:"1px solid #e2e8f0", borderRadius:10, background:"#f8fafc" }}>
-                          <span style={{ fontSize:"0.95rem", color:"#0f172a", fontWeight:600 }}>{svc.name} <span style={{color:"#64748b", fontSize:"0.85rem", marginLeft:8, fontWeight: 500}}>({formatMoney(Number(svc.price||0) * Number(svc.qty||1))})</span></span>
-                          <div style={{ display:"flex", alignItems:"center", gap:16 }}>
-                            <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                              <span style={{ fontSize: "0.8rem", color: "#64748b", fontWeight: 600, textTransform: "uppercase" }}>Qty</span>
-                              <input type="number" min="1" value={svc.qty} onChange={e => { const n=[...pkgDraft.customServices]; n[idx]={...n[idx],qty:Number(e.target.value)}; const newTotal = n.reduce((acc,s)=>acc+(Number(s.price||0)*Number(s.qty||1)),0); setPkgDraft(d=>({...d,customServices:n, price: pkgModalPkg?.id==="CUSTOM"?String(newTotal):d.price})); }} style={{ width:70, padding:"8px", border:"1px solid #cbd5e1", borderRadius:6, fontSize:"0.95rem", textAlign:"center", outline: "none" }} onFocus={e => e.target.style.borderColor="#3b82f6"} onBlur={e => e.target.style.borderColor="#cbd5e1"} />
+                        <div key={idx} style={{ display:"flex", alignItems:"center", justifyContent:"space-between", padding:"12px 16px", border:"1px solid #e2e8f0", borderRadius:10, background:"#f8fafc", flexWrap:"wrap", gap: 8 }}>
+                          <span style={{ fontSize:"0.9rem", color:"#0f172a", fontWeight:600, flex: 1, minWidth: 160 }}>{svc.name} <span style={{color:"#64748b", fontSize:"0.8rem", marginLeft:6, fontWeight: 500}}>({formatMoney(Number(svc.price||0) * Number(svc.qty||1))})</span></span>
+                          <div style={{ display:"flex", alignItems:"center", gap:12 }}>
+                            <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                              <span style={{ fontSize: "0.75rem", color: "#64748b", fontWeight: 600, textTransform: "uppercase" }}>Qty</span>
+                              <input type="number" min="1" value={svc.qty} onChange={e => { const n=[...pkgDraft.customServices]; n[idx]={...n[idx],qty:Number(e.target.value)}; const newTotal = n.reduce((acc,s)=>acc+(Number(s.price||0)*Number(s.qty||1)),0); setPkgDraft(d=>({...d,customServices:n, price: pkgModalPkg?.id==="CUSTOM"?String(newTotal):d.price})); }} style={{ width:60, padding:"6px", border:"1px solid #cbd5e1", borderRadius:6, fontSize:"0.9rem", textAlign:"center", outline: "none" }} onFocus={e => e.target.style.borderColor="#3b82f6"} onBlur={e => e.target.style.borderColor="#cbd5e1"} />
                             </div>
-                            <button onClick={() => { const n=pkgDraft.customServices.filter((_,i)=>i!==idx); const newTotal = n.reduce((acc,s)=>acc+(Number(s.price||0)*Number(s.qty||1)),0); setPkgDraft(d=>({...d,customServices:n, price: pkgModalPkg?.id==="CUSTOM"?String(newTotal):d.price})); }} style={{ width:36, height:36, display:"flex", alignItems:"center", justifyContent:"center", background:"#fee2e2", border:"none", borderRadius:6, cursor:"pointer", color:"#ef4444", fontWeight:700, fontSize: "1.1rem", transition: "background 0.2s" }} onMouseEnter={e => e.currentTarget.style.background="#fecaca"} onMouseLeave={e => e.currentTarget.style.background="#fee2e2"}>&times;</button>
+                            <button onClick={() => { const n=pkgDraft.customServices.filter((_,i)=>i!==idx); const newTotal = n.reduce((acc,s)=>acc+(Number(s.price||0)*Number(s.qty||1)),0); setPkgDraft(d=>({...d,customServices:n, price: pkgModalPkg?.id==="CUSTOM"?String(newTotal):d.price})); }} style={{ width:32, height:32, display:"flex", alignItems:"center", justifyContent:"center", background:"#fee2e2", border:"none", borderRadius:6, cursor:"pointer", color:"#ef4444", fontWeight:700, fontSize: "1rem", transition: "background 0.2s" }} onMouseEnter={e => e.currentTarget.style.background="#fecaca"} onMouseLeave={e => e.currentTarget.style.background="#fee2e2"}>&times;</button>
                           </div>
                         </div>
                       ))}
@@ -2768,17 +2768,17 @@ export default function PosPage() {
                 )}
 
                 {/* Add Services & Products Area */}
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 24, background: "#f8fafc", padding: "20px", borderRadius: "12px", border: "1px solid #e2e8f0" }}>
+                <div className="pos-modal-pkg-add-grid">
                   {/* Add Services Search Bar */}
-                  <div style={{ display:"flex", flexDirection:"column", gap:8 }}>
-                    <label style={{ fontWeight:700, color:"#334155", fontSize:"0.9rem" }}>Add Services to Package</label>
+                  <div style={{ display:"flex", flexDirection:"column", gap:6 }}>
+                    <label style={{ fontWeight:700, color:"#334155", fontSize:"0.88rem" }}>Add Services to Package</label>
                     <div style={{ position:"relative" }}>
-                      <input placeholder="Search Service By Category Or Name..." value={pkgServiceSearch} onChange={e => setPkgServiceSearch(e.target.value)} style={{ width:"100%", padding:"12px 16px", paddingRight:40, border:"1px solid #cbd5e1", borderRadius:8, fontSize:"0.95rem", boxSizing:"border-box", outline: "none", transition: "border-color 0.2s" }} onFocus={e => e.target.style.borderColor="#3b82f6"} onBlur={e => e.target.style.borderColor="#cbd5e1"} />
-                      <span style={{ position:"absolute", right:14, top:12, color:"#94a3b8", fontWeight:700 }}>🔍</span>
+                      <input placeholder="Search Service..." value={pkgServiceSearch} onChange={e => setPkgServiceSearch(e.target.value)} style={{ width:"100%", padding:"10px 14px", paddingRight:36, border:"1px solid #cbd5e1", borderRadius:8, fontSize:"0.9rem", boxSizing:"border-box", outline: "none", transition: "border-color 0.2s" }} onFocus={e => e.target.style.borderColor="#3b82f6"} onBlur={e => e.target.style.borderColor="#cbd5e1"} />
+                      <span style={{ position:"absolute", right:12, top:10, color:"#94a3b8", fontWeight:700 }}>🔍</span>
                       {pkgServiceSearch.trim() && (
                         <div style={{ position:"absolute", top:"100%", left:0, right:0, background:"#fff", border:"1px solid #e2e8f0", borderRadius:8, maxHeight:200, overflowY:"auto", marginTop:6, zIndex:20, boxShadow: "0 10px 15px -3px rgba(0,0,0,0.1)" }}>
                           {(context.services || []).filter(s => s.name.toLowerCase().includes(pkgServiceSearch.toLowerCase())).map(svc => (
-                            <div key={svc.id} onClick={() => { if(!pkgDraft.customServices.find(c=>c.id===svc.id)) { const newSvc = [...pkgDraft.customServices, {id:svc.id, name:svc.name, price: svc.salesPrice || svc.price || 0, qty:1}]; const newTotal = newSvc.reduce((acc,s)=>acc+(Number(s.price||0)*Number(s.qty||1)),0); setPkgDraft(d=>({...d, customServices: newSvc, price: pkgModalPkg?.id==="CUSTOM"?String(newTotal):d.price})); } setPkgServiceSearch(""); }} style={{ padding:"12px 16px", cursor:"pointer", fontSize:"0.95rem", color:"#334155", borderBottom:"1px solid #f1f5f9" }} onMouseEnter={e => { e.currentTarget.style.background="#f8fafc"; e.currentTarget.style.color="#0f172a"; }} onMouseLeave={e => { e.currentTarget.style.background="transparent"; e.currentTarget.style.color="#334155"; }}>
+                            <div key={svc.id} onClick={() => { if(!pkgDraft.customServices.find(c=>c.id===svc.id)) { const newSvc = [...pkgDraft.customServices, {id:svc.id, name:svc.name, price: svc.salesPrice || svc.price || 0, qty:1}]; const newTotal = newSvc.reduce((acc,s)=>acc+(Number(s.price||0)*Number(s.qty||1)),0); setPkgDraft(d=>({...d, customServices: newSvc, price: pkgModalPkg?.id==="CUSTOM"?String(newTotal):d.price})); } setPkgServiceSearch(""); }} style={{ padding:"10px 14px", cursor:"pointer", fontSize:"0.9rem", color:"#334155", borderBottom:"1px solid #f1f5f9" }} onMouseEnter={e => { e.currentTarget.style.background="#f8fafc"; e.currentTarget.style.color="#0f172a"; }} onMouseLeave={e => { e.currentTarget.style.background="transparent"; e.currentTarget.style.color="#334155"; }}>
                               {svc.name}
                             </div>
                           ))}
@@ -2788,15 +2788,15 @@ export default function PosPage() {
                   </div>
 
                   {/* Add Products Search Bar */}
-                  <div style={{ display:"flex", flexDirection:"column", gap:8 }}>
-                    <label style={{ fontWeight:700, color:"#334155", fontSize:"0.9rem" }}>Add Products to Package</label>
+                  <div style={{ display:"flex", flexDirection:"column", gap:6 }}>
+                    <label style={{ fontWeight:700, color:"#334155", fontSize:"0.88rem" }}>Add Products to Package</label>
                     <div style={{ position:"relative" }}>
-                      <input placeholder="Search Product By Category Or Name..." value={pkgProductSearch} onChange={e => setPkgProductSearch(e.target.value)} style={{ width:"100%", padding:"12px 16px", paddingRight:40, border:"1px solid #cbd5e1", borderRadius:8, fontSize:"0.95rem", boxSizing:"border-box", outline: "none", transition: "border-color 0.2s" }} onFocus={e => e.target.style.borderColor="#3b82f6"} onBlur={e => e.target.style.borderColor="#cbd5e1"} />
-                      <span style={{ position:"absolute", right:14, top:12, color:"#94a3b8", fontWeight:700 }}>🔍</span>
+                      <input placeholder="Search Product..." value={pkgProductSearch} onChange={e => setPkgProductSearch(e.target.value)} style={{ width:"100%", padding:"10px 14px", paddingRight:36, border:"1px solid #cbd5e1", borderRadius:8, fontSize:"0.9rem", boxSizing:"border-box", outline: "none", transition: "border-color 0.2s" }} onFocus={e => e.target.style.borderColor="#3b82f6"} onBlur={e => e.target.style.borderColor="#cbd5e1"} />
+                      <span style={{ position:"absolute", right:12, top:10, color:"#94a3b8", fontWeight:700 }}>🔍</span>
                       {pkgProductSearch.trim() && (
                         <div style={{ position:"absolute", top:"100%", left:0, right:0, background:"#fff", border:"1px solid #e2e8f0", borderRadius:8, maxHeight:200, overflowY:"auto", marginTop:6, zIndex:20, boxShadow: "0 10px 15px -3px rgba(0,0,0,0.1)" }}>
                           {(context.products || []).filter(p => p.name.toLowerCase().includes(pkgProductSearch.toLowerCase())).map(prod => (
-                            <div key={prod.id} onClick={() => { if(!pkgDraft.customProducts.find(c=>c.id===prod.id)) { const newProd = [...pkgDraft.customProducts, {id:prod.id, name:prod.name, price: prod.sellingPrice || prod.salesPrice || prod.price || 0, qty:1}]; const svcTotal = pkgDraft.customServices.reduce((acc,s)=>acc+(Number(s.price||0)*Number(s.qty||1)),0); const prodTotal = newProd.reduce((acc,p)=>acc+(Number(p.price||0)*Number(p.qty||1)),0); setPkgDraft(d=>({...d, customProducts: newProd, price: pkgModalPkg?.id==="CUSTOM"?String(svcTotal+prodTotal):d.price})); } setPkgProductSearch(""); }} style={{ padding:"12px 16px", cursor:"pointer", fontSize:"0.95rem", color:"#334155", borderBottom:"1px solid #f1f5f9" }} onMouseEnter={e => { e.currentTarget.style.background="#f8fafc"; e.currentTarget.style.color="#0f172a"; }} onMouseLeave={e => { e.currentTarget.style.background="transparent"; e.currentTarget.style.color="#334155"; }}>
+                            <div key={prod.id} onClick={() => { if(!pkgDraft.customProducts.find(c=>c.id===prod.id)) { const newProd = [...pkgDraft.customProducts, {id:prod.id, name:prod.name, price: prod.sellingPrice || prod.salesPrice || prod.price || 0, qty:1}]; const svcTotal = pkgDraft.customServices.reduce((acc,s)=>acc+(Number(s.price||0)*Number(s.qty||1)),0); const prodTotal = newProd.reduce((acc,p)=>acc+(Number(p.price||0)*Number(p.qty||1)),0); setPkgDraft(d=>({...d, customProducts: newProd, price: pkgModalPkg?.id==="CUSTOM"?String(svcTotal+prodTotal):d.price})); } setPkgProductSearch(""); }} style={{ padding:"10px 14px", cursor:"pointer", fontSize:"0.9rem", color:"#334155", borderBottom:"1px solid #f1f5f9" }} onMouseEnter={e => { e.currentTarget.style.background="#f8fafc"; e.currentTarget.style.color="#0f172a"; }} onMouseLeave={e => { e.currentTarget.style.background="transparent"; e.currentTarget.style.color="#334155"; }}>
                               {prod.name}
                             </div>
                           ))}
@@ -2808,18 +2808,18 @@ export default function PosPage() {
 
                 {/* Selected Products */}
                 {pkgDraft.customProducts.length > 0 && (
-                  <div style={{ marginTop:8 }}>
-                    <div style={{ fontWeight:700, color:"#0f172a", fontSize:"1rem", marginBottom:12, paddingBottom: 8, borderBottom: "1px solid #f1f5f9" }}>Selected Products</div>
-                    <div style={{ display:"flex", flexDirection:"column", gap:10 }}>
+                  <div style={{ marginTop:6 }}>
+                    <div style={{ fontWeight:700, color:"#0f172a", fontSize:"1rem", marginBottom:10, paddingBottom: 6, borderBottom: "1px solid #f1f5f9" }}>Selected Products</div>
+                    <div style={{ display:"flex", flexDirection:"column", gap:8 }}>
                       {pkgDraft.customProducts.map((prod, idx) => (
-                        <div key={idx} style={{ display:"flex", alignItems:"center", justifyContent:"space-between", padding:"14px 20px", border:"1px solid #e2e8f0", borderRadius:10, background:"#f8fafc" }}>
-                          <span style={{ fontSize:"0.95rem", color:"#0f172a", fontWeight:600 }}>{prod.name} <span style={{color:"#64748b", fontSize:"0.85rem", marginLeft:8, fontWeight: 500}}>({formatMoney(Number(prod.price||0) * Number(prod.qty||1))})</span></span>
-                          <div style={{ display:"flex", alignItems:"center", gap:16 }}>
-                            <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                              <span style={{ fontSize: "0.8rem", color: "#64748b", fontWeight: 600, textTransform: "uppercase" }}>Qty</span>
-                              <input type="number" min="1" value={prod.qty} onChange={e => { const n=[...pkgDraft.customProducts]; n[idx]={...n[idx],qty:Number(e.target.value)}; const svcTotal = pkgDraft.customServices.reduce((acc,s)=>acc+(Number(s.price||0)*Number(s.qty||1)),0); const prodTotal = n.reduce((acc,p)=>acc+(Number(p.price||0)*Number(p.qty||1)),0); setPkgDraft(d=>({...d,customProducts:n, price: pkgModalPkg?.id==="CUSTOM"?String(svcTotal+prodTotal):d.price})); }} style={{ width:70, padding:"8px", border:"1px solid #cbd5e1", borderRadius:6, fontSize:"0.95rem", textAlign:"center", outline: "none" }} onFocus={e => e.target.style.borderColor="#3b82f6"} onBlur={e => e.target.style.borderColor="#cbd5e1"} />
+                        <div key={idx} style={{ display:"flex", alignItems:"center", justifyContent:"space-between", padding:"12px 16px", border:"1px solid #e2e8f0", borderRadius:10, background:"#f8fafc", flexWrap:"wrap", gap:8 }}>
+                          <span style={{ fontSize:"0.9rem", color:"#0f172a", fontWeight:600, flex:1, minWidth:160 }}>{prod.name} <span style={{color:"#64748b", fontSize:"0.8rem", marginLeft:6, fontWeight: 500}}>({formatMoney(Number(prod.price||0) * Number(prod.qty||1))})</span></span>
+                          <div style={{ display:"flex", alignItems:"center", gap:12 }}>
+                            <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                              <span style={{ fontSize: "0.75rem", color: "#64748b", fontWeight: 600, textTransform: "uppercase" }}>Qty</span>
+                              <input type="number" min="1" value={prod.qty} onChange={e => { const n=[...pkgDraft.customProducts]; n[idx]={...n[idx],qty:Number(e.target.value)}; const svcTotal = pkgDraft.customServices.reduce((acc,s)=>acc+(Number(s.price||0)*Number(s.qty||1)),0); const prodTotal = n.reduce((acc,p)=>acc+(Number(p.price||0)*Number(p.qty||1)),0); setPkgDraft(d=>({...d,customProducts:n, price: pkgModalPkg?.id==="CUSTOM"?String(svcTotal+prodTotal):d.price})); }} style={{ width:60, padding:"6px", border:"1px solid #cbd5e1", borderRadius:6, fontSize:"0.9rem", textAlign:"center", outline: "none" }} onFocus={e => e.target.style.borderColor="#3b82f6"} onBlur={e => e.target.style.borderColor="#cbd5e1"} />
                             </div>
-                            <button onClick={() => { const n=pkgDraft.customProducts.filter((_,i)=>i!==idx); const svcTotal = pkgDraft.customServices.reduce((acc,s)=>acc+(Number(s.price||0)*Number(s.qty||1)),0); const prodTotal = n.reduce((acc,p)=>acc+(Number(p.price||0)*Number(p.qty||1)),0); setPkgDraft(d=>({...d,customProducts:n, price: pkgModalPkg?.id==="CUSTOM"?String(svcTotal+prodTotal):d.price})); }} style={{ width:36, height:36, display:"flex", alignItems:"center", justifyContent:"center", background:"#fee2e2", border:"none", borderRadius:6, cursor:"pointer", color:"#ef4444", fontWeight:700, fontSize: "1.1rem", transition: "background 0.2s" }} onMouseEnter={e => e.currentTarget.style.background="#fecaca"} onMouseLeave={e => e.currentTarget.style.background="#fee2e2"}>&times;</button>
+                            <button onClick={() => { const n=pkgDraft.customProducts.filter((_,i)=>i!==idx); const svcTotal = pkgDraft.customServices.reduce((acc,s)=>acc+(Number(s.price||0)*Number(s.qty||1)),0); const prodTotal = n.reduce((acc,p)=>acc+(Number(p.price||0)*Number(p.qty||1)),0); setPkgDraft(d=>({...d,customProducts:n, price: pkgModalPkg?.id==="CUSTOM"?String(svcTotal+prodTotal):d.price})); }} style={{ width:32, height:32, display:"flex", alignItems:"center", justifyContent:"center", background:"#fee2e2", border:"none", borderRadius:6, cursor:"pointer", color:"#ef4444", fontWeight:700, fontSize: "1rem", transition: "background 0.2s" }} onMouseEnter={e => e.currentTarget.style.background="#fecaca"} onMouseLeave={e => e.currentTarget.style.background="#fee2e2"}>&times;</button>
                           </div>
                         </div>
                       ))}
@@ -2828,29 +2828,29 @@ export default function PosPage() {
                 )}
 
                 {/* Totals */}
-                <div style={{ display:"flex", gap:32, alignItems:"center", marginTop:12, padding:"20px 24px", background:"#f1f5f9", borderRadius:12, border: "1px dashed #cbd5e1" }}>
+                <div className="pos-modal-pkg-totals">
                   <div style={{ flex: 1 }}>
-                    <div style={{ color:"#475569", fontWeight:600, fontSize: "0.85rem", textTransform: "uppercase", marginBottom: 4 }}>Total Service Value</div> 
-                    <div style={{ fontWeight:800, color:"#0f172a", fontSize: "1.2rem" }}>{formatMoney(pkgDraft.customServices.reduce((acc,s)=>acc+(Number(s.price||0)*Number(s.qty||1)),0))}</div>
+                    <div style={{ color:"#475569", fontWeight:600, fontSize: "0.8rem", textTransform: "uppercase", marginBottom: 2 }}>Total Service Value</div> 
+                    <div style={{ fontWeight:800, color:"#0f172a", fontSize: "1.15rem" }}>{formatMoney(pkgDraft.customServices.reduce((acc,s)=>acc+(Number(s.price||0)*Number(s.qty||1)),0))}</div>
                   </div>
                   <div style={{ flex: 1 }}>
-                    <div style={{ color:"#475569", fontWeight:600, fontSize: "0.85rem", textTransform: "uppercase", marginBottom: 4 }}>Total Product Value</div> 
-                    <div style={{ fontWeight:800, color:"#0f172a", fontSize: "1.2rem" }}>{formatMoney(pkgDraft.customProducts.reduce((acc,p)=>acc+(Number(p.price||0)*Number(p.qty||1)),0))}</div>
+                    <div style={{ color:"#475569", fontWeight:600, fontSize: "0.8rem", textTransform: "uppercase", marginBottom: 2 }}>Total Product Value</div> 
+                    <div style={{ fontWeight:800, color:"#0f172a", fontSize: "1.15rem" }}>{formatMoney(pkgDraft.customProducts.reduce((acc,p)=>acc+(Number(p.price||0)*Number(p.qty||1)),0))}</div>
                   </div>
-                  <div style={{ flex: 1, borderLeft: "2px solid #cbd5e1", paddingLeft: 32 }}>
-                    <div style={{ color:"#3b82f6", fontWeight:800, fontSize: "0.85rem", textTransform: "uppercase", marginBottom: 4 }}>Package Price</div> 
-                    <div style={{ fontWeight:800, color:"#1d4ed8", fontSize: "1.5rem" }}>{formatMoney(Number(pkgDraft.price || pkgModalPkg?.price || 0))}</div>
+                  <div style={{ flex: 1, borderLeft: "2px solid #cbd5e1", paddingLeft: 24 }}>
+                    <div style={{ color:"#3b82f6", fontWeight:800, fontSize: "0.85rem", textTransform: "uppercase", marginBottom: 2 }}>Package Price</div> 
+                    <div style={{ fontWeight:800, color:"#1d4ed8", fontSize: "1.35rem" }}>{formatMoney(Number(pkgDraft.price || pkgModalPkg?.price || 0))}</div>
                   </div>
                 </div>
 
                 {/* Staff, Purchase Date, Validity Days */}
-                <div style={{ display:"flex", gap:20, alignItems:"flex-end", marginTop:16, flexWrap:"wrap" }}>
-                  <div style={{ flex:1.5, minWidth:200 }}>
-                    <label style={{ fontSize:"0.85rem", fontWeight:700, color:"#334155", display:"block", marginBottom:8 }}>Assign Staff <span style={{color: "#ef4444"}}>*</span></label>
+                <div className="pos-modal-form-grid">
+                  <div className="pos-field-full" style={{ flex:1.5, minWidth:160 }}>
+                    <label style={{ fontSize:"0.82rem", fontWeight:700, color:"#334155", display:"block", marginBottom:6 }}>Assign Staff <span style={{color: "#ef4444"}}>*</span></label>
                     <CustomDropdown
                       value={pkgDraft.staffId}
                       onChange={e => setPkgDraft(d => ({ ...d, staffId: e.target.value }))}
-                      style={{ width:"100%", padding:"12px 16px", border:"1px solid #cbd5e1", borderRadius:8, fontSize:"0.95rem", boxSizing:"border-box", outline: "none", backgroundColor: "#fff", cursor: "pointer", transition: "border-color 0.2s" }}
+                      style={{ width:"100%", padding:"10px 12px", border:"1px solid #cbd5e1", borderRadius:8, fontSize:"0.9rem", boxSizing:"border-box", outline: "none", backgroundColor: "#fff", cursor: "pointer", transition: "border-color 0.2s" }}
                       onFocus={e => e.target.style.borderColor="#3b82f6"} onBlur={e => e.target.style.borderColor="#cbd5e1"}
                     >
                       <option value="">Select Staff</option>
@@ -2861,89 +2861,89 @@ export default function PosPage() {
                       ))}
                     </CustomDropdown>
                     {!packageStaffUsers.length ? (
-                      <div style={{ marginTop:8, fontSize:"0.8rem", color:"#dc2626", fontWeight: 500 }}>
+                      <div style={{ marginTop:6, fontSize:"0.78rem", color:"#dc2626", fontWeight: 500 }}>
                         No active staff found for the selected branch.
                       </div>
                     ) : null}
                   </div>
-                  <div style={{ flex:1, minWidth:160 }}>
-                    <label style={{ fontSize:"0.85rem", fontWeight:700, color:"#334155", display:"block", marginBottom:8 }}>Purchase Date</label>
+                  <div style={{ flex:1, minWidth:120 }}>
+                    <label style={{ fontSize:"0.82rem", fontWeight:700, color:"#334155", display:"block", marginBottom:6 }}>Purchase Date</label>
                     <input
                       type="date"
                       value={pkgDraft.purchaseDate}
                       onChange={e => setPkgDraft(d => ({ ...d, purchaseDate: e.target.value }))}
                       max={new Date().toISOString().slice(0, 10)}
-                      style={{ width:"100%", padding:"12px 16px", border:"1px solid #cbd5e1", borderRadius:8, fontSize:"0.95rem", boxSizing:"border-box", outline: "none", transition: "border-color 0.2s" }}
+                      style={{ width:"100%", padding:"10px 12px", border:"1px solid #cbd5e1", borderRadius:8, fontSize:"0.9rem", boxSizing:"border-box", outline: "none", transition: "border-color 0.2s" }}
                       onFocus={e => e.target.style.borderColor="#3b82f6"} onBlur={e => e.target.style.borderColor="#cbd5e1"}
                     />
                   </div>
-                  <div style={{ flex:1, minWidth:140 }}>
-                    <label style={{ fontSize:"0.85rem", fontWeight:700, color:"#334155", display:"block", marginBottom:8 }}>Validity (Days)</label>
+                  <div style={{ flex:1, minWidth:100 }}>
+                    <label style={{ fontSize:"0.82rem", fontWeight:700, color:"#334155", display:"block", marginBottom:6 }}>Validity (Days)</label>
                     <input
                       type="number"
                       min="1"
                       value={pkgDraft.validityDays}
                       onChange={e => setPkgDraft(d => ({ ...d, validityDays: String(Math.max(1, Number(e.target.value) || 1)) }))}
-                      style={{ width:"100%", padding:"12px 16px", border:"1px solid #cbd5e1", borderRadius:8, fontSize:"0.95rem", boxSizing:"border-box", outline: "none", transition: "border-color 0.2s" }}
+                      style={{ width:"100%", padding:"10px 12px", border:"1px solid #cbd5e1", borderRadius:8, fontSize:"0.9rem", boxSizing:"border-box", outline: "none", transition: "border-color 0.2s" }}
                       onFocus={e => e.target.style.borderColor="#3b82f6"} onBlur={e => e.target.style.borderColor="#cbd5e1"}
                     />
                   </div>
                 </div>
 
                 {/* Payment Details */}
-                <div style={{ marginTop:24, padding: "24px", border: "1px solid #e2e8f0", borderRadius: "12px", background: "#ffffff", boxShadow: "0 4px 6px -1px rgba(0,0,0,0.05)" }}>
-                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20, paddingBottom: 16, borderBottom: "1px solid #f1f5f9" }}>
-                    <div style={{ fontWeight:800, color:"#0f172a", fontSize:"1.1rem" }}>Payment Details</div>
-                    <div style={{ fontSize: "0.9rem", color: "#64748b", fontWeight: 600 }}>Amount to Pay: <span style={{ color: "#0f172a", fontSize: "1.2rem", marginLeft: 4 }}>{formatMoney(Number(pkgDraft.price || pkgModalPkg?.price || 0))}</span></div>
+                <div className="pos-modal-payment-box" style={{ marginTop:16 }}>
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 14, paddingBottom: 10, borderBottom: "1px solid #e2e8f0" }}>
+                    <div style={{ fontWeight:700, color:"#0f172a", fontSize:"1rem" }}>Payment Details</div>
+                    <div style={{ fontSize: "0.85rem", color: "#64748b", fontWeight: 600 }}>Amount: <span style={{ color: "#0f172a", fontSize: "1.1rem", marginLeft: 4 }}>{formatMoney(Number(pkgDraft.price || pkgModalPkg?.price || 0))}</span></div>
                   </div>
                   
-                  <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fit, minmax(180px, 1fr))", gap:20 }}>
+                  <div className="pos-modal-payment-grid">
                     <div>
-                      <label style={{ fontSize:"0.85rem", fontWeight:700, color:"#334155", display:"block", marginBottom:8 }}>Online (📱)</label>
+                      <label style={{ fontSize:"0.82rem", fontWeight:700, color:"#334155", display:"block", marginBottom:6 }}>Online (📱)</label>
                       <input type="number" min="0" step="0.01" inputMode="decimal" max={pkgPaymentTotal} placeholder="0.0" value={pkgDraft.online} onFocus={() => {
                         const total = Math.max(0, Number(pkgDraft.price || pkgModalPkg?.price || 0));
                         setPkgDraft(d => ({ ...d, online: String(total), offline: "", balance: "0" }));
-                      }} onChange={e=>setPkgDraft(d=>{ const total = Math.max(0, Number(d.price || pkgModalPkg?.price || 0)); const offline = Math.max(0, Number(d.offline || 0)); const online = clampMoneyInput(e.target.value, Math.max(0, total - offline)); const nextBalance = Math.max(0, Number((total - Number(online || 0) - offline).toFixed(2))); return { ...d, online, balance: String(nextBalance) }; })} style={{ width:"100%", padding:"12px 16px", border:"1px solid #cbd5e1", borderRadius:8, fontSize:"1rem", boxSizing:"border-box", outline: "none", transition: "border-color 0.2s" }} onFocus={e => e.target.style.borderColor="#3b82f6"} onBlur={e => e.target.style.borderColor="#cbd5e1"} />
+                      }} onChange={e=>setPkgDraft(d=>{ const total = Math.max(0, Number(d.price || pkgModalPkg?.price || 0)); const offline = Math.max(0, Number(d.offline || 0)); const online = clampMoneyInput(e.target.value, Math.max(0, total - offline)); const nextBalance = Math.max(0, Number((total - Number(online || 0) - offline).toFixed(2))); return { ...d, online, balance: String(nextBalance) }; })} style={{ width:"100%", padding:"10px 12px", border:"1px solid #cbd5e1", borderRadius:8, fontSize:"0.95rem", boxSizing:"border-box", outline: "none", transition: "border-color 0.2s" }} onFocus={e => e.target.style.borderColor="#3b82f6"} onBlur={e => e.target.style.borderColor="#cbd5e1"} />
                     </div>
                     <div>
-                      <label style={{ fontSize:"0.85rem", fontWeight:700, color:"#334155", display:"block", marginBottom:8 }}>Offline / Cash (💵)</label>
+                      <label style={{ fontSize:"0.82rem", fontWeight:700, color:"#334155", display:"block", marginBottom:6 }}>Offline / Cash (💵)</label>
                       <input type="number" min="0" step="0.01" inputMode="decimal" max={Math.max(0, pkgPaymentTotal - pkgPaymentOnline)} placeholder="0.0" value={pkgDraft.offline} onFocus={() => {
                         const total = Math.max(0, Number(pkgDraft.price || pkgModalPkg?.price || 0));
                         setPkgDraft(d => ({ ...d, offline: String(total), online: "", balance: "0" }));
-                      }} onChange={e=>setPkgDraft(d=>{ const total = Math.max(0, Number(d.price || pkgModalPkg?.price || 0)); const online = Math.max(0, Number(d.online || 0)); const offline = clampMoneyInput(e.target.value, Math.max(0, total - online)); const nextBalance = Math.max(0, Number((total - online - Number(offline || 0)).toFixed(2))); return { ...d, offline, balance: String(nextBalance) }; })} style={{ width:"100%", padding:"12px 16px", border:"1px solid #cbd5e1", borderRadius:8, fontSize:"1rem", boxSizing:"border-box", outline: "none", transition: "border-color 0.2s" }} onFocus={e => e.target.style.borderColor="#3b82f6"} onBlur={e => e.target.style.borderColor="#cbd5e1"} />
+                      }} onChange={e=>setPkgDraft(d=>{ const total = Math.max(0, Number(d.price || pkgModalPkg?.price || 0)); const online = Math.max(0, Number(d.online || 0)); const offline = clampMoneyInput(e.target.value, Math.max(0, total - online)); const nextBalance = Math.max(0, Number((total - online - Number(offline || 0)).toFixed(2))); return { ...d, offline, balance: String(nextBalance) }; })} style={{ width:"100%", padding:"10px 12px", border:"1px solid #cbd5e1", borderRadius:8, fontSize:"0.95rem", boxSizing:"border-box", outline: "none", transition: "border-color 0.2s" }} onFocus={e => e.target.style.borderColor="#3b82f6"} onBlur={e => e.target.style.borderColor="#cbd5e1"} />
                     </div>
-                    <div>
-                      <label style={{ fontSize:"0.85rem", fontWeight:700, color:"#334155", display:"block", marginBottom:8 }}>Remaining Balance</label>
-                      <input type="number" placeholder="0.0" value={pkgPaymentBalance.toFixed(2)} readOnly style={{ width:"100%", padding:"12px 16px", border:"1px solid #cbd5e1", borderRadius:8, fontSize:"1rem", boxSizing:"border-box", background:"#f1f5f9", color: "#64748b", outline: "none" }} />
+                    <div className="pos-field-full">
+                      <label style={{ fontSize:"0.82rem", fontWeight:700, color:"#334155", display:"block", marginBottom:6 }}>Remaining Balance</label>
+                      <input type="number" placeholder="0.0" value={pkgPaymentBalance.toFixed(2)} readOnly style={{ width:"100%", padding:"10px 12px", border:"1px solid #cbd5e1", borderRadius:8, fontSize:"0.95rem", boxSizing:"border-box", background:"#f1f5f9", color: "#64748b", outline: "none" }} />
                     </div>
                   </div>
                 </div>
 
                 {/* Remark */}
-                <div style={{ marginTop:16 }}>
-                  <label style={{ fontSize:"0.85rem", fontWeight:700, color:"#334155", display:"block", marginBottom:8 }}>Internal Remark <span style={{ fontWeight: 400, color: "#94a3b8" }}>(Optional)</span></label>
-                  <textarea placeholder="Add any notes about this package purchase..." value={pkgDraft.remark} onChange={e=>setPkgDraft(d=>({...d,remark:e.target.value}))} rows={2} style={{ width:"100%", padding:"12px 16px", border:"1px solid #cbd5e1", borderRadius:8, fontSize:"0.95rem", boxSizing:"border-box", resize:"vertical", outline: "none", transition: "border-color 0.2s", fontFamily: "inherit" }} onFocus={e => e.target.style.borderColor="#3b82f6"} onBlur={e => e.target.style.borderColor="#cbd5e1"} />
+                <div style={{ marginTop:12 }}>
+                  <label style={{ fontSize:"0.82rem", fontWeight:700, color:"#334155", display:"block", marginBottom:6 }}>Internal Remark <span style={{ fontWeight: 400, color: "#94a3b8" }}>(Optional)</span></label>
+                  <textarea placeholder="Add any notes about this package purchase..." value={pkgDraft.remark} onChange={e=>setPkgDraft(d=>({...d,remark:e.target.value}))} rows={2} style={{ width:"100%", padding:"10px 12px", border:"1px solid #cbd5e1", borderRadius:8, fontSize:"0.9rem", boxSizing:"border-box", resize:"vertical", outline: "none", transition: "border-color 0.2s", fontFamily: "inherit" }} onFocus={e => e.target.style.borderColor="#3b82f6"} onBlur={e => e.target.style.borderColor="#cbd5e1"} />
                 </div>
 
                 {/* Warning / Error details */}
-                <div style={{ display: "flex", flexDirection: "column", gap: 8, marginTop: 16 }}>
+                <div style={{ display: "flex", flexDirection: "column", gap: 8, marginTop: 12 }}>
                   {!form.customerId ? (
-                    <div style={{ fontSize: "0.85rem", color: "#b91c1c", fontWeight: 600, padding: "10px 16px", background: "#fef2f2", border: "1px solid #fecaca", borderRadius: 8, display: "flex", alignItems: "center", gap: 8 }}>
+                    <div style={{ fontSize: "0.82rem", color: "#b91c1c", fontWeight: 600, padding: "8px 12px", background: "#fef2f2", border: "1px solid #fecaca", borderRadius: 8, display: "flex", alignItems: "center", gap: 8 }}>
                       <span>⚠️</span> Guest selection is required before purchase. Please select a guest on the main POS screen.
                     </div>
                   ) : null}
                   {!form.branchId ? (
-                    <div style={{ fontSize: "0.85rem", color: "#b91c1c", fontWeight: 600, padding: "10px 16px", background: "#fef2f2", border: "1px solid #fecaca", borderRadius: 8, display: "flex", alignItems: "center", gap: 8 }}>
+                    <div style={{ fontSize: "0.82rem", color: "#b91c1c", fontWeight: 600, padding: "8px 12px", background: "#fef2f2", border: "1px solid #fecaca", borderRadius: 8, display: "flex", alignItems: "center", gap: 8 }}>
                       <span>⚠️</span> Branch selection is required before purchase. Please select a branch on the main POS screen.
                     </div>
                   ) : null}
                   {!pkgDraft.staffId ? (
-                    <div style={{ fontSize: "0.85rem", color: "#b91c1c", fontWeight: 600, padding: "10px 16px", background: "#fef2f2", border: "1px solid #fecaca", borderRadius: 8, display: "flex", alignItems: "center", gap: 8 }}>
+                    <div style={{ fontSize: "0.82rem", color: "#b91c1c", fontWeight: 600, padding: "8px 12px", background: "#fef2f2", border: "1px solid #fecaca", borderRadius: 8, display: "flex", alignItems: "center", gap: 8 }}>
                       <span>⚠️</span> Staff selection is required before purchase.
                     </div>
                   ) : null}
                   {status.error ? (
-                    <div style={{ fontSize: "0.85rem", color: "#b91c1c", fontWeight: 600, padding: "10px 16px", background: "#fef2f2", border: "1px solid #fecaca", borderRadius: 8, display: "flex", alignItems: "center", gap: 8 }}>
+                    <div style={{ fontSize: "0.82rem", color: "#b91c1c", fontWeight: 600, padding: "8px 12px", background: "#fef2f2", border: "1px solid #fecaca", borderRadius: 8, display: "flex", alignItems: "center", gap: 8 }}>
                       <span>⚠️</span> {status.error}
                     </div>
                   ) : null}
@@ -2951,9 +2951,9 @@ export default function PosPage() {
               </div>
             </div>
 
-            <div style={{ padding:"20px 28px", borderTop:"1px solid #e2e8f0", display:"flex", justifyContent:"flex-end", gap:16, background: "#f8fafc", position: "sticky", bottom: 0, borderRadius: "0 0 16px 16px", zIndex: 10 }}>
-              <button onClick={() => { setShowPkgModal(false); setStatus({ error: "", success: "" }); }} style={{ padding:"12px 28px", background:"#fff", border:"1px solid #cbd5e1", borderRadius:8, fontWeight:700, cursor:"pointer", color:"#475569", fontSize: "0.95rem", transition: "all 0.2s" }} onMouseEnter={e => { e.currentTarget.style.background="#f1f5f9"; e.currentTarget.style.borderColor="#94a3b8"; }} onMouseLeave={e => { e.currentTarget.style.background="#fff"; e.currentTarget.style.borderColor="#cbd5e1"; }}>Cancel</button>
-              <button onClick={handleAddPkgToCart} disabled={!pkgDraftCanSubmit || submittingPkg} style={{ padding:"12px 28px", background:"#10b981", color:"#fff", border:"none", borderRadius:8, fontWeight:800, cursor:(pkgDraftCanSubmit && !submittingPkg)?"pointer":"not-allowed", opacity:(pkgDraftCanSubmit && !submittingPkg)?1:0.6, fontSize: "0.95rem", boxShadow: "0 4px 6px -1px rgba(16, 185, 129, 0.3)", transition: "all 0.2s" }} onMouseEnter={e => { if(pkgDraftCanSubmit && !submittingPkg) { e.currentTarget.style.background="#059669"; e.currentTarget.style.transform="translateY(-1px)"; } }} onMouseLeave={e => { if(pkgDraftCanSubmit && !submittingPkg) { e.currentTarget.style.background="#10b981"; e.currentTarget.style.transform="translateY(0)"; } }}>
+            <div className="pos-modal-footer">
+              <button onClick={() => { setShowPkgModal(false); setStatus({ error: "", success: "" }); }} style={{ padding:"10px 24px", background:"#fff", border:"1px solid #cbd5e1", borderRadius:8, fontWeight:700, cursor:"pointer", color:"#475569", fontSize: "0.9rem", transition: "all 0.2s" }} onMouseEnter={e => { e.currentTarget.style.background="#f1f5f9"; e.currentTarget.style.borderColor="#94a3b8"; }} onMouseLeave={e => { e.currentTarget.style.background="#fff"; e.currentTarget.style.borderColor="#cbd5e1"; }}>Cancel</button>
+              <button onClick={handleAddPkgToCart} disabled={!pkgDraftCanSubmit || submittingPkg} style={{ padding:"10px 24px", background:"#10b981", color:"#fff", border:"none", borderRadius:8, fontWeight:800, cursor:(pkgDraftCanSubmit && !submittingPkg)?"pointer":"not-allowed", opacity:(pkgDraftCanSubmit && !submittingPkg)?1:0.6, fontSize: "0.9rem", boxShadow: "0 4px 6px -1px rgba(16, 185, 129, 0.3)", transition: "all 0.2s" }} onMouseEnter={e => { if(pkgDraftCanSubmit && !submittingPkg) { e.currentTarget.style.background="#059669"; e.currentTarget.style.transform="translateY(-1px)"; } }} onMouseLeave={e => { if(pkgDraftCanSubmit && !submittingPkg) { e.currentTarget.style.background="#10b981"; e.currentTarget.style.transform="translateY(0)"; } }}>
                 {submittingPkg ? "Processing..." : "Confirm Purchase"}
               </button>
             </div>
@@ -3036,22 +3036,22 @@ export default function PosPage() {
 
       {/* ======= FULL ADD MEMBERSHIP MODAL ======= */}
       {showMemModal && (
-        <div style={{ position:"fixed", inset:0, background:"rgba(15,23,42,0.55)", zIndex:9000, display:"flex", alignItems:"center", justifyContent:"center" }} onClick={() => setShowMemModal(false)}>
-          <div style={{ background:"#fff", borderRadius:16, width:"min(95vw,900px)", maxHeight:"90vh", overflowY:"auto", boxShadow: "none", display:"flex", flexDirection:"column" }} onClick={e => e.stopPropagation()}>
-            <div style={{ padding:"18px 24px", display:"flex", justifyContent:"space-between", alignItems:"center", borderBottom:"1px solid #f1f5f9" }}>
-              <div style={{ fontWeight:700, fontSize:"1.2rem", color:"#0f172a" }}>Add membership</div>
-              <div style={{ display:"flex", alignItems:"center", gap:12 }}>
-                <div style={{ position:"relative" }}>
-                  <input placeholder="Search For Membership" value={memSearch} onChange={e => setMemSearch(e.target.value)} style={{ padding:"8px 12px", paddingRight:32, border:"1px solid #cbd5e1", borderRadius:8, fontSize:"0.9rem", width:220 }} />
+        <div className="pos-modal-overlay" onClick={() => setShowMemModal(false)}>
+          <div className="pos-modal-container" onClick={e => e.stopPropagation()}>
+            <div className="pos-modal-header">
+              <div className="pos-modal-title">Add membership</div>
+              <div className="pos-modal-header-actions">
+                <div className="pos-modal-search-box">
+                  <input placeholder="Search For Membership" value={memSearch} onChange={e => setMemSearch(e.target.value)} />
                   <span style={{ position:"absolute", right:10, top:8, color:"#94a3b8" }}>🔍</span>
                 </div>
-                <button onClick={() => setShowMemModal(false)} style={{ background:"none", border:"none", fontSize:"1.4rem", cursor:"pointer", color:"#94a3b8" }}>&#x2715;</button>
+                <button className="pos-modal-close-btn" onClick={() => setShowMemModal(false)}>&#x2715;</button>
               </div>
             </div>
             
-            <div style={{ padding:"24px", display:"flex", flexDirection:"column", gap:24, flex:1 }}>
+            <div className="pos-modal-body">
               {/* Membership Grid */}
-              <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill, minmax(250px, 1fr))", gap:16, maxHeight:300, overflowY:"auto", paddingRight:8 }}>
+              <div className="pos-modal-cards-grid">
                 {(context.memberships || []).filter(m => m.name.toLowerCase().includes(memSearch.toLowerCase())).map(mem => {
                   const isSelected = memModalMem?.id === mem.id;
                   const price = Number(mem.price || 0);
@@ -3095,7 +3095,7 @@ export default function PosPage() {
                         background: isSelected ? "#eff6ff" : "#ffffff",
                         border: isSelected ? "2px solid #2563eb" : "1px solid #e2e8f0",
                         borderRadius: 16,
-                        padding: 20,
+                        padding: 16,
                         cursor: "pointer",
                         transition: "all 0.2s",
                         display: "flex",
@@ -3144,54 +3144,54 @@ export default function PosPage() {
                 )}
 
                 {/* The Meta Form (Name, Validity, Price, Staff, Date) */}
-                <div style={{ display:"flex", gap:16, alignItems:"flex-end", marginTop:16, flexWrap:"wrap" }}>
-                  <div style={{ flex:1, minWidth:150 }}>
+                <div className="pos-modal-form-grid">
+                  <div className="pos-field-full" style={{ flex:1, minWidth:140 }}>
                     <label style={{ fontSize:"0.82rem", fontWeight:600, color:"#475569", display:"block", marginBottom:6 }}>Name</label>
                     <input readOnly value={memModalMem ? (memModalMem.id==="CUSTOM" ? "CUSTOM" : memModalMem.name) : ""} placeholder="Select above" style={{ width:"100%", padding:"10px 12px", border:"1px solid #cbd5e1", borderRadius:8, fontSize:"0.9rem", background:"#f8fafc", color:"#94a3b8", boxSizing:"border-box" }} />
                   </div>
-                  <div style={{ flex:1, minWidth:120 }}>
+                  <div style={{ flex:1, minWidth:110 }}>
                     <label style={{ fontSize:"0.82rem", fontWeight:600, color:"#475569", display:"block", marginBottom:6 }}>Validity</label>
                     <input type="number" placeholder="Enter Validity" value={memDraft.validityDays} onChange={e=>setMemDraft(d=>({...d,validityDays:e.target.value}))} style={{ width:"100%", padding:"10px 12px", border:"1px solid #cbd5e1", borderRadius:8, fontSize:"0.9rem", boxSizing:"border-box" }} />
                   </div>
-                  <div style={{ flex:1, minWidth:120 }}>
+                  <div style={{ flex:1, minWidth:110 }}>
                     <label style={{ fontSize:"0.82rem", fontWeight:600, color:"#475569", display:"block", marginBottom:6 }}>Price</label>
                     <input type="number" placeholder="Enter Price" value={memDraft.price} onChange={e=>setMemDraft(d=>({...d,price:e.target.value}))} style={{ width:"100%", padding:"10px 12px", border:"1px solid #cbd5e1", borderRadius:8, fontSize:"0.9rem", boxSizing:"border-box" }} />
                   </div>
-                  <div style={{ flex:1.2, minWidth:150 }}>
+                  <div className="pos-field-full" style={{ flex:1.2, minWidth:140 }}>
                     <label style={{ fontSize:"0.82rem", fontWeight:600, color:"#475569", display:"block", marginBottom:6 }}>Staff</label>
                     <CustomDropdown value={memDraft.staffId} onChange={e=>setMemDraft(d=>({...d,staffId:e.target.value}))} style={{ width:"100%", padding:"10px 12px", border:"1px solid #cbd5e1", borderRadius:8, fontSize:"0.9rem", boxSizing:"border-box" }}>
                       <option value="">Select Staff</option>
                       {(context.staffUsers || []).map(s => <option key={s.id} value={s.id}>{s.user?.name || s.user?.email || s.id}</option>)}
                     </CustomDropdown>
                   </div>
-                  <div style={{ flex:1, minWidth:140 }}>
+                  <div className="pos-field-full" style={{ flex:1, minWidth:140 }}>
                     <label style={{ fontSize:"0.82rem", fontWeight:600, color:"#475569", display:"block", marginBottom:6 }}>Purchase date</label>
                     <input type="date" value={memDraft.purchaseDate} onChange={e=>setMemDraft(d=>({...d,purchaseDate:e.target.value}))} max={new Date().toISOString().slice(0, 10)} style={{ width:"100%", padding:"10px 12px", border:"1px solid #cbd5e1", borderRadius:8, fontSize:"0.9rem", boxSizing:"border-box" }} />
                   </div>
                 </div>
 
                 {/* Membership Payments */}
-                <div style={{ marginTop: 16, padding: "16px", background: "#f8fafc", borderRadius: 8, border: "1px solid #e2e8f0" }}>
+                <div className="pos-modal-payment-box" style={{ marginTop: 16 }}>
                   <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 12 }}>
                     <div style={{ fontWeight: 700, color: "#0f172a" }}>Payment Split</div>
                     <div style={{ fontWeight: 700, color: "#2563eb", fontSize: "1.1rem" }}>Total: ₹{memDraft.price || 0}</div>
                   </div>
-                  <div style={{ display: "flex", gap: 16, flexWrap: "wrap" }}>
-                    <div style={{ flex: 1, minWidth: 120 }}>
+                  <div className="pos-modal-payment-grid">
+                    <div style={{ flex: 1, minWidth: 100 }}>
                       <label style={{ fontSize: "0.82rem", fontWeight: 600, color: "#475569", display: "block", marginBottom: 6 }}>Balance</label>
                       <input type="number" readOnly value={memDraft.balance || 0} style={{ width: "100%", padding: "10px 12px", border: "1px solid #cbd5e1", borderRadius: 8, fontSize: "0.9rem", background: "#e2e8f0", color: "#64748b", boxSizing: "border-box" }} />
                     </div>
-                    <div style={{ flex: 1, minWidth: 120 }}>
+                    <div style={{ flex: 1, minWidth: 110 }}>
                       <label style={{ fontSize: "0.82rem", fontWeight: 600, color: "#475569", display: "block", marginBottom: 6 }}>Online</label>
                       <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                        <span style={{ fontSize: "1.2rem" }}>📱</span>
+                        <span style={{ fontSize: "1.1rem" }}>📱</span>
                         <input type="number" min="0" step="0.01" inputMode="decimal" placeholder="0.0" value={memDraft.online} onFocus={() => {
                           const total = Math.max(0, Number(memDraft.price || 0));
                           setMemDraft(d => ({ ...d, online: String(total), offline: "", balance: "0" }));
                         }} onChange={e => setMemDraft(d => { const total = Math.max(0, Number(d.price || 0)); const offline = Math.max(0, Number(d.offline || 0)); const online = clampMoneyInput(e.target.value, Math.max(0, total - offline)); const nextBalance = Math.max(0, Number((total - Number(online || 0) - offline).toFixed(2))); return { ...d, online, balance: String(nextBalance) }; })} style={{ width: "100%", padding: "10px 12px", border: "1px solid #cbd5e1", borderRadius: 8, fontSize: "0.9rem", boxSizing: "border-box" }} />
                       </div>
                     </div>
-                    <div style={{ flex: 1, minWidth: 120 }}>
+                    <div className="pos-field-full" style={{ flex: 1, minWidth: 110 }}>
                       <label style={{ fontSize: "0.82rem", fontWeight: 600, color: "#475569", display: "block", marginBottom: 6 }}>Offline</label>
                       <input type="number" min="0" step="0.01" inputMode="decimal" placeholder="0.0" value={memDraft.offline} onFocus={() => {
                         const total = Math.max(0, Number(memDraft.price || 0));
@@ -3234,7 +3234,7 @@ export default function PosPage() {
               </div>
             </div>
 
-            <div style={{ padding:"16px 24px", borderTop:"1px solid #f1f5f9", display:"flex", justifyContent:"flex-end", gap:12 }}>
+            <div className="pos-modal-footer">
               <button onClick={() => { setShowMemModal(false); setStatus({ error: "", success: "" }); }} style={{ padding:"10px 24px", background:"#fff", border:"1px solid #cbd5e1", borderRadius:8, fontWeight:600, cursor:"pointer", color:"#475569" }}>Cancel</button>
               <button onClick={handleBuyMembershipDirect} disabled={!memModalMem || !memDraft.staffId || submittingMem} style={{ padding:"10px 24px", background:"#2563eb", color:"#fff", border:"none", borderRadius:8, fontWeight:700, cursor:(memModalMem && memDraft.staffId && !submittingMem)?"pointer":"not-allowed", opacity:(memModalMem && memDraft.staffId && !submittingMem)?1:0.6 }}>
                 {submittingMem ? "Purchasing..." : "Purchase Membership"}
