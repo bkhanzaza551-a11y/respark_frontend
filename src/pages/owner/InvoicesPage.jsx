@@ -9,6 +9,7 @@ import { downloadFromApi } from "../../utils/download";
 import { useBranch } from '../../context/BranchContext';
 import PosReceipt from "../../components/PosReceipt";
 import { Eye, Download, FileText, ChevronLeft, ChevronRight } from "lucide-react";
+import "./InvoicesPage.css";
 
 
 export default function InvoicesPage() {
@@ -18,6 +19,7 @@ export default function InvoicesPage() {
   const [rows, setRows] = useState([]);
   const [filters, setFilters] = useState({ q: "", status: "" });
   const [selectedInvoice, setSelectedInvoice] = useState(null);
+  const [mobileTab, setMobileTab] = useState(routeInvoiceId ? "details" : "list");
   const [paymentForm, setPaymentForm] = useState({ mode: "CASH", amount: 0, note: "" });
   const [reminderPreview, setReminderPreview] = useState("");
   const [status, setStatus] = useState({ error: "", success: "", loading: true });
@@ -69,7 +71,11 @@ export default function InvoicesPage() {
       setReminderPreview("");
       const response = await api.get(`/owner/invoices/${invoiceId}`);
       setSelectedInvoice(response.data);
+      setMobileTab("details");
       navigate(`/admin/invoices/${invoiceId}`, { replace: true });
+      if (typeof window !== "undefined" && window.innerWidth <= 1024) {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
     } catch (error) {
       setStatus((current) => ({ ...current, error: formatApiError(error, "Failed to load invoice detail") }));
     }
@@ -81,6 +87,7 @@ export default function InvoicesPage() {
       setSelectedInvoice(null);
       return () => { active = false; };
     }
+    setMobileTab("details");
     (async () => {
       try {
         const response = await api.get(`/owner/invoices/${routeInvoiceId}`);
@@ -153,16 +160,16 @@ export default function InvoicesPage() {
   };
 
   return (
-    <div className="page-shell" style={{ maxWidth: '100%', margin: '0 auto', padding: '24px 32px' }}>
-      <div style={{ padding: '0 4px 24px 4px', borderBottom: '1px solid #e2e8f0', marginBottom: '24px' }}>
-        <h2 style={{ fontSize: '1.8rem', fontWeight: '800', color: '#0f172a', letterSpacing: '-0.02em', marginBottom: '8px' }}>Invoices & Billing</h2>
-        <p style={{ color: '#64748b', fontSize: '0.95rem', lineHeight: '1.5', maxWidth: '800px', margin: 0 }}>
+    <div className="page-shell invoices-page-shell">
+      <div className="invoices-page-header">
+        <h2 className="invoices-page-title">Invoices & Billing</h2>
+        <p className="invoices-page-subtitle">
           View comprehensive invoice snapshots that remain stable over time. Manage payments, track cancellations, and download receipts directly from this dashboard.
         </p>
       </div>
 
-      <div style={{ display: 'flex', gap: '16px', marginBottom: '24px', flexWrap: 'wrap', padding: '0 4px' }}>
-        <div style={{ flex: '1 1 300px', maxWidth: '450px' }}>
+      <div className="invoices-filter-bar">
+        <div className="invoices-search-col">
           <div style={{ fontSize: '0.85rem', fontWeight: '600', color: '#475569', marginBottom: '8px' }}>Search</div>
           <input 
             value={filters.q} 
@@ -173,7 +180,7 @@ export default function InvoicesPage() {
             onBlur={(e) => e.target.style.borderColor = '#cbd5e1'}
           />
         </div>
-        <div style={{ width: '200px' }}>
+        <div className="invoices-status-col">
           <div style={{ fontSize: '0.85rem', fontWeight: '600', color: '#475569', marginBottom: '8px' }}>Status</div>
           <CustomDropdown 
             value={filters.status} 
@@ -188,11 +195,11 @@ export default function InvoicesPage() {
             <option value="REFUNDED">Refunded</option>
           </CustomDropdown>
         </div>
-        <div style={{ display: 'flex', alignItems: 'flex-end' }}>
+        <div className="invoices-reset-col">
           <button 
             type="button" 
             onClick={() => setFilters({ q: "", status: "" })} 
-            style={{ height: '46px', padding: '0 24px', borderRadius: '8px', border: '1px solid #e2e8f0', backgroundColor: '#f8fafc', color: '#475569', fontWeight: '600', cursor: 'pointer', transition: 'all 0.2s', fontSize: '0.9rem' }}
+            style={{ height: '46px', padding: '0 24px', borderRadius: '8px', border: '1px solid #e2e8f0', backgroundColor: '#f8fafc', color: '#475569', fontWeight: '600', cursor: 'pointer', transition: 'all 0.2s', fontSize: '0.9rem', boxSizing: 'border-box' }}
             onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#f1f5f9'; e.currentTarget.style.color = '#0f172a'; }}
             onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#f8fafc'; e.currentTarget.style.color = '#475569'; }}
           >
@@ -204,68 +211,72 @@ export default function InvoicesPage() {
       {status.error && <div style={{ backgroundColor: '#fef2f2', color: '#991b1b', padding: '12px 16px', borderRadius: '8px', marginBottom: '20px', border: '1px solid #fecaca' }}>{status.error}</div>}
       {status.success && <div style={{ backgroundColor: '#f0fdf4', color: '#166534', padding: '12px 16px', borderRadius: '8px', marginBottom: '20px', border: '1px solid #bbf7d0' }}>{status.success}</div>}
 
-      <div className="two-col" style={{ display: 'grid', gridTemplateColumns: '1fr 1.2fr', gap: '16px', alignItems: 'flex-start' }}>
-        <div style={{ display: 'flex', flexDirection: 'column' }}>
+      {/* Mobile Tab Switcher */}
+      <div className="invoices-mobile-tabs">
+        <button 
+          type="button" 
+          className={`invoices-mobile-tab-btn ${mobileTab === 'list' ? 'active' : ''}`}
+          onClick={() => setMobileTab('list')}
+        >
+          Invoice List ({rows.length})
+        </button>
+        <button 
+          type="button" 
+          className={`invoices-mobile-tab-btn ${mobileTab === 'details' ? 'active' : ''}`}
+          onClick={() => setMobileTab('details')}
+        >
+          {selectedInvoice ? `${selectedInvoice.invoiceNumber}` : 'Invoice Preview'}
+        </button>
+      </div>
+
+      <div className="invoices-grid-container">
+        <div className={`invoices-list-column ${mobileTab === 'list' ? 'mobile-visible' : ''}`}>
           {status.loading ? <PageLoader compact title="Loading invoices" message="Preparing invoice list..." /> : null}
-          <div className="no-print" style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+          <div className="no-print" style={{ display: 'flex', flexDirection: 'column', gap: '14px', width: '100%', boxSizing: 'border-box' }}>
             {currentRows.map((row) => {
               const isSelected = selectedInvoice?.id === row.id;
               return (
               <div 
                 key={row.id} 
                 onClick={() => openDetail(row.id)}
-                style={{ 
-                  cursor: "pointer", 
-                  transition: "all 0.2s ease-in-out",
-                  padding: "20px",
-                  borderRadius: "16px",
-                  backgroundColor: isSelected ? "#f8fafc" : "#ffffff",
-                  border: isSelected ? "2px solid #3b82f6" : "1px solid #e2e8f0",
-                  boxShadow: isSelected ? "0 4px 12px rgba(59, 130, 246, 0.15)" : "0 2px 4px rgba(0,0,0,0.02)",
-                  display: "flex",
-                  flexDirection: "column",
-                  position: "relative",
-                  overflow: "hidden"
-                }}
-                onMouseEnter={(e) => { if (!isSelected) { e.currentTarget.style.borderColor = '#cbd5e1'; e.currentTarget.style.boxShadow = '0 4px 6px rgba(0,0,0,0.04)'; } }}
-                onMouseLeave={(e) => { if (!isSelected) { e.currentTarget.style.borderColor = '#e2e8f0'; e.currentTarget.style.boxShadow = '0 2px 4px rgba(0,0,0,0.02)'; } }}
+                className={`invoice-list-card ${isSelected ? "selected" : ""}`}
               >
-                {isSelected && <div style={{ position: 'absolute', left: 0, top: 0, bottom: 0, width: '4px', backgroundColor: '#3b82f6' }} />}
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '16px' }}>
-                  <div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
-                      <h3 style={{ margin: 0, fontSize: '1.1rem', fontWeight: '700', color: '#0f172a' }}>{row.invoiceNumber}</h3>
+                {isSelected && <div className="invoice-list-card-accent" />}
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '14px', gap: '8px' }}>
+                  <div style={{ minWidth: 0, flex: 1, overflow: 'hidden' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
+                      <h3 style={{ margin: 0, fontSize: '1.05rem', fontWeight: '700', color: '#0f172a', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{row.invoiceNumber}</h3>
                     </div>
-                    <div style={{ color: '#64748b', fontSize: '0.9rem', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                      <span style={{ fontWeight: '500', color: '#334155' }}>{row.customer?.name || "Walk-in"}</span>
+                    <div style={{ color: '#64748b', fontSize: '0.85rem', display: 'flex', alignItems: 'center', gap: '6px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                      <span style={{ fontWeight: '600', color: '#334155', overflow: 'hidden', textOverflow: 'ellipsis' }}>{row.customer?.name || "Walk-in"}</span>
                       <span>•</span>
-                      <span>{row.branch?.name || "Main salon"}</span>
+                      <span style={{ overflow: 'hidden', textOverflow: 'ellipsis' }}>{row.branch?.name || "Main salon"}</span>
                     </div>
                   </div>
-                  <span className={`badge badge-${String(row.status).toLowerCase()}`} style={{ fontSize: '0.75rem', padding: '6px 12px', borderRadius: '20px', fontWeight: '700', letterSpacing: '0.5px' }}>{row.status}</span>
+                  <span className={`badge badge-${String(row.status).toLowerCase()}`} style={{ fontSize: '0.72rem', padding: '4px 10px', borderRadius: '20px', fontWeight: '700', letterSpacing: '0.5px', whiteSpace: 'nowrap', flexShrink: 0 }}>{row.status}</span>
                 </div>
                 
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', backgroundColor: '#f1f5f9', padding: '12px 16px', borderRadius: '8px', marginBottom: '16px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', backgroundColor: '#f8fafc', padding: '10px 14px', borderRadius: '10px', marginBottom: '14px', border: '1px solid #f1f5f9' }}>
                   <div style={{ display: 'flex', flexDirection: 'column' }}>
-                    <span style={{ fontSize: '0.75rem', color: '#64748b', textTransform: 'uppercase', fontWeight: '700', letterSpacing: '0.5px' }}>Total Amount</span>
-                    <span style={{ fontSize: '1.1rem', fontWeight: '800', color: '#0f172a' }}>₹{String(row.total)}</span>
+                    <span style={{ fontSize: '0.72rem', color: '#64748b', textTransform: 'uppercase', fontWeight: '700', letterSpacing: '0.5px' }}>Total Amount</span>
+                    <span style={{ fontSize: '1.05rem', fontWeight: '800', color: '#0f172a' }}>₹{String(row.total)}</span>
                   </div>
-                  <div style={{ width: '1px', height: '30px', backgroundColor: '#cbd5e1' }}></div>
+                  <div style={{ width: '1px', height: '28px', backgroundColor: '#cbd5e1' }}></div>
                   <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
-                    <span style={{ fontSize: '0.75rem', color: '#64748b', textTransform: 'uppercase', fontWeight: '700', letterSpacing: '0.5px' }}>Amount Paid</span>
-                    <span style={{ fontSize: '1.1rem', fontWeight: '800', color: row.paidAmount < row.total ? '#eab308' : '#10b981' }}>₹{String(row.paidAmount)}</span>
+                    <span style={{ fontSize: '0.72rem', color: '#64748b', textTransform: 'uppercase', fontWeight: '700', letterSpacing: '0.5px' }}>Amount Paid</span>
+                    <span style={{ fontSize: '1.05rem', fontWeight: '800', color: row.paidAmount < row.total ? '#eab308' : '#10b981' }}>₹{String(row.paidAmount)}</span>
                   </div>
                 </div>
 
-                <div style={{ display: "flex", gap: "10px", flexWrap: "wrap" }} onClick={(e) => e.stopPropagation()}>
-                  <button type="button" onClick={() => openDetail(row.id)} style={{ flex: 1, padding: "8px 12px", display: "flex", alignItems: "center", justifyContent: "center", gap: "8px", backgroundColor: "#ffffff", border: "1px solid #cbd5e1", borderRadius: "8px", color: "#334155", fontSize: "0.85rem", fontWeight: "600", cursor: "pointer", transition: "all 0.2s" }} onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#f8fafc'; e.currentTarget.style.borderColor = '#94a3b8'; }} onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#ffffff'; e.currentTarget.style.borderColor = '#cbd5e1'; }}>
-                    <Eye size={16} color="#64748b" /> View
+                <div className="invoice-actions-row" onClick={(e) => e.stopPropagation()}>
+                  <button type="button" className="invoice-action-btn" onClick={() => openDetail(row.id)}>
+                    <Eye size={15} color="#64748b" /> View
                   </button>
-                  <button type="button" onClick={() => downloadFromApi(`/owner/invoices/${row.id}/pdf`, { fallbackFilename: `receipt-${row.invoiceNumber || row.id}.pdf` })} style={{ flex: 1, padding: "8px 12px", display: "flex", alignItems: "center", justifyContent: "center", gap: "8px", backgroundColor: "#ffffff", border: "1px solid #cbd5e1", borderRadius: "8px", color: "#334155", fontSize: "0.85rem", fontWeight: "600", cursor: "pointer", transition: "all 0.2s" }} onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#f8fafc'; e.currentTarget.style.borderColor = '#94a3b8'; }} onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#ffffff'; e.currentTarget.style.borderColor = '#cbd5e1'; }}>
-                    <Download size={16} color="#64748b" /> Receipt
+                  <button type="button" className="invoice-action-btn" onClick={() => downloadFromApi(`/owner/invoices/${row.id}/pdf`, { fallbackFilename: `receipt-${row.invoiceNumber || row.id}.pdf` })}>
+                    <Download size={15} color="#64748b" /> Receipt
                   </button>
-                  <button type="button" onClick={() => downloadFromApi(`/owner/invoices/${row.id}/pdf`, { fallbackFilename: `invoice-${row.invoiceNumber || row.id}.pdf` })} style={{ flex: 1, padding: "8px 12px", display: "flex", alignItems: "center", justifyContent: "center", gap: "8px", backgroundColor: "#ffffff", border: "1px solid #cbd5e1", borderRadius: "8px", color: "#334155", fontSize: "0.85rem", fontWeight: "600", cursor: "pointer", transition: "all 0.2s" }} onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#f8fafc'; e.currentTarget.style.borderColor = '#94a3b8'; }} onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#ffffff'; e.currentTarget.style.borderColor = '#cbd5e1'; }}>
-                    <FileText size={16} color="#64748b" /> PDF
+                  <button type="button" className="invoice-action-btn" onClick={() => downloadFromApi(`/owner/invoices/${row.id}/pdf`, { fallbackFilename: `invoice-${row.invoiceNumber || row.id}.pdf` })}>
+                    <FileText size={15} color="#64748b" /> PDF
                   </button>
                 </div>
               </div>
@@ -275,8 +286,8 @@ export default function InvoicesPage() {
           
           {/* Pagination Controls */}
           {totalPages > 1 && (
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: 24, paddingTop: 16, borderTop: "1px solid #e2e8f0" }}>
-              <span style={{ fontSize: "0.9rem", color: '#64748b', fontWeight: '500' }}>Showing page <strong style={{ color: '#0f172a' }}>{currentPage}</strong> of <strong style={{ color: '#0f172a' }}>{totalPages}</strong></span>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: 24, paddingTop: 16, borderTop: "1px solid #e2e8f0", width: '100%', boxSizing: 'border-box' }}>
+              <span style={{ fontSize: "0.85rem", color: '#64748b', fontWeight: '500' }}>Page <strong style={{ color: '#0f172a' }}>{currentPage}</strong> of <strong style={{ color: '#0f172a' }}>{totalPages}</strong></span>
               <div style={{ display: "flex", gap: 8 }}>
                 <button
                   type="button"
@@ -299,32 +310,44 @@ export default function InvoicesPage() {
           )}
         </div>
 
-        <div style={{ position: 'sticky', top: '24px' }}>
+        <div className={`invoices-detail-column ${mobileTab === 'details' ? 'mobile-visible' : ''}`}>
+          {/* Mobile Back Button */}
+          <button 
+            type="button" 
+            className="invoices-back-btn" 
+            onClick={() => {
+              setMobileTab("list");
+              navigate("/admin/invoices", { replace: true });
+            }}
+          >
+            <ChevronLeft size={16} /> Back to Invoices List
+          </button>
+
           {!selectedInvoice && (
-            <div style={{ backgroundColor: '#ffffff', borderRadius: '16px', padding: '40px 24px', border: '1px dashed #cbd5e1', textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '400px' }}>
+            <div style={{ backgroundColor: '#ffffff', borderRadius: '16px', padding: '40px 24px', border: '1px dashed #cbd5e1', textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '380px', width: '100%', boxSizing: 'border-box' }}>
               <FileText size={48} color="#94a3b8" style={{ marginBottom: '16px', opacity: 0.5 }} />
-              <h3 style={{ margin: '0 0 8px 0', color: '#334155', fontSize: '1.25rem' }}>No Invoice Selected</h3>
-              <p style={{ color: '#64748b', margin: 0, fontSize: '0.95rem', maxWidth: '250px' }}>Choose an invoice from the list to view its complete receipt and record payments.</p>
+              <h3 style={{ margin: '0 0 8px 0', color: '#334155', fontSize: '1.2rem' }}>No Invoice Selected</h3>
+              <p style={{ color: '#64748b', margin: 0, fontSize: '0.9rem', maxWidth: '250px' }}>Choose an invoice from the list to view its complete receipt and record payments.</p>
             </div>
           )}
           {selectedInvoice && (
             <>
-              <div className="no-print" style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 20, gap: 12 }}>
+              <div className="no-print" style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 16, gap: 10, flexWrap: 'wrap' }}>
                 {selectedInvoice.status !== "PAID" && selectedInvoice.status !== "CANCELLED" && (
-                  <button type="button" onClick={() => sendReminder(selectedInvoice.id)} style={{ padding: '10px 20px', borderRadius: '8px', border: '1px solid #3b82f6', backgroundColor: '#eff6ff', color: '#1d4ed8', fontWeight: '600', cursor: 'pointer', transition: 'all 0.2s', fontSize: '0.9rem' }} onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#dbeafe'; }} onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#eff6ff'; }}>
+                  <button type="button" onClick={() => sendReminder(selectedInvoice.id)} style={{ padding: '8px 16px', borderRadius: '8px', border: '1px solid #3b82f6', backgroundColor: '#eff6ff', color: '#1d4ed8', fontWeight: '600', cursor: 'pointer', transition: 'all 0.2s', fontSize: '0.85rem' }} onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#dbeafe'; }} onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#eff6ff'; }}>
                     Send Reminder
                   </button>
                 )}
                 {selectedInvoice.status !== "CANCELLED" && selectedInvoice.payments.length === 0 && (
-                  <button type="button" onClick={() => cancelInvoice(selectedInvoice.id)} style={{ padding: '10px 20px', borderRadius: '8px', border: '1px solid #ef4444', backgroundColor: '#fef2f2', color: '#b91c1c', fontWeight: '600', cursor: 'pointer', transition: 'all 0.2s', fontSize: '0.9rem' }} onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#fee2e2'; }} onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#fef2f2'; }}>
+                  <button type="button" onClick={() => cancelInvoice(selectedInvoice.id)} style={{ padding: '8px 16px', borderRadius: '8px', border: '1px solid #ef4444', backgroundColor: '#fef2f2', color: '#b91c1c', fontWeight: '600', cursor: 'pointer', transition: 'all 0.2s', fontSize: '0.85rem' }} onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#fee2e2'; }} onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#fef2f2'; }}>
                     Cancel Invoice
                   </button>
                 )}
               </div>
-              {reminderPreview && <p className="muted no-print" style={{ marginBottom: 16, textAlign: 'right', fontSize: '0.9rem' }}>{reminderPreview}</p>}
+              {reminderPreview && <p className="muted no-print" style={{ marginBottom: 14, textAlign: 'right', fontSize: '0.85rem' }}>{reminderPreview}</p>}
 
-              {/* Replacing the old HTML invoice view with PosReceipt inline */}
-              <div style={{ background: '#ffffff', padding: '0', borderRadius: '16px', marginBottom: '24px', boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01)', overflow: 'hidden', border: '1px solid #e2e8f0' }}>
+              {/* PosReceipt container */}
+              <div style={{ background: '#ffffff', padding: '0', borderRadius: '16px', marginBottom: '20px', boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.05)', overflow: 'hidden', border: '1px solid #e2e8f0', width: '100%', boxSizing: 'border-box' }}>
                 <PosReceipt 
                   invoice={selectedInvoice} 
                   inline={true} 
@@ -334,18 +357,18 @@ export default function InvoicesPage() {
               </div>
 
               {selectedInvoice.status !== "PAID" && selectedInvoice.status !== "CANCELLED" && (
-                <div style={{ backgroundColor: '#ffffff', borderRadius: '16px', padding: '24px', border: '1px solid #e2e8f0', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.05)', marginTop: '24px' }} className="no-print">
-                  <h4 style={{ marginTop: 0, fontSize: '1.2rem', color: '#0f172a', marginBottom: '8px' }}>Record Payment</h4>
-                  <div style={{ fontSize: "0.9rem", color: "#64748b", marginBottom: '20px', paddingBottom: '16px', borderBottom: '1px solid #f1f5f9' }}>
-                    Outstanding Balance: <strong style={{ color: "#dc2626", fontSize: '1.1rem' }}>₹{String(selectedInvoice.balanceAmount)}</strong>
+                <div className="invoice-payment-container no-print">
+                  <h4 style={{ marginTop: 0, fontSize: '1.15rem', color: '#0f172a', marginBottom: '8px' }}>Record Payment</h4>
+                  <div style={{ fontSize: "0.88rem", color: "#64748b", marginBottom: '18px', paddingBottom: '14px', borderBottom: '1px solid #f1f5f9' }}>
+                    Outstanding Balance: <strong style={{ color: "#dc2626", fontSize: '1.05rem' }}>₹{String(selectedInvoice.balanceAmount)}</strong>
                   </div>
-                  <div style={{ display: "flex", gap: '16px', flexWrap: "wrap", alignItems: 'flex-end' }}>
-                    <div style={{ flex: 1, minWidth: '120px' }}>
-                      <div style={{ fontSize: '0.85rem', fontWeight: '600', color: '#475569', marginBottom: '8px' }}>Method</div>
+                  <div className="invoice-payment-grid">
+                    <div>
+                      <div style={{ fontSize: '0.85rem', fontWeight: '600', color: '#475569', marginBottom: '6px' }}>Method</div>
                       <CustomDropdown 
                         value={paymentForm.mode} 
                         onChange={(event) => setPaymentForm({ ...paymentForm, mode: event.target.value })}
-                        style={{ width: '100%', padding: '12px 16px', borderRadius: '8px', border: '1px solid #cbd5e1', fontSize: '0.95rem', outline: 'none', backgroundColor: '#f8fafc', cursor: 'pointer', appearance: 'none', backgroundImage: 'url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23475569%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E")', backgroundRepeat: 'no-repeat', backgroundPosition: 'right 16px top 50%', backgroundSize: '0.65em auto' }}
+                        style={{ width: '100%', padding: '10px 14px', borderRadius: '8px', border: '1px solid #cbd5e1', fontSize: '0.9rem', outline: 'none', backgroundColor: '#f8fafc', cursor: 'pointer', appearance: 'none', backgroundImage: 'url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23475569%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E")', backgroundRepeat: 'no-repeat', backgroundPosition: 'right 14px top 50%', backgroundSize: '0.65em auto', boxSizing: 'border-box' }}
                       >
                         <option value="CASH">Cash</option>
                         <option value="CARD">Card</option>
@@ -353,8 +376,8 @@ export default function InvoicesPage() {
                         <option value="BANK_TRANSFER">Bank Tx</option>
                       </CustomDropdown>
                     </div>
-                    <div style={{ flex: 1, minWidth: '120px' }}>
-                      <div style={{ fontSize: '0.85rem', fontWeight: '600', color: '#475569', marginBottom: '8px' }}>Amount</div>
+                    <div>
+                      <div style={{ fontSize: '0.85rem', fontWeight: '600', color: '#475569', marginBottom: '6px' }}>Amount</div>
                       <input 
                         type="number" min="0" step="0.01" inputMode="decimal" 
                         max={Number(selectedInvoice?.balanceAmount || 0) || undefined} 
@@ -368,17 +391,17 @@ export default function InvoicesPage() {
                           const val = Math.min(Number(event.target.value) || 0, balanceAmt || Infinity);
                           setPaymentForm({ ...paymentForm, amount: val });
                         }} 
-                        style={{ width: '100%', padding: '12px 16px', borderRadius: '8px', border: '1px solid #cbd5e1', fontSize: '0.95rem', outline: 'none', backgroundColor: '#fff', transition: 'border-color 0.2s', boxShadow: 'inset 0 1px 2px rgba(0,0,0,0.02)', boxSizing: 'border-box' }}
+                        style={{ width: '100%', padding: '10px 14px', borderRadius: '8px', border: '1px solid #cbd5e1', fontSize: '0.9rem', outline: 'none', backgroundColor: '#fff', transition: 'border-color 0.2s', boxShadow: 'inset 0 1px 2px rgba(0,0,0,0.02)', boxSizing: 'border-box' }}
                         onFocus={(e) => e.target.style.borderColor = '#3b82f6'}
                         onBlur={(e) => e.target.style.borderColor = '#cbd5e1'}
                       />
                     </div>
-                    <div style={{ flex: 2, minWidth: '160px' }}>
-                      <div style={{ fontSize: '0.85rem', fontWeight: '600', color: '#475569', marginBottom: '8px' }}>Internal Note <span style={{ color: '#94a3b8', fontWeight: '400' }}>(Optional)</span></div>
+                    <div>
+                      <div style={{ fontSize: '0.85rem', fontWeight: '600', color: '#475569', marginBottom: '6px' }}>Internal Note <span style={{ color: '#94a3b8', fontWeight: '400' }}>(Optional)</span></div>
                       <input 
                         value={paymentForm.note} 
                         onChange={(event) => setPaymentForm({ ...paymentForm, note: event.target.value })} 
-                        style={{ width: '100%', padding: '12px 16px', borderRadius: '8px', border: '1px solid #cbd5e1', fontSize: '0.95rem', outline: 'none', backgroundColor: '#fff', transition: 'border-color 0.2s', boxShadow: 'inset 0 1px 2px rgba(0,0,0,0.02)', boxSizing: 'border-box' }}
+                        style={{ width: '100%', padding: '10px 14px', borderRadius: '8px', border: '1px solid #cbd5e1', fontSize: '0.9rem', outline: 'none', backgroundColor: '#fff', transition: 'border-color 0.2s', boxShadow: 'inset 0 1px 2px rgba(0,0,0,0.02)', boxSizing: 'border-box' }}
                         onFocus={(e) => e.target.style.borderColor = '#3b82f6'}
                         onBlur={(e) => e.target.style.borderColor = '#cbd5e1'}
                         placeholder="e.g. Txn ID"
@@ -387,7 +410,7 @@ export default function InvoicesPage() {
                     <button 
                       type="button" 
                       onClick={() => addPayment(selectedInvoice.id)} 
-                      style={{ height: '46px', padding: '0 24px', borderRadius: '8px', border: 'none', backgroundColor: '#10b981', color: '#fff', fontWeight: '700', cursor: 'pointer', transition: 'all 0.2s', fontSize: '0.95rem', boxShadow: '0 2px 4px rgba(16, 185, 129, 0.2)', flexShrink: 0 }}
+                      style={{ height: '42px', padding: '0 24px', borderRadius: '8px', border: 'none', backgroundColor: '#10b981', color: '#fff', fontWeight: '700', cursor: 'pointer', transition: 'all 0.2s', fontSize: '0.95rem', boxShadow: '0 2px 4px rgba(16, 185, 129, 0.2)', flexShrink: 0, boxSizing: 'border-box' }}
                       onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#059669'; e.currentTarget.style.boxShadow = '0 4px 6px rgba(16, 185, 129, 0.3)'; }}
                       onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#10b981'; e.currentTarget.style.boxShadow = '0 2px 4px rgba(16, 185, 129, 0.2)'; }}
                     >

@@ -155,14 +155,21 @@ export default function PosReceipt({ invoice, salonName, salonAddress, salonPhon
   const money = (value) => formatCurrency(value || 0, currencyCode, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
   const wrapStyle = {
-    position: "relative", width: fmt.width, maxWidth: "100%", maxHeight: "92vh", overflowY: "auto",
-    background: "#fff", borderRadius: isThermal ? 8 : 16,
+    position: "relative",
+    width: "100%",
+    maxWidth: fmt.width,
+    maxHeight: "92vh",
+    overflowY: "auto",
+    background: "#fff",
+    borderRadius: isThermal ? 8 : 16,
     boxShadow: "0 25px 60px -12px rgba(0,0,0,0.35)",
-    fontFamily: "'Poppins', 'Segoe UI', system-ui, sans-serif", paddingBottom: 0
+    fontFamily: "'Poppins', 'Segoe UI', system-ui, sans-serif",
+    paddingBottom: 0,
+    boxSizing: "border-box"
   };
 
   return (
-    <div style={inline ? { display: "flex", justifyContent: "center", width: "100%", padding: "20px 0" } : { position: "fixed", inset: 0, background: "rgba(0,0,0,0.55)", backdropFilter: "blur(6px)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 9999, padding: 20 }} className={inline ? "" : "pos-receipt-overlay"} onClick={inline ? undefined : onClose}>
+    <div style={inline ? { display: "flex", justifyContent: "center", width: "100%", padding: "16px 0", boxSizing: "border-box", overflowX: "hidden" } : { position: "fixed", inset: 0, background: "rgba(0,0,0,0.55)", backdropFilter: "blur(6px)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 9999, padding: "16px 12px", boxSizing: "border-box" }} className={inline ? "" : "pos-receipt-overlay"} onClick={inline ? undefined : onClose}>
       <div style={{ ...wrapStyle, ...(inline ? { maxHeight: "none", boxShadow: "0 10px 40px -10px rgba(0,0,0,0.15)", border: "1px solid #e2e8f0" } : {}) }} className="invoice-paper" onClick={inline ? undefined : (e) => e.stopPropagation()}>
         {/* Action Bar */}
         <div style={{ position: "sticky", top: 0, zIndex: 10, display: "flex", justifyContent: "flex-end", alignItems: "center", gap: 6, padding: isThermal ? "8px 8px" : "12px 16px", background: "rgba(255,255,255,0.95)", backdropFilter: "blur(8px)", borderBottom: "1px solid #f1f5f9", borderRadius: isThermal ? "8px 8px 0 0" : "16px 16px 0 0" }} className="no-print">
@@ -176,27 +183,27 @@ export default function PosReceipt({ invoice, salonName, salonAddress, salonPhon
         </div>
 
         {/* Receipt Body */}
-        <div id="receipt-print-area" style={{ padding: isThermal ? "8px 10px" : "0 24px 24px" }}>
+        <div id="receipt-print-area" style={{ padding: isThermal ? "8px 10px" : "0 18px 20px", boxSizing: "border-box", width: "100%", overflowX: "hidden" }}>
           {/* Header */}
-          <div style={{ textAlign: "center", padding: isThermal ? "8px 0 2px" : "20px 0 4px" }}>
-            <div style={{ fontSize: isThermal ? 14 : 26, fontWeight: 900, letterSpacing: isThermal ? 1 : 3, color: "#0f172a", margin: 0, lineHeight: 1, fontFamily: "'Poppins', system-ui, sans-serif" }}>{displaySalonName.toUpperCase()}</div>
-            {!isThermal && <div style={{ fontSize: 9, letterSpacing: 3.5, color: "#94a3b8", marginTop: 4, textTransform: "uppercase", fontWeight: 600 }}>Hair - Lifestyle - Care</div>}
-            {displayAddress && <div style={{ fontSize: isThermal ? 9 : 11, color: "#64748b", textAlign: "center", marginTop: 6, lineHeight: 1.6 }}>{displayAddress}{displayPhone && <><br />{displayPhone}</>}</div>}
+          <div style={{ textAlign: "center", padding: isThermal ? "8px 0 2px" : "18px 0 4px" }}>
+            <div style={{ fontSize: isThermal ? 14 : "clamp(18px, 4vw, 24px)", fontWeight: 900, letterSpacing: isThermal ? 1 : 2, color: "#0f172a", margin: 0, lineHeight: 1.2, fontFamily: "'Poppins', system-ui, sans-serif", wordBreak: "break-word" }}>{displaySalonName.toUpperCase()}</div>
+            {!isThermal && <div style={{ fontSize: 9, letterSpacing: 2, color: "#94a3b8", marginTop: 4, textTransform: "uppercase", fontWeight: 600 }}>Hair - Lifestyle - Care</div>}
+            {displayAddress && <div style={{ fontSize: isThermal ? 9 : 11, color: "#64748b", textAlign: "center", marginTop: 6, lineHeight: 1.6, wordBreak: "break-word" }}>{displayAddress}{displayPhone && <><br />{displayPhone}</>}</div>}
           </div>
 
           <Divider dashed={true} style={{ margin: isThermal ? "6px 0" : "14px 0" }} />
 
           {/* Meta Grid */}
-          <div style={{ display: "grid", gridTemplateColumns: "auto 1fr", gap: isThermal ? "3px 8px" : "6px 12px", fontSize: isThermal ? 10 : 12 }}>
-            <span style={{ color: "#94a3b8", fontSize: isThermal ? 9 : 11, fontWeight: 500 }}>Invoice No</span>
-            <span style={{ color: "#0f172a", fontWeight: 600, textAlign: "right", fontSize: isThermal ? 10 : 12, fontFamily: "'JetBrains Mono', 'Courier New', monospace" }}>{safeInv.invoiceNumber || "—"}</span>
-            <span style={{ color: "#94a3b8", fontSize: isThermal ? 9 : 11, fontWeight: 500 }}>Date</span>
+          <div style={{ display: "grid", gridTemplateColumns: "auto 1fr", gap: isThermal ? "3px 8px" : "6px 12px", fontSize: isThermal ? 10 : 12, alignItems: "center" }}>
+            <span style={{ color: "#94a3b8", fontSize: isThermal ? 9 : 11, fontWeight: 500, whiteSpace: "nowrap" }}>Invoice No</span>
+            <span style={{ color: "#0f172a", fontWeight: 600, textAlign: "right", fontSize: isThermal ? 10 : 12, fontFamily: "'JetBrains Mono', 'Courier New', monospace", wordBreak: "break-all" }}>{safeInv.invoiceNumber || "—"}</span>
+            <span style={{ color: "#94a3b8", fontSize: isThermal ? 9 : 11, fontWeight: 500, whiteSpace: "nowrap" }}>Date</span>
             <span style={{ color: "#0f172a", fontWeight: 600, textAlign: "right", fontSize: isThermal ? 10 : 12, fontFamily: "'JetBrains Mono', 'Courier New', monospace" }}>{dateStr}</span>
             {!isThermal && <>
-              <span style={{ color: "#94a3b8", fontSize: 11, fontWeight: 500 }}>Time</span>
+              <span style={{ color: "#94a3b8", fontSize: 11, fontWeight: 500, whiteSpace: "nowrap" }}>Time</span>
               <span style={{ color: "#0f172a", fontWeight: 600, textAlign: "right", fontSize: 12, fontFamily: "'JetBrains Mono', 'Courier New', monospace" }}>{timeStr}</span>
             </>}
-            <span style={{ color: "#94a3b8", fontSize: isThermal ? 9 : 11, fontWeight: 500 }}>Status</span>
+            <span style={{ color: "#94a3b8", fontSize: isThermal ? 9 : 11, fontWeight: 500, whiteSpace: "nowrap" }}>Status</span>
             <span style={{ textAlign: "right" }}><Tag color={statusColor(statusUp)}>{statusUp}</Tag></span>
           </div>
 
@@ -204,8 +211,8 @@ export default function PosReceipt({ invoice, salonName, salonAddress, salonPhon
 
           {/* Customer */}
           <div style={{ marginBottom: 4 }}>
-            <div style={{ fontSize: isThermal ? 8 : 9, color: "#94a3b8", letterSpacing: 2.5, textTransform: "uppercase", fontWeight: 700 }}>Bill To</div>
-            <div style={{ fontWeight: 700, fontSize: isThermal ? 11 : 14, color: "#0f172a", marginTop: 2 }}>{customer.name || safeInv.customerName || "Walk-in Customer"}</div>
+            <div style={{ fontSize: isThermal ? 8 : 9, color: "#94a3b8", letterSpacing: 2, textTransform: "uppercase", fontWeight: 700 }}>Bill To</div>
+            <div style={{ fontWeight: 700, fontSize: isThermal ? 11 : 14, color: "#0f172a", marginTop: 2, wordBreak: "break-word" }}>{customer.name || safeInv.customerName || "Walk-in Customer"}</div>
             {(customer.phone || safeInv.customerPhone) && <div style={{ fontSize: isThermal ? 9 : 11, color: "#64748b", marginTop: 1, fontFamily: "'JetBrains Mono', monospace" }}>{customer.phone || safeInv.customerPhone}</div>}
           </div>
 
@@ -220,13 +227,13 @@ export default function PosReceipt({ invoice, salonName, salonAddress, salonPhon
               const amt = Number(item.lineTotal || rate * qty);
               const itemName = (item.serviceName || item.productName || item.name || "Item").replace(/\[Package:\s*(.*?)\]/i, "Package: $1 |");
               return (
-                <div key={idx} style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", padding: isThermal ? "4px 0" : "10px 0", borderBottom: "1px dashed #e2e8f0" }}>
-                  <div style={{ flex: 1 }}>
-                    <div style={{ fontWeight: 600, color: "#0f172a", fontSize: isThermal ? 10 : 13 }}>{isThermal ? itemName.substring(0, 22) : itemName}</div>
+                <div key={idx} style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", padding: isThermal ? "4px 0" : "10px 0", borderBottom: "1px dashed #e2e8f0", gap: "8px", minWidth: 0 }}>
+                  <div style={{ flex: 1, minWidth: 0, overflow: "hidden" }}>
+                    <div style={{ fontWeight: 600, color: "#0f172a", fontSize: isThermal ? 10 : 13, wordBreak: "break-word" }}>{isThermal ? itemName.substring(0, 22) : itemName}</div>
                     <div style={{ fontSize: isThermal ? 8 : 11, color: "#94a3b8", marginTop: 3, fontFamily: "'JetBrains Mono', monospace" }}>{qty} x {money(rate)}</div>
                     {!isThermal && item.staffName && <div style={{ fontSize: 10, color: "#94a3b8", marginTop: 2 }}>Staff: {item.staffName}</div>}
                   </div>
-                  <div style={{ fontWeight: 700, color: "#0f172a", fontSize: isThermal ? 10 : 13, textAlign: "right", minWidth: isThermal ? 50 : 70, fontFamily: "'JetBrains Mono', monospace" }}>{money(amt)}</div>
+                  <div style={{ fontWeight: 700, color: "#0f172a", fontSize: isThermal ? 10 : 13, textAlign: "right", whiteSpace: "nowrap", flexShrink: 0, fontFamily: "'JetBrains Mono', monospace" }}>{money(amt)}</div>
                 </div>
               );
             })}

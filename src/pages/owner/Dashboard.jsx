@@ -15,35 +15,35 @@ function PaginatedList({ items = [], renderItem, emptyState, title, badge, icon:
   const currentItems = items.slice((page - 1) * itemsPerPage, page * itemsPerPage);
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", padding: "24px", background: "#fff", borderRadius: "16px", boxShadow: "0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 4px 6px -4px rgba(0,0,0,0.02)", border: "1px solid #f1f5f9", flex: 1 }}>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20, paddingBottom: 16, borderBottom: "1px solid #f1f5f9" }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-          {Icon && <div style={{ background: "#f8fafc", padding: 10, borderRadius: 12, color: "var(--accent)" }}><Icon size={20} /></div>}
-          <h3 style={{ margin: 0, fontSize: "1.15rem", fontWeight: 800, color: "#0f172a" }}>{title}</h3>
+    <div className="dashboard-paginated-card">
+      <div className="dashboard-paginated-header">
+        <div style={{ display: "flex", alignItems: "center", gap: 10, minWidth: 0, flex: 1, overflow: "hidden" }}>
+          {Icon && <div style={{ background: "#f8fafc", padding: 8, borderRadius: 10, color: "var(--accent)", flexShrink: 0 }}><Icon size={18} /></div>}
+          <h3 style={{ margin: 0, fontSize: "1.1rem", fontWeight: 800, color: "#0f172a", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{title}</h3>
         </div>
-        {badge && <span style={{ background: "#f8fafc", color: "#475569", padding: "6px 12px", borderRadius: "20px", fontSize: "0.8rem", fontWeight: 700, border: "1px solid #e2e8f0" }}>{badge}</span>}
+        {badge && <span style={{ background: "#f8fafc", color: "#475569", padding: "4px 10px", borderRadius: "20px", fontSize: "0.75rem", fontWeight: 700, border: "1px solid #e2e8f0", whiteSpace: "nowrap", flexShrink: 0 }}>{badge}</span>}
       </div>
-      <div style={{ display: "flex", flexDirection: "column", gap: 12, flex: 1 }}>
+      <div style={{ display: "flex", flexDirection: "column", gap: 10, flex: 1, minWidth: 0, width: "100%" }}>
         {currentItems.length > 0 ? currentItems.map(renderItem) : emptyState}
       </div>
       {totalPages > 1 && (
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 20, borderTop: '1px solid #f1f5f9', paddingTop: 16 }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 16, borderTop: '1px solid #f1f5f9', paddingTop: 14 }}>
           <button 
             type="button" 
-            style={{ padding: '8px 16px', fontSize: "0.85rem", borderRadius: 8, border: "1px solid #e2e8f0", background: "#fff", cursor: page === 1 ? "not-allowed" : "pointer", color: page === 1 ? "#94a3b8" : "#475569", display: "flex", alignItems: "center", gap: 6, fontWeight: 600, transition: "all 0.2s" }}
+            style={{ padding: '6px 12px', fontSize: "0.8rem", borderRadius: 8, border: "1px solid #e2e8f0", background: "#fff", cursor: page === 1 ? "not-allowed" : "pointer", color: page === 1 ? "#94a3b8" : "#475569", display: "flex", alignItems: "center", gap: 4, fontWeight: 600, transition: "all 0.2s" }}
             disabled={page === 1} 
             onClick={() => setPage(p => p - 1)}
           >
-            <ChevronLeft size={16} /> Prev
+            <ChevronLeft size={14} /> Prev
           </button>
-          <span style={{ fontSize: "0.85rem", color: '#64748b', fontWeight: 600 }}>Page {page} of {totalPages}</span>
+          <span style={{ fontSize: "0.8rem", color: '#64748b', fontWeight: 600 }}>Page {page} of {totalPages}</span>
           <button 
             type="button" 
-            style={{ padding: '8px 16px', fontSize: "0.85rem", borderRadius: 8, border: "1px solid #e2e8f0", background: "#fff", cursor: page === totalPages ? "not-allowed" : "pointer", color: page === totalPages ? "#94a3b8" : "#475569", display: "flex", alignItems: "center", gap: 6, fontWeight: 600, transition: "all 0.2s" }}
+            style={{ padding: '6px 12px', fontSize: "0.8rem", borderRadius: 8, border: "1px solid #e2e8f0", background: "#fff", cursor: page === totalPages ? "not-allowed" : "pointer", color: page === totalPages ? "#94a3b8" : "#475569", display: "flex", alignItems: "center", gap: 4, fontWeight: 600, transition: "all 0.2s" }}
             disabled={page === totalPages} 
             onClick={() => setPage(p => p + 1)}
           >
-            Next <ChevronRight size={16} />
+            Next <ChevronRight size={14} />
           </button>
         </div>
       )}
@@ -122,11 +122,11 @@ export default function OwnerDashboard() {
 
       <div className="dashboard-grid-1">
         {/* Operations & Financials */}
-        <div style={{ background: "#fff", borderRadius: 16, padding: 24, boxShadow: "0 10px 25px -5px rgba(0,0,0,0.05)", border: "1px solid #f1f5f9", display: "flex", flexDirection: "column" }}>
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 24, paddingBottom: 16, borderBottom: "1px solid #f1f5f9" }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-              <div style={{ background: "#f8fafc", padding: 10, borderRadius: 12, color: "var(--accent)" }}><Activity size={20} /></div>
-              <h3 style={{ margin: 0, fontSize: "1.15rem", fontWeight: 800, color: "#0f172a" }}>Operations & Financials</h3>
+        <div className="dashboard-paginated-card">
+          <div className="dashboard-paginated-header">
+            <div style={{ display: "flex", alignItems: "center", gap: 10, minWidth: 0, flex: 1, overflow: "hidden" }}>
+              <div style={{ background: "#f8fafc", padding: 8, borderRadius: 10, color: "var(--accent)", flexShrink: 0 }}><Activity size={18} /></div>
+              <h3 style={{ margin: 0, fontSize: "1.1rem", fontWeight: 800, color: "#0f172a", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>Operations & Financials</h3>
             </div>
           </div>
           
@@ -214,17 +214,17 @@ export default function OwnerDashboard() {
           items={data.recentCustomers}
           emptyState={<EmptyState title="No recent customers" message="Fresh customer activity will appear here as soon as visits or sales are recorded." />}
           renderItem={(customer, idx) => (
-            <div key={customer.id} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "16px 20px", background: "#fff", border: "1px solid #e2e8f0", borderRadius: 12, cursor: "pointer", transition: "all 0.2s" }} onClick={() => navigate(`/admin/customers/${customer.id}`)} onMouseEnter={e => { e.currentTarget.style.borderColor = "#cbd5e1"; e.currentTarget.style.boxShadow = "0 4px 6px -1px rgba(0,0,0,0.05)"; }} onMouseLeave={e => { e.currentTarget.style.borderColor = "#e2e8f0"; e.currentTarget.style.boxShadow = "none"; }}>
-              <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
-                <div style={{ width: 40, height: 40, borderRadius: "50%", background: "#f1f5f9", display: "flex", alignItems: "center", justifyContent: "center", color: "#475569", fontWeight: 800, fontSize: "1.1rem" }}>
+            <div key={customer.id} className="dashboard-list-item" onClick={() => navigate(`/admin/customers/${customer.id}`)}>
+              <div style={{ display: "flex", alignItems: "center", gap: 12, minWidth: 0, flex: 1, overflow: "hidden" }}>
+                <div style={{ width: 38, height: 38, borderRadius: "50%", background: "#f1f5f9", display: "flex", alignItems: "center", justifyContent: "center", color: "#475569", fontWeight: 800, fontSize: "1rem", flexShrink: 0 }}>
                   {customer.name?.charAt(0).toUpperCase() || "?"}
                 </div>
-                <div>
-                  <div style={{ fontSize: "1rem", fontWeight: 700, color: "#0f172a" }}>{customer.name}</div>
-                  <div style={{ fontSize: "0.85rem", color: "#64748b", marginTop: 4 }}>{customer.phone || "No phone"}</div>
+                <div style={{ minWidth: 0, overflow: "hidden" }}>
+                  <div style={{ fontSize: "0.95rem", fontWeight: 700, color: "#0f172a", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{customer.name}</div>
+                  <div style={{ fontSize: "0.8rem", color: "#64748b", marginTop: 2, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{customer.phone || "No phone"}</div>
                 </div>
               </div>
-              <span style={{ background: "#ecfdf5", color: "#059669", fontSize: "0.75rem", fontWeight: 700, padding: "6px 12px", borderRadius: 20, border: "1px solid #a7f3d0" }}>NEW</span>
+              <span className="dashboard-item-badge" style={{ background: "#ecfdf5", color: "#059669", fontSize: "0.75rem", fontWeight: 700, borderRadius: 20, border: "1px solid #a7f3d0", whiteSpace: "nowrap", flexShrink: 0 }}>NEW</span>
             </div>
           )}
         />
@@ -239,16 +239,16 @@ export default function OwnerDashboard() {
           items={data.recentInvoices}
           emptyState={<EmptyState title="No invoices yet" message="This branch scope has no invoice activity yet. New sales will show up here automatically." />}
           renderItem={(invoice) => (
-            <div key={invoice.id} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "16px 20px", background: "#fff", border: "1px solid #e2e8f0", borderRadius: 12, cursor: "pointer", transition: "all 0.2s", gap: "12px" }} onClick={() => navigate(`/admin/invoices/${invoice.id}`)} onMouseEnter={e => { e.currentTarget.style.borderColor = "#cbd5e1"; e.currentTarget.style.boxShadow = "0 4px 6px -1px rgba(0,0,0,0.05)"; }} onMouseLeave={e => { e.currentTarget.style.borderColor = "#e2e8f0"; e.currentTarget.style.boxShadow = "none"; }}>
-              <div style={{ minWidth: 0 }}>
-                <div style={{ fontSize: "1rem", fontWeight: 800, color: "#0f172a", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{invoice.invoiceNumber}</div>
-                <div style={{ fontSize: "0.85rem", color: "#64748b", marginTop: 6, display: "flex", alignItems: "center", gap: 6, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
-                  <Users size={14} style={{ flexShrink: 0 }} /> <span style={{ overflow: "hidden", textOverflow: "ellipsis" }}>{invoice.customer?.name || "Walk-in"}</span>
+            <div key={invoice.id} className="dashboard-list-item" onClick={() => navigate(`/admin/invoices/${invoice.id}`)}>
+              <div style={{ minWidth: 0, flex: 1, overflow: "hidden" }}>
+                <div style={{ fontSize: "0.95rem", fontWeight: 800, color: "#0f172a", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{invoice.invoiceNumber}</div>
+                <div style={{ fontSize: "0.8rem", color: "#64748b", marginTop: 4, display: "flex", alignItems: "center", gap: 6, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+                  <Users size={13} style={{ flexShrink: 0 }} /> <span style={{ overflow: "hidden", textOverflow: "ellipsis" }}>{invoice.customer?.name || "Walk-in"}</span>
                   <span style={{ color: "#cbd5e1" }}>|</span>
                   <span style={{ overflow: "hidden", textOverflow: "ellipsis" }}>{invoice.branch?.name || "Main salon"}</span>
                 </div>
               </div>
-              <div style={{ background: "#f8fafc", color: "var(--accent)", fontSize: "1rem", fontWeight: 800, padding: "6px 12px", borderRadius: 8, border: "1px solid #e2e8f0", whiteSpace: "nowrap", flexShrink: 0 }}>
+              <div className="dashboard-item-badge" style={{ background: "#f8fafc", color: "var(--accent)", fontSize: "0.95rem", fontWeight: 800, borderRadius: 8, border: "1px solid #e2e8f0", whiteSpace: "nowrap", flexShrink: 0 }}>
                 {formatMoney(invoice.total)}
               </div>
             </div>
@@ -263,14 +263,14 @@ export default function OwnerDashboard() {
           items={data.recentPayments}
           emptyState={<EmptyState title="No payments yet" message="Payment entries will start populating here once billing activity begins for this scope." />}
           renderItem={(payment) => (
-            <div key={payment.id} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "16px 20px", background: "#fff", border: "1px solid #e2e8f0", borderRadius: 12, cursor: "pointer", transition: "all 0.2s", gap: "12px" }} onClick={() => navigate(`/admin/payments`)} onMouseEnter={e => { e.currentTarget.style.borderColor = "#cbd5e1"; e.currentTarget.style.boxShadow = "0 4px 6px -1px rgba(0,0,0,0.05)"; }} onMouseLeave={e => { e.currentTarget.style.borderColor = "#e2e8f0"; e.currentTarget.style.boxShadow = "none"; }}>
-              <div style={{ minWidth: 0 }}>
-                <div style={{ fontSize: "1rem", fontWeight: 800, color: "#0f172a", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{payment.invoice?.invoiceNumber || "Direct Payment"}</div>
-                <div style={{ fontSize: "0.8rem", color: "#64748b", marginTop: 6, fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.05em", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+            <div key={payment.id} className="dashboard-list-item" onClick={() => navigate(`/admin/payments`)}>
+              <div style={{ minWidth: 0, flex: 1, overflow: "hidden" }}>
+                <div style={{ fontSize: "0.95rem", fontWeight: 800, color: "#0f172a", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{payment.invoice?.invoiceNumber || "Direct Payment"}</div>
+                <div style={{ fontSize: "0.78rem", color: "#64748b", marginTop: 4, fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.05em", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
                   Paid via <span style={{ color: "#3b82f6" }}>{payment.mode}</span>
                 </div>
               </div>
-              <div style={{ background: "#ecfdf5", color: "#059669", fontSize: "1rem", fontWeight: 800, padding: "6px 12px", borderRadius: 8, border: "1px solid #a7f3d0", whiteSpace: "nowrap", flexShrink: 0 }}>
+              <div className="dashboard-item-badge" style={{ background: "#ecfdf5", color: "#059669", fontSize: "0.95rem", fontWeight: 800, borderRadius: 8, border: "1px solid #a7f3d0", whiteSpace: "nowrap", flexShrink: 0 }}>
                 + {formatMoney(payment.amount)}
               </div>
             </div>
