@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import CustomDropdown from '../../components/common/CustomDropdown';
-import { Scissors, Edit2, Plus, Trash2 } from "lucide-react";
+import { Scissors, Edit2, Plus, Trash2, FileSpreadsheet } from "lucide-react";
 import { api } from "../../api/client";
 import { downloadFromApi } from "../../utils/download";
 import EmptyState from "../../components/EmptyState";
@@ -363,10 +363,91 @@ export default function ServiceCategoriesPage() {
     }
   };
 
+  const downloadClientSideSampleServicesExcel = () => {
+    const headers = [
+      "ServiceName (Mandatory)",
+      "Category (Mandatory)",
+      "Price (Mandatory)",
+      "DurationMin (Mandatory)",
+      "Subcategory (Optional)",
+      "Gender (Optional)",
+      "TaxRate (Optional)",
+      "CommissionPct (Optional)",
+      "Description (Optional)",
+      "OnlineBooking (Optional)"
+    ];
+
+    const sampleRows = [
+      ["Haircut & Beard Styling", "Hair Care", "1500", "45", "Men's Grooming", "MALE", "0", "15", "Premium haircut with hot towel beard shaping", "YES"],
+      ["Keratin Smooth Treatment", "Hair Care", "8500", "120", "Chemical Treatments", "FEMALE", "5", "20", "Formaldehyde-free protein smoothing treatment", "YES"],
+      ["Hydra Deep Cleansing Facial", "Skin Care", "4500", "60", "Facials", "UNISEX", "0", "15", "Multi-step hydrating extraction and serum infusion", "YES"],
+      ["Classic Manicure & Pedicure", "Nail Care", "2800", "60", "Hands & Feet", "UNISEX", "0", "10", "Nail shaping, cuticle care and soothing scrub", "YES"],
+      ["Bridal Makeup & Styling", "Makeup & Styling", "25000", "180", "Bridal", "FEMALE", "10", "25", "HD bridal makeup with hair styling and draping", "NO"],
+      ["Swedish Full Body Massage", "Spa & Wellness", "5000", "60", "Massages", "UNISEX", "5", "20", "Relaxing light to medium pressure body massage", "YES"],
+      ["Hair Root Touch-up", "Hair Care", "3200", "60", "Hair Coloring", "UNISEX", "0", "12", "Ammonia-free grey coverage root touch-up", "YES"]
+    ];
+
+    let xml = '<?xml version="1.0"?>\n<?mso-application progid="Excel.Sheet"?>\n<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet">\n';
+    xml += '<Styles>\n';
+    xml += '  <Style ss:ID="Default" ss:Name="Normal"><Alignment ss:Vertical="Center"/><Font ss:FontName="Calibri" ss:Size="11"/></Style>\n';
+    xml += '  <Style ss:ID="HeaderMandatory"><Alignment ss:Horizontal="Center" ss:Vertical="Center"/><Font ss:FontName="Calibri" ss:Size="11" ss:Bold="1" ss:Color="#FFFFFF"/><Interior ss:Color="#1E3A8A" ss:Pattern="Solid"/><Borders><Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="2"/></Borders></Style>\n';
+    xml += '  <Style ss:ID="HeaderOptional"><Alignment ss:Horizontal="Center" ss:Vertical="Center"/><Font ss:FontName="Calibri" ss:Size="11" ss:Bold="1" ss:Color="#FFFFFF"/><Interior ss:Color="#1E293B" ss:Pattern="Solid"/><Borders><Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="2"/></Borders></Style>\n';
+    xml += '  <Style ss:ID="DataCell"><Alignment ss:Vertical="Center"/><Font ss:FontName="Calibri" ss:Size="10"/><Borders><Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#E2E8F0"/><Border ss:Position="Right" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#E2E8F0"/></Borders></Style>\n';
+    xml += '  <Style ss:ID="DataCellAlt"><Alignment ss:Vertical="Center"/><Font ss:FontName="Calibri" ss:Size="10"/><Interior ss:Color="#F8FAFC" ss:Pattern="Solid"/><Borders><Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#E2E8F0"/><Border ss:Position="Right" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#E2E8F0"/></Borders></Style>\n';
+    xml += '</Styles>\n';
+    xml += '<Worksheet ss:Name="Service Test Data">\n<Table>\n';
+
+    headers.forEach(() => {
+      xml += '<Column ss:AutoFitWidth="1" ss:Width="140"/>\n';
+    });
+
+    xml += '<Row ss:Height="28">\n';
+    headers.forEach((h, i) => {
+      const style = i < 4 ? 'HeaderMandatory' : 'HeaderOptional';
+      xml += `  <Cell ss:StyleID="${style}"><Data ss:Type="String">${h}</Data></Cell>\n`;
+    });
+    xml += '</Row>\n';
+
+    sampleRows.forEach((row, rowIdx) => {
+      const style = rowIdx % 2 === 1 ? 'DataCellAlt' : 'DataCell';
+      xml += '<Row ss:Height="22">\n';
+      row.forEach((val) => {
+        xml += `  <Cell ss:StyleID="${style}"><Data ss:Type="String">${String(val || '')}</Data></Cell>\n`;
+      });
+      xml += '</Row>\n';
+    });
+
+    xml += '</Table>\n</Worksheet>\n</Workbook>';
+
+    const blob = new Blob([xml], { type: 'application/vnd.ms-excel;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'Services_Test_Data.xls';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
+
+  const handleDownloadTestExcel = async () => {
+    try {
+      await downloadFromApi('/owner/service-categories/test-template', {
+        fallbackFilename: 'Services_Test_Data.xlsx'
+      });
+    } catch {
+      try {
+        downloadClientSideSampleServicesExcel();
+      } catch {
+        setError('Could not download test Excel sheet');
+      }
+    }
+  };
+
   const handleImportClick = () => {
     const input = document.createElement("input");
     input.type = "file";
-    input.accept = ".csv";
+    input.accept = ".csv,.xlsx,.xls";
     input.onchange = async (e) => {
       const file = e.target.files?.[0];
       if (!file) return;
@@ -567,6 +648,9 @@ export default function ServiceCategoriesPage() {
             <div style={{ display: "flex", gap: 8, flexShrink: 0, flexWrap: "wrap" }}>
               <button type="button" onClick={handleImportClick} style={{ padding: "7px 14px", background: "#f1f5f9", color: "#475569", border: "1px solid #e2e8f0", borderRadius: 8, fontWeight: 600, cursor: "pointer", fontSize: 13 }}>Import CSV</button>
               <button type="button" onClick={handleExport} style={{ padding: "7px 14px", background: "#f1f5f9", color: "#475569", border: "1px solid #e2e8f0", borderRadius: 8, fontWeight: 600, cursor: "pointer", fontSize: 13 }}>Export CSV</button>
+              <button type="button" onClick={handleDownloadTestExcel} style={{ padding: "7px 14px", background: "#eff6ff", color: "#1d4ed8", border: "1px solid #bfdbfe", borderRadius: 8, fontWeight: 600, cursor: "pointer", fontSize: 13, display: "inline-flex", alignItems: "center", gap: 6 }}>
+                <FileSpreadsheet size={15} /> Test Excel Sheet
+              </button>
               <button type="button" onClick={openNewService} style={{ padding: "7px 18px", background: "#0f172a", color: "#fff", border: "none", borderRadius: 8, fontWeight: 700, cursor: "pointer", fontSize: 13 }}>+ Add Service</button>
             </div>
           </div>

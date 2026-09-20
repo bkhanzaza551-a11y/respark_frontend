@@ -2,7 +2,7 @@ import { useEffect, useState, useCallback, useRef } from "react";
 import CustomDropdown from '../../components/common/CustomDropdown';
 import ToggleSwitch from "../../components/common/ToggleSwitch";
 import PremiumToast from "../../components/common/PremiumToast";
-import { Search, Plus, Package, X, Check, Edit2, Trash2, Camera, Download, Upload, AlertCircle, Eye, EyeOff, ClipboardList } from "lucide-react";
+import { Search, Plus, Package, X, Check, Edit2, Trash2, Camera, Download, Upload, AlertCircle, Eye, EyeOff, ClipboardList, FileSpreadsheet } from "lucide-react";
 import { api } from "../../api/client";
 import { formatApiError } from "../../utils/apiError";
 import { useSalonSettings } from "../../context/SalonSettingsContext";
@@ -301,6 +301,204 @@ export default function ProductCategoriesPage() {
     }
   };
 
+  const downloadClientSideSampleProductsExcel = () => {
+    const headers = [
+      "ProductName (Mandatory)",
+      "ProductType (Mandatory)",
+      "CostPrice (Mandatory)",
+      "SellingPrice (Mandatory)",
+      "Category (Optional)",
+      "SKU (Optional)",
+      "Barcode (Optional)",
+      "CurrentStock (Optional)",
+      "MinStock (Optional)",
+      "OnFloor (Optional)",
+      "SalePrice (Optional)",
+      "Unit (Optional)",
+      "NetWeight (Optional)",
+      "TargetGroup (Optional)",
+      "Featured (Optional)",
+      "Description (Optional)"
+    ];
+
+    const sampleRows = [
+      ["L'Oreal Serie Expert Absolut Repair Shampoo", "RETAIL", "1200", "1950", "Hair Care", "LOR-SH-500", "890123456701", "25", "5", "8", "1850", "ml", "500", "BOTH", "YES", "Protein enriched repairing shampoo for damaged hair"],
+      ["Moroccanoil Treatment Original", "RETAIL", "2400", "3800", "Hair Care", "MOR-OIL-100", "890123456702", "15", "3", "5", "3600", "ml", "100", "BOTH", "YES", "Argan oil infused conditioning, styling and finishing tool"],
+      ["OPI ProSpa Nail & Cuticle Oil", "RETAIL", "850", "1450", "Nail Care", "OPI-OIL-15", "890123456703", "30", "6", "10", "1350", "ml", "15", "FEMALE", "NO", "Ultra-nourishing cupuacu and white tea nail treatment"],
+      ["Schwarzkopf Igora Royal 6-0 Dark Blonde", "CONSUMABLE", "650", "1100", "Hair Color", "SCH-IG-60", "890123456704", "40", "10", "15", "0", "gm", "60", "BOTH", "NO", "High definition professional hair color cream"],
+      ["Dermalogica Daily Microfoliant", "RETAIL", "3100", "4950", "Skin Care", "DERM-MIC-74", "890123456705", "12", "2", "4", "4700", "gm", "74", "BOTH", "YES", "Gentle rice-based exfoliating powder for daily use"],
+      ["Wella Blondor Multi Blonde Powder", "CONSUMABLE", "1800", "2800", "Hair Color", "WEL-BL-800", "890123456706", "10", "2", "3", "0", "gm", "800", "BOTH", "NO", "Tri-lightening dust-free lightening powder"]
+    ];
+
+    let xml = '<?xml version="1.0"?>\n<?mso-application progid="Excel.Sheet"?>\n<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet">\n';
+    xml += '<Styles>\n';
+    xml += '  <Style ss:ID="Default" ss:Name="Normal"><Alignment ss:Vertical="Center"/><Font ss:FontName="Calibri" ss:Size="11"/></Style>\n';
+    xml += '  <Style ss:ID="HeaderMandatory"><Alignment ss:Horizontal="Center" ss:Vertical="Center"/><Font ss:FontName="Calibri" ss:Size="11" ss:Bold="1" ss:Color="#FFFFFF"/><Interior ss:Color="#1E3A8A" ss:Pattern="Solid"/><Borders><Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="2"/></Borders></Style>\n';
+    xml += '  <Style ss:ID="HeaderOptional"><Alignment ss:Horizontal="Center" ss:Vertical="Center"/><Font ss:FontName="Calibri" ss:Size="11" ss:Bold="1" ss:Color="#FFFFFF"/><Interior ss:Color="#1E293B" ss:Pattern="Solid"/><Borders><Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="2"/></Borders></Style>\n';
+    xml += '  <Style ss:ID="DataCell"><Alignment ss:Vertical="Center"/><Font ss:FontName="Calibri" ss:Size="10"/><Borders><Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#E2E8F0"/><Border ss:Position="Right" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#E2E8F0"/></Borders></Style>\n';
+    xml += '  <Style ss:ID="DataCellAlt"><Alignment ss:Vertical="Center"/><Font ss:FontName="Calibri" ss:Size="10"/><Interior ss:Color="#F8FAFC" ss:Pattern="Solid"/><Borders><Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#E2E8F0"/><Border ss:Position="Right" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#E2E8F0"/></Borders></Style>\n';
+    xml += '</Styles>\n';
+    xml += '<Worksheet ss:Name="Product Test Data">\n<Table>\n';
+
+    headers.forEach(() => {
+      xml += '<Column ss:AutoFitWidth="1" ss:Width="140"/>\n';
+    });
+
+    xml += '<Row ss:Height="28">\n';
+    headers.forEach((h, i) => {
+      const style = i < 4 ? 'HeaderMandatory' : 'HeaderOptional';
+      xml += `  <Cell ss:StyleID="${style}"><Data ss:Type="String">${h}</Data></Cell>\n`;
+    });
+    xml += '</Row>\n';
+
+    sampleRows.forEach((row, rowIdx) => {
+      const style = rowIdx % 2 === 1 ? 'DataCellAlt' : 'DataCell';
+      xml += '<Row ss:Height="22">\n';
+      row.forEach((val) => {
+        xml += `  <Cell ss:StyleID="${style}"><Data ss:Type="String">${String(val || '')}</Data></Cell>\n`;
+      });
+      xml += '</Row>\n';
+    });
+
+    xml += '</Table>\n</Worksheet>\n</Workbook>';
+
+    const blob = new Blob([xml], { type: 'application/vnd.ms-excel;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'Products_Test_Data.xls';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
+
+  const handleDownloadTestExcel = () => {
+    try {
+      downloadClientSideSampleProductsExcel();
+    } catch {
+      setStatus({ error: "Could not download test Excel sheet", success: "" });
+    }
+  };
+
+  const handleExportProducts = () => {
+    try {
+      const headers = ["Product Name", "Category", "SKU", "Barcode", "Product Type", "Cost Price", "Selling Price", "Sale Price", "Current Stock", "On Floor", "Unit", "Net Weight", "Target Group", "Featured", "Status"];
+      const rows = filteredProducts.map(p => [
+        p.name || "",
+        categories.find(c => c.id === p.categoryId)?.name || "",
+        p.sku || "",
+        p.barcode || "",
+        p.productType || "RETAIL",
+        p.costPrice != null ? p.costPrice : 0,
+        p.sellingPrice != null ? p.sellingPrice : 0,
+        p.salePrice != null ? p.salePrice : 0,
+        p.currentStock != null ? p.currentStock : 0,
+        p.onFloor != null ? p.onFloor : 0,
+        p.unit || "",
+        p.netWeight != null ? p.netWeight : "",
+        p.targetGroup || "BOTH",
+        p.featured ? "YES" : "NO",
+        p.isActive !== false ? "Active" : "Inactive"
+      ]);
+
+      const csvContent = [
+        headers.join(","),
+        ...rows.map(r => r.map(v => `"${String(v).replace(/"/g, '""')}"`).join(","))
+      ].join("\n");
+
+      const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `products_export_${new Date().toISOString().slice(0, 10)}.csv`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      setStatus({ success: "Products exported successfully", error: "" });
+    } catch {
+      setStatus({ error: "Failed to export products", success: "" });
+    }
+  };
+
+  const handleImportProductsClick = () => {
+    const input = document.createElement("input");
+    input.type = "file";
+    input.accept = ".csv,.xlsx,.xls";
+    input.onchange = async (e) => {
+      const file = e.target.files?.[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = async (evt) => {
+        try {
+          const text = evt.target.result;
+          const lines = text.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
+          if (lines.length <= 1) {
+            setStatus({ error: "Uploaded file is empty or missing headers", success: "" });
+            return;
+          }
+
+          const rawHeaders = lines[0].split(",").map(h => h.replace(/^["']|["']$/g, "").toLowerCase().replace(/[^a-z0-9]/g, ""));
+          const findIdx = (...keys) => rawHeaders.findIndex(h => keys.some(k => h.includes(k)));
+
+          const nameIdx = findIdx("productname", "name");
+          const typeIdx = findIdx("producttype", "type");
+          const costIdx = findIdx("costprice", "cost");
+          const priceIdx = findIdx("sellingprice", "price", "mrp");
+          const catIdx = findIdx("category");
+          const skuIdx = findIdx("sku");
+          const stockIdx = findIdx("currentstock", "stock");
+
+          if (nameIdx === -1 || priceIdx === -1) {
+            setStatus({ error: "File must contain Product Name and Price columns", success: "" });
+            return;
+          }
+
+          let importedCount = 0;
+          for (let i = 1; i < lines.length; i++) {
+            const cols = lines[i].split(",").map(c => c.replace(/^["']|["']$/g, "").trim());
+            const name = cols[nameIdx];
+            if (!name) continue;
+
+            const categoryName = catIdx !== -1 ? cols[catIdx] : "";
+            let matchedCat = categories.find(c => c.name.toLowerCase() === categoryName.toLowerCase());
+
+            const pType = typeIdx !== -1 && cols[typeIdx]?.toUpperCase().includes("CONSUM") ? "CONSUMABLE" : "RETAIL";
+            const cost = costIdx !== -1 ? Number(cols[costIdx]) || 0 : 0;
+            const price = Number(cols[priceIdx]) || 0;
+            const sku = skuIdx !== -1 ? cols[skuIdx] : "";
+            const stock = stockIdx !== -1 ? Number(cols[stockIdx]) || 0 : 0;
+
+            try {
+              await api.post("/owner/inventory/products", {
+                name,
+                productType: pType,
+                costPrice: cost,
+                sellingPrice: price,
+                categoryId: matchedCat ? matchedCat.id : (selectedCategory?.id || null),
+                sku: sku || undefined,
+                currentStock: stock,
+                branchId: selectedBranchId || null
+              });
+              importedCount++;
+            } catch {
+              // continue
+            }
+          }
+
+          setStatus({ success: `${importedCount} products imported successfully!`, error: "" });
+          loadData();
+        } catch {
+          setStatus({ error: "Could not parse product file", success: "" });
+        }
+      };
+      reader.readAsText(file);
+    };
+    input.click();
+  };
+
   if (loading) return <PageLoader title="Loading products" />;
 
   return (
@@ -394,8 +592,8 @@ export default function ProductCategoriesPage() {
             <div style={{ background: "#eff6ff", padding: 8, borderRadius: 8, color: "#3b82f6", display: "flex" }}><Package size={20} /></div>
             {selectedCategory ? selectedCategory.name : "All Products"}
           </h3>
-          <div className="responsive-header-actions" style={{ display: "flex", gap: 16, alignItems: "center" }}>
-            <div style={{ position: "relative", flex: 1 }}>
+          <div className="responsive-header-actions" style={{ display: "flex", gap: 10, alignItems: "center", flexWrap: "wrap" }}>
+            <div style={{ position: "relative" }}>
               <Search size={16} style={{ position: "absolute", left: 12, top: 12, color: "#94a3b8" }} />
               <input
                 type="text"
@@ -403,13 +601,22 @@ export default function ProductCategoriesPage() {
                 onChange={(e) => setSearchQ(e.target.value)}
                 placeholder="Search products, SKU..."
                 className="responsive-search-input"
-                style={{ border: "1px solid #cbd5e1", borderRadius: 8, padding: "10px 12px 10px 36px", fontSize: 14, width: 260, outline: "none", transition: "border-color 0.2s" }}
+                style={{ border: "1px solid #cbd5e1", borderRadius: 8, padding: "10px 12px 10px 36px", fontSize: 14, width: 220, outline: "none", transition: "border-color 0.2s" }}
                 onFocus={e => e.target.style.borderColor = "#3b82f6"}
                 onBlur={e => e.target.style.borderColor = "#cbd5e1"}
               />
             </div>
-            <button onClick={openNewProduct} style={{ background: "#0f172a", color: "#fff", border: "none", borderRadius: 8, padding: "10px 20px", fontSize: 14, fontWeight: 600, cursor: "pointer", display: "flex", alignItems: "center", gap: 8, boxShadow: "0 2px 4px rgba(0,0,0,0.1)", transition: "all 0.2s" }} onMouseEnter={e=>e.currentTarget.style.background="#1e293b"} onMouseLeave={e=>e.currentTarget.style.background="#0f172a"}>
-              <Plus size={18} /> Add Product
+            <button type="button" onClick={handleImportProductsClick} style={{ padding: "8px 14px", background: "#f1f5f9", color: "#475569", border: "1px solid #e2e8f0", borderRadius: 8, fontWeight: 600, cursor: "pointer", fontSize: 13, display: "inline-flex", alignItems: "center", gap: 6 }}>
+              <Upload size={15} /> Import
+            </button>
+            <button type="button" onClick={handleExportProducts} style={{ padding: "8px 14px", background: "#f1f5f9", color: "#475569", border: "1px solid #e2e8f0", borderRadius: 8, fontWeight: 600, cursor: "pointer", fontSize: 13, display: "inline-flex", alignItems: "center", gap: 6 }}>
+              <Download size={15} /> Export
+            </button>
+            <button type="button" onClick={handleDownloadTestExcel} style={{ padding: "8px 14px", background: "#eff6ff", color: "#1d4ed8", border: "1px solid #bfdbfe", borderRadius: 8, fontWeight: 600, cursor: "pointer", fontSize: 13, display: "inline-flex", alignItems: "center", gap: 6 }}>
+              <FileSpreadsheet size={15} /> Test Excel Sheet
+            </button>
+            <button onClick={openNewProduct} style={{ background: "#0f172a", color: "#fff", border: "none", borderRadius: 8, padding: "8px 18px", fontSize: 13, fontWeight: 600, cursor: "pointer", display: "flex", alignItems: "center", gap: 6, boxShadow: "0 2px 4px rgba(0,0,0,0.1)", transition: "all 0.2s" }} onMouseEnter={e=>e.currentTarget.style.background="#1e293b"} onMouseLeave={e=>e.currentTarget.style.background="#0f172a"}>
+              <Plus size={16} /> Add Product
             </button>
           </div>
         </div>

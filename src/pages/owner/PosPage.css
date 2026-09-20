@@ -507,57 +507,405 @@
   min-height: unset;
 }
 
-/* MOBILE RESPONSIVE STYLES */
+/* MOBILE NAV TABS (HIDDEN ON DESKTOP) */
+.pos-mobile-nav {
+  display: none;
+}
+.pos-mobile-floating-cart {
+  display: none;
+}
+.pos-mobile-invoice-header {
+  display: none;
+}
+.pos-table-scroll-hint {
+  display: none;
+}
+
+/* CUSTOMER INFO BOX RESPONSIVE GRID */
+.pos-customer-info-box {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 12px 14px;
+  background: #f8fafc;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+  margin-bottom: 14px;
+  font-size: 12px;
+  color: #334155;
+}
+.pos-customer-info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 12px;
+  width: 100%;
+}
+.pos-customer-info-col {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+/* CART ACTIONS ROW (MEMBERSHIP, DISCOUNT, PKG, GC, TIP) */
+.pos-cart-actions-row {
+  display: flex;
+  gap: 8px;
+  padding: 8px 0;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+}
+.pos-cart-actions-row button {
+  flex-shrink: 0;
+  padding: 7px 16px;
+  background: #fff;
+  border: 1px solid var(--accent, #3b82f6);
+  border-radius: 20px;
+  cursor: pointer;
+  font-weight: 600;
+  color: var(--accent, #3b82f6);
+  font-size: 12px;
+  white-space: nowrap;
+  transition: all 120ms ease;
+}
+.pos-cart-actions-row button:hover {
+  background: #eff6ff;
+}
+
+/* COUPON ROW RESPONSIVE */
+.pos-coupon-row {
+  display: flex;
+  gap: 8px;
+  margin: 4px 0 8px;
+  align-items: center;
+}
+.pos-coupon-row input {
+  flex: 1;
+  min-width: 0;
+  padding: 8px 12px;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  font-size: 13px;
+  outline: none;
+}
+.pos-coupon-row button {
+  flex-shrink: 0;
+}
+
+/* MODAL OVERLAY MOBILE PROTECTION */
+.pos-layout div[style*="position: fixed"] > div,
+.pos-layout div[style*="position:fixed"] > div {
+  max-width: calc(100vw - 24px) !important;
+  box-sizing: border-box;
+}
+
+/* --- MOBILE & TABLET MEDIA QUERY --- */
 @media (max-width: 768px) {
+  .pos-layout {
+    height: calc(100dvh - 60px);
+    margin: -12px -8px;
+    overflow: hidden;
+  }
+
+  /* TOP BAR */
   .pos-topbar {
     height: auto;
     flex-direction: column;
+    padding: 6px 8px;
+    gap: 6px;
+    background: #ffffff;
+    border-bottom: 1px solid #e2e8f0;
   }
   .pos-topbar-left {
     width: 100%;
-    min-width: 100%;
-    border-right: none;
-    border-bottom: 1px solid #e2e8f0;
-    padding: 10px;
+    min-width: 0;
+    padding: 0;
+    border: none;
+    display: flex;
+    gap: 6px;
     height: auto;
-    flex-wrap: wrap;
+  }
+  .pos-gender-toggles {
+    height: 32px;
+  }
+  .pos-gender-btn {
+    padding: 0 10px;
+    font-size: 0.72rem;
+  }
+  .pos-search-wrapper input {
+    height: 32px;
+    font-size: 0.75rem;
   }
   .pos-topbar-right {
     width: 100%;
-    padding: 10px;
-    flex-wrap: wrap;
+    padding: 0;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    display: flex;
+    gap: 6px;
     height: auto;
-    overflow-x: visible;
+    scrollbar-width: none;
+  }
+  .pos-topbar-right::-webkit-scrollbar {
+    display: none;
+  }
+  .pos-top-tab {
+    height: 28px;
+    padding: 0 12px;
+    font-size: 0.72rem;
+    flex-shrink: 0;
   }
 
+  /* MOBILE VIEW SWITCHER TABS */
+  .pos-mobile-nav {
+    display: flex;
+    background: #ffffff;
+    border-bottom: 2px solid #e2e8f0;
+    padding: 4px 6px;
+    gap: 6px;
+    z-index: 10;
+  }
+  .pos-mobile-nav-btn {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 7px 10px;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    background: #f8fafc;
+    color: #64748b;
+    cursor: pointer;
+    transition: all 150ms ease;
+  }
+  .pos-mobile-nav-btn.active {
+    background: #eff6ff;
+    border-color: #3b82f6;
+    color: #1d4ed8;
+    box-shadow: 0 1px 3px rgba(59, 130, 246, 0.15);
+  }
+  .pos-mobile-nav-title {
+    font-size: 0.78rem;
+    font-weight: 700;
+  }
+  .pos-mobile-nav-subtitle {
+    font-size: 0.68rem;
+    opacity: 0.85;
+    margin-top: 1px;
+  }
+  .pos-mobile-nav-badge {
+    background: #ef4444;
+    color: white;
+    font-size: 0.65rem;
+    font-weight: 700;
+    padding: 1px 6px;
+    border-radius: 10px;
+    margin-left: 4px;
+    vertical-align: middle;
+  }
+  .pos-mobile-nav-price {
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: #10b981;
+    margin-left: 4px;
+  }
+
+  /* BODY - SWITCH BETWEEN CATALOG & INVOICE */
   .pos-body {
     flex-direction: column;
+    flex: 1;
+    overflow: hidden;
+    position: relative;
   }
 
+  .pos-pane-hidden {
+    display: none !important;
+  }
+  .pos-pane-active {
+    display: flex !important;
+    width: 100% !important;
+    flex: 1 !important;
+    height: 100% !important;
+    overflow-y: auto !important;
+  }
+
+  /* SIDEBAR (CATALOG VIEW ON MOBILE) */
   .pos-sidebar {
     width: 100%;
     min-width: 100%;
     border-right: none;
-    border-bottom: 2px solid #94a3b8;
-    height: 38vh; /* Give menu 38% height */
-    flex: 0 0 38vh;
+    padding: 8px 8px 75px 8px; /* space for bottom floating cart */
+    box-sizing: border-box;
+  }
+  .pos-cat-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 6px;
+  }
+  .pos-cat-btn {
+    padding: 8px 4px;
+    font-size: 0.7rem;
+  }
+  .pos-item-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 6px;
+  }
+  .pos-item-card {
+    min-height: 64px;
+    padding: 8px;
   }
 
+  /* FLOATING CART BAR ON CATALOG VIEW */
+  .pos-mobile-floating-cart {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: fixed;
+    bottom: 12px;
+    left: 12px;
+    right: 12px;
+    background: #0f172a;
+    color: white;
+    padding: 10px 14px;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(15, 23, 42, 0.35);
+    z-index: 99;
+    cursor: pointer;
+  }
+  .pos-mobile-floating-cart-info {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .pos-mobile-floating-cart-count {
+    background: #3b82f6;
+    color: white;
+    font-size: 0.72rem;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 12px;
+  }
+  .pos-mobile-floating-cart-total {
+    font-size: 0.92rem;
+    font-weight: 700;
+    color: #4ade80;
+  }
+  .pos-mobile-floating-cart-btn {
+    background: #3b82f6;
+    color: white;
+    border: none;
+    padding: 6px 14px;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 0.8rem;
+    cursor: pointer;
+  }
+
+  /* MAIN (INVOICE VIEW ON MOBILE) */
   .pos-main {
     width: 100%;
-    flex: 1;
-    padding-bottom: 80px; /* space for thicker footer */
+    padding: 6px 6px 85px 6px; /* space for footer bar */
+    box-sizing: border-box;
+  }
+  .pos-mobile-invoice-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 10px;
+    background: #eff6ff;
+    border-bottom: 1px solid #bfdbfe;
+    border-radius: 6px 6px 0 0;
+  }
+  .pos-mobile-back-catalog-btn {
+    background: #ffffff;
+    border: 1px solid #93c5fd;
+    color: #1d4ed8;
+    font-weight: 700;
+    font-size: 0.75rem;
+    padding: 5px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+  .pos-mobile-cart-badge {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: #1e40af;
   }
 
-  .pos-footer-bar {
-    left: 0;
+  /* GUEST ROW */
+  .pos-guest-row {
+    flex-direction: column;
+    align-items: stretch;
     padding: 10px;
-    justify-content: center;
-    flex-wrap: wrap;
-    border-top: 1px solid #cbd5e1;
+    gap: 8px;
   }
-  
-  .pos-footer-bar button {
+  .pos-search-guest {
+    width: 100%;
+  }
+  .pos-add-guest-btn {
+    align-self: flex-start;
+    padding: 6px 12px;
+    background: #f1f5f9;
+    border-radius: 6px;
+  }
+
+  /* TABLE SCROLL HINT */
+  .pos-table-scroll-hint {
+    display: block;
+    font-size: 0.68rem;
+    color: #64748b;
+    padding: 4px 8px;
+    background: #f8fafc;
+    border-bottom: 1px solid #e2e8f0;
+    text-align: center;
+  }
+
+  .pos-cart-table {
+    min-width: 580px;
+  }
+
+  /* PAYMENT GRID */
+  .pos-payment-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
+  .pos-payment-input input {
+    width: 100%;
+  }
+
+  /* FOOTER BAR ON MOBILE */
+  .pos-footer-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: #ffffff;
+    padding: 8px 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 6px;
+    z-index: 100;
+    border-top: 1px solid #cbd5e1;
+    box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.1);
+  }
+  .pos-btn-clear {
     flex: 1;
+    height: 38px;
+    font-size: 0.78rem;
+    padding: 0 8px;
+  }
+  .pos-btn-create {
+    flex: 1.2;
+    height: 38px;
+    font-size: 0.78rem;
+    padding: 0 8px;
+  }
+  .pos-btn-complete {
+    flex: 2;
+    height: 38px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    padding: 0 10px;
   }
 }

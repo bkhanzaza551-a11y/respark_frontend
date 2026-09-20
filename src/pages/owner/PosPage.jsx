@@ -172,6 +172,12 @@ export default function PosPage() {
     sendInvoiceMessage: true
   });
 
+  const [mobilePosView, setMobilePosView] = useState("catalog"); // "catalog" | "invoice"
+
+  const cartItemCount = useMemo(() => {
+    return (form.items || []).filter((item) => item.serviceId || item.productId || item.membershipPlanId || item.packageId || item.giftCardId || item.itemType === "GIFT_CARD").length;
+  }, [form.items]);
+
   const applyContext = useCallback((contextResponse, closingResponse, catRes, customerId, branchId) => {
     const branches = contextResponse?.data?.branches || [];
     const defaultBranch = branches.find(b => b.name.toLowerCase().includes("main")) || branches[0];
@@ -1695,9 +1701,42 @@ export default function PosPage() {
         </div>
       </div>
 
+      {/* MOBILE NAV TABS (Only visible on mobile <= 768px) */}
+      <div className="pos-mobile-nav">
+        <button
+          type="button"
+          className={`pos-mobile-nav-btn ${mobilePosView === "catalog" ? "active" : ""}`}
+          onClick={() => setMobilePosView("catalog")}
+        >
+          <span className="pos-mobile-nav-title">🛍️ Catalog</span>
+          <span className="pos-mobile-nav-subtitle">
+            {tab === "billing" ? "Services" : tab === "products" ? "Products" : tab === "packages" ? "Packages" : "Memberships"}
+          </span>
+        </button>
+        <button
+          type="button"
+          className={`pos-mobile-nav-btn ${mobilePosView === "invoice" ? "active" : ""}`}
+          onClick={() => setMobilePosView("invoice")}
+        >
+          <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
+            <span className="pos-mobile-nav-title">🧾 Current Bill</span>
+            {cartItemCount > 0 && (
+              <span className="pos-mobile-nav-badge">{cartItemCount}</span>
+            )}
+          </div>
+          <span className="pos-mobile-nav-subtitle">
+            {cartItemCount > 0 ? (
+              <span className="pos-mobile-nav-price">{formatMoney(totals.total.toFixed(0))}</span>
+            ) : (
+              "0 items"
+            )}
+          </span>
+        </button>
+      </div>
+
       <div className="pos-body">
         {/* LEFT SIDEBAR (1-CLICK CATALOG) */}
-        <div className="pos-sidebar">
+        <div className={`pos-sidebar ${mobilePosView === "catalog" ? "pos-pane-active" : "pos-pane-hidden"}`}>
           <div className="pos-cat-grid">
             {tab === "products" ? (
                <>
@@ -1787,11 +1826,32 @@ export default function PosPage() {
                )) : <EmptyState title="No services found" message="Try All, switch Male/Female, or clear service search." />
             )}
           </div>
+
+          {/* Floating Cart Button for Mobile when in Catalog */}
+          {cartItemCount > 0 && (
+            <div className="pos-mobile-floating-cart" onClick={() => setMobilePosView("invoice")}>
+              <div className="pos-mobile-floating-cart-info">
+                <span className="pos-mobile-floating-cart-count">{cartItemCount} item{cartItemCount > 1 ? "s" : ""}</span>
+                <span className="pos-mobile-floating-cart-total">{formatMoney(totals.total.toFixed(0))}</span>
+              </div>
+              <button type="button" className="pos-mobile-floating-cart-btn">
+                View Bill ➔
+              </button>
+            </div>
+          )}
         </div>
 
         {/* RIGHT MAIN AREA */}
-        <div className="pos-main">
+        <div className={`pos-main ${mobilePosView === "invoice" ? "pos-pane-active" : "pos-pane-hidden"}`}>
           <div className="pos-invoice-section">
+            <div className="pos-mobile-invoice-header">
+              <button type="button" className="pos-mobile-back-catalog-btn" onClick={() => setMobilePosView("catalog")}>
+                ← Add More Items
+              </button>
+              <span className="pos-mobile-cart-badge">
+                {cartItemCount} item{cartItemCount !== 1 ? "s" : ""} in cart
+              </span>
+            </div>
             <div className="pos-invoice-header">
               <h4>Invoice</h4>
               <div className="pos-invoice-date">
@@ -1800,8 +1860,8 @@ export default function PosPage() {
               </div>
             </div>
 
-            <div className="pos-guest-row" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "16px", gap: "16px", borderBottom: "1px solid #f1f5f9" }}>
-              <div className="pos-search-guest" style={{ width: "400px", flex: "none", margin: 0, padding: 0 }}>
+            <div className="pos-guest-row">
+              <div className="pos-search-guest">
                 <div style={{ position: "relative", width: "100%", display: "block" }}>
                   <input 
                     type="text" 
@@ -1873,25 +1933,25 @@ export default function PosPage() {
               const lastVisited = customer.lastVisitAt ? new Date(customer.lastVisitAt).toLocaleDateString("en-GB", {month:"short", day:"2-digit"}) : "NA";
               
               return (
-                <div style={{ display: "flex", flexWrap: "wrap", gap: "16px", padding: "12px 16px", background: "#f8fafc", borderRadius: "8px", border: "1px solid #e2e8f0", marginBottom: "16px", fontSize: "12px", color: "#334155" }}>
-                  <div style={{display: "flex", gap: "24px", width: "100%", justifyContent: "space-between"}}>
-                    <div style={{display: "flex", flexDirection: "column", gap: "8px"}}>
+                <div className="pos-customer-info-box">
+                  <div className="pos-customer-info-grid">
+                    <div className="pos-customer-info-col">
                       <div><strong style={{color:"#0f172a"}}>Guest :</strong> {customer.name}</div>
                       <div><strong style={{color:"#0f172a"}}>Phone :</strong> {customer.phone}</div>
                     </div>
-                    <div style={{display: "flex", flexDirection: "column", gap: "8px"}}>
+                    <div className="pos-customer-info-col">
                       <div><strong style={{color:"#0f172a"}}>DOB :</strong> {dob}</div>
                       <div><strong style={{color:"#0f172a"}}>Anniv :</strong> {anniv}</div>
                     </div>
-                    <div style={{display: "flex", flexDirection: "column", gap: "8px"}}>
+                    <div className="pos-customer-info-col">
                       <div><strong style={{color:"#0f172a"}}>Last Visited :</strong> {lastVisited}</div>
                       <div><strong style={{color:"#0f172a"}}>Due Bal :</strong> {dueBal > 0 ? formatMoney(Number(dueBal.toFixed(0))) : "NA"}</div>
                     </div>
-                    <div style={{display: "flex", flexDirection: "column", gap: "8px"}}>
+                    <div className="pos-customer-info-col">
                       <div><strong style={{color:"#0f172a"}}>Adv :</strong> {standaloneAdvance > 0 ? <span style={{color: "#10b981", fontWeight: 700}}>{formatMoney(Number(standaloneAdvance.toFixed(0)))}</span> : "NA"}</div>
                       <div><strong style={{color:"#0f172a"}}>Package :</strong> {activePackage ? <span style={{color:"#2563eb", cursor:"pointer"}} onClick={() => void openPackageDetails(activePackage)}>{activePackage?.package?.name || "NA"}</span> : cartPackage ? <span style={{color:"#10b981", fontWeight:"600"}}>{cartPackage.name} (In Cart)</span> : "NA"} {activePackage && <span title="Package Details" onClick={() => void openPackageDetails(activePackage)} style={{display:"inline-flex", alignItems:"center", justifyContent:"center", width:18, height:18, borderRadius:"50%", background:"#e2e8f0", color:"#475569", fontSize:11, fontWeight:700, cursor:"pointer", marginLeft:4, verticalAlign:"middle"}}>&#9432;</span>}</div>
                     </div>
-                    <div style={{display: "flex", flexDirection: "column", gap: "8px"}}>
+                    <div className="pos-customer-info-col">
                       <div><strong style={{color:"#0f172a"}}>Membership :</strong> {activeMembership?.membershipPlan?.name || "NA"}</div>
                     </div>
                     <div style={{display: "flex", alignItems: "flex-start"}}>
@@ -1905,7 +1965,9 @@ export default function PosPage() {
             })()}
 
             <div className="pos-cart-table-wrapper">
-
+              <div className="pos-table-scroll-hint">
+                ↔ Swipe table sideways to view staff, discount & tax
+              </div>
               <table className="pos-cart-table">
                 <thead>
                   <tr>
@@ -2096,12 +2158,12 @@ export default function PosPage() {
               <input placeholder="Add Order Instruction (Optional, Max 500 Characters)" value={form.notes} onChange={(e) => setForm(c => ({ ...c, notes: e.target.value }))} />
             </div>
 
-            <div style={{ display: "flex", gap: 10, flexWrap: "wrap", padding: "8px 0" }}>
-              <button type="button" onClick={openApplyMembershipModal} style={{ padding: "8px 18px", background: "#fff", border: "1px solid var(--accent, #3b82f6)", borderRadius: 20, cursor: "pointer", fontWeight: 600, color: "var(--accent, #3b82f6)", fontSize: 13, whiteSpace: "nowrap" }}>Apply Membership</button>
-              <button type="button" onClick={openDiscountModal} style={{ padding: "8px 18px", background: "#fff", border: "1px solid var(--accent, #3b82f6)", borderRadius: 20, cursor: "pointer", fontWeight: 600, color: "var(--accent, #3b82f6)", fontSize: 13, whiteSpace: "nowrap" }}>Apply Discount</button>
-              <button type="button" onClick={loadCustomerPackagesForRedemption} disabled={loadingCustomerPkgs} style={{ padding: "8px 18px", background: "#fff", border: "1px solid var(--accent, #3b82f6)", borderRadius: 20, cursor: loadingCustomerPkgs ? "not-allowed" : "pointer", fontWeight: 600, color: "var(--accent, #3b82f6)", fontSize: 13, whiteSpace: "nowrap", opacity: loadingCustomerPkgs ? 0.6 : 1 }}>{loadingCustomerPkgs ? "Loading..." : "Apply Package"}</button>
-              <button type="button" onClick={() => { setGcRedemptionCode(""); setGcRedemptionResult(null); setShowGcRedemptionModal(true); }} style={{ padding: "8px 18px", background: "#fff", border: "1px solid var(--accent, #3b82f6)", borderRadius: 20, cursor: "pointer", fontWeight: 600, color: "var(--accent, #3b82f6)", fontSize: 13, whiteSpace: "nowrap" }}>Apply Gift Card</button>
-              <button type="button" onClick={() => setShowTipModal(true)} style={{ padding: "8px 18px", background: "#fff", border: "1px solid var(--accent, #3b82f6)", borderRadius: 20, cursor: "pointer", fontWeight: 600, color: "var(--accent, #3b82f6)", fontSize: 13, whiteSpace: "nowrap" }}>Add Tip</button>
+            <div className="pos-cart-actions-row">
+              <button type="button" onClick={openApplyMembershipModal}>Apply Membership</button>
+              <button type="button" onClick={openDiscountModal}>Apply Discount</button>
+              <button type="button" onClick={loadCustomerPackagesForRedemption} disabled={loadingCustomerPkgs} style={{ cursor: loadingCustomerPkgs ? "not-allowed" : "pointer", opacity: loadingCustomerPkgs ? 0.6 : 1 }}>{loadingCustomerPkgs ? "Loading..." : "Apply Package"}</button>
+              <button type="button" onClick={() => { setGcRedemptionCode(""); setGcRedemptionResult(null); setShowGcRedemptionModal(true); }}>Apply Gift Card</button>
+              <button type="button" onClick={() => setShowTipModal(true)}>Add Tip</button>
             </div>
 
             {form.couponCode && couponValidation ? (
@@ -2141,14 +2203,13 @@ export default function PosPage() {
                 )}
               </div>
             ) : (
-              <div style={{ display: "flex", gap: 8, margin: "4px 0 8px", alignItems: "center" }}>
+              <div className="pos-coupon-row">
                 <input
                   type="text"
                   placeholder="Enter coupon code"
                   value={couponCodeInput}
                   onChange={(e) => setCouponCodeInput(e.target.value.toUpperCase())}
                   onKeyDown={(e) => { if (e.key === "Enter") applyCoupon(); }}
-                  style={{ flex: 1, padding: "8px 12px", border: "1px solid #cbd5e1", borderRadius: 8, fontSize: 13, outline: "none" }}
                 />
                 <button
                   type="button"

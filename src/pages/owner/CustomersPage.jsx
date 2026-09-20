@@ -952,7 +952,14 @@ export default function CustomersPage() {
       setRows((current) => current.filter((entry) => entry.id !== row.id));
       setActiveMenuRowId("");
     } catch (error) {
-      alert(formatApiError(error, "Could not delete customer"));
+      const errStatus = error?.response?.status || error?.status;
+      const errMsg = String(error?.response?.data?.message || error?.message || "").toLowerCase();
+      if (errStatus === 404 || errMsg.includes("not found")) {
+        setRows((current) => current.filter((entry) => entry.id !== row.id));
+        setActiveMenuRowId("");
+      } else {
+        alert(formatApiError(error, "Could not delete customer"));
+      }
     } finally {
       setActionBusy("");
       setSaving(false);
