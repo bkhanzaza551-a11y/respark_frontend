@@ -1706,37 +1706,39 @@ export default function SettingsPage() {
 
         <div className="settings-table-wrap cpn-card" style={{ background: "#fff", borderRadius: 12, overflowX: "auto", overflowY: "hidden", border: "1px solid #e2e8f0", boxShadow: "0 4px 12px rgba(0,0,0,0.03)" }}>
           <div style={{ minWidth: 900 }}>
-            <div style={{ padding: "16px 20px", borderBottom: "1px solid #e2e8f0", background: "#f8fafc", display: "grid", gridTemplateColumns: "120px 1fr 180px 180px 120px 1fr", alignItems: "center", gap: 16, fontSize: 13, fontWeight: 700, color: "#64748b", textTransform: "uppercase", letterSpacing: 0.5 }}>
-            <label style={{ display: "flex", alignItems: "center", gap: 10, cursor: "pointer" }}>
-              <input
-                type="checkbox"
-                disabled={!rosterModuleEnabled}
-                checked={visibleRosterRows.length > 0 && visibleRosterRows.every((row) => row.applyToAll)}
-                onChange={(event) => {
-                  const visibleIds = new Set(visibleRosterRows.map(r => r.id));
-                  updateAdvancedObject("rosterManagement", {
-                    rows: roster.rows.map((row) => visibleIds.has(row.id) ? { ...row, applyToAll: event.target.checked } : row)
-                  });
-                }}
-                style={{ width: 18, height: 18, accentColor: "#2563eb", cursor: "pointer" }}
-              />
-              <span>Apply All</span>
-            </label>
-            <div>Staff Name</div>
-            <div>From Time</div>
-            <div>To Time</div>
-            <div>Working?</div>
-            <div>Add Break</div>
-          </div>
-          {visibleRosterRows.map((row) => (
-            <div key={row.id} style={{ padding: "12px 20px", borderBottom: "1px solid #f1f5f9", display: "grid", gridTemplateColumns: "120px 1fr 180px 180px 120px 1fr", alignItems: "center", gap: 16, background: "#fff", transition: "background 0.2s" }} onMouseEnter={(e) => e.currentTarget.style.background = "#f8fafc"} onMouseLeave={(e) => e.currentTarget.style.background = "#fff"}>
-              <input
-                type="checkbox"
-                disabled={!rosterModuleEnabled}
-                checked={Boolean(row.applyToAll)}
-                onChange={(event) => updateRow(row.id, { applyToAll: event.target.checked })}
-                style={{ width: 18, height: 18, accentColor: "#2563eb", cursor: "pointer" }}
-              />
+            <div style={{ padding: "16px 20px", borderBottom: "1px solid #e2e8f0", background: "#f8fafc", display: "grid", gridTemplateColumns: "110px 1fr 180px 180px 120px 1fr", alignItems: "center", gap: 16, fontSize: 13, fontWeight: 700, color: "#64748b", textTransform: "uppercase", letterSpacing: 0.5 }}>
+              <label style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 6, cursor: "pointer", userSelect: "none" }}>
+                <input
+                  type="checkbox"
+                  disabled={!rosterModuleEnabled}
+                  checked={visibleRosterRows.length > 0 && visibleRosterRows.every((row) => row.applyToAll)}
+                  onChange={(event) => {
+                    const visibleIds = new Set(visibleRosterRows.map(r => r.id));
+                    updateAdvancedObject("rosterManagement", {
+                      rows: roster.rows.map((row) => visibleIds.has(row.id) ? { ...row, applyToAll: event.target.checked } : row)
+                    });
+                  }}
+                  style={{ width: 18, height: 18, accentColor: "#2563eb", cursor: "pointer", margin: 0 }}
+                />
+                <span style={{ fontSize: 11 }}>Apply All</span>
+              </label>
+              <div>Staff Name</div>
+              <div>From Time</div>
+              <div>To Time</div>
+              <div>Working?</div>
+              <div>Add Break</div>
+            </div>
+            {visibleRosterRows.map((row) => (
+              <div key={row.id} style={{ padding: "12px 20px", borderBottom: "1px solid #f1f5f9", display: "grid", gridTemplateColumns: "110px 1fr 180px 180px 120px 1fr", alignItems: "center", gap: 16, background: "#fff", transition: "background 0.2s" }} onMouseEnter={(e) => e.currentTarget.style.background = "#f8fafc"} onMouseLeave={(e) => e.currentTarget.style.background = "#fff"}>
+                <div style={{ display: "flex", justifyContent: "center", width: "100%" }}>
+                  <input
+                    type="checkbox"
+                    disabled={!rosterModuleEnabled}
+                    checked={Boolean(row.applyToAll)}
+                    onChange={(event) => updateRow(row.id, { applyToAll: event.target.checked })}
+                    style={{ width: 18, height: 18, accentColor: "#2563eb", cursor: "pointer", margin: 0 }}
+                  />
+                </div>
               <div style={{ fontSize: 15, color: "#1e293b", fontWeight: 600 }}>{row.staffName}</div>
               <input
                 type="time"
