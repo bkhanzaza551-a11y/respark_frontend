@@ -51,6 +51,8 @@ const makeEmptyForm = () => ({
   designation: "",
   uanNumber: "",
   reportingToId: "",
+  workingHoursType: "shift",
+  shiftId: "",
   workingHours: "",
   workingHoursStart: "",
   workingHoursEnd: "",
@@ -312,6 +314,19 @@ export default function UsersPage() {
   const startEdit = (row) => {
     setEditingId(row.id);
     setSelectedId(row.id);
+    
+    let matchedShiftId = "";
+    let wType = "shift";
+    if (row.workingHours) {
+      const match = shifts.find(s => `${s.startTime} - ${s.endTime}` === row.workingHours);
+      if (match) {
+        matchedShiftId = match.id;
+        wType = "shift";
+      } else {
+        wType = "custom";
+      }
+    }
+
     setForm({
       name: row.user?.name || "",
       email: row.user?.email || "",
@@ -332,6 +347,8 @@ export default function UsersPage() {
       designation: row.designation || "",
       uanNumber: row.uanNumber || "",
       reportingToId: row.reportingToId || "",
+      workingHoursType: wType,
+      shiftId: matchedShiftId,
       workingHours: row.workingHours || "",
       workingHoursStart: row.workingHours ? row.workingHours.split(/\s*-\s*/)[0] || "" : "",
       workingHoursEnd: row.workingHours ? row.workingHours.split(/\s*-\s*/)[1] || "" : "",
@@ -907,24 +924,50 @@ export default function UsersPage() {
                           <input type="text" className="hub-input" value={form.uanNumber} onChange={(event) => setForm({ ...form, uanNumber: event.target.value })} placeholder="12-digit UAN" pattern="\d{12}" maxLength={12} />
                         </div>
                         <div className="hub-form-group">
-                          <label>Working Shift</label>
-                          <CustomDropdown className="hub-input" value={form.shiftId || ""} onChange={e => {
-                            const sid = e.target.value;
-                            const shift = shifts.find(s => s.id === sid);
-                            setForm({
-                              ...form, 
-                              shiftId: sid,
-                              workingHours: shift && shift.startTime && shift.endTime ? `${shift.startTime} - ${shift.endTime}` : ""
-                            });
-                          }}>
-                            <option value="">Select Shift...</option>
-                            {shifts.map(s => (
-                              <option key={s.id} value={s.id}>{s.name}</option>
-                            ))}
-                          </CustomDropdown>
-                          {form.workingHours && (
-                            <div style={{ fontSize: "0.8rem", color: "#64748b", marginTop: 4 }}>
-                              Time: {form.workingHours}
+                          <label style={{ display: 'flex', justifyContent: 'space-between' }}>
+                            <span>Working Hours</span>
+                            <div style={{ display: 'flex', gap: '8px', fontSize: '12px' }}>
+                              <label style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                                <input type="radio" name="wType" value="shift" checked={form.workingHoursType === 'shift'} onChange={() => setForm({ ...form, workingHoursType: 'shift', shiftId: '', workingHours: '', workingHoursStart: '', workingHoursEnd: '' })} /> Shift
+                              </label>
+                              <label style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                                <input type="radio" name="wType" value="custom" checked={form.workingHoursType === 'custom'} onChange={() => setForm({ ...form, workingHoursType: 'custom', shiftId: '', workingHours: '', workingHoursStart: '', workingHoursEnd: '' })} /> Custom
+                              </label>
+                            </div>
+                          </label>
+                          {form.workingHoursType === 'shift' ? (
+                            <>
+                              <CustomDropdown className="hub-input" value={form.shiftId || ""} onChange={e => {
+                                const sid = e.target.value;
+                                const shift = shifts.find(s => s.id === sid);
+                                setForm({
+                                  ...form, 
+                                  shiftId: sid,
+                                  workingHours: shift && shift.startTime && shift.endTime ? `${shift.startTime} - ${shift.endTime}` : ""
+                                });
+                              }}>
+                                <option value="">Select Shift...</option>
+                                {shifts.map(s => (
+                                  <option key={s.id} value={s.id}>{s.name}</option>
+                                ))}
+                              </CustomDropdown>
+                              {form.workingHours && (
+                                <div style={{ fontSize: "0.8rem", color: "#64748b", marginTop: 4 }}>
+                                  Time: {form.workingHours}
+                                </div>
+                              )}
+                            </>
+                          ) : (
+                            <div style={{ display: 'flex', gap: 8 }}>
+                              <input type="time" className="hub-input" style={{ flex: 1 }} value={form.workingHoursStart} onChange={(e) => {
+                                const start = e.target.value;
+                                setForm({ ...form, workingHoursStart: start, workingHours: start && form.workingHoursEnd ? `${start} - ${form.workingHoursEnd}` : "" });
+                              }} />
+                              <span style={{ alignSelf: 'center' }}>-</span>
+                              <input type="time" className="hub-input" style={{ flex: 1 }} value={form.workingHoursEnd} onChange={(e) => {
+                                const end = e.target.value;
+                                setForm({ ...form, workingHoursEnd: end, workingHours: form.workingHoursStart && end ? `${form.workingHoursStart} - ${end}` : "" });
+                              }} />
                             </div>
                           )}
                         </div>
@@ -1113,24 +1156,50 @@ export default function UsersPage() {
                     <input type="text" className="hub-input" value={form.uanNumber} onChange={e => setForm({ ...form, uanNumber: e.target.value })} placeholder="12-digit UAN" pattern="\d{12}" maxLength={12} />
                   </div>
                   <div className="hub-form-group" style={{ marginBottom: 16 }}>
-                    <label>Working Shift</label>
-                    <CustomDropdown className="hub-input" value={form.shiftId || ""} onChange={e => {
-                      const sid = e.target.value;
-                      const shift = shifts.find(s => s.id === sid);
-                      setForm({
-                        ...form, 
-                        shiftId: sid,
-                        workingHours: shift && shift.startTime && shift.endTime ? `${shift.startTime} - ${shift.endTime}` : ""
-                      });
-                    }}>
-                      <option value="">Select Shift...</option>
-                      {shifts.map(s => (
-                        <option key={s.id} value={s.id}>{s.name}</option>
-                      ))}
-                    </CustomDropdown>
-                    {form.workingHours && (
-                      <div style={{ fontSize: "0.8rem", color: "#64748b", marginTop: 4 }}>
-                        Time: {form.workingHours}
+                    <label style={{ display: 'flex', justifyContent: 'space-between' }}>
+                      <span>Working Hours</span>
+                      <div style={{ display: 'flex', gap: '8px', fontSize: '12px' }}>
+                        <label style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                          <input type="radio" name="wTypeModal" value="shift" checked={form.workingHoursType === 'shift'} onChange={() => setForm({ ...form, workingHoursType: 'shift', shiftId: '', workingHours: '', workingHoursStart: '', workingHoursEnd: '' })} /> Shift
+                        </label>
+                        <label style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                          <input type="radio" name="wTypeModal" value="custom" checked={form.workingHoursType === 'custom'} onChange={() => setForm({ ...form, workingHoursType: 'custom', shiftId: '', workingHours: '', workingHoursStart: '', workingHoursEnd: '' })} /> Custom
+                        </label>
+                      </div>
+                    </label>
+                    {form.workingHoursType === 'shift' ? (
+                      <>
+                        <CustomDropdown className="hub-input" value={form.shiftId || ""} onChange={e => {
+                          const sid = e.target.value;
+                          const shift = shifts.find(s => s.id === sid);
+                          setForm({
+                            ...form, 
+                            shiftId: sid,
+                            workingHours: shift && shift.startTime && shift.endTime ? `${shift.startTime} - ${shift.endTime}` : ""
+                          });
+                        }}>
+                          <option value="">Select Shift...</option>
+                          {shifts.map(s => (
+                            <option key={s.id} value={s.id}>{s.name}</option>
+                          ))}
+                        </CustomDropdown>
+                        {form.workingHours && (
+                          <div style={{ fontSize: "0.8rem", color: "#64748b", marginTop: 4 }}>
+                            Time: {form.workingHours}
+                          </div>
+                        )}
+                      </>
+                    ) : (
+                      <div style={{ display: 'flex', gap: 8 }}>
+                        <input type="time" className="hub-input" style={{ flex: 1 }} value={form.workingHoursStart} onChange={(e) => {
+                          const start = e.target.value;
+                          setForm({ ...form, workingHoursStart: start, workingHours: start && form.workingHoursEnd ? `${start} - ${form.workingHoursEnd}` : "" });
+                        }} />
+                        <span style={{ alignSelf: 'center' }}>-</span>
+                        <input type="time" className="hub-input" style={{ flex: 1 }} value={form.workingHoursEnd} onChange={(e) => {
+                          const end = e.target.value;
+                          setForm({ ...form, workingHoursEnd: end, workingHours: form.workingHoursStart && end ? `${form.workingHoursStart} - ${end}` : "" });
+                        }} />
                       </div>
                     )}
                   </div>

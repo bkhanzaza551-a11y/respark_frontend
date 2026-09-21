@@ -204,13 +204,32 @@ export default function AppointmentsPage() {
   }, [salonSettings]);
 
   const isStaffWorkingAtSlot = (staffId, slot) => {
-    const rosterRows = salonSettings?.advancedSettings?.rosterManagement?.rows || [];
-    const staffRow = rosterRows.find(r => String(r.id) === String(staffId));
-    if (!staffRow) return true;
-    if (staffRow.isWorking === false) return false;
-    if (!staffRow.fromTime || !staffRow.toTime) return true;
+    let fromTime = "";
+    let toTime = "";
+    let isWorking = true;
 
-    // Handles BOTH 24-hour "HH:MM" (roster fromTime/toTime) and 12-hour "HH:MM AM/PM" (slot labels)
+    // First check individual staff workingHours (from shift or custom)
+    const staff = staffUsers.find(s => String(s.id) === String(staffId));
+    if (staff && staff.workingHours) {
+      const parts = staff.workingHours.split("-").map(s => s.trim());
+      if (parts.length === 2) {
+        fromTime = parts[0];
+        toTime = parts[1];
+      }
+    }
+
+    // Fall back to roster management if no individual workingHours
+    if (!fromTime || !toTime) {
+      const rosterRows = salonSettings?.advancedSettings?.rosterManagement?.rows || [];
+      const staffRow = rosterRows.find(r => String(r.id) === String(staffId));
+      if (!staffRow) return true;
+      if (staffRow.isWorking === false) return false;
+      if (!staffRow.fromTime || !staffRow.toTime) return true;
+      fromTime = staffRow.fromTime;
+      toTime = staffRow.toTime;
+    }
+
+    // Handles BOTH 24-hour "HH:MM" and 12-hour "HH:MM AM/PM"
     const getMinutes = (timeStr) => {
       if (!timeStr) return 0;
       const clean = timeStr.trim().toLowerCase();
@@ -227,15 +246,13 @@ export default function AppointmentsPage() {
         if (isPM && h < 12) h += 12;
         if (isAM && h === 12) h = 0;
       }
-      // No AM/PM → already 24-hour format, use as-is
       return h * 60 + m;
     };
 
     const slotMinutes = getMinutes(slot);
-    const startMinutes = getMinutes(staffRow.fromTime);
-    const endMinutes = getMinutes(staffRow.toTime);
+    const startMinutes = getMinutes(fromTime);
+    const endMinutes = getMinutes(toTime);
 
-    // Allow booking in any slot that starts within the shift (up to and including the last slot)
     return slotMinutes >= startMinutes && slotMinutes < endMinutes;
   };
 
