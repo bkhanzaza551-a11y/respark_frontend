@@ -1136,14 +1136,20 @@ export default function SettingsPage() {
               <span className="muted" style={{ display: "block", marginBottom: 12, fontWeight: 600, fontSize: 13, color: "#1e293b" }}>Set Weekly Off</span>
               <div style={{ display: "flex", flexWrap: "wrap", gap: 12 }}>
                 <label style={{ display: "flex", flexDirection: "row", alignItems: "center", gap: 8, cursor: "pointer", background: allChecked ? "#eff6ff" : "#f8fafc", border: allChecked ? "1px solid #3b82f6" : "1px solid #e2e8f0", padding: "6px 14px", borderRadius: 8, transition: "all 0.2s" }}>
-                  <input type="checkbox" checked={allChecked} onChange={(e) => toggleAllWeeklyOff(e.target.checked)} style={{ width: 16, height: 16, accentColor: "#3b82f6", cursor: "pointer", margin: 0 }} /> 
+                  <input type="checkbox" checked={allChecked} onChange={(e) => toggleAllWeeklyOff(e.target.checked)} style={{ opacity: 0, position: "absolute", width: 0, height: 0 }} />
+                  <div style={{ width: 16, height: 16, borderRadius: 4, background: allChecked ? "#2563eb" : "#fff", border: allChecked ? "none" : "1px solid #cbd5e1", display: "flex", alignItems: "center", justifyContent: "center", transition: "all 0.2s" }}>
+                    {allChecked && <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>}
+                  </div>
                   <span style={{ fontSize: 13, fontWeight: 600, color: allChecked ? "#1e3a8a" : "#475569" }}>All</span>
                 </label>
                 {WEEK_DAYS.map((day) => {
                   const isChecked = generic.weeklyOff.includes(day.key);
                   return (
                     <label key={day.key} style={{ display: "flex", flexDirection: "row", alignItems: "center", gap: 8, cursor: "pointer", background: isChecked ? "#eff6ff" : "#f8fafc", border: isChecked ? "1px solid #3b82f6" : "1px solid #e2e8f0", padding: "6px 14px", borderRadius: 8, transition: "all 0.2s" }}>
-                      <input type="checkbox" checked={isChecked} onChange={() => toggleWeeklyOff(day.key)} style={{ width: 16, height: 16, accentColor: "#3b82f6", cursor: "pointer", margin: 0 }} /> 
+                      <input type="checkbox" checked={isChecked} onChange={() => toggleWeeklyOff(day.key)} style={{ opacity: 0, position: "absolute", width: 0, height: 0 }} />
+                      <div style={{ width: 16, height: 16, borderRadius: 4, background: isChecked ? "#2563eb" : "#fff", border: isChecked ? "none" : "1px solid #cbd5e1", display: "flex", alignItems: "center", justifyContent: "center", transition: "all 0.2s" }}>
+                        {isChecked && <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>}
+                      </div>
                       <span style={{ fontSize: 13, fontWeight: 600, color: isChecked ? "#1e3a8a" : "#475569" }}>{day.label}</span>
                     </label>
                   );
