@@ -1762,14 +1762,22 @@ export default function PosPage() {
                        {group.items.map(product => {
                          const isOutOfStock = Number(product.currentStock || 0) <= 0 && !product.allowNegativeStock;
                          return (
-                         <button type="button" key={product.id} className="pos-item-card" onClick={() => { if(!isOutOfStock) addQuickProduct(product); else alert("This product is out of stock."); }} style={{ opacity: isOutOfStock ? 0.6 : 1, cursor: isOutOfStock ? 'not-allowed' : 'pointer' }}>
-                          {isOutOfStock && <div style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)", background: "rgba(239, 68, 68, 0.9)", color: "white", padding: "4px 8px", borderRadius: 4, fontSize: 11, fontWeight: "bold", zIndex: 10, whiteSpace: "nowrap" }}>Out of Stock</div>}
-                          {product.featured && <div style={{ position: "absolute", top: 4, right: 4, fontSize: 9, background: "#fef3c7", color: "#92400e", padding: "1px 5px", borderRadius: 4, fontWeight: 700, lineHeight: "14px" }}>★</div>}
-                          {Array.isArray(product.variations) && product.variations.length > 0 && <div style={{ position: "absolute", top: 4, left: 4, fontSize: 9, background: "#dbeafe", color: "#1d4ed8", padding: "1px 5px", borderRadius: 4, fontWeight: 700, lineHeight: "14px" }}>Customisable</div>}
-                          <div className="pos-item-card-name">{product.name}</div>
-                          <div className="pos-item-card-prices">
-                            <span className="pos-item-card-price-new">{Number(product.sellingPrice || 0).toFixed(0)}</span>
-                          </div>
+                          <button type="button" key={product.id} className="pos-item-card" onClick={() => { if(!isOutOfStock) addQuickProduct(product); else alert("This product is out of stock."); }} style={{ opacity: isOutOfStock ? 0.6 : 1, cursor: isOutOfStock ? 'not-allowed' : 'pointer' }}>
+                           {isOutOfStock && <div style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)", background: "rgba(239, 68, 68, 0.9)", color: "white", padding: "4px 8px", borderRadius: 4, fontSize: 11, fontWeight: "bold", zIndex: 10, whiteSpace: "nowrap" }}>Out of Stock</div>}
+                           <div className="pos-item-card-top">
+                             {(Boolean(product.featured) || (Array.isArray(product.variations) && product.variations.length > 0)) && (
+                               <div className="pos-item-badge-row">
+                                 {Array.isArray(product.variations) && product.variations.length > 0 && (
+                                   <span className="pos-item-customisable-badge">Customisable</span>
+                                 )}
+                                 {product.featured && <span className="pos-item-featured-badge">★</span>}
+                               </div>
+                             )}
+                             <div className="pos-item-card-name">{product.name}</div>
+                           </div>
+                           <div className="pos-item-card-prices">
+                             <span className="pos-item-card-price-new">{Number(product.sellingPrice || 0).toFixed(0)}</span>
+                           </div>
                         </button>
                       )})}
                    </div>
