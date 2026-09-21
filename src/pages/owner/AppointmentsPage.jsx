@@ -206,28 +206,32 @@ export default function AppointmentsPage() {
   const isStaffWorkingAtSlot = (staffId, slot) => {
     let fromTime = "";
     let toTime = "";
-    let isWorking = true;
 
-    // First check individual staff workingHours (from shift or custom)
-    const staff = staffUsers.find(s => String(s.id) === String(staffId));
-    if (staff && staff.workingHours) {
-      const parts = staff.workingHours.split("-").map(s => s.trim());
-      if (parts.length === 2) {
-        fromTime = parts[0];
-        toTime = parts[1];
+    const rosterRows = salonSettings?.advancedSettings?.rosterManagement?.rows || [];
+    const staffRow = rosterRows.find(r => String(r.id) === String(staffId));
+
+    // Roster Management takes priority (Overrides default shift)
+    if (staffRow) {
+      if (staffRow.isWorking === false) return false;
+      if (staffRow.fromTime && staffRow.toTime) {
+        fromTime = staffRow.fromTime;
+        toTime = staffRow.toTime;
       }
     }
 
-    // Fall back to roster management if no individual workingHours
+    // Fall back to individual staff workingHours if roster doesn't define times
     if (!fromTime || !toTime) {
-      const rosterRows = salonSettings?.advancedSettings?.rosterManagement?.rows || [];
-      const staffRow = rosterRows.find(r => String(r.id) === String(staffId));
-      if (!staffRow) return true;
-      if (staffRow.isWorking === false) return false;
-      if (!staffRow.fromTime || !staffRow.toTime) return true;
-      fromTime = staffRow.fromTime;
-      toTime = staffRow.toTime;
+      const staff = staffUsers.find(s => String(s.id) === String(staffId));
+      if (staff && staff.workingHours) {
+        const parts = staff.workingHours.split("-").map(s => s.trim());
+        if (parts.length === 2) {
+          fromTime = parts[0];
+          toTime = parts[1];
+        }
+      }
     }
+
+    if (!fromTime || !toTime) return true; // Default to working if completely missing
 
     // Handles BOTH 24-hour "HH:MM" and 12-hour "HH:MM AM/PM"
     const getMinutes = (timeStr) => {
