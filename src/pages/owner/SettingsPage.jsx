@@ -1521,7 +1521,7 @@ export default function SettingsPage() {
           </div>
 
           {/* Shift Cards */}
-          {shiftList.map((shift) => (
+          {shiftList.filter(s => s.id !== "new").map((shift) => (
             <div key={shift.id} style={{ border: "1px solid #e2e8f0", borderRadius: 20, padding: 24, background: "#fff", boxShadow: "0 4px 12px rgba(0,0,0,0.02)", display: "flex", flexDirection: "column", justifyContent: "space-between", height: 180, transition: "transform 0.2s, box-shadow 0.2s" }} onMouseEnter={(e) => { e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.boxShadow = "0 8px 24px rgba(0,0,0,0.06)"; }} onMouseLeave={(e) => { e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.boxShadow = "0 4px 12px rgba(0,0,0,0.02)"; }}>
               <div>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "start", marginBottom: 12 }}>
