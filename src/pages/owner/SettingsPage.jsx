@@ -1134,15 +1134,20 @@ export default function SettingsPage() {
 
             <div style={{ marginTop: 8 }}>
               <span className="muted" style={{ display: "block", marginBottom: 12, fontWeight: 600, fontSize: 13, color: "#1e293b" }}>Set Weekly Off</span>
-              <div style={{ display: "flex", flexWrap: "wrap", gap: 20 }}>
-                <label style={{ display: "flex", flexDirection: "row", alignItems: "center", gap: 8, cursor: "pointer", fontSize: 14 }}>
-                  <input type="checkbox" checked={allChecked} onChange={(e) => toggleAllWeeklyOff(e.target.checked)} style={{ width: 16, height: 16, accentColor: "#3b82f6" }} /> All
+              <div style={{ display: "flex", flexWrap: "wrap", gap: 12 }}>
+                <label style={{ display: "flex", flexDirection: "row", alignItems: "center", gap: 8, cursor: "pointer", background: allChecked ? "#eff6ff" : "#f8fafc", border: allChecked ? "1px solid #3b82f6" : "1px solid #e2e8f0", padding: "6px 14px", borderRadius: 8, transition: "all 0.2s" }}>
+                  <input type="checkbox" checked={allChecked} onChange={(e) => toggleAllWeeklyOff(e.target.checked)} style={{ width: 16, height: 16, accentColor: "#3b82f6", cursor: "pointer", margin: 0 }} /> 
+                  <span style={{ fontSize: 13, fontWeight: 600, color: allChecked ? "#1e3a8a" : "#475569" }}>All</span>
                 </label>
-                {WEEK_DAYS.map((day) => (
-                  <label key={day.key} style={{ display: "flex", flexDirection: "row", alignItems: "center", gap: 8, cursor: "pointer", fontSize: 14 }}>
-                    <input type="checkbox" checked={generic.weeklyOff.includes(day.key)} onChange={() => toggleWeeklyOff(day.key)} style={{ width: 16, height: 16, accentColor: "#3b82f6" }} /> {day.label}
-                  </label>
-                ))}
+                {WEEK_DAYS.map((day) => {
+                  const isChecked = generic.weeklyOff.includes(day.key);
+                  return (
+                    <label key={day.key} style={{ display: "flex", flexDirection: "row", alignItems: "center", gap: 8, cursor: "pointer", background: isChecked ? "#eff6ff" : "#f8fafc", border: isChecked ? "1px solid #3b82f6" : "1px solid #e2e8f0", padding: "6px 14px", borderRadius: 8, transition: "all 0.2s" }}>
+                      <input type="checkbox" checked={isChecked} onChange={() => toggleWeeklyOff(day.key)} style={{ width: 16, height: 16, accentColor: "#3b82f6", cursor: "pointer", margin: 0 }} /> 
+                      <span style={{ fontSize: 13, fontWeight: 600, color: isChecked ? "#1e3a8a" : "#475569" }}>{day.label}</span>
+                    </label>
+                  );
+                })}
               </div>
             </div>
           </div>
