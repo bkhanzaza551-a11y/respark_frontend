@@ -926,13 +926,35 @@ export default function UsersPage() {
                         <div className="hub-form-group">
                           <label style={{ display: 'flex', justifyContent: 'space-between' }}>
                             <span>Working Hours</span>
-                            <div style={{ display: 'flex', gap: '8px', fontSize: '12px' }}>
-                              <label style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px' }}>
-                                <input type="radio" name="wType" value="shift" checked={form.workingHoursType === 'shift'} onChange={() => setForm({ ...form, workingHoursType: 'shift', shiftId: '', workingHours: '', workingHoursStart: '', workingHoursEnd: '' })} /> Shift
-                              </label>
-                              <label style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px' }}>
-                                <input type="radio" name="wType" value="custom" checked={form.workingHoursType === 'custom'} onChange={() => setForm({ ...form, workingHoursType: 'custom', shiftId: '', workingHours: '', workingHoursStart: '', workingHoursEnd: '' })} /> Custom
-                              </label>
+                            <div style={{ display: 'flex', background: '#f1f5f9', borderRadius: '8px', padding: '4px', gap: '4px', border: '1px solid #e2e8f0', width: 'fit-content' }}>
+                              <button 
+                                type="button"
+                                onClick={() => setForm({ ...form, workingHoursType: 'shift', shiftId: '', workingHours: '', workingHoursStart: '', workingHoursEnd: '' })}
+                                style={{ 
+                                  flex: 1, padding: '4px 12px', borderRadius: '6px', border: 'none', fontSize: '12px', 
+                                  fontWeight: form.workingHoursType === 'shift' ? 600 : 500, 
+                                  color: form.workingHoursType === 'shift' ? '#0f172a' : '#64748b', 
+                                  background: form.workingHoursType === 'shift' ? 'white' : 'transparent', 
+                                  boxShadow: form.workingHoursType === 'shift' ? '0 1px 2px rgba(0,0,0,0.1)' : 'none', 
+                                  cursor: 'pointer', transition: 'all 0.2s'
+                                }}
+                              >
+                                Shift
+                              </button>
+                              <button 
+                                type="button"
+                                onClick={() => setForm({ ...form, workingHoursType: 'custom', shiftId: '', workingHours: '', workingHoursStart: '', workingHoursEnd: '' })}
+                                style={{ 
+                                  flex: 1, padding: '4px 12px', borderRadius: '6px', border: 'none', fontSize: '12px', 
+                                  fontWeight: form.workingHoursType === 'custom' ? 600 : 500, 
+                                  color: form.workingHoursType === 'custom' ? '#0f172a' : '#64748b', 
+                                  background: form.workingHoursType === 'custom' ? 'white' : 'transparent', 
+                                  boxShadow: form.workingHoursType === 'custom' ? '0 1px 2px rgba(0,0,0,0.1)' : 'none', 
+                                  cursor: 'pointer', transition: 'all 0.2s'
+                                }}
+                              >
+                                Custom
+                              </button>
                             </div>
                           </label>
                           {form.workingHoursType === 'shift' ? (
@@ -1158,13 +1180,35 @@ export default function UsersPage() {
                   <div className="hub-form-group" style={{ marginBottom: 16 }}>
                     <label style={{ display: 'flex', justifyContent: 'space-between' }}>
                       <span>Working Hours</span>
-                      <div style={{ display: 'flex', gap: '8px', fontSize: '12px' }}>
-                        <label style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px' }}>
-                          <input type="radio" name="wTypeModal" value="shift" checked={form.workingHoursType === 'shift'} onChange={() => setForm({ ...form, workingHoursType: 'shift', shiftId: '', workingHours: '', workingHoursStart: '', workingHoursEnd: '' })} /> Shift
-                        </label>
-                        <label style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px' }}>
-                          <input type="radio" name="wTypeModal" value="custom" checked={form.workingHoursType === 'custom'} onChange={() => setForm({ ...form, workingHoursType: 'custom', shiftId: '', workingHours: '', workingHoursStart: '', workingHoursEnd: '' })} /> Custom
-                        </label>
+                      <div style={{ display: 'flex', background: '#f1f5f9', borderRadius: '8px', padding: '4px', gap: '4px', border: '1px solid #e2e8f0', width: 'fit-content' }}>
+                        <button 
+                          type="button"
+                          onClick={() => setForm({ ...form, workingHoursType: 'shift', shiftId: '', workingHours: '', workingHoursStart: '', workingHoursEnd: '' })}
+                          style={{ 
+                            flex: 1, padding: '4px 12px', borderRadius: '6px', border: 'none', fontSize: '12px', 
+                            fontWeight: form.workingHoursType === 'shift' ? 600 : 500, 
+                            color: form.workingHoursType === 'shift' ? '#0f172a' : '#64748b', 
+                            background: form.workingHoursType === 'shift' ? 'white' : 'transparent', 
+                            boxShadow: form.workingHoursType === 'shift' ? '0 1px 2px rgba(0,0,0,0.1)' : 'none', 
+                            cursor: 'pointer', transition: 'all 0.2s'
+                          }}
+                        >
+                          Shift
+                        </button>
+                        <button 
+                          type="button"
+                          onClick={() => setForm({ ...form, workingHoursType: 'custom', shiftId: '', workingHours: '', workingHoursStart: '', workingHoursEnd: '' })}
+                          style={{ 
+                            flex: 1, padding: '4px 12px', borderRadius: '6px', border: 'none', fontSize: '12px', 
+                            fontWeight: form.workingHoursType === 'custom' ? 600 : 500, 
+                            color: form.workingHoursType === 'custom' ? '#0f172a' : '#64748b', 
+                            background: form.workingHoursType === 'custom' ? 'white' : 'transparent', 
+                            boxShadow: form.workingHoursType === 'custom' ? '0 1px 2px rgba(0,0,0,0.1)' : 'none', 
+                            cursor: 'pointer', transition: 'all 0.2s'
+                          }}
+                        >
+                          Custom
+                        </button>
                       </div>
                     </label>
                     {form.workingHoursType === 'shift' ? (
