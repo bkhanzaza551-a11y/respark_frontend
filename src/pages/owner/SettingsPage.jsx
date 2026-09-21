@@ -1775,9 +1775,9 @@ export default function SettingsPage() {
                 onFocus={(e) => { e.target.style.borderColor = "#3b82f6"; e.target.style.boxShadow = "0 0 0 3px rgba(59, 130, 246, 0.1)"; }}
                 onBlur={(e) => { e.target.style.borderColor = "#cbd5e1"; e.target.style.boxShadow = "none"; }}
               />
-              <label style={{ display: "flex", alignItems: "center" }}>
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
                 <ToggleSwitch checked={Boolean(row.isWorking)} onChange={(e) => updateRow(row.id, { isWorking: e.target.checked })} />
-              </label>
+              </div>
               <input
                 type="text"
                 disabled={!rosterModuleEnabled || !row.isWorking}
