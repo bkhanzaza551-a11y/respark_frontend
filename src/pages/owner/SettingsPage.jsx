@@ -1729,8 +1729,11 @@ export default function SettingsPage() {
                       rows: roster.rows.map((row) => visibleIds.has(row.id) ? { ...row, applyToAll: event.target.checked } : row)
                     });
                   }}
-                  style={{ width: 18, height: 18, accentColor: "#2563eb", cursor: "pointer", margin: 0 }}
+                  style={{ opacity: 0, position: "absolute", width: 0, height: 0 }}
                 />
+                <div style={{ width: 18, height: 18, borderRadius: 4, background: (visibleRosterRows.length > 0 && visibleRosterRows.every((row) => row.applyToAll)) ? "#2563eb" : "#fff", border: (visibleRosterRows.length > 0 && visibleRosterRows.every((row) => row.applyToAll)) ? "none" : "1px solid #cbd5e1", display: "flex", alignItems: "center", justifyContent: "center", transition: "all 0.2s" }}>
+                  {(visibleRosterRows.length > 0 && visibleRosterRows.every((row) => row.applyToAll)) && <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>}
+                </div>
                 <span style={{ fontSize: 11 }}>Apply All</span>
               </label>
               <div>Staff Name</div>
@@ -1741,15 +1744,18 @@ export default function SettingsPage() {
             </div>
             {visibleRosterRows.map((row) => (
               <div key={row.id} style={{ padding: "12px 20px", borderBottom: "1px solid #f1f5f9", display: "grid", gridTemplateColumns: "110px 1fr 180px 180px 120px 1fr", alignItems: "center", gap: 16, background: "#fff", transition: "background 0.2s" }} onMouseEnter={(e) => e.currentTarget.style.background = "#f8fafc"} onMouseLeave={(e) => e.currentTarget.style.background = "#fff"}>
-                <div style={{ display: "flex", justifyContent: "center", width: "100%" }}>
+                <label style={{ display: "flex", justifyContent: "center", width: "100%", cursor: "pointer", margin: 0 }}>
                   <input
                     type="checkbox"
                     disabled={!rosterModuleEnabled}
                     checked={Boolean(row.applyToAll)}
                     onChange={(event) => updateRow(row.id, { applyToAll: event.target.checked })}
-                    style={{ width: 18, height: 18, accentColor: "#2563eb", cursor: "pointer", margin: 0 }}
+                    style={{ opacity: 0, position: "absolute", width: 0, height: 0 }}
                   />
-                </div>
+                  <div style={{ width: 18, height: 18, borderRadius: 4, background: Boolean(row.applyToAll) ? "#2563eb" : "#fff", border: Boolean(row.applyToAll) ? "none" : "1px solid #cbd5e1", display: "flex", alignItems: "center", justifyContent: "center", transition: "all 0.2s" }}>
+                    {Boolean(row.applyToAll) && <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>}
+                  </div>
+                </label>
               <div style={{ fontSize: 15, color: "#1e293b", fontWeight: 600 }}>{row.staffName}</div>
               <input
                 type="time"
