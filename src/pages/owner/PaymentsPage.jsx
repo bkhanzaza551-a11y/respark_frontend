@@ -187,23 +187,55 @@ export default function PaymentsPage() {
                   <td>{row.note || "-"}</td>
                   <td>{new Date(row.createdAt).toLocaleString()}</td>
                   <td style={{ textAlign: "right" }}>
-                    <div style={{ display: "inline-flex", gap: 6, alignItems: "center" }}>
+                    <div style={{ display: "inline-flex", gap: 8, alignItems: "center", justifyContent: "flex-end" }}>
                       {row.invoiceId && (
                         <button
+                          type="button"
                           title="View Invoice"
-                          style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", width: 28, height: 28, borderRadius: 6, background: "#eff6ff", border: "1px solid #bfdbfe", color: "#2563eb", cursor: "pointer" }}
+                          style={{
+                            display: "inline-flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            width: 34,
+                            height: 34,
+                            borderRadius: 8,
+                            background: "#eff6ff",
+                            border: "1px solid #bfdbfe",
+                            color: "#2563eb",
+                            cursor: "pointer",
+                            flexShrink: 0,
+                            transition: "all 0.15s ease-in-out"
+                          }}
+                          onMouseEnter={(e) => { e.currentTarget.style.background = "#dbeafe"; e.currentTarget.style.borderColor = "#93c5fd"; }}
+                          onMouseLeave={(e) => { e.currentTarget.style.background = "#eff6ff"; e.currentTarget.style.borderColor = "#bfdbfe"; }}
                           onClick={() => navigate(`/admin/invoices/${row.invoiceId}`)}
                         >
-                          <Eye size={14} />
+                          <Eye size={18} strokeWidth={2.2} />
                         </button>
                       )}
                       {tab !== "audit" && row.type !== "REFUND" && row.invoiceId && (
                         <button
+                          type="button"
                           title="Refund this payment"
-                          style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", width: 28, height: 28, borderRadius: 6, background: "#fef2f2", border: "1px solid #fecaca", color: "#dc2626", cursor: "pointer" }}
+                          style={{
+                            display: "inline-flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            width: 34,
+                            height: 34,
+                            borderRadius: 8,
+                            background: "#fef2f2",
+                            border: "1px solid #fecaca",
+                            color: "#dc2626",
+                            cursor: "pointer",
+                            flexShrink: 0,
+                            transition: "all 0.15s ease-in-out"
+                          }}
+                          onMouseEnter={(e) => { e.currentTarget.style.background = "#fee2e2"; e.currentTarget.style.borderColor = "#fca5a5"; }}
+                          onMouseLeave={(e) => { e.currentTarget.style.background = "#fef2f2"; e.currentTarget.style.borderColor = "#fecaca"; }}
                           onClick={() => { setRefundForm({ invoiceId: row.invoiceId, amount: Number(row.amount || 0), note: `Refund for ${row.invoice?.invoiceNumber || row.id}` }); window.scrollTo({ top: 0, behavior: "smooth" }); }}
                         >
-                          <RotateCcw size={14} />
+                          <RotateCcw size={18} strokeWidth={2.2} />
                         </button>
                       )}
                     </div>
