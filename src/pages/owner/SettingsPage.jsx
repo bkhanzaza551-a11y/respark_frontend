@@ -552,11 +552,16 @@ export default function SettingsPage() {
     setAffiliateCashCreditInput(cashValue !== undefined && cashValue !== null ? String(cashValue) : "0.5");
   }, [form.advancedSettings?.referralSettings]);
 
+  const canManageStaff = auth?.systemRole === "SALON_OWNER" ||
+    auth?.membership?.salonRole === "SALON_OWNER" ||
+    Boolean(auth?.membership?.permissions?.staff);
+
   const filteredSections = useMemo(() => {
     if (!canViewSettings) return [];
-    if (!deferredSearch) return SETTINGS_WORKSPACE_SECTIONS;
-    return SETTINGS_WORKSPACE_SECTIONS.filter((item) => `${item.label} ${item.hint}`.toLowerCase().includes(deferredSearch));
-  }, [canViewSettings, deferredSearch]);
+    const base = SETTINGS_WORKSPACE_SECTIONS.filter((item) => item.key !== "access-control" || canManageStaff);
+    if (!deferredSearch) return base;
+    return base.filter((item) => `${item.label} ${item.hint}`.toLowerCase().includes(deferredSearch));
+  }, [canViewSettings, deferredSearch, canManageStaff]);
 
   useEffect(() => {
     if (!canViewSettings) {
@@ -2288,6 +2293,9 @@ export default function SettingsPage() {
   };
 
   const renderAccessControlSection = () => {
+    if (!canManageStaff) {
+      return <EmptyState title="Access Restricted" message="You do not have permission to access team roles and permissions." />;
+    }
     const access = form.advancedSettings.accessControl;
     return (
       <>

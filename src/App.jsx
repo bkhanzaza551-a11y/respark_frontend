@@ -236,7 +236,9 @@ const Protected = () => {
       hint: "Business configuration",
       defaultOpen: true,
       items: can("settings", "edit")
-        ? SETTINGS_WORKSPACE_SECTIONS.map((item) => ({ label: item.label, to: item.to }))
+        ? SETTINGS_WORKSPACE_SECTIONS
+            .filter((item) => item.key !== "access-control" || can("staff"))
+            .map((item) => ({ label: item.label, to: item.to }))
         : []
     }
   ].filter((group) => Array.isArray(group?.items) && group.items.length > 0);
