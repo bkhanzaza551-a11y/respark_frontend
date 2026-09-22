@@ -139,11 +139,14 @@ export default function MyDashboardPage() {
 
   const getBranchGeofenceValidation = (coords) => {
     const branch = data.profile?.branch;
+    if (!branch) {
+      return { valid: true, distance: 0 };
+    }
     const lat = parseFloat(String(branch?.latitude));
     const lng = parseFloat(String(branch?.longitude));
     const radius = Number(branch?.geofenceRadiusMeters || 200);
     if (!Number.isFinite(lat) || !Number.isFinite(lng) || (lat === 0 && lng === 0)) {
-      return { valid: true, distance: 0, warning: "Branch GPS coordinates are not set. Geofence check skipped. Please ask your manager to set the branch location." };
+      return { valid: true, distance: 0, warning: "Branch GPS coordinates are not set. Geofence check skipped." };
     }
     const distance = haversineDistanceMeters(lat, lng, coords.latitude, coords.longitude);
     const accuracy = coords.accuracyMeters ? Math.round(coords.accuracyMeters) : "?";
@@ -655,13 +658,19 @@ export default function MyDashboardPage() {
                     {todayAttendance ? `Status: ${todayAttendance.status}` : "No attendance marked today"}
                   </span>
                 </div>
-                {data.profile?.branch?.latitude && data.profile?.branch?.longitude ? (
-                  <div style={{ fontSize: 11, color: "#94a3b8", marginTop: 6 }}>
-                    Branch GPS: {Number(data.profile.branch.latitude).toFixed(6)}, {Number(data.profile.branch.longitude).toFixed(6)} | Radius: {data.profile.branch.geofenceRadiusMeters || 200}m
-                  </div>
+                {data.profile?.branch ? (
+                  data.profile.branch.latitude && data.profile.branch.longitude ? (
+                    <div style={{ fontSize: 11, color: "#94a3b8", marginTop: 6 }}>
+                      Branch GPS: {Number(data.profile.branch.latitude).toFixed(6)}, {Number(data.profile.branch.longitude).toFixed(6)} | Radius: {data.profile.branch.geofenceRadiusMeters || 200}m
+                    </div>
+                  ) : (
+                    <div style={{ fontSize: 11, color: "#dc2626", fontWeight: 500, marginTop: 6 }}>
+                      <Shield size={14} style={{ display: 'inline', marginBottom: -2, marginRight: 4, color: '#d97706' }} /> Branch GPS coordinates not set.
+                    </div>
+                  )
                 ) : (
-                  <div style={{ fontSize: 11, color: "#dc2626", fontWeight: 500, marginTop: 6 }}>
-                    <Shield size={14} style={{ display: 'inline', marginBottom: -2, marginRight: 4, color: '#d97706' }} /> Branch GPS coordinates not set. Ask your manager to configure this branch location.
+                  <div style={{ fontSize: 11, color: "#64748b", marginTop: 6 }}>
+                    No branch assigned (GPS verification disabled)
                   </div>
                 )}
                 {todayAttendance && (
