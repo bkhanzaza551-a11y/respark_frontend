@@ -288,11 +288,11 @@ const Protected = () => {
           items: myWorkspaceItems
         }]
       : []),
-    ...(isOwner ? groups : [])
+    ...(isOwner || salonRole === "MANAGER" ? groups : [])
   ];
 
   return (
-    <div className={`app-shell ${!sidebarExpanded ? "sidebar-collapsed" : ""} ${!isOwner ? "staff-workspace" : ""}`}>
+    <div className={`app-shell ${!sidebarExpanded ? "sidebar-collapsed" : ""} ${!isOwner && salonRole !== "MANAGER" ? "staff-workspace" : ""}`}>
       <Sidebar
         groups={visibleGroups}
         auth={auth}
