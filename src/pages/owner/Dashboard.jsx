@@ -210,8 +210,8 @@ export default function OwnerDashboard() {
         <PaginatedList
           title="Recent Customers"
           icon={UserPlus}
-          badge={`${data.recentCustomers.length} latest`}
-          items={data.recentCustomers}
+          badge={`${(data.recentCustomers || []).length} latest`}
+          items={data.recentCustomers || []}
           emptyState={<EmptyState title="No recent customers" message="Fresh customer activity will appear here as soon as visits or sales are recorded." />}
           renderItem={(customer, idx) => (
             <div key={customer.id} className="dashboard-list-item" onClick={() => navigate(`/admin/customers/${customer.id}`)}>
@@ -235,8 +235,8 @@ export default function OwnerDashboard() {
         <PaginatedList
           title="Recent Invoices"
           icon={Receipt}
-          badge={`${data.recentInvoices.length} entries`}
-          items={data.recentInvoices}
+          badge={`${(data.recentInvoices || []).length} entries`}
+          items={data.recentInvoices || []}
           emptyState={<EmptyState title="No invoices yet" message="This branch scope has no invoice activity yet. New sales will show up here automatically." />}
           renderItem={(invoice) => (
             <div key={invoice.id} className="dashboard-list-item" onClick={() => navigate(`/admin/invoices/${invoice.id}`)}>
@@ -259,8 +259,8 @@ export default function OwnerDashboard() {
         <PaginatedList
           title="Recent Payments"
           icon={CreditCard}
-          badge={`${data.recentPayments.length} payments`}
-          items={data.recentPayments}
+          badge={`${(data.recentPayments || []).length} payments`}
+          items={data.recentPayments || []}
           emptyState={<EmptyState title="No payments yet" message="Payment entries will start populating here once billing activity begins for this scope." />}
           renderItem={(payment) => (
             <div key={payment.id} className="dashboard-list-item" onClick={() => navigate(`/admin/payments`)}>
