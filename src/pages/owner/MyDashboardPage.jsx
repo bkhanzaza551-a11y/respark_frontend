@@ -86,8 +86,10 @@ export default function MyDashboardPage() {
     }
   }, [data.profile?.attendanceEnrollmentPhotoUrl]);
 
+  const isManager = data.profile?.salonRole === "MANAGER";
+
   useEffect(() => {
-    if (!loading && !loadError && data.profile && !data.todayAttendance && !autoOpenedRef.current) {
+    if (!loading && !loadError && data.profile && !isManager && !data.todayAttendance && !autoOpenedRef.current) {
       const hasGeo = !!navigator.geolocation;
       const hasCamera = !!navigator.mediaDevices;
       if (hasGeo && hasCamera) {
@@ -95,7 +97,7 @@ export default function MyDashboardPage() {
         handleStartCheckIn();
       }
     }
-  }, [loading, loadError, data.profile, data.todayAttendance]);
+  }, [loading, loadError, data.profile, data.todayAttendance, isManager]);
 
   const stopCameraStream = () => {
     if (streamRef.current) {
@@ -643,133 +645,135 @@ export default function MyDashboardPage() {
         <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
           
           {/* Attendance Section */}
-          <div className="glass-panel attendance-control-panel">
-            <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 4, background: isCheckedIn ? "linear-gradient(90deg, #10b981, #34d399)" : "linear-gradient(90deg, #0ea5e9, #38bdf8)", borderTopLeftRadius: 16, borderTopRightRadius: 16 }} />
-            
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 20, flexWrap: "wrap", borderBottom: "1px solid #f1f5f9", paddingBottom: 20, marginBottom: 20 }}>
-              <div>
-                <h3 style={{ margin: 0, fontSize: 18, fontWeight: 800, color: "#1e293b", display: "flex", alignItems: "center", gap: 8 }}>
-                  <Timer size={18} /> Attendance Controls
-                </h3>
-                <div style={{ color: "#64748b", fontSize: 13, marginTop: 4, display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap" }}>
-                  <span><MapPin size={12} style={{ display: 'inline', marginBottom: -2, marginRight: 4 }} /> {data.profile?.branch?.name || "No branch assigned"}</span>
-                  <span>•</span>
-                  <span style={{ fontWeight: 600, color: isCheckedIn ? "#059669" : "#64748b" }}>
-                    {todayAttendance ? `Status: ${todayAttendance.status}` : "No attendance marked today"}
-                  </span>
-                </div>
-                {data.profile?.branch ? (
-                  data.profile.branch.latitude && data.profile.branch.longitude ? (
-                    <div style={{ fontSize: 11, color: "#94a3b8", marginTop: 6 }}>
-                      Branch GPS: {Number(data.profile.branch.latitude).toFixed(6)}, {Number(data.profile.branch.longitude).toFixed(6)} | Radius: {data.profile.branch.geofenceRadiusMeters || 200}m
-                    </div>
+          {!isManager && (
+            <div className="glass-panel attendance-control-panel">
+              <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 4, background: isCheckedIn ? "linear-gradient(90deg, #10b981, #34d399)" : "linear-gradient(90deg, #0ea5e9, #38bdf8)", borderTopLeftRadius: 16, borderTopRightRadius: 16 }} />
+              
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 20, flexWrap: "wrap", borderBottom: "1px solid #f1f5f9", paddingBottom: 20, marginBottom: 20 }}>
+                <div>
+                  <h3 style={{ margin: 0, fontSize: 18, fontWeight: 800, color: "#1e293b", display: "flex", alignItems: "center", gap: 8 }}>
+                    <Timer size={18} /> Attendance Controls
+                  </h3>
+                  <div style={{ color: "#64748b", fontSize: 13, marginTop: 4, display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap" }}>
+                    <span><MapPin size={12} style={{ display: 'inline', marginBottom: -2, marginRight: 4 }} /> {data.profile?.branch?.name || "No branch assigned"}</span>
+                    <span>•</span>
+                    <span style={{ fontWeight: 600, color: isCheckedIn ? "#059669" : "#64748b" }}>
+                      {todayAttendance ? `Status: ${todayAttendance.status}` : "No attendance marked today"}
+                    </span>
+                  </div>
+                  {data.profile?.branch ? (
+                    data.profile.branch.latitude && data.profile.branch.longitude ? (
+                      <div style={{ fontSize: 11, color: "#94a3b8", marginTop: 6 }}>
+                        Branch GPS: {Number(data.profile.branch.latitude).toFixed(6)}, {Number(data.profile.branch.longitude).toFixed(6)} | Radius: {data.profile.branch.geofenceRadiusMeters || 200}m
+                      </div>
+                    ) : (
+                      <div style={{ fontSize: 11, color: "#dc2626", fontWeight: 500, marginTop: 6 }}>
+                        <Shield size={14} style={{ display: 'inline', marginBottom: -2, marginRight: 4, color: '#d97706' }} /> Branch GPS coordinates not set.
+                      </div>
+                    )
                   ) : (
-                    <div style={{ fontSize: 11, color: "#dc2626", fontWeight: 500, marginTop: 6 }}>
-                      <Shield size={14} style={{ display: 'inline', marginBottom: -2, marginRight: 4, color: '#d97706' }} /> Branch GPS coordinates not set.
+                    <div style={{ fontSize: 11, color: "#64748b", marginTop: 6 }}>
+                      No branch assigned (GPS verification disabled)
                     </div>
-                  )
-                ) : (
-                  <div style={{ fontSize: 11, color: "#64748b", marginTop: 6 }}>
-                    No branch assigned (GPS verification disabled)
-                  </div>
-                )}
-                {todayAttendance && (
-                  <div style={{ fontSize: 12, color: "#475569", fontWeight: 600, marginTop: 6, background: "#f8fafc", padding: "4px 10px", borderRadius: 6, display: "inline-block" }}>
-                    Check-in: {new Date(todayAttendance.checkInAt).toLocaleTimeString()}
-                    {todayAttendance.checkOutAt ? ` | Check-out: ${new Date(todayAttendance.checkOutAt).toLocaleTimeString()}` : ""}
-                  </div>
-                )}
+                  )}
+                  {todayAttendance && (
+                    <div style={{ fontSize: 12, color: "#475569", fontWeight: 600, marginTop: 6, background: "#f8fafc", padding: "4px 10px", borderRadius: 6, display: "inline-block" }}>
+                      Check-in: {new Date(todayAttendance.checkInAt).toLocaleTimeString()}
+                      {todayAttendance.checkOutAt ? ` | Check-out: ${new Date(todayAttendance.checkOutAt).toLocaleTimeString()}` : ""}
+                    </div>
+                  )}
+                </div>
+
+                {/* Action Buttons */}
+                <div style={{ display: "flex", gap: 12, flexShrink: 0 }}>
+                  <button
+                    type="button"
+                    onClick={() => void handleStartCheckIn()}
+                    disabled={attendanceStatus.loading || Boolean(todayAttendance)}
+                    style={{
+                      minWidth: 130,
+                      padding: "10px 20px",
+                      background: todayAttendance ? "#f1f5f9" : "linear-gradient(135deg, #10b981, #059669)",
+                      color: todayAttendance ? "#94a3b8" : "#fff",
+                      border: "none",
+                      borderRadius: 8,
+                      fontWeight: 700,
+                      fontSize: 13,
+                      cursor: todayAttendance ? "not-allowed" : "pointer",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      gap: 6,
+                      boxShadow: todayAttendance ? "none" : "0 4px 12px rgba(16,185,129,0.2)",
+                      transition: "all 0.2s"
+                    }}
+                  >
+                    <LogIn size={14} /> Check In
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => void handleStartCheckOut()}
+                    disabled={attendanceStatus.loading || !isCheckedIn}
+                    style={{
+                      minWidth: 130,
+                      padding: "10px 20px",
+                      background: !isCheckedIn ? "#f1f5f9" : "linear-gradient(135deg, #3b82f6, #2563eb)",
+                      color: !isCheckedIn ? "#94a3b8" : "#fff",
+                      border: "none",
+                      borderRadius: 8,
+                      fontWeight: 700,
+                      fontSize: 13,
+                      cursor: !isCheckedIn ? "not-allowed" : "pointer",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      gap: 6,
+                      boxShadow: !isCheckedIn ? "none" : "0 4px 12px rgba(59,130,246,0.2)",
+                      transition: "all 0.2s"
+                    }}
+                  >
+                    <LogOut size={14} /> Check Out
+                  </button>
+                </div>
               </div>
 
-              {/* Action Buttons */}
-              <div style={{ display: "flex", gap: 12, flexShrink: 0 }}>
-                <button
-                  type="button"
-                  onClick={() => void handleStartCheckIn()}
-                  disabled={attendanceStatus.loading || Boolean(todayAttendance)}
-                  style={{
-                    minWidth: 130,
-                    padding: "10px 20px",
-                    background: todayAttendance ? "#f1f5f9" : "linear-gradient(135deg, #10b981, #059669)",
-                    color: todayAttendance ? "#94a3b8" : "#fff",
-                    border: "none",
-                    borderRadius: 8,
-                    fontWeight: 700,
-                    fontSize: 13,
-                    cursor: todayAttendance ? "not-allowed" : "pointer",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    gap: 6,
-                    boxShadow: todayAttendance ? "none" : "0 4px 12px rgba(16,185,129,0.2)",
-                    transition: "all 0.2s"
-                  }}
-                >
-                  <LogIn size={14} /> Check In
-                </button>
-                <button
-                  type="button"
-                  onClick={() => void handleStartCheckOut()}
-                  disabled={attendanceStatus.loading || !isCheckedIn}
-                  style={{
-                    minWidth: 130,
-                    padding: "10px 20px",
-                    background: !isCheckedIn ? "#f1f5f9" : "linear-gradient(135deg, #3b82f6, #2563eb)",
-                    color: !isCheckedIn ? "#94a3b8" : "#fff",
-                    border: "none",
-                    borderRadius: 8,
-                    fontWeight: 700,
-                    fontSize: 13,
-                    cursor: !isCheckedIn ? "not-allowed" : "pointer",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    gap: 6,
-                    boxShadow: !isCheckedIn ? "none" : "0 4px 12px rgba(59,130,246,0.2)",
-                    transition: "all 0.2s"
-                  }}
-                >
-                  <LogOut size={14} /> Check Out
-                </button>
+              {/* Verification highlights */}
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: 16 }}>
+                <div style={{ padding: 16, borderRadius: 12, background: "#f0fdfa", border: "1px solid #ccfbf1", display: "flex", gap: 12 }}>
+                  <div style={{ width: 36, height: 36, borderRadius: "50%", background: "#fff", display: "flex", alignItems: "center", justifyContent: "center", color: "#0f766e", fontSize: 16, flexShrink: 0 }}>
+                    <MapPin size={16} />
+                  </div>
+                  <div>
+                    <div style={{ fontSize: 13, fontWeight: 700, color: "#115e59" }}>Location Verification</div>
+                    <div style={{ fontSize: 11, color: "#14b8a6", marginTop: 2, lineHeight: 1.4 }}>GPS coordinates are dynamically matched against your branch radius.</div>
+                  </div>
+                </div>
+                <div style={{ padding: 16, borderRadius: 12, background: "#f5f3ff", border: "1px solid #ede9fe", display: "flex", gap: 12 }}>
+                  <div style={{ width: 36, height: 36, borderRadius: "50%", background: "#fff", display: "flex", alignItems: "center", justifyContent: "center", color: "#6d28d9", fontSize: 16, flexShrink: 0 }}>
+                    <Camera size={16} />
+                  </div>
+                  <div>
+                    <div style={{ fontSize: 13, fontWeight: 700, color: "#5b21b6" }}>Selfie & Biometrics</div>
+                    <div style={{ fontSize: 11, color: "#8b5cf6", marginTop: 2, lineHeight: 1.4 }}>Photos verified against face registration profile in database.</div>
+                  </div>
+                </div>
+                <div style={{ padding: 16, borderRadius: 12, background: "#fff8e1", border: "1px solid #ffe8cc", display: "flex", gap: 12 }}>
+                  <div style={{ width: 36, height: 36, borderRadius: "50%", background: "#fff", display: "flex", alignItems: "center", justifyContent: "center", color: "#b25e00", fontSize: 16, flexShrink: 0 }}>
+                    <Clock size={16} />
+                  </div>
+                  <div>
+                    <div style={{ fontSize: 13, fontWeight: 700, color: "#b25e00" }}>Roster Shift Status</div>
+                    <div style={{ fontSize: 11, color: "#e67e00", marginTop: 2, lineHeight: 1.4 }}>
+                      {todayAttendance ? todayAttendance.status : "Waiting for check-in to begin your shift."}
+                    </div>
+                  </div>
+                </div>
               </div>
+
+              {attendanceStatus.error && <p style={{ margin: "16px 0 0", color: "#dc2626", fontSize: 13, fontWeight: 600, background: "#fef2f2", padding: "8px 12px", borderRadius: 8, border: "1px solid #fecaca" }}>{attendanceStatus.error}</p>}
+              {attendanceStatus.success && <p style={{ margin: "16px 0 0", color: "#059669", fontSize: 13, fontWeight: 600, background: "#ecfdf5", padding: "8px 12px", borderRadius: 8, border: "1px solid #bbf7d0" }}>{attendanceStatus.success}</p>}
             </div>
-
-            {/* Verification highlights */}
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: 16 }}>
-              <div style={{ padding: 16, borderRadius: 12, background: "#f0fdfa", border: "1px solid #ccfbf1", display: "flex", gap: 12 }}>
-                <div style={{ width: 36, height: 36, borderRadius: "50%", background: "#fff", display: "flex", alignItems: "center", justifyContent: "center", color: "#0f766e", fontSize: 16, flexShrink: 0 }}>
-                  <MapPin size={16} />
-                </div>
-                <div>
-                  <div style={{ fontSize: 13, fontWeight: 700, color: "#115e59" }}>Location Verification</div>
-                  <div style={{ fontSize: 11, color: "#14b8a6", marginTop: 2, lineHeight: 1.4 }}>GPS coordinates are dynamically matched against your branch radius.</div>
-                </div>
-              </div>
-              <div style={{ padding: 16, borderRadius: 12, background: "#f5f3ff", border: "1px solid #ede9fe", display: "flex", gap: 12 }}>
-                <div style={{ width: 36, height: 36, borderRadius: "50%", background: "#fff", display: "flex", alignItems: "center", justifyContent: "center", color: "#6d28d9", fontSize: 16, flexShrink: 0 }}>
-                  <Camera size={16} />
-                </div>
-                <div>
-                  <div style={{ fontSize: 13, fontWeight: 700, color: "#5b21b6" }}>Selfie & Biometrics</div>
-                  <div style={{ fontSize: 11, color: "#8b5cf6", marginTop: 2, lineHeight: 1.4 }}>Photos verified against face registration profile in database.</div>
-                </div>
-              </div>
-              <div style={{ padding: 16, borderRadius: 12, background: "#fff8e1", border: "1px solid #ffe8cc", display: "flex", gap: 12 }}>
-                <div style={{ width: 36, height: 36, borderRadius: "50%", background: "#fff", display: "flex", alignItems: "center", justifyContent: "center", color: "#b25e00", fontSize: 16, flexShrink: 0 }}>
-                  <Clock size={16} />
-                </div>
-                <div>
-                  <div style={{ fontSize: 13, fontWeight: 700, color: "#b25e00" }}>Roster Shift Status</div>
-                  <div style={{ fontSize: 11, color: "#e67e00", marginTop: 2, lineHeight: 1.4 }}>
-                    {todayAttendance ? todayAttendance.status : "Waiting for check-in to begin your shift."}
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {attendanceStatus.error && <p style={{ margin: "16px 0 0", color: "#dc2626", fontSize: 13, fontWeight: 600, background: "#fef2f2", padding: "8px 12px", borderRadius: 8, border: "1px solid #fecaca" }}>{attendanceStatus.error}</p>}
-            {attendanceStatus.success && <p style={{ margin: "16px 0 0", color: "#059669", fontSize: 13, fontWeight: 600, background: "#ecfdf5", padding: "8px 12px", borderRadius: 8, border: "1px solid #bbf7d0" }}>{attendanceStatus.success}</p>}
-          </div>
+          )}
 
           {/* Today's Appointments Section */}
           <div className="glass-panel" style={{ padding: 32 }}>

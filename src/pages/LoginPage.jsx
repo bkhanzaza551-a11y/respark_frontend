@@ -30,7 +30,7 @@ export default function LoginPage() {
       };
       const result = await login(payload);
       const role = result.membership?.salonRole;
-      if (role && role !== "SALON_OWNER") {
+      if (role && role !== "SALON_OWNER" && role !== "MANAGER") {
         nav("/admin/my-dashboard");
       } else {
         nav("/admin/pos");

@@ -128,14 +128,15 @@ const Protected = () => {
   const can = (key, action = "view") => Array.isArray(perms[key]) && perms[key].includes(action);
   const enabled = (key) => flags[key] !== false;
   const isOwner = salonRole === "SALON_OWNER";
-  const shouldShowMyWorkspace = salonRole && !isOwner;
+  const isManager = salonRole === "MANAGER";
+  const shouldShowMyWorkspace = salonRole && !isOwner && !isManager;
   const myWorkspaceItems = [
-    { label: "My Dashboard", to: "/admin/my-dashboard" },
-    { label: "My Attendance", to: "/admin/my-attendance" },
-    { label: "My Appointments", to: "/admin/my-appointments" },
-    { label: "My Schedule", to: "/admin/my-schedule" },
-    { label: "My Profile", to: "/admin/my-profile" }
-  ];
+    can("myDashboard") && { label: "My Dashboard", to: "/admin/my-dashboard" },
+    can("myAttendance") && { label: "My Attendance", to: "/admin/my-attendance" },
+    can("myAppointments") && { label: "My Appointments", to: "/admin/my-appointments" },
+    can("mySchedule") && { label: "My Schedule", to: "/admin/my-schedule" },
+    can("myProfile") && { label: "My Profile", to: "/admin/my-profile" }
+  ].filter(Boolean);
   const groups = [
         {
           label: "Operations",
