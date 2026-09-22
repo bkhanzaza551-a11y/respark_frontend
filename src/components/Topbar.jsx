@@ -164,12 +164,29 @@ export default function Topbar({ auth, sidebarExpanded, onToggleSidebar, onLogou
           gap: 16px;
           flex: 1;
         }
+        .skillify-logo-wrapper {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          line-height: 1;
+        }
         .skillify-brand-image {
-          height: 42px;
-          max-width: 160px;
+          height: 30px;
+          max-width: 140px;
           width: auto;
           object-fit: contain;
           display: block;
+        }
+        .skillify-brand-tagline {
+          font-size: 9.5px;
+          font-weight: 700;
+          letter-spacing: 1.8px;
+          text-transform: uppercase;
+          color: #0f766e;
+          margin-top: 2px;
+          line-height: 1;
+          white-space: nowrap;
         }
         .skillify-salon-name {
           color: #475569;
@@ -550,7 +567,10 @@ export default function Topbar({ auth, sidebarExpanded, onToggleSidebar, onLogou
           <button className="skillify-menu-btn-top" onClick={onToggleSidebar} style={{ background: "none", border: "none", cursor: "pointer", display: "flex", alignItems: "center", color: "#64748b", padding: 0 }}>
             <Menu size={24} />
           </button>
-          <img src="/skillify-logo.png" alt="Skillify" className="skillify-brand-image" />
+          <div className="skillify-logo-wrapper" onClick={() => navigate("/admin/dashboard")} style={{ cursor: "pointer", display: "flex", flexDirection: "column", alignItems: "center", textDecoration: "none" }}>
+            <img src="/skillify-logo.png" alt="Skillify" className="skillify-brand-image" />
+            <span className="skillify-brand-tagline">Salon POS</span>
+          </div>
           <div className="skillify-salon-name">{salonName}</div>
         </div>
 
