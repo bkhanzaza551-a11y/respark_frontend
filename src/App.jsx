@@ -324,9 +324,10 @@ const OwnerRoute = ({ moduleKey, action = "view", featureKey, element }) => {
 
   if (!auth) return <Navigate to="/login" replace />;
 
+  const isOwnerOrSuperAdmin = auth.membership?.salonRole === "SALON_OWNER" || auth.user?.systemRole === "SUPER_ADMIN";
   const permissions = auth.membership?.permissions || {};
   const featureFlags = auth.membership?.featureFlags || {};
-  const allowed = Array.isArray(permissions[moduleKey]) && permissions[moduleKey].includes(action);
+  const allowed = isOwnerOrSuperAdmin || (Array.isArray(permissions[moduleKey]) && permissions[moduleKey].includes(action));
   const enabled = featureKey ? featureFlags[featureKey] !== false : true;
 
   if (!enabled) {
