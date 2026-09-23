@@ -152,7 +152,7 @@ const Protected = () => {
           label: "Setup",
           hint: "Branches and team",
           items: [
-            can("branches") && { label: "Branches", to: "/admin/branches" },
+            isOwner && can("branches") && { label: "Branches", to: "/admin/branches" },
             can("staff") && {
               label: "Staff Details",
               to: "/admin/users"
@@ -249,7 +249,7 @@ const Protected = () => {
       label: "Manage",
       hint: "Salon lifecycle",
       items: [
-        { label: "Branches", to: "/admin/branches" },
+        ...(isOwner ? [{ label: "Branches", to: "/admin/branches" }] : []),
         { label: "Services", to: "/admin/services" },
         {
           label: "Staff & Roles",
@@ -434,7 +434,7 @@ export default function App() {
           <Route path="/admin/appointments/create" element={<OwnerRoute moduleKey="appointments" featureKey="appointments" element={<AppointmentsPage />} />} />
           <Route path="/admin/appointments/:id" element={<OwnerRoute moduleKey="appointments" featureKey="appointments" element={<AppointmentDetailPage />} />} />
           <Route path="/admin/appointments/:id/edit" element={<OwnerRoute moduleKey="appointments" featureKey="appointments" element={<AppointmentEditPage />} />} />
-          <Route path="/admin/branches" element={<OwnerRoute moduleKey="branches" element={<BranchesPage />} />} />
+          <Route path="/admin/branches" element={<OwnerRoute moduleKey="branches" ownerOnly={true} element={<BranchesPage />} />} />
           <Route path="/admin/services" element={<OwnerRoute moduleKey="services" element={<ServiceCategoriesPage />} />} />
           <Route path="/admin/service-categories" element={<OwnerRoute moduleKey="services" element={<ServiceCategoriesPage />} />} />
           <Route path="/admin/staff-schedule" element={<OwnerRoute moduleKey="staffSchedule" featureKey="appointments" element={<StaffSchedulePage />} />} />
