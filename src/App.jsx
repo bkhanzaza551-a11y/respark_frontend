@@ -157,7 +157,7 @@ const Protected = () => {
               label: "Staff Details",
               to: "/admin/users"
             },
-            can("staff") && {
+            isOwner && can("staff") && {
               label: "Roles & Permissions",
               to: "/admin/roles-permissions"
             },
@@ -322,12 +322,15 @@ const AccessNotice = ({ title, message }) => (
   </div>
 );
 
-const OwnerRoute = ({ moduleKey, action = "view", featureKey, element }) => {
+const OwnerRoute = ({ moduleKey, action = "view", featureKey, ownerOnly = false, element }) => {
   const { auth } = useAuth();
 
   if (!auth) return <Navigate to="/login" replace />;
 
   const isOwnerOrSuperAdmin = auth.membership?.salonRole === "SALON_OWNER" || auth.user?.systemRole === "SUPER_ADMIN";
+  if (ownerOnly && !isOwnerOrSuperAdmin) {
+    return <AccessNotice title="Access Restricted" message="This section is restricted to the Salon Owner." />;
+  }
   const permissions = auth.membership?.permissions || {};
   const featureFlags = auth.membership?.featureFlags || {};
   const allowed = isOwnerOrSuperAdmin || (Array.isArray(permissions[moduleKey]) && permissions[moduleKey].includes(action));
@@ -442,7 +445,7 @@ export default function App() {
           <Route path="/admin/customers/:id/history" element={<OwnerRoute moduleKey="customers" element={<CustomerHistoryPage />} />} />
           <Route path="/admin/users" element={<OwnerRoute moduleKey="staff" element={<UsersPage />} />} />
           <Route path="/admin/experts" element={<OwnerRoute moduleKey="staff" element={<ExpertsPage />} />} />
-          <Route path="/admin/roles-permissions" element={<OwnerRoute moduleKey="staff" element={<StaffRolesPage />} />} />
+          <Route path="/admin/roles-permissions" element={<OwnerRoute moduleKey="staff" ownerOnly={true} element={<StaffRolesPage />} />} />
           <Route path="/admin/pos" element={<OwnerRoute moduleKey="pos" featureKey="pos" element={<PosPage />} />} />
           <Route path="/admin/pos/new" element={<OwnerRoute moduleKey="pos" featureKey="pos" element={<PosPage />} />} />
           <Route path="/admin/pos/day-closing" element={<OwnerRoute moduleKey="payments" featureKey="pos" element={<PosPage />} />} />

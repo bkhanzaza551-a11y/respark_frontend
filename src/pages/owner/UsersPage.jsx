@@ -3,6 +3,7 @@ import CustomDropdown from '../../components/common/CustomDropdown';
 import { X } from "lucide-react";
 import { api } from "../../api/client";
 import { useBranch } from '../../context/BranchContext';
+import { useAuth } from '../../context/AuthContext';
 import "./ServiceHubPage.css";
 
 const getImageUrl = (path) => {
@@ -65,7 +66,10 @@ const makeEmptyForm = () => ({
 const moduleCatalog = MODULE_GROUPS.flatMap((group) => group.modules);
 
 export default function UsersPage() {
+  const { auth } = useAuth();
   const { selectedBranchId, branches } = useBranch();
+  const isManager = auth?.membership?.salonRole === "MANAGER";
+  const managerBranchId = auth?.membership?.branchId;
   const [rows, setRows] = useState([]);
   const [services, setServices] = useState([]);
   const [customRoles, setCustomRoles] = useState([]);
@@ -237,8 +241,11 @@ export default function UsersPage() {
   }, []);
 
   const filteredRows = useMemo(() => {
-    if (!deferredQuery) return rows;
-    return rows.filter((row) => {
+    const base = isManager && managerBranchId
+      ? rows.filter((row) => row.branchId === managerBranchId || row.salonRole === "SALON_OWNER")
+      : rows;
+    if (!deferredQuery) return base;
+    return base.filter((row) => {
       const haystack = [
         row.user?.name,
         row.user?.email,
@@ -250,7 +257,7 @@ export default function UsersPage() {
       ].filter(Boolean).join(" ").toLowerCase();
       return haystack.includes(deferredQuery);
     });
-  }, [deferredQuery, rows]);
+  }, [deferredQuery, rows, isManager, managerBranchId]);
 
   const selectedRow = useMemo(() => {
     if (!filteredRows.length) return null;
@@ -308,7 +315,8 @@ export default function UsersPage() {
   const startCreate = () => {
     setIsMobileDetailView(true);
     resetForm();
-    setForm((current) => ({ ...current, branchId: selectedBranchId || "" }));
+    const defaultBranch = isManager ? (managerBranchId || "") : (selectedBranchId || "");
+    setForm((current) => ({ ...current, branchId: defaultBranch }));
     setStatus((current) => ({ ...current, error: "", success: "" }));
     setIsCreateModalOpen(true);
   };
@@ -441,7 +449,7 @@ export default function UsersPage() {
         phone: form.phone || undefined,
         avatarUrl: form.avatarUrl || undefined,
         profileNote: form.profileNote || undefined,
-        branchId: form.branchId || null,
+        branchId: isManager ? (managerBranchId || form.branchId || null) : (form.branchId || null),
         customRoleId: form.customRoleId || undefined,
         showInCatalog: Boolean(form.showInCatalog),
         attendanceEnabled: Boolean(form.attendanceEnabled),
@@ -465,7 +473,7 @@ export default function UsersPage() {
       } else {
         await api.post("/owner/users/create-login", {
           ...payload,
-          branchId: form.branchId || selectedBranchId || branches[0]?.id || undefined,
+          branchId: isManager ? (managerBranchId || undefined) : (form.branchId || selectedBranchId || branches[0]?.id || undefined),
           name: form.name.trim(),
           email: form.email.trim(),
           password: form.password,
@@ -785,9 +793,11 @@ export default function UsersPage() {
                               Roles created in <strong>Settings → Access Control</strong>. Pick one to auto-apply its full permission set.
                             </div>
                           </div>
-                          <button type="button" onClick={openAccessControl} className="secondary-button" style={{ background: 'white', border: '1px solid #2563eb', color: '#1d4ed8', padding: '6px 12px', fontSize: 12, fontWeight: 600, borderRadius: 6, cursor: 'pointer' }}>
-                            + Create New Role
-                          </button>
+                          {!isManager && (
+                            <button type="button" onClick={openAccessControl} className="secondary-button" style={{ background: 'white', border: '1px solid #2563eb', color: '#1d4ed8', padding: '6px 12px', fontSize: 12, fontWeight: 600, borderRadius: 6, cursor: 'pointer' }}>
+                              + Create New Role
+                            </button>
+                          )}
                         </div>
                         <CustomDropdown
                           className="hub-input"
@@ -822,7 +832,7 @@ export default function UsersPage() {
                         <div className="hub-form-group">
                           <label>System role (fallback) <span style={{ color: '#94a3b8', fontWeight: 400, fontSize: 11 }}>— auto-set when access role picked</span></label>
                           <CustomDropdown className="hub-input" value={form.salonRole} onChange={(event) => applyRolePreset(event.target.value)} disabled={Boolean(form.customRoleId)} style={form.customRoleId ? { background: '#f1f5f9', cursor: 'not-allowed' } : undefined}>
-                            {ROLE_OPTIONS.map((role) => <option key={role.value} value={role.value}>{role.label}</option>)}
+                            {ROLE_OPTIONS.filter((role) => !isManager || (role.value !== "SALON_OWNER" && role.value !== "MANAGER")).map((role) => <option key={role.value} value={role.value}>{role.label}</option>)}
                           </CustomDropdown>
                         </div>
                         <div className="hub-form-group">
@@ -831,10 +841,20 @@ export default function UsersPage() {
                         </div>
                         <div className="hub-form-group">
                           <label>Branch scope</label>
-                          <CustomDropdown className="hub-input" value={form.branchId} onChange={(event) => setForm({ ...form, branchId: event.target.value, serviceIds: [] })}>
-                            <option value="">All branches</option>
-                            {branches.map((branch) => <option key={branch.id} value={branch.id}>{branch.name}</option>)}
-                          </CustomDropdown>
+                          {isManager ? (
+                            <input
+                              type="text"
+                              className="hub-input"
+                              disabled
+                              value={branches.find((b) => b.id === (form.branchId || managerBranchId))?.name || "Assigned Branch"}
+                              style={{ background: '#f1f5f9', cursor: 'not-allowed', color: '#475569' }}
+                            />
+                          ) : (
+                            <CustomDropdown className="hub-input" value={form.branchId} onChange={(event) => setForm({ ...form, branchId: event.target.value, serviceIds: [] })}>
+                              <option value="">All branches</option>
+                              {branches.map((branch) => <option key={branch.id} value={branch.id}>{branch.name}</option>)}
+                            </CustomDropdown>
+                          )}
                         </div>
                         <div className="hub-form-group">
                           <label>Phone</label>
@@ -1091,16 +1111,22 @@ export default function UsersPage() {
                   </CustomDropdown>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 4 }}>
                     <span style={{ fontSize: 11, color: '#64748b' }}>Roles from Settings → Access Control</span>
-                    <button type="button" onClick={openAccessControl} style={{ fontSize: 11, color: '#2563eb', background: 'none', border: 'none', cursor: 'pointer', textDecoration: 'underline', fontWeight: 600 }}>+ Create role</button>
+                    {!isManager && (
+                      <button type="button" onClick={openAccessControl} style={{ fontSize: 11, color: '#2563eb', background: 'none', border: 'none', cursor: 'pointer', textDecoration: 'underline', fontWeight: 600 }}>+ Create role</button>
+                    )}
                   </div>
                 </div>
 
                 <div className="hub-form-group" style={{ marginBottom: 16 }}>
                   <label>Branch Assignment</label>
                   <div style={{ padding: "12px 14px", border: "1px solid #e2e8f0", borderRadius: 6, fontSize: 14, color: "#334155", background: "#f8fafc" }}>
-                    {selectedBranchId ? (branches.find(b => b.id === selectedBranchId)?.name || "Selected Branch") : "All Branches"}
+                    {isManager
+                      ? (branches.find(b => b.id === managerBranchId)?.name || "Assigned Branch")
+                      : (selectedBranchId ? (branches.find(b => b.id === selectedBranchId)?.name || "Selected Branch") : "All Branches")}
                   </div>
-                  <div style={{ fontSize: 11, color: "#64748b", marginTop: 4 }}>Auto-assigned from topbar branch selector</div>
+                  <div style={{ fontSize: 11, color: "#64748b", marginTop: 4 }}>
+                    {isManager ? "Assigned exclusively to your branch" : "Auto-assigned from topbar branch selector"}
+                  </div>
                 </div>
 
                 <div className="hub-form-group" style={{ marginBottom: 16 }}>
