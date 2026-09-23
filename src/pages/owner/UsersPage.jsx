@@ -816,7 +816,7 @@ export default function UsersPage() {
                           )}
                           {customRoles.map((role) => (
                             <option key={role.id} value={role.id}>
-                              {role.name}{role.description ? ` — ${role.description}` : ""}
+                              {role.name}
                             </option>
                           ))}
                         </CustomDropdown>
@@ -1111,7 +1111,7 @@ export default function UsersPage() {
                       <option value="" disabled>No custom roles yet — create one in Settings → Access Control</option>
                     )}
                     {customRoles.map(role => (
-                      <option key={role.id} value={role.id}>{role.name}{role.description ? ` — ${role.description}` : ""}</option>
+                      <option key={role.id} value={role.id}>{role.name}</option>
                     ))}
                   </CustomDropdown>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 4 }}>
