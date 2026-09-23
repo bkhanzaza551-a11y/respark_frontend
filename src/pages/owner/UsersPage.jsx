@@ -260,12 +260,14 @@ export default function UsersPage() {
   useEffect(() => {
     if (!selectedRow) {
       setSelectedId("");
+      setEditingId("");
       return;
     }
-    if (!selectedId || !filteredRows.some((row) => row.id === selectedId)) {
+    if (editingId !== selectedRow.id) {
       setSelectedId(selectedRow.id);
+      startEdit(selectedRow);
     }
-  }, [filteredRows, selectedId, selectedRow]);
+  }, [selectedRow]);
 
   const filteredServices = useMemo(() => {
     if (!form.branchId) return services;
@@ -412,7 +414,10 @@ export default function UsersPage() {
     event.preventDefault();
     setStatus((current) => ({ ...current, error: "", success: "" }));
     try {
-      if (!editingId) {
+      const isEditing = Boolean(editingId || (!isCreateModalOpen && selectedRow?.id));
+      const targetId = editingId || selectedRow?.id;
+
+      if (!isEditing) {
         if (!form.name?.trim()) return setStatus((current) => ({ ...current, error: "Name is required" }));
         if (form.name.trim().length < 2) return setStatus((current) => ({ ...current, error: "Name must be at least 2 characters" }));
         if (!form.email?.trim()) return setStatus((current) => ({ ...current, error: "Email is required" }));
@@ -436,7 +441,7 @@ export default function UsersPage() {
         phone: form.phone || undefined,
         avatarUrl: form.avatarUrl || undefined,
         profileNote: form.profileNote || undefined,
-        branchId: selectedBranchId || branches[0]?.id || null,
+        branchId: form.branchId || null,
         customRoleId: form.customRoleId || undefined,
         showInCatalog: Boolean(form.showInCatalog),
         attendanceEnabled: Boolean(form.attendanceEnabled),
@@ -453,13 +458,14 @@ export default function UsersPage() {
         accountNumber: form.accountNumber || undefined,
         ifscCode: form.ifscCode || undefined
       };
-      if (editingId) {
-        await api.patch(`/owner/users/${editingId}`, payload);
+      if (isEditing) {
+        await api.patch(`/owner/users/${targetId}`, payload);
         setStatus((current) => ({ ...current, success: "Staff profile and access updated." }));
+        await load(selectedBranchId);
       } else {
         await api.post("/owner/users/create-login", {
           ...payload,
-          branchId: selectedBranchId || branches[0]?.id || undefined,
+          branchId: form.branchId || selectedBranchId || branches[0]?.id || undefined,
           name: form.name.trim(),
           email: form.email.trim(),
           password: form.password,
@@ -475,9 +481,9 @@ export default function UsersPage() {
         });
         setStatus((current) => ({ ...current, success: "New staff login created." }));
         setIsCreateModalOpen(false);
+        resetForm();
+        await load(selectedBranchId);
       }
-      resetForm();
-      await load(selectedBranchId);
     } catch (error) {
       setStatus((current) => ({ ...current, error: formatApiError(error, "Could not save staff user"), success: "" }));
     }
