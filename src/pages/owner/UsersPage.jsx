@@ -425,6 +425,10 @@ export default function UsersPage() {
       const isEditing = Boolean(editingId || (!isCreateModalOpen && selectedRow?.id));
       const targetId = editingId || selectedRow?.id;
 
+      if (isEditing && !targetId) {
+        return setStatus((current) => ({ ...current, error: "Please select a staff member from the directory to edit." }));
+      }
+
       if (!isEditing) {
         if (!form.name?.trim()) return setStatus((current) => ({ ...current, error: "Name is required" }));
         if (form.name.trim().length < 2) return setStatus((current) => ({ ...current, error: "Name must be at least 2 characters" }));
@@ -446,11 +450,11 @@ export default function UsersPage() {
       const payload = {
         salonRole: form.salonRole,
         roleTitle: form.roleTitle || undefined,
-        phone: form.phone || undefined,
+        phone: form.phone ? form.phone : undefined,
         avatarUrl: form.avatarUrl || undefined,
         profileNote: form.profileNote || undefined,
         branchId: isManager ? (managerBranchId || form.branchId || null) : (form.branchId || null),
-        customRoleId: form.customRoleId || undefined,
+        customRoleId: form.customRoleId ? form.customRoleId : null,
         showInCatalog: Boolean(form.showInCatalog),
         attendanceEnabled: Boolean(form.attendanceEnabled),
         attendanceEnrollmentPhotoUrl: form.attendanceEnrollmentPhotoUrl || undefined,
@@ -493,6 +497,7 @@ export default function UsersPage() {
         await load(selectedBranchId);
       }
     } catch (error) {
+      console.error("[UsersPage] submit error:", error);
       setStatus((current) => ({ ...current, error: formatApiError(error, "Could not save staff user"), success: "" }));
     }
   };
@@ -832,7 +837,7 @@ export default function UsersPage() {
                         <div className="hub-form-group">
                           <label>System role (fallback) <span style={{ color: '#94a3b8', fontWeight: 400, fontSize: 11 }}>— auto-set when access role picked</span></label>
                           <CustomDropdown className="hub-input" value={form.salonRole} onChange={(event) => applyRolePreset(event.target.value)} disabled={Boolean(form.customRoleId)} style={form.customRoleId ? { background: '#f1f5f9', cursor: 'not-allowed' } : undefined}>
-                            {ROLE_OPTIONS.filter((role) => !isManager || (role.value !== "SALON_OWNER" && role.value !== "MANAGER")).map((role) => <option key={role.value} value={role.value}>{role.label}</option>)}
+                            {ROLE_OPTIONS.filter((role) => (!isManager || (role.value !== "SALON_OWNER" && role.value !== "MANAGER")) || role.value === form.salonRole).map((role) => <option key={role.value} value={role.value}>{role.label}</option>)}
                           </CustomDropdown>
                         </div>
                         <div className="hub-form-group">
