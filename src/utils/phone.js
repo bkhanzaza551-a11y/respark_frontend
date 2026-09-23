@@ -48,31 +48,54 @@ export const normalizeIndianPhoneInputDigits = (value) => {
   return digits.slice(0, 10);
 };
 
-const phoneKeyPattern = /(^|_)(phone|mobile|whatsapp)(number)?$/i;
-const phoneKeys = new Set(["phone", "customerPhone", "supportPhone", "whatsappNumber", "alternatePhone"]);
+const phoneKeys = new Set([
+  "phone",
+  "phoneNumber",
+  "customerPhone",
+  "supportPhone",
+  "whatsappNumber",
+  "alternatePhone",
+  "mobile",
+  "mobileNumber"
+]);
 
-export const isPhoneLikeKey = (key) => phoneKeys.has(key) || phoneKeyPattern.test(key);
+export const isPhoneLikeKey = (key) => {
+  if (!key || typeof key !== "string") return false;
+  if (key === "whatsapp" || key === "whatsappLogs") return false;
+  return phoneKeys.has(key) || /(^|_)(phone|mobile|whatsapp_?number)$/i.test(key);
+};
 
-export const normalizePhoneFields = (value, key = "") => {
-  if (Array.isArray(value)) return value.map((item) => normalizePhoneFields(item));
+export const normalizePhoneFields = (value, key = "", path = []) => {
+  if (path.includes("permissions") || path.includes("featureFlags") || key === "permissions" || key === "featureFlags") {
+    return value;
+  }
+  if (Array.isArray(value)) return value;
   if (!value || typeof value !== "object") {
     if (!key || !isPhoneLikeKey(key) || value == null || value === "") return value;
+    if (typeof value !== "string") return value;
     return normalizeIndianPhone(value);
   }
   return Object.fromEntries(
-    Object.entries(value).map(([entryKey, entryValue]) => [entryKey, normalizePhoneFields(entryValue, entryKey)])
+    Object.entries(value).map(([entryKey, entryValue]) => [
+      entryKey,
+      normalizePhoneFields(entryValue, entryKey, [...path, entryKey])
+    ])
   );
 };
 
 export const validatePhoneFields = (value, path = []) => {
-  if (Array.isArray(value)) {
-    value.forEach((item, index) => validatePhoneFields(item, [...path, index]));
-    return;
-  }
+  if (path.includes("permissions") || path.includes("featureFlags")) return;
+  if (Array.isArray(value)) return;
   if (!value || typeof value !== "object") return;
   Object.entries(value).forEach(([key, entryValue]) => {
+    if (key === "permissions" || key === "featureFlags") return;
     const nextPath = [...path, key];
-    if (isPhoneLikeKey(key) && entryValue !== undefined && entryValue !== null && entryValue !== "" && !isValidIndianPhone(entryValue)) {
+    if (
+      isPhoneLikeKey(key) &&
+      typeof entryValue === "string" &&
+      entryValue.trim() !== "" &&
+      !isValidIndianPhone(entryValue)
+    ) {
       const label = key.replace(/([A-Z])/g, " $1").replace(/^./, (char) => char.toUpperCase());
       throw new Error(`${label} must be a valid phone number`);
     }
